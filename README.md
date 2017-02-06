@@ -9,7 +9,7 @@ in the Relaxtion-Time-Approximation (RTA).
 Getting started
 ***************
 
-How to get going is here briefly explained.
+Testing. How to get going is here briefly explained.
 
 Prerequisites
 =============

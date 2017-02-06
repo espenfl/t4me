@@ -1,18 +1,18 @@
-****************************
+############################
 T4ME - Transport 4 MatErials
-****************************
+############################
 
 Routines to calculate the transport properties of materials
 using the linearized Boltzmann Transport Equations (BTE)
 in the Relaxtion-Time-Approximation (RTA).
 
 Getting started
-###############
+***************
 
 How to get going is here briefly explained.
 
 Prerequisites
-*************
+=============
 
 In its basic form T4ME only need the following
 dependencies: `Spglib <https://atztogo.github.io/spglib/>`_
@@ -24,7 +24,7 @@ Additional optional dependencies include:
 (use Wildmagic 5.14).
 
 Installing
-**********
+==========
 
 Please consult the [setup]{setup.py} file for details on
 how to configure the location of the include and libraries.
@@ -38,7 +38,7 @@ the main driver routine::
     python t4me.py
 
 Structure
-*********
+=========
 
 The structure of the program is simple: the main routines
 are written in Python utlizing NumPy and SciPy where
@@ -68,7 +68,7 @@ also be present:
   (if that is needed).
 
 Running tests
-#############
+*************
 
 Some very simple tests are included located inside the
 `tests` folder. They contain the necessary input files
@@ -80,7 +80,7 @@ Then all tests are executed by issuing::
      python t4me.py
 
 Built With
-##########
+**********
 * `Spglib <https://atztogo.github.io/spglib/>`_
 * `GNU Scientific Library <https://www.gnu.org/software/gsl/>`_
 * `Einspline <http://einspline.sourceforge.net/>`_
@@ -88,17 +88,17 @@ Built With
 * `GeometricTools <https://www.geometrictools.com/>`_
 
 Versioning
-##########
+**********
 
 Standard Git versioning is utilized.
 
 Author
-######
+******
 Espen Flage-Larsen with finances from the Norwegian
 Research Council, Thelma project (228854).
 
 License
-#######
+*******
 
 This project is licensed under the GNU GPLv3. Please see
 :file:`LICENSE.md` for additional details.

@@ -19,6 +19,12 @@
 #include <math.h>
 #include "skw.h"
 
+/* Dummy main, as we only use this in library mode */
+
+int main(int argc, const char* argv[]) {
+
+}
+
 /* Fetches the symmetry operations using spglib
 
    Since spglib has a static C interface, we need to copy the 

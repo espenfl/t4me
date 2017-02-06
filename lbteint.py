@@ -272,7 +272,9 @@ def fermiintclosed(order, eta, spin_fact):
     Notes
     -----
     Utilizes the GSL :cite:`gsl` library and a few inlined
-    function from the literature :cite:`halen_1985_joap_assatfioo, halen_1986_joap_essatfioo` 
+    function from the literature. Consult Ref. 
+    :cite:`halen_1985_joap_assatfioo` and Ref.
+    :cite:`halen_1986_joap_essatfioo` 
     as a suplement. The Gamma factor renormalization which 
     is included in the GSL returns should be removed and
     this is done in the interface Cython file.

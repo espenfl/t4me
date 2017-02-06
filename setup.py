@@ -20,7 +20,7 @@ import numpy
 
 # required (local version)
 # USE THIS AND TAILOR IF YOU INSTALLED AS LOCAL USER
-home = "/usit/abel/u1/espenfl"
+home = "/home/flagre"
 locallib = home + "/local/lib"
 localinclude = home + "/local/include"
 
@@ -45,8 +45,8 @@ einsplineinclude = localinclude + "/einspline"
 cubaturelib = locallib
 cubatureinclude = localinclude + "/cubature"
 
-wildmagiclib = locallib
-wildmagicinclude = localinclude + "/wildmagic"
+wildmagiclib = "/usr/lib64"
+wildmagicinclude = "/usr/include/WildMagic"
 
 #gptoolslib = locallib
 #gptoolsinclude = localinclude + "/gptools"
@@ -56,12 +56,12 @@ ext = [Extension("gsl", ["gsl_interface/gsl.pyx"],
                  library_dirs=[gsllib],
                  libraries=["gsl", "gslcblas"]),
 
-#       Extension("einspline", ["einspline_interface/einspline.pyx"],
-#                 include_dirs=[einsplineinclude, numpy.get_include()],
-#                 library_dirs=[einsplinelib],
-#                 libraries=["einspline"],
-#                 extra_compile_args=["-std=c++11"],
-#                 language="c++"),
+       Extension("einspline", ["einspline_interface/einspline.pyx"],
+                 include_dirs=[einsplineinclude, numpy.get_include()],
+                 library_dirs=[einsplinelib],
+                 libraries=["einspline"],
+                 extra_compile_args=["-std=c++11"],
+                 language="c++"),
 
        Extension("wildmagic", ["wildmagic_interface/wildmagic.pyx"],
                  include_dirs=[wildmagicinclude, numpy.get_include()],
@@ -69,30 +69,31 @@ ext = [Extension("gsl", ["gsl_interface/gsl.pyx"],
                  libraries=["Wm5Core", "Wm5Mathematics"],
                  language="c++"),
 
-#       Extension("cubature_wildmagic", ["cubature_wildmagic_interface/cubature_wildmagic.pyx"],
-#                 include_dirs=[cubatureinclude, wildmagicinclude, numpy.get_include()],
-#                 library_dirs=[cubaturelib, wildmagiclib],
-#                 libraries=["cubature", "Wm5Core", "Wm5Mathematics"],
-#                 extra_compile_args=["-O3", "-w",
-#                                     "-std=c++11"],
-#                 language="c++"),
+       Extension("cubature_wildmagic", ["cubature_wildmagic_interface/cubature_wildmagic.pyx"],
+                 include_dirs=[cubatureinclude,
+                               wildmagicinclude, numpy.get_include()],
+                 library_dirs=[cubaturelib, wildmagiclib],
+                 libraries=["cubature", "Wm5Core", "Wm5Mathematics"],
+                 extra_compile_args=["-O3", "-w",
+                                     "-std=c++11"],
+                 language="c++"),
 
-#       Extension("skw_interface", ["skw_interface/skw.pyx"],
-#                 include_dirs=[spglibinclude, mklinclude,
-#                               skwinclude, fftwinclude, numpy.get_include()],
-#                 library_dirs=[spgliblib, fftwlib, mkllib, skwlib],
-#                 libraries=["stdc++", "mkl_rt", "pthread",
-#                            "m", "dl", "skw", "symspg", "fftw3xc_intel"],
-#                 extra_compile_args=[
-#                     "-std=c++11"],
-#                 language="c++"),
+       Extension("skw_interface", ["skw_interface/skw.pyx"],
+                 include_dirs=[spglibinclude, mklinclude,
+                               skwinclude, fftwinclude, numpy.get_include()],
+                 library_dirs=[spgliblib, fftwlib, mkllib, skwlib],
+                 libraries=["stdc++", "mkl_rt", "pthread",
+                            "m", "dl", "skw", "symspg", "fftw3xc_intel"],
+                 extra_compile_args=[
+                     "-std=c++11"],
+                 language="c++"),
 
        Extension("spglib_interface", ["spglib_interface/spglib.pyx"],
                  include_dirs=[spglibinclude, numpy.get_include()],
                  library_dirs=[spgliblib],
                  libraries=["symspg", "stdc++"],
                  extra_compile_args=[
-                     "-std=c++11","-g", "-w", "-fno-omit-frame-pointer", "-fno-builtin-malloc -fno-builtin-calloc -fno-builtin-realloc -fno-builtin-free"],
+                     "-std=c++11", "-g", "-w", "-fno-omit-frame-pointer", "-fno-builtin-malloc -fno-builtin-calloc -fno-builtin-realloc -fno-builtin-free"],
                  extra_link_args=["-g"],
                  language="c++"),
        #       Extension("prof", ["prof/prof.pyx"],

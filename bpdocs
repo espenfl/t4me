@@ -27,7 +27,7 @@ rm -rf ./docs
 
 # add, commit and push gh-pages
 git add -A
-git commit -m "publishing updated docs..."
+git commit -m "Publishing updated documentation"
 git push origin gh-pages
 
 # switch back to master branch

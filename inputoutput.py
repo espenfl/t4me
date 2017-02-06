@@ -374,6 +374,8 @@ def dump_transport_coefficients(tr, filename_tag=""):
     sigma_file.write(
         "#  Data is blocked on temperature in K                   #\n")
     sigma_file.write(
+        "#                                                        #\n")
+    sigma_file.write(
         "# ------------------------------------------------------ #\n")
     sigma_file.write(
         "# ------------------------------------------------------ #\n")
@@ -435,6 +437,8 @@ def dump_transport_coefficients(tr, filename_tag=""):
         "#                                                        #\n")
     seebeck_file.write(
         "#  Data is blocked on temperature in K                   #\n")
+    seebeck_file.write(
+        "#                                                        #\n")
     seebeck_file.write(
         "# ------------------------------------------------------ #\n")
     seebeck_file.write(
@@ -498,6 +502,8 @@ def dump_transport_coefficients(tr, filename_tag=""):
     lorenz_file.write(
         "#  Data is blocked on temperature in K                   #\n")
     lorenz_file.write(
+        "#                                                        #\n")
+    lorenz_file.write(
         "# ------------------------------------------------------ #\n")
     lorenz_file.write(
         "# ------------------------------------------------------ #\n")
@@ -559,6 +565,8 @@ def dump_transport_coefficients(tr, filename_tag=""):
         "#                                                        #\n")
     kappae_file.write(
         "#  Data is blocked on temperature in K                   #\n")
+    kappae_file.write(
+        "#                                                        #\n")
     kappae_file.write(
         "# ------------------------------------------------------ #\n")
     kappae_file.write(
@@ -622,6 +630,8 @@ def dump_transport_coefficients(tr, filename_tag=""):
     hall_file.write(
         "#  Data is blocked on temperature in K                   #\n")
     hall_file.write(
+        "#                                                        #\n")
+    hall_file.write(
         "# ------------------------------------------------------ #\n")
     hall_file.write(
         "# ------------------------------------------------------ #\n")
@@ -684,6 +694,8 @@ def dump_transport_coefficients(tr, filename_tag=""):
     hall_cc_file.write(
         "#  Data is blocked on temperature in K                   #\n")
     hall_cc_file.write(
+        "#                                                        #\n")
+    hall_cc_file.write(
         "# ------------------------------------------------------ #\n")
     hall_cc_file.write(
         "# ------------------------------------------------------ #\n")
@@ -745,6 +757,8 @@ def dump_transport_coefficients(tr, filename_tag=""):
         "#                                                        #\n")
     cc_file.write(
         "#  Data is blocked on temperature in K                   #\n")
+    cc_file.write(
+        "#                                                        #\n")
     cc_file.write(
         "# ------------------------------------------------------ #\n")
     cc_file.write(
@@ -809,6 +823,8 @@ def dump_transport_coefficients(tr, filename_tag=""):
         "#                                                        #\n")
     hall_fact_file.write(
         "#  Data is blocked on temperature in K                   #\n")
+    hall_fact_file.write(
+        "#                                                        #\n")
     hall_fact_file.write(
         "# ------------------------------------------------------ #\n")
     hall_fact_file.write(

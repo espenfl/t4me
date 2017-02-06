@@ -9,7 +9,7 @@ in the Relaxtion-Time-Approximation (RTA).
 Getting started
 ***************
 
-Testing. How to get going is here briefly explained.
+How to get going is here briefly explained.
 
 Prerequisites
 =============
@@ -66,6 +66,10 @@ also be present:
   and the parameters to
   use in the tight binding generation
   (if that is needed).
+
+These files are documented, please consult respective files
+for detailed information of how to set the relevant
+parameters.
 
 Running tests
 *************

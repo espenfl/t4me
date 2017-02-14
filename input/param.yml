@@ -17,23 +17,30 @@
 # bandstructure?
 dispersion_interpolate: True # n/a
 # What is the target k-point sampling?
-dispersion_interpolate_sampling: [45,45,45] # n/a
+dispersion_interpolate_sampling: [27,27,27] # n/a
 # What interpolation method to use?
 dispersion_interpolate_method: "wildmagic" # n/a
 # What sub method to use?
 dispersion_interpolate_type: "akima" # n/a
+# Use numerical differentiation to calculate the
+# velocities if they are not present on entry, or/and
+# use numerical differentiation to extract the
+# velocities after the dispersions have been
+# interpolated (used by default for the interpolat
+# routines that do not support velocity extraction)
+dispersion_velocities_numdiff: True # n/a
 # Do you want to dump dispersion line to file before
 # interpolation?
-dispersion_write_preinter: False # n/a
+dispersion_write_preinter: True # n/a
 # Do you want to dump dispersion line to file after
 # interpolation?
-dispersion_write_postinter: False # n/a
+dispersion_write_postinter: True # n/a
 # Start k-point in direct coordinates for the
 # dispersion line:
 dispersion_write_start: [0.0, 0.0, 0.0] # n/a
 # End k-point in direct coordinates for the
 # dispersion line:
-dispersion_write_end: [0.5, 0.0, 0.0] # n/a
+dispersion_write_end: [0.5, 0.5, 0.0] # n/a
 # Number of k-points along line extration:
 num_kpoints_along_line: 20 # n/a
 # Parameters that are passed to PythTB when reading
@@ -52,9 +59,9 @@ dispersion_w90_tb_max_distance: 10 # AA
 # -------------------------------------------------------#
 # Do you want to calculate the electronic
 # transport tensors?
-transport_calc: True # n/a
+transport_calc: False # n/a
 # Which method to use?
-transport_method: "numerick"
+transport_method: "closed"
 # Which integration method to use?
 transport_integration_method: "trapz" # n/a
 # Which smearing to use (only applied if
@@ -90,7 +97,7 @@ transport_energycutband: 1.0 # eV
 transport_include_bands: [] # n/a
 # Do you want to use the analytical spherical scattering
 # models?
-transport_use_analytic_scattering: False # n/a
+transport_use_analytic_scattering: True # n/a
 # Do you want to calculate the scattering on the fly
 # during integration?
 transport_use_scattering_ontfly: False # n/a
@@ -109,18 +116,18 @@ transport_isotropic: True # n/a
 # -------------------------------------------------------#
 # -------------------------------------------------------#
 # Do you want to calculate the density of states?
-dos_calc: False # n/a
+dos_calc: True # n/a
 # The minimum energy used for the density of states
 # calculations:
-dos_e_min: -1.0 # eV
+dos_e_min: -5.0 # eV
 # The maximum energy used for the density of states
 # calculations:
-dos_e_max: 1.0 # eV
+dos_e_max: 2.0 # eV
 # The number of energy samples between the min and max:
 dos_num_samples: 1000 # n/a
 # The Gaussian smearing (if "smeared", "trapz", "simps"
 # or "romb" is used)
-dos_smearing: 0.05 # eV
+dos_smearing: 0.1 # eV
 # What on-the-fly interpolation method to use during
 # integration (only "wildmagic" is available and the
 # integration method have to be "cubature").
@@ -128,7 +135,7 @@ dos_interpolate_method: "wildmagic" # n/a
 # What sub method to use?
 dos_interpolate_type: "akima" # n/a
 # What type of integration method to use?
-dos_integrating_method: "trapz" # n/a
+dos_integrating_method: "tetra" # n/a
 # This is a bit redundant, users please leave this
 # set at False
 dos_smear_then_interpolate: False # n/a

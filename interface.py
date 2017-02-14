@@ -27,6 +27,7 @@ import utils
 import inputoutput
 import constants
 
+
 def lattice_param_numpy(lattice, location=None, filename=None):
     """
     Interface used to format the elements needed to generate the
@@ -786,19 +787,17 @@ def bandstructure_vasp(bs, location=None, filename=None):
 
     # get divisions, IBZ kpoints and location of the eigenvalues and
     # dos
-    if kinter < 2:
+    if np.abs(kinter) < 2:
         if lvel:
             energies_base = tree.find(
-                './/eigenvalues[@comment="interpolated with '
-                'velocities on the full bz grid"]')
+                './/eigenvelocities[@comment="interpolated_bz"]')
         else:
             energies_base = tree.find('.//eigenvalues')
             dos_base = tree.find('.//dos')
     else:
         if lvel:
             energies_base = tree.find(
-                './/eigenvalues[@comment="interpolated with '
-                'velocities on the full bz grid"]')
+                './/eigenvelocities[@comment="interpolated_bz"]')
         else:
             energies_base = tree.find(
                 './/eigenvalues[@comment="interpolated"]')
@@ -1536,7 +1535,7 @@ def bandstructure_w90(bs, location=None, filename=None):
     """
     # lazy import of PythTB (optional)
     import pythtb
-    
+
     # set logger
     logger = logging.getLogger(sys._getframe().f_code.co_name)
     logger.debug("Running bandstructure_w90.")

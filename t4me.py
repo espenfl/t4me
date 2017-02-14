@@ -103,6 +103,12 @@ def main():
     # generate or read bandstructure data
     bs = bandstructure.Bandstructure(lat, param)
 
+    # generate the velocities if they are not present
+    # and if the user does not want to use the extraction
+    # of the interpolation routines
+    if bs.gen_velocities and param.dispersion_velocities_numdiff:
+        bs.calc_velocities()
+    sys.exit(1)
     # dump the dispersions?
     if param.dispersion_write_preinter:
         inputoutput.dump_bandstruct_line(bs, param.dispersion_write_start,
@@ -131,26 +137,37 @@ def main():
     # maybe the user wants to pre-interpolate?
     if param.dispersion_interpolate:
         logger.info("Pre-interpolating the dispersion data.")
-        bs.interpolate(store_inter=True, ivelocities=True)
-        # if velocities did not exists, we now have them, so set
-        bs.gen_velocities = False
+        if (bs.gen_velocities == False) and param.transport_calc:
+            # here we need the velocities
+            bs.interpolate(store_inter=True, ivelocities=True)
+            # if velocities did not exists, we now have them, so set
+            bs.gen_velocities = False
+        else:
+            # not here
+            bs.interpolate(store_inter=True, ivelocities=False)
 
-    # dump the dispersions after interpolations?
-    if param.dispersion_write_postinter:
-        inputoutput.dump_bandstruct_line(bs, param.dispersion_write_start,
-                                         param.dispersion_write_end,
-                                         datatype="e", filename="bands_inter",
-                                         k_direct=True,
-                                         itype="linearnd",
-                                         itype_sub="linear")
+        # dump the dispersions after interpolations?
+        if param.dispersion_write_postinter:
+            inputoutput.dump_bandstruct_line(bs, param.dispersion_write_start,
+                                             param.dispersion_write_end,
+                                             datatype="e", filename="bands_inter",
+                                             k_direct=True,
+                                             itype="linearnd",
+                                             itype_sub="linear")
 
-        # same as above just for the velocities
-        inputoutput.dump_bandstruct_line(bs, param.dispersion_write_start,
-                                         param.dispersion_write_end,
-                                         datatype="v", filename="velocities_inter",
-                                         k_direct=True,
-                                         itype="linearnd",
-                                         itype_sub="linear")
+            # same as above just for the velocities
+            if bs.gen_velocities:
+                logger.info(
+                    "Data for the band velocities does not exist. "
+                    "Skipping writing the band velocities to file "
+                    "and continuing.")
+            else:
+                inputoutput.dump_bandstruct_line(bs, param.dispersion_write_start,
+                                                 param.dispersion_write_end,
+                                                 datatype="v", filename="velocities_inter",
+                                                 k_direct=True,
+                                                 itype="linearnd",
+                                                 itype_sub="linear")
 
     # calculation of the density of states?
     if param.dos_calc:

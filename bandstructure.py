@@ -31,6 +31,7 @@ import utils
 import constants
 import spglib_interface
 
+
 class Bandstructure():
     """
     Handles the read in, generation and storrage of the
@@ -1403,6 +1404,67 @@ class Bandstructure():
                                                   itype_sub=itype_sub)
         return energies
 
+    def calc_velocities(self):
+        """
+        Calculate the electron group velocities
+        from the electron energy dispersion
+
+        Parameters
+        ----------
+        bs : object, optional
+            A `Bandstructure()` object. Defaults to the
+            active object.
+
+        Returns
+        -------
+        None
+
+        Notes
+        -----
+        Does not call any interpolation routines such
+        that the velocities can be extracted directly from the
+        electron energy dispersion by numerical differentiation.
+
+        Overwrites any entry of exising `velocities` in `bs`
+        and sets `gen_velocities` to False.
+
+        """
+
+        # set logger
+        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger.info("Running calc_velocities.")
+
+        energies = self.energies[0]
+        ksampling = self.lattice.ksampling
+        num_kpoints = self.lattice.kmesh.shape[0]
+        # assume equally spaced grid and fetch
+        # spacing along each direction
+        dx, dy, dz = self.lattice.fetch_kmesh_spacing(direct=False)
+
+        testx = np.linspace(-1, 1, 5)
+        testy = np.linspace(-2, 2, 5)
+        testz = np.linspace(-3, 3, 5)
+        x, y, z = np.meshgrid(testx, testy, testz, sparse=False)
+        print x.shape
+        f = x + y + z
+        print f.shape
+
+        # reshape
+        energies_shaped = energies.reshape((ksampling[0],
+                                            ksampling[1],
+                                            ksampling[2]), order='C')
+        # call gradient from NumPy to obtain the gradients and
+        # pass spacings (grid is seldom cubic)
+        velocities = np.gradient(energies_shaped, [dx, dy, dz])
+        # ravel to flatten and store
+        print len(velocities[0])
+        velocities = np.array(velocities[0].flatten(order='C'),
+                              velocities[1].flatten(order='C'),
+                              velocities[2].flatten(order='C'))
+        self.velocities = velocities
+        print velocities
+        self.gen_velocities = False
+
     def interpolate(self, iksampling=None, ienergies=True,
                     ivelocities=False, itype=None, itype_sub=None,
                     kpoint_mesh=None, store_inter=False):
@@ -1581,6 +1643,9 @@ class Bandstructure():
         # fetch old grid in cartesian (IBZ in direct for SKW)
         if itype != "skw":
             old_grid = self.lattice.fetch_kmesh(direct=False)
+            # store old bz border to be used in the interpolation
+            # routines below
+            old_bz_border = self.lattice.fetch_bz_border(direct=True)
         else:
             old_grid = self.lattice.fetch_kmesh(direct=True, ired=True)
 
@@ -1615,16 +1680,13 @@ class Bandstructure():
             # border (most routines does not support extrapolation)
             dvec = (1 - 1e-6) * dvec
             if itype != "skw":
-                # store old bz border to be used in the interpolation
-                # routines below
-                old_bz_border = self.lattice.fetch_bz_border(direct=False)
                 self.lattice.create_kmesh_spg(iksampling)
                 # now this is the crucial part, scale the grid by
                 # dvec to pull it inside the borders
                 self.lattice.kmesh = self.lattice.kmesh * dvec
                 self.lattice.kmesh_ired = self.lattice.kmesh_ired * dvec
                 # make sure the grid is in cartesian coordinates
-                new_grid = self.lattice.fetch_kmesh(direct=False)
+                new_grid = self.lattice.fetch_kmesh(direct=True)
             else:
                 new_grid = old_grid
         else:
@@ -1741,14 +1803,35 @@ class Bandstructure():
             # lazy import of einspline (optional)
             import einspline
 
-            # set boundary conditions
-            bz_border = old_bz_border
-            domainx = np.array(
-                [bz_border[0], bz_border[1]], dtype=np.double)
-            domainy = np.array(
-                [bz_border[2], bz_border[3]], dtype=np.double)
-            domainz = np.array(
-                [bz_border[4], bz_border[5]], dtype=np.double)
+            # in general we do not have a uniform
+            # k-point grid
+            uniform = True
+
+            if uniform:
+                # for uniform grids we only need the start and
+                # endpoint and number of points in each direction
+                bz_border = old_bz_border
+                domainx = np.array(
+                    [bz_border[0], bz_border[1]], dtype=np.double)
+                domainy = np.array(
+                    [bz_border[2], bz_border[3]], dtype=np.double)
+                domainz = np.array(
+                    [bz_border[4], bz_border[5]], dtype=np.double)
+                domain_num_points = ksampling_old
+            else:
+                print "balla"
+                # for non-uniform grids we need the full array
+                # of points
+                # domainx = np.ascontiguousarray(old_grid[:, 0],
+                #                               dtype=np.double)
+                # domainy = np.ascontiguousarray(old_grid[:, 1],
+                #                               dtype=np.double)
+                # domainz = np.ascontiguousarray(old_grid[:, 2],
+                #                               dtype=np.double)
+                # domain_num_points = np.array([domainx.shape[0],
+                #                              domainy.shape[0],
+                #                              domainz.shape[0]],
+                #                             dtype="intc")
             ix = np.ascontiguousarray(new_grid.T[0], dtype=np.double)
             iy = np.ascontiguousarray(new_grid.T[1], dtype=np.double)
             iz = np.ascontiguousarray(new_grid.T[2], dtype=np.double)
@@ -1764,10 +1847,11 @@ class Bandstructure():
                 sys.exit(1)
 
             if gen_velocities:
-                einspline.einspline_execute_interface(ksampling_old,
+                einspline.einspline_execute_interface(domain_num_points,
                                                       domainx,
                                                       domainy,
                                                       domainz,
+                                                      uniform,
                                                       np.ascontiguousarray(
                                                           energies, dtype="double"),
                                                       ix, iy, iz, ien,
@@ -2188,7 +2272,7 @@ class Bandstructure():
 
         # set logger
         logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running calc_density_of_states.")
+        logger.info("Running calc_density_of_states.")
 
         # set some constants
         num_bands = self.energies.shape[0]

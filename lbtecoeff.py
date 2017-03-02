@@ -844,12 +844,15 @@ def numerick(tr, chempots, temperatures, bs=None):
     lorenz = np.zeros((sigma.shape))
     # check the velocities
     if not bs.check_velocities(constants.zerocut):
-        if bs.gen_velocities:
+        if bs.gen_velocities and not \
+           bs.param.dispersion_velocities_numdiff:
             logger.info("No band velocities were supplied, have "
                         "to run Cubature integration with Wildmagic "
                         "interpolation in order to extract band velocities "
                         "on the fly during integration. Consider to "
-                        "turn on the preinterpolator to avoid this.")
+                        "turn on the preinterpolator or the "
+                        "dispersion_velocities_numdiff to avoid "
+                        "this.")
             if not tr.param.transport_integration_method == "cubature":
                 logger.error(
                     "User did not specify the only possible option "
@@ -886,6 +889,7 @@ def numerick(tr, chempots, temperatures, bs=None):
         logger.info(
             "Running Cubature and Geometric Tools on the fly interpolation "
             "routines to calculate the transport coefficients.")
+
         # lazy import of cubature_wildmagic (optional)
         import cubature_wildmagic
 

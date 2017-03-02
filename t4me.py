@@ -17,7 +17,7 @@ def main():
 
     Notes
     -----
-    This routine can be modified for more advanced usage. For 
+    This routine can be modified for more advanced usage. For
     day-day operations, the most used configurations are available
     by setting the parameters in the general configuration file (
     defaults to param.yml).
@@ -106,9 +106,15 @@ def main():
     # generate the velocities if they are not present
     # and if the user does not want to use the extraction
     # of the interpolation routines
-    if bs.gen_velocities and param.dispersion_velocities_numdiff:
+    # makes more sense to have this in lbtecoeff.py or
+    # similar, but sometimes one would want to check the
+    # velocities and we thus need them before checking if
+    # user wants to dump dispersion relation (imcludes velocities
+    # if present).
+    if bs.gen_velocities and param.dispersion_velocities_numdiff \
+       and param.transport_calc:
         bs.calc_velocities()
-    sys.exit(1)
+
     # dump the dispersions?
     if param.dispersion_write_preinter:
         inputoutput.dump_bandstruct_line(bs, param.dispersion_write_start,
@@ -137,13 +143,13 @@ def main():
     # maybe the user wants to pre-interpolate?
     if param.dispersion_interpolate:
         logger.info("Pre-interpolating the dispersion data.")
-        if (bs.gen_velocities == False) and param.transport_calc:
+        if bs.gen_velocities and param.transport_calc:
             # here we need the velocities
             bs.interpolate(store_inter=True, ivelocities=True)
             # if velocities did not exists, we now have them, so set
             bs.gen_velocities = False
         else:
-            # not here
+            # no velocities needed here
             bs.interpolate(store_inter=True, ivelocities=False)
 
         # dump the dispersions after interpolations?
@@ -168,6 +174,8 @@ def main():
                                                  k_direct=True,
                                                  itype="linearnd",
                                                  itype_sub="linear")
+
+    sys.exit(1)
 
     # calculation of the density of states?
     if param.dos_calc:

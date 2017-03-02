@@ -34,6 +34,7 @@ skw_warning_printed = False
 wildmagic_warning_printed = False
 cubature_warning_printed = False
 einspline_warning_printed = False
+alglib_warning_printed = False
 
 # errors that cause exits
 
@@ -56,6 +57,20 @@ def gsl_error():
     sys.exit(1)
 
 # warnings
+
+
+def alglib_warning():
+    global alglib_warning_printed
+    if not alglib_warning_printed:
+        # set logger
+        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger.warning("Could not load the Alglib package. Using "
+                       "the Rbf function in SciPy instead. "
+                       "This is extremely memory consuming, please "
+                       "install the Alglib package properly of you "
+                       "want to utilize RBF interpolation. "
+                       "Continuing.")
+        alglib_warning_printed = True
 
 
 def pythtb_warning():
@@ -1307,6 +1322,10 @@ def dump_bandstruct_line(bs, kstart, kend, filename="band",
             "# ------------------------------------------------------ #\n")
         bands_file.write(
             "##########################################################\n")
+        bands_file.write("{:<7s}".format("Dist."))
+        for band in range(e.shape[0]):
+            bands_file.write("{:>12s}".format("E_{" + str(band + 1) + "}(k)"))
+        bands_file.write("\n")
         for kpoint in range(kpts.shape[0]):
             bands_file.write("{:>7.4f}".format(kpoint_length[kpoint]))
             for band in range(e.shape[0]):
@@ -1364,14 +1383,20 @@ def dump_bandstruct_line(bs, kstart, kend, filename="band",
             "# ------------------------------------------------------ #\n")
         bands_file.write(
             "##########################################################\n")
+        bands_file.write("{:<7s}".format("Dist."))
+        for band in range(vel.shape[0]):
+            for dir in range(3):
+                bands_file.write("{:>16s}".format(
+                    "dE_{" + str(band + 1) + "}(k)/dk_" + str(dir + 1)))
+        bands_file.write("\n")
         for kpoint in range(kpts.shape[0]):
             bands_file.write("{:>7.4f}".format(kpoint_length[kpoint]))
             for band in range(vel.shape[0]):
-                bands_file.write(" " + "{:>12.4e}".format(vel[band, 0,
+                bands_file.write(" " + "{:>16.4e}".format(vel[band, 0,
                                                               kpoint]) +
-                                 " " + "{:>12.4e}".format(vel[band, 1,
+                                 " " + "{:>16.4e}".format(vel[band, 1,
                                                               kpoint]) +
-                                 " " + "{:>12.4e}".format(vel[band, 2,
+                                 " " + "{:>16.4e}".format(vel[band, 2,
                                                               kpoint]))
             bands_file.write("\n")
         file_handler(filename, bands_file)

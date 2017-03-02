@@ -543,24 +543,9 @@ class Bandstructure():
             # problems in scattering routines etc.)
             energies[band][np.abs(energies[band]) <
                            constants.zerocut] = constants.zerocut
-        # PythTB does not return velocities...now go and fetch those using
-        # interpolation
-        logger.info(
-            "PythTB does not presently return band velocities. "
-            "Fetching those with an interpolation technique.")
-
-        # this routine reside inside the analytic generation, so
-        # gen_velocities are for sure set to False, set to True
-        # so that the interpolate() routine can fetch the velocities
+        # PythTB does not return velocities
         self.gen_velocities = True
-        # set energies temporarely (overwritten later)
-        self.energies = energies
-        kmesh = self.lattice.fetch_kmesh(direct=False)
-        dummy, velocities, dummy = self.interpolate(
-            kpoint_mesh=kmesh)
-        # and then put back to False
-        self.gen_velocities = False
-        return energies, velocities
+        return energies, None
 
     def non_parabolic_energy_1(self, k, effmass, a, e0=0.0,
                                kshift=[0.0, 0.0, 0.0]):
@@ -1028,7 +1013,8 @@ class Bandstructure():
                 e, v = self.tight_binding_energies(band)
                 numtbands = e.shape[0]
                 energies[band:band + numtbands] = e[:]
-                velocities[band:band + numtbands] = v[:]
+                if v is not None:
+                    velocities[band:band + numtbands] = v[:]
                 tb_band.extend([True] * numtbands)
                 band = band + numtbands
         energies = np.array(energies, dtype="double")
@@ -1190,7 +1176,7 @@ class Bandstructure():
         """
         # set logger
         logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running fetch_velocities_along_line.")
+        logger.info("Running fetch_velocities_along_line.")
 
         # now make sure the supplied points does not extend outside the
         # grid
@@ -1329,7 +1315,7 @@ class Bandstructure():
 
         # set logger
         logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running fetch_energies_along_line.")
+        logger.info("Running fetch_energies_along_line.")
 
         # now make sure the supplied points does not extend outside the
         # grid
@@ -1424,6 +1410,7 @@ class Bandstructure():
         Does not call any interpolation routines such
         that the velocities can be extracted directly from the
         electron energy dispersion by numerical differentiation.
+        Uses the :func:`gradient` from NumPy.
 
         Overwrites any entry of exising `velocities` in `bs`
         and sets `gen_velocities` to False.
@@ -1434,36 +1421,44 @@ class Bandstructure():
         logger = logging.getLogger(sys._getframe().f_code.co_name)
         logger.info("Running calc_velocities.")
 
-        energies = self.energies[0]
+        energies = self.energies
         ksampling = self.lattice.ksampling
-        num_kpoints = self.lattice.kmesh.shape[0]
+        num_kpoints = energies.shape[1]
+        num_bands = energies.shape[0]
+
         # assume equally spaced grid and fetch
         # spacing along each direction
         dx, dy, dz = self.lattice.fetch_kmesh_spacing(direct=False)
 
-        testx = np.linspace(-1, 1, 5)
-        testy = np.linspace(-2, 2, 5)
-        testz = np.linspace(-3, 3, 5)
-        x, y, z = np.meshgrid(testx, testy, testz, sparse=False)
-        print x.shape
-        f = x + y + z
-        print f.shape
-
         # reshape
-        energies_shaped = energies.reshape((ksampling[0],
-                                            ksampling[1],
-                                            ksampling[2]), order='C')
+        energies_shaped = np.reshape(energies, (num_bands,
+                                                ksampling[0],
+                                                ksampling[1],
+                                                ksampling[2]), order='C')
         # call gradient from NumPy to obtain the gradients and
-        # pass spacings (grid is seldom cubic)
-        velocities = np.gradient(energies_shaped, [dx, dy, dz])
-        # ravel to flatten and store
-        print len(velocities[0])
-        velocities = np.array(velocities[0].flatten(order='C'),
-                              velocities[1].flatten(order='C'),
-                              velocities[2].flatten(order='C'))
-        self.velocities = velocities
-        print velocities
+        # pass spacings (grid is seldom cubic with spacing of 1.0)
+        # also, make sure we do nothing to the band axis
+        vx, vy, vz = np.gradient(energies_shaped,
+                                 dx, dy, dz, axis=(1, 2, 3))
+
+        # flatten and store
+        velocities = np.array([np.reshape(vx, (num_bands,
+                                               num_kpoints),
+                                          order='C'),
+                               np.reshape(vy, (num_bands,
+                                               num_kpoints),
+                                          order='C'),
+                               np.reshape(vz, (num_bands,
+                                               num_kpoints),
+                                          order='C')])
+        # need band first, then direction, then k-points
+        velocities = np.swapaxes(velocities, 0, 1)
+
+        # no need to generate velocities again
         self.gen_velocities = False
+
+        # set velocities in current object
+        self.velocities = velocities
 
     def interpolate(self, iksampling=None, ienergies=True,
                     ivelocities=False, itype=None, itype_sub=None,
@@ -1755,41 +1750,115 @@ class Bandstructure():
                         ivel3_band = scipy.interpolate.interpn(
                             (kxp, kyp, kzp), vel3shape, new_grid, method=itype_sub)
                 if itype == "rbf":
-                    logger.info("Interpolating using Scipy Rbf.")
-                    # this RBF routine uses crazy amounts of memory
-                    kx_old, ky_old, kz_old = old_grid.T
-                    kx_new, ky_new, kz_new = new_grid.T
-                    if itype_sub not in constants.rbf_functions:
-                        logger.error("The specified itype_sub is not recognized "
-                                     "by the Rbf method, please consult the Scipy "
-                                     "documentation for valid flags. Possible flags "
-                                     "for itype_sub are: " +
-                                     ', '.join(map(str, constants.rbf_functions)) +
-                                     ". Exiting.")
+                    # lazy import of Alglib
+                    alglib = True
+                    try:
+                        import alglib
+                        import xalglib
+                    except ImportError:
+                        inputoutput.alglib_warning()
+                        alglib = False
+                    if alglib:
+                        logger.info("Interpolating using Alglib RBF.")
+                    else:
+                        logger.info("Interpolating using Scipy RBF.")
+                    if alglib:
+                        inter = xalglib.rbfcreate(3, 1)
+                        # data structure of Alglib is a bit different, pad
+                        # scalar at the end of coordinate values
+                        # TODO: Fix wrapper to avoid going through list
+                        kxkykzscalar = np.column_stack(
+                            (old_grid, energies[band])).tolist()
+                        # set the points
+                        xalglib.rbfsetpoints(inter, kxkykzscalar)
+                        # set type of rgf
+                        xalglib.rbfsetalgoqnn(inter)
+                        # rebuild model and change coefficients
+                        status = xalglib.rbfbuildmodel(inter)
+                        if status.terminationtype != 1:
+                            logger.error("The call to rbfbuildmodel of Alglib "
+                                         "returned: " +
+                                         str(status.terminationtype) +
+                                         " for the energies. Exiting.")
+                            sys.exit(1)
+                        ien_band = np.array(xalglib.rbfcalc3(inter,
+                                                             new_grid.tolist()))
+                        if ivelocities:
+                            # do the same for the velocities
+                            # direction 1
+                            kxkykzscalar = np.column_stack(
+                                (old_grid, velocities[band][0])).tolist()
+                            xalglib.rbfsetpoints(inter, kxkykzscalar)
+                            xalglib.rbfsetalgoqnn(inter)
+                            status = xalglib.rbfbuildmodel(inter)
+                            if status.terminationtype != 1:
+                                logger.error("The call to rbfbuildmodel of "
+                                             "Alglib returned: " +
+                                             str(status.terminationtype) +
+                                             " for the velocities. Exiting.")
+                                sys.exit(1)
+                            ivel1_band = np.array(xalglib.rbfcalc3(inter,
+                                                                   new_grid.tolist()))
+                            # direction 2
+                            kxkykzscalar = np.column_stack(
+                                (old_grid, velocities[band][1])).tolist()
+                            xalglib.rbfsetpoints(inter, kxkykzscalar)
+                            xalglib.rbfsetalgoqnn(inter)
+                            status = xalglib.rbfbuildmodel(inter)
+                            if status.terminationtype != 1:
+                                logger.error("The call to rbfbuildmodel of "
+                                             "Alglib returned: " +
+                                             str(status.terminationtype) +
+                                             " for the velocities. Exiting.")
+                                sys.exit(1)
+                            ivel2_band = np.array(xalglib.rbfcalc3(inter,
+                                                                   new_grid.tolist()))
+                            # direction 3
+                            kxkykzscalar = np.column_stack(
+                                (old_grid, velocities[band][2])).tolist()
+                            xalglib.rbfsetpoints(inter, kxkykzscalar)
+                            xalglib.rbfsetalgoqnn(inter)
+                            status = xalglib.rbfbuildmodel(inter)
+                            if status.terminationtype != 1:
+                                logger.error("The call to rbfbuildmodel of "
+                                             "Alglib returned: " +
+                                             str(status.terminationtype) +
+                                             " for the velocities. Exiting.")
+                                sys.exit(1)
+                            ivel3_band = np.array(xalglib.rbfcalc3(inter,
+                                                                   new_grid.tolist()))
+
+                    else:
+                        # this RBF routine uses crazy amounts of memory
+                        kx_old, ky_old, kz_old = old_grid.T
+                        kx_new, ky_new, kz_new = new_grid.T
+                        if itype_sub not in constants.rbf_functions:
+                            logger.error("The specified itype_sub is not recognized "
+                                         "by the Rbf method, please consult the Scipy "
+                                         "documentation for valid flags. Possible flags "
+                                         "for itype_sub are: " +
+                                         ', '.join(map(str, constants.rbf_functions)) +
+                                         ". Exiting.")
                         sys.exit(1)
-                    # force Rbf to go through the original points
-                    smooth = 0.0
-                    intere = scipy.interpolate.Rbf(kx_old, ky_old, kz_old,
-                                                   energies[band],
-                                                   function=itype_sub,
-                                                   smooth=selfmooth)
-                    ien_band = intere(kx_new, ky_new, kz_new)
-                    if ivelocities:
-                        intervel1 = scipy.interpolate.Rbf(kx_old, ky_old, kz_old,
-                                                          velocities[band][0],
-                                                          function=itype_sub,
-                                                          smooth=smooth)
-                        ivel1_band = intervel1(kx_new, ky_new, kz_new)
-                        intervel2 = scipy.interpolate.Rbf(kx_old, ky_old, kz_old,
-                                                          velocities[band][1],
-                                                          function=itype_sub,
-                                                          smooth=smooth)
-                        ivel2_band = intervel2(kx_new, ky_new, kz_new)
-                        intervel3 = scipy.interpolate.Rbf(kx_old, ky_old, kz_old,
-                                                          velocities[band][2],
-                                                          function=itype_sub,
-                                                          smooth=smooth)
-                        ivel3_band = intervel3(kx_new, ky_new, kz_new)
+                        # force Rbf to go through the original points
+                        smooth = 0.0
+                        intere = scipy.interpolate.Rbf(
+                            kx_old, ky_old, kz_old, energies[band],
+                            function=itype_sub, smooth=smooth)
+                        ien_band = intere(kx_new, ky_new, kz_new)
+                        if ivelocities:
+                            intervel1 = scipy.interpolate.Rbf(
+                                kx_old, ky_old, kz_old, velocities[band][0],
+                                function=itype_sub, smooth=smooth)
+                            ivel1_band = intervel1(kx_new, ky_new, kz_new)
+                            intervel2 = scipy.interpolate.Rbf(
+                                kx_old, ky_old, kz_old, velocities[band][1],
+                                function=itype_sub, smooth=smooth)
+                            ivel2_band = intervel2(kx_new, ky_new, kz_new)
+                            intervel3 = scipy.interpolate.Rbf(
+                                kx_old, ky_old, kz_old, velocities[band][2],
+                                function=itype_sub, smooth=smooth)
+                            ivel3_band = intervel3(kx_new, ky_new, kz_new)
 
                 ien[band] = ien_band
                 if ivelocities:
@@ -1846,7 +1915,7 @@ class Bandstructure():
                              "interface. Exiting.")
                 sys.exit(1)
 
-            if gen_velocities:
+            if gen_velocities and ivelocities:
                 einspline.einspline_execute_interface(domain_num_points,
                                                       domainx,
                                                       domainy,
@@ -1912,12 +1981,14 @@ class Bandstructure():
 
             # set boundary conditions
             bz_border = old_bz_border
+            print bz_border
             domainx = np.ascontiguousarray(
                 np.array([bz_border[0], bz_border[1]], dtype=np.double))
             domainy = np.ascontiguousarray(
                 np.array([bz_border[2], bz_border[3]], dtype=np.double))
             domainz = np.ascontiguousarray(
                 np.array([bz_border[4], bz_border[5]], dtype=np.double))
+            print domainx, domainy, domainz
             new_grid_trans = new_grid.T
             ix = np.ascontiguousarray(new_grid_trans[0], dtype="double")
             iy = np.ascontiguousarray(new_grid_trans[1], dtype="double")

@@ -495,9 +495,9 @@ def bandstructure_param(bs, location=None, filename=None):
             logger.error(
                 "The Band X segments in bandparam.yml is not to spec "
                 "or you have not specified the right read flag in "
-                "param.yml. Maybe you are switching to/from VASP "
-                "and param reading and forgot to also modify "
-                "bandparams.yml? Exiting.")
+                "param.yml. Maybe you are switching to/from a read "
+                "from external data and param reading and forgot to "
+                " also modify bandparams.yml? Exiting.")
             sys.exit(1)
         # check for tight binding entries
         if bandparamdata["type"] == 3:
@@ -557,9 +557,9 @@ def bandstructure_param(bs, location=None, filename=None):
             logger.error(
                 "The Band X segments in bandparam.yml is not to spec "
                 "or you have not specified the right read flag in "
-                "param.yml. Maybe you are switching to/from VASP "
-                "and param reading and forgot to also modify "
-                "bandparams.yml? Exiting.")
+                "param.yml. Maybe you are switching to/from a read "
+                "from external data and param reading and forgot to "
+                " also modify bandparams.yml? Exiting.")
             sys.exit(1)
         bandparams[band] = np.array(
             [banddata["type"], banddata["folding"]])

@@ -17,7 +17,7 @@
 # bandstructure?
 dispersion_interpolate: True # n/a
 # What is the target k-point sampling?
-dispersion_interpolate_sampling: [11,11,11] # n/a
+dispersion_interpolate_sampling: [15,15,15] # n/a
 # What interpolation method to use?
 dispersion_interpolate_method: "wildmagic" # n/a
 # What sub method to use?
@@ -28,7 +28,7 @@ dispersion_interpolate_type: "akima" # n/a
 # velocities after the dispersions have been
 # interpolated (used by default for the interpolat
 # routines that do not support velocity extraction)
-dispersion_velocities_numdiff: False # n/a
+dispersion_velocities_numdiff: True # n/a
 # Do you want to dump dispersion line to file before
 # interpolation?
 dispersion_write_preinter: True # n/a
@@ -40,7 +40,7 @@ dispersion_write_postinter: True # n/a
 dispersion_write_start: [0.0, 0.0, 0.0] # n/a
 # End k-point in direct coordinates for the
 # dispersion line:
-dispersion_write_end: [0.0, 0.5, 0.0] # n/a
+dispersion_write_end: [0.5, 0.0, 0.0] # n/a
 # Number of k-points along line extration:
 num_kpoints_along_line: 20 # n/a
 # Parameters that are passed to PythTB when reading
@@ -219,7 +219,7 @@ acceptor_degen_fact: 0.25 # #
 # Acceptor energy:
 acceptor_energy: 0.0 # eV
 # Input data and parameter read in. Consult manual.
-read: param # n/a
+read: vasp # n/a
 # Filename for the input data etc. Consult manual.
 readfile: "" # n/a
 # Do you want to use scissor operator?

@@ -1635,13 +1635,15 @@ class Bandstructure():
             sys.exit(1)
 
         # fetch old grid in cartesian (IBZ in direct for SKW)
-        if itype != "skw":
-            old_grid = self.lattice.fetch_kmesh(direct=False)
-            # store old bz border to be used in the interpolation
-            # routines below
-            old_bz_border = self.lattice.fetch_bz_border(direct=True)
+        if itype == "skw" or itype == "wildmagic" or itype == "einspline":
+            if itype == "skw":
+                old_grid = self.lattice.fetch_kmesh(direct=True, ired=True)
+            else:
+                # store old bz border to be used in the interpolation
+                # routines below
+                old_bz_border = self.lattice.fetch_bz_border(direct=True)
         else:
-            old_grid = self.lattice.fetch_kmesh(direct=True, ired=True)
+            old_grid = self.lattice.fetch_kmesh(direct=False)
 
         ksampling_old = ksampling
 
@@ -1679,8 +1681,12 @@ class Bandstructure():
                 # dvec to pull it inside the borders
                 self.lattice.kmesh = self.lattice.kmesh * dvec
                 self.lattice.kmesh_ired = self.lattice.kmesh_ired * dvec
-                # make sure the grid is in cartesian coordinates
-                new_grid = self.lattice.fetch_kmesh(direct=True)
+                # use direct for Wildmagic and Einspline, cartesian
+                # for the rest
+                if itype == "wildmagic" or itype == "einspline":
+                    new_grid = self.lattice.fetch_kmesh(direct=True)
+                else:
+                    new_grid = self.lattice.fetch_kmesh(direct=False)
             else:
                 new_grid = old_grid
         else:
@@ -1966,6 +1972,10 @@ class Bandstructure():
                     0, itype_sub)
 
         if itype == "wildmagic":
+            old_grid = self.lattice.fetch_kmesh(direct=True)
+            old_bz_border = self.lattice.fetch_bz_border(direct=True)
+            new_grid = self.lattice.fetch_kmesh(direct=True)
+
             if itype_sub not in constants.wildmagic_methods:
                 logger.error("The specified itype_sub is not recognized by "
                              "the Wildmagic method, please consult the "
@@ -1980,14 +1990,12 @@ class Bandstructure():
 
             # set boundary conditions
             bz_border = old_bz_border
-            print bz_border
             domainx = np.ascontiguousarray(
                 np.array([bz_border[0], bz_border[1]], dtype=np.double))
             domainy = np.ascontiguousarray(
                 np.array([bz_border[2], bz_border[3]], dtype=np.double))
             domainz = np.ascontiguousarray(
                 np.array([bz_border[4], bz_border[5]], dtype=np.double))
-            print domainx, domainy, domainz
             new_grid_trans = new_grid.T
             ix = np.ascontiguousarray(new_grid_trans[0], dtype="double")
             iy = np.ascontiguousarray(new_grid_trans[1], dtype="double")
@@ -2137,7 +2145,6 @@ class Bandstructure():
                                  "trilinear, tricubic_exact, tricubic_bspline "
                                  "and akima. Exiting.")
                     sys.exit(1)
-
         if itype == "skw":
             # lazy import of skw_interface (optional)
             import skw_interface

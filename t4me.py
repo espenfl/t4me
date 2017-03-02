@@ -123,7 +123,6 @@ def main():
                                          k_direct=True,
                                          itype="linearnd",
                                          itype_sub="linear")
-
         # same as above just for the velocities
         # check if the velocities exists, if not print a message and
         # continue
@@ -143,14 +142,7 @@ def main():
     # maybe the user wants to pre-interpolate?
     if param.dispersion_interpolate:
         logger.info("Pre-interpolating the dispersion data.")
-        if bs.gen_velocities and param.transport_calc:
-            # here we need the velocities
-            bs.interpolate(store_inter=True, ivelocities=True)
-            # if velocities did not exists, we now have them, so set
-            bs.gen_velocities = False
-        else:
-            # no velocities needed here
-            bs.interpolate(store_inter=True, ivelocities=False)
+        bs.interpolate(store_inter=True, ivelocities=True)
 
         # dump the dispersions after interpolations?
         if param.dispersion_write_postinter:
@@ -160,7 +152,6 @@ def main():
                                              k_direct=True,
                                              itype="linearnd",
                                              itype_sub="linear")
-
             # same as above just for the velocities
             if bs.gen_velocities:
                 logger.info(

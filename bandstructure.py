@@ -933,9 +933,8 @@ class Bandstructure():
                              "use closed expressions for the density of "
                              "states calculations. Exiting.")
                 sys.exit(1)
-            # check if the effective mass is indeed spherical
-            self.spherical_effective_mass(self.effmass[band])
-            effmass[band] = np.abs(self.effmass[band][0])
+            # use density of states effective mass
+            effmass[band] = np.power(np.prod(effmass[band]), 1.0 / 3.0)
             energy_shift = dos_energies - e0[band]
             status = self.status[band]
             # conduction

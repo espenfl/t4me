@@ -1773,7 +1773,6 @@ class Bandstructure():
                     # lazy import of Alglib
                     alglib = True
                     try:
-                        import alglib
                         import xalglib
                     except ImportError:
                         inputoutput.alglib_warning()
@@ -1801,8 +1800,14 @@ class Bandstructure():
                                          str(status.terminationtype) +
                                          " for the energies. Exiting.")
                             sys.exit(1)
+                        new_grid_x = new_grid[:, 0].tolist()
+                        print new_grid_x
+                        new_grid_y = new_grid[:, 1].tolist()
+                        new_grid_z = new_grid[:, 2].tolist()
                         ien_band = np.array(xalglib.rbfcalc3(inter,
-                                                             new_grid.tolist()))
+                                                             new_grid_x,
+                                                             new_grid_y,
+                                                             new_grid_z))
                         if ivelocities:
                             # do the same for the velocities
                             # direction 1
@@ -1818,7 +1823,9 @@ class Bandstructure():
                                              " for the velocities. Exiting.")
                                 sys.exit(1)
                             ivel1_band = np.array(xalglib.rbfcalc3(inter,
-                                                                   new_grid.tolist()))
+                                                                   new_grid_x,
+                                                                   new_grid_y,
+                                                                   new_grid_z))
                             # direction 2
                             kxkykzscalar = np.column_stack(
                                 (old_grid, velocities[band][1])).tolist()
@@ -1832,7 +1839,9 @@ class Bandstructure():
                                              " for the velocities. Exiting.")
                                 sys.exit(1)
                             ivel2_band = np.array(xalglib.rbfcalc3(inter,
-                                                                   new_grid.tolist()))
+                                                                   new_grid_x,
+                                                                   new_grid_y,
+                                                                   new_grid_z))
                             # direction 3
                             kxkykzscalar = np.column_stack(
                                 (old_grid, velocities[band][2])).tolist()
@@ -1846,8 +1855,9 @@ class Bandstructure():
                                              " for the velocities. Exiting.")
                                 sys.exit(1)
                             ivel3_band = np.array(xalglib.rbfcalc3(inter,
-                                                                   new_grid.tolist()))
-
+                                                                   new_grid_x,
+                                                                   new_grid_y,
+                                                                   new_grid_z))
                     else:
                         # this RBF routine uses crazy amounts of memory
                         kx_old, ky_old, kz_old = old_grid.T

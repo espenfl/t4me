@@ -15,7 +15,7 @@
 # -------------------------------------------------------#
 # Do you want to interpolate the supplied
 # bandstructure?
-dispersion_interpolate: True # n/a
+dispersion_interpolate: False # n/a
 # What is the target k-point sampling?
 dispersion_interpolate_sampling: [15,15,15] # n/a
 # What interpolation method to use?
@@ -31,10 +31,10 @@ dispersion_interpolate_type: "akima" # n/a
 dispersion_velocities_numdiff: True # n/a
 # Do you want to dump dispersion line to file before
 # interpolation?
-dispersion_write_preinter: True # n/a
+dispersion_write_preinter: False # n/a
 # Do you want to dump dispersion line to file after
 # interpolation?
-dispersion_write_postinter: True # n/a
+dispersion_write_postinter: False # n/a
 # Start k-point in direct coordinates for the
 # dispersion line:
 dispersion_write_start: [0.0, 0.0, 0.0] # n/a
@@ -61,7 +61,7 @@ dispersion_w90_tb_max_distance: 10 # AA
 # transport tensors?
 transport_calc: True # n/a
 # Which method to use?
-transport_method: "closed"
+transport_method: "numerick"
 # Which integration method to use?
 transport_integration_method: "trapz" # n/a
 # Which smearing to use (only applied if

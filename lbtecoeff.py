@@ -197,7 +197,11 @@ def spherical_closed(tr, eta, bs, tau0_t, temperature):
         band_actual = tr.included_bands[band]
         # check for spherical effective mass
         effmass_vec = bs.effmass[band_actual]
-        tr.bs.spherical_effective_mass(effmass_vec)
+        if not tr.bs.spherical_effective_mass(effmass_vec):
+            logger.error("In order to run the closed Fermi-Dirac "
+                         "integrals the effective mass needs to be "
+                         "spherical. Exiting.")
+            sys.exit(1)
         # make sure effective mass is positive
         effmass[band] = np.abs(effmass_vec[0])
         # check if tau0 exist

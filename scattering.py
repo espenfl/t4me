@@ -612,7 +612,11 @@ def scattering_spherical(tr, energies, select_scattering,
             sign = 1.0
             # check spherical effmass for all bands
             effmass_vec = tr.bs.effmass[band]
-            tr.bs.spherical_effective_mass(effmass_vec)
+            if not tr.bs.spherical_effective_mass(effmass_vec):
+                logger.error("The setup of scattering mechanisms using "
+                             "spherical models requires a spherical "
+                             "effective mass. Exiting.")
+                sys.exit(1)
             effmass = effmass_vec[0]
             # make sure effective mass is positive
             effmass = abs(effmass)

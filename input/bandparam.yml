@@ -51,7 +51,7 @@ Band 1-:
   # Bandfolding? Please leave at False
   folding: False
   # Effective masses in units of the electron mass
-  effmass: [-1.0,-2.0,-3.0]
+  effmass: [-1.0,-1.0,-1.0]
   # Alpha factor or factor in front of k^4 term
   a: [-100.0,-100.0,-100.0]
   # Energy shift

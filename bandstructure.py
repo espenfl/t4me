@@ -1537,6 +1537,12 @@ class Bandstructure():
         logger = logging.getLogger(sys._getframe().f_code.co_name)
         logger.debug("Running interpolate.")
 
+        # this flag determines if we want to run the
+        # Wildmagic or Einspline interpolation on direct or
+        # cartesian coordinates (does not matter for the energies)
+        # this should always be set to False, except for testing
+        wildmagic_einspline_direct = False
+
         if ienergies:
             try:
                 energies = self.energies
@@ -1641,9 +1647,15 @@ class Bandstructure():
             else:
                 # store old bz border to be used in the interpolation
                 # routines below
-                old_bz_border = self.lattice.fetch_bz_border(direct=True)
+                if wildmagic_einspline_direct:
+                    old_grid = self.lattice.fetch_kmesh(direct=True)
+                    old_bz_border = self.lattice.fetch_bz_border(direct=True)
+                else:
+                    old_grid = self.lattice.fetch_kmesh(direct=False)
+                    old_bz_border = self.lattice.fetch_bz_border(direct=False)
         else:
             old_grid = self.lattice.fetch_kmesh(direct=False)
+            old_bz_border = self.lattice.fetch_bz_border(direct=False)
 
         ksampling_old = ksampling
 
@@ -1684,7 +1696,10 @@ class Bandstructure():
                 # use direct for Wildmagic and Einspline, cartesian
                 # for the rest
                 if itype == "wildmagic" or itype == "einspline":
-                    new_grid = self.lattice.fetch_kmesh(direct=True)
+                    if wildmagic_einspline_direct:
+                        new_grid = self.lattice.fetch_kmesh(direct=True)
+                    else:
+                        new_grid = self.lattice.fetch_kmesh(direct=False)
                 else:
                     new_grid = self.lattice.fetch_kmesh(direct=False)
             else:
@@ -1874,38 +1889,18 @@ class Bandstructure():
         # loop over bands in the C code
         if itype == "einspline":
             logger.info("Interpolating using Einspline.")
+
             # lazy import of einspline (optional)
             import einspline
 
-            # in general we do not have a uniform
-            # k-point grid
-            uniform = True
-
-            if uniform:
-                # for uniform grids we only need the start and
-                # endpoint and number of points in each direction
-                bz_border = old_bz_border
-                domainx = np.array(
-                    [bz_border[0], bz_border[1]], dtype=np.double)
-                domainy = np.array(
-                    [bz_border[2], bz_border[3]], dtype=np.double)
-                domainz = np.array(
-                    [bz_border[4], bz_border[5]], dtype=np.double)
-                domain_num_points = ksampling_old
-            else:
-                print "balla"
-                # for non-uniform grids we need the full array
-                # of points
-                # domainx = np.ascontiguousarray(old_grid[:, 0],
-                #                               dtype=np.double)
-                # domainy = np.ascontiguousarray(old_grid[:, 1],
-                #                               dtype=np.double)
-                # domainz = np.ascontiguousarray(old_grid[:, 2],
-                #                               dtype=np.double)
-                # domain_num_points = np.array([domainx.shape[0],
-                #                              domainy.shape[0],
-                #                              domainz.shape[0]],
-                #                             dtype="intc")
+            bz_border = old_bz_border
+            domainx = np.array(
+                [bz_border[0], bz_border[1]], dtype=np.double)
+            domainy = np.array(
+                [bz_border[2], bz_border[3]], dtype=np.double)
+            domainz = np.array(
+                [bz_border[4], bz_border[5]], dtype=np.double)
+            domain_num_points = ksampling_old
             ix = np.ascontiguousarray(new_grid.T[0], dtype=np.double)
             iy = np.ascontiguousarray(new_grid.T[1], dtype=np.double)
             iz = np.ascontiguousarray(new_grid.T[2], dtype=np.double)
@@ -1925,7 +1920,6 @@ class Bandstructure():
                                                       domainx,
                                                       domainy,
                                                       domainz,
-                                                      uniform,
                                                       np.ascontiguousarray(
                                                           energies, dtype="double"),
                                                       ix, iy, iz, ien,
@@ -1970,12 +1964,8 @@ class Bandstructure():
                     ix, iy, iz, ivel3,
                     dummy, dummy, dummy,
                     0, itype_sub)
-
+        # again loop over bands in the C code
         if itype == "wildmagic":
-            old_grid = self.lattice.fetch_kmesh(direct=True)
-            old_bz_border = self.lattice.fetch_bz_border(direct=True)
-            new_grid = self.lattice.fetch_kmesh(direct=True)
-
             if itype_sub not in constants.wildmagic_methods:
                 logger.error("The specified itype_sub is not recognized by "
                              "the Wildmagic method, please consult the "
@@ -1985,6 +1975,7 @@ class Bandstructure():
                              ". Exiting.")
                 sys.exit(1)
             logger.info("Interpolating using Wildmagic/GeometricTools.")
+
             # lazy import of wildmagic (optional)
             import wildmagic
 
@@ -2057,7 +2048,6 @@ class Bandstructure():
                              "trilinear, tricubic_exact, tricubic_bspline "
                              "and akima. Exiting.")
                 sys.exit(1)
-
             if ivelocities and not gen_velocities:
                 if itype_sub == "trilinear":
                     wildmagic.trilinear_execute_interface(
@@ -2169,6 +2159,7 @@ class Bandstructure():
                     positions, dtype="double"),
                     np.ascontiguousarray(species, dtype="intc"),
                     factor)
+
         else:
             if gen_velocities or ivelocities:
                 # squeeze all individual directions into one array
@@ -2206,6 +2197,9 @@ class Bandstructure():
                 self.velocities = ivel
             else:
                 self.velocities = None
+            # we should now have the velocities
+            # or gen_velocities was already False
+            self.gen_velocities = False
         # only return
         else:
             # reset lattice
@@ -2240,10 +2234,7 @@ class Bandstructure():
         effmass = effmass_t[0]
         if not np.allclose(np.array([effmass, effmass, effmass]),
                            effmass_t, atol=constants.zerocut):
-            logger.error(
-                "This routine requires a spherical effective mass "
-                "tensor. Exiting.")
-            sys.exit(1)
+            return False
         return True
 
     def calc_density_of_states(self, spin_degen=False,

@@ -111,10 +111,15 @@ def main():
     # velocities and we thus need them before checking if
     # user wants to dump dispersion relation (imcludes velocities
     # if present).
-    if bs.gen_velocities and param.dispersion_velocities_numdiff \
-       and param.transport_calc:
+    # also, if user wants to preinterpolate, wait with velocity
+    # extraction
+    if param.dispersion_velocities_numdiff and \
+       not param.dispersion_interpolate:
+        if not bs.gen_velocities:
+            logger.warning("The velocities already exist. This data will "
+                           "be overwritten. Continuing.")
+        logger.info("Extracting the velocities by finite difference")
         bs.calc_velocities()
-
     # dump the dispersions?
     if param.dispersion_write_preinter:
         inputoutput.dump_bandstruct_line(bs, param.dispersion_write_start,
@@ -142,7 +147,36 @@ def main():
     # maybe the user wants to pre-interpolate?
     if param.dispersion_interpolate:
         logger.info("Pre-interpolating the dispersion data.")
-        bs.interpolate(store_inter=True, ivelocities=True)
+        if bs.gen_velocities and not param.dispersion_velocities_numdiff:
+            if lat.regular:
+                # for a regular grid it is okey for us to extract velocities
+                # on the fly
+                logger.info("Interpolating the energies and extracting the "
+                            "velocities by interpolation.")
+                bs.interpolate(store_inter=True, ivelocities=True)
+            else:
+                # only interpolate the eigenvalues
+                logger.info("Interpolating the energies.")
+                bs.interpolate(store_inter=True, ivelocities=False)
+                if param.dispersion_velocities_numdiff:
+                    logger.warning("The user disabled the extraction of the "
+                                   "velocities by finite difference. However, "
+                                   "velocity extraction by interpolation is "
+                                   "currently only possible for regular "
+                                   "unitcells. Continuing.")
+                # and then extract velocities by finite difference
+                logger.info("Extracting the velocities by finite difference.")
+                bs.calc_velocities()
+        else:
+            if param.dispersion_velocities_numdiff:
+                # only interpolate the eigenvalues
+                logger.info("Interpolating the energies.")
+                bs.interpolate(store_inter=True, ivelocities=False)
+                # and then extract velocities by finite difference
+                logger.info("Extracting the velocities by finite difference.")
+                bs.calc_velocities()
+            else:
+                bs.interpolate(store_inter=True, ivelocities=True)
 
         # dump the dispersions after interpolations?
         if param.dispersion_write_postinter:
@@ -165,8 +199,6 @@ def main():
                                                  k_direct=True,
                                                  itype="linearnd",
                                                  itype_sub="linear")
-
-    sys.exit(1)
 
     # calculation of the density of states?
     if param.dos_calc:

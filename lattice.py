@@ -88,6 +88,9 @@ class Lattice():
         # calculate the reciprocal unit cell volume
         self.rvolume = self.calculate_cell_volume(self.runitcell)
 
+        # check if unitcell is regular
+        self.regular = self.regularcell()
+
         # check that we have at least set a minimal set
         # of parameters
         self.check_lattice()
@@ -871,3 +874,36 @@ class Lattice():
         self.mapping_bz_to_ibz = mapping_bz_to_ibz
         self.ksampling = ksampling
         self.ibz_weights = ibz_weights
+
+    def regularcell(self):
+        """
+        Checks that all the vectors in the unit cell
+        is orthogonal and thus if the cell is regular.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        regular : boolean
+            True if regular, False otherwise.
+
+        """
+
+        # set logger
+        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger.debug("Running regularcell.")
+
+        regular = True
+
+        # detect values in upper trigonal
+        if self.unitcell[np.triu_indices(
+                3, k=1)].all() > constants.zerocut:
+            regular = False
+        # detect values in lower trigonal
+        if self.unitcell[np.tril_indices(
+                3, k=-1)].all() > constants.zerocut:
+            regular = False
+
+        return regular

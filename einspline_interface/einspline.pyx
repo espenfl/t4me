@@ -28,7 +28,7 @@ cdef extern from "einspline_interface.cpp":
     void einspline_execute_nonuniform(int * num_points, double * gridx, double * gridy, double * gridz, double * data, double * ix, double * iy, double * iz, int ip, int num_bands, double * idata, double * igradx, double * igrady, double * igradz, int grad, char * )
 
 
-def einspline_execute_interface(np.ndarray[int, ndim=1, mode="c"] num_points not None, np.ndarray[double, ndim=1, mode="c"] domainx not None, np.ndarray[double, ndim=1, mode="c"] domainy not None, np.ndarray[double, ndim=1, mode="c"] domainz not None, uniform, np.ndarray[double, ndim=2, mode="c"] data not None, np.ndarray[double, ndim=1, mode="c"] ix not None,  np.ndarray[double, ndim=1, mode="c"] iy not None, np.ndarray[double, ndim=1, mode="c"] iz not None, np.ndarray[double, ndim=2, mode="c"] idata not None, np.ndarray[double, ndim=2, mode="c"] igradx not None, np.ndarray[double, ndim=2, mode="c"] igrady not None, np.ndarray[double, ndim=2, mode="c"] igradz not None, int grad, boundary):
+def einspline_execute_interface(np.ndarray[int, ndim=1, mode="c"] num_points not None, np.ndarray[double, ndim=1, mode="c"] domainx not None, np.ndarray[double, ndim=1, mode="c"] domainy not None, np.ndarray[double, ndim=1, mode="c"] domainz not None, np.ndarray[double, ndim=2, mode="c"] data not None, np.ndarray[double, ndim=1, mode="c"] ix not None,  np.ndarray[double, ndim=1, mode="c"] iy not None, np.ndarray[double, ndim=1, mode="c"] iz not None, np.ndarray[double, ndim=2, mode="c"] idata not None, np.ndarray[double, ndim=2, mode="c"] igradx not None, np.ndarray[double, ndim=2, mode="c"] igrady not None, np.ndarray[double, ndim=2, mode="c"] igradz not None, int grad, boundary):
     logging.debug("Running Einspline interpolation")
     cdef int ip = np.intc(ix.shape[0])
     cdef int num_bands = np.intc(data.shape[0])
@@ -37,6 +37,7 @@ def einspline_execute_interface(np.ndarray[int, ndim=1, mode="c"] num_points not
     boundary = boundary.upper()
     bc_bytes = str.encode(boundary)
     cdef char * bc = bc_bytes
+    uniform = True
     if uniform:
         logging.debug("Running uniform Einspline interpolation")
         einspline_execute_uniform( & num_points[0], & domainx[0], & domainy[0],

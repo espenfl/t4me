@@ -1,0 +1,45 @@
+# simple build script for Spglib. Please
+# consult README.md and INSTALL after automake initialization
+# for additional system specific modifications
+
+# default location for submodule
+cd spglib
+
+# check if previous compilation have been performed
+if [ -f Makefile ]
+then 
+make clean
+rm -rf lib
+else
+mkdir -p m4
+fi
+
+# build spglib per Linux specs in README.md
+aclocal
+autoheader
+libtoolize
+touch INSTALL NEWS README AUTHORS
+automake -acf
+autoconf
+./configure --prefix=$PWD
+make
+make install
+
+# build tetrahedron_method (separated since spglib 1.7.4)
+# change to you specs
+CC=gcc
+CFLAGS="-O2 -fPIC"
+
+cd src
+$CC $CFLAGS -c kgrid.c tetrahedron_method.c
+
+# make simple library that can be included in setup.py
+# shared
+#$CC -shared -o libtetrahedron.so tetrahedron_method.o
+#mv libtetrahedron.so ../lib/.
+# static
+ar rvs libtetrahedron.a tetrahedron_method.o kgrid.o
+mv libtetrahedron.a ../lib/.
+
+cd ..
+

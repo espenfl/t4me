@@ -95,10 +95,10 @@ ext = [Extension("gsl", ["gsl_interface/gsl.pyx"],
        # in spglib, tetrahedron_method is compiled and linked manually
        # by the compile script in the base directory
        Extension("spglib_interface", ["spglib_interface/spglib.pyx"],
-                 include_dirs=[spglibinclude, spglibinclude +
-                               "/../../src", numpy.get_include()],
+                 include_dirs=[spglibinclude,
+                               "spglib/src", numpy.get_include()],
                  library_dirs=[spgliblib],
-                 libraries=["symspg", "tetrahedron", "stdc++"],
+                 libraries=["tetrahedron", "symspg", "tetrahedron", "stdc++"],
                  extra_compile_args=[
                      "-std=c++11", "-g", "-w", "-fno-omit-frame-pointer", "-fno-builtin-malloc -fno-builtin-calloc -fno-builtin-realloc -fno-builtin-free"],
                  extra_link_args=["-g"],

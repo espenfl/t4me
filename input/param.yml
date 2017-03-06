@@ -59,7 +59,7 @@ dispersion_w90_tb_max_distance: 10 # AA
 # -------------------------------------------------------#
 # Do you want to calculate the electronic
 # transport tensors?
-transport_calc: True # n/a
+transport_calc: False # n/a
 # Which method to use?
 transport_method: "numerick"
 # Which integration method to use?
@@ -116,7 +116,7 @@ transport_isotropic: True # n/a
 # -------------------------------------------------------#
 # -------------------------------------------------------#
 # Do you want to calculate the density of states?
-dos_calc: False # n/a
+dos_calc: True # n/a
 # The minimum energy used for the density of states
 # calculations:
 dos_e_min: -5.0 # eV
@@ -219,7 +219,7 @@ acceptor_degen_fact: 0.25 # #
 # Acceptor energy:
 acceptor_energy: 0.0 # eV
 # Input data and parameter read in. Consult manual.
-read: vasp # n/a
+read: param # n/a
 # Filename for the input data etc. Consult manual.
 readfile: "" # n/a
 # Do you want to use scissor operator?

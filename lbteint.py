@@ -27,7 +27,6 @@ import scattering
 import constants
 import inputoutput
 import utils
-import gsl
 
 
 def scipy_k_integrals(eta, beta, effmass, e0, i, l, m, method="tplquad"):
@@ -297,6 +296,9 @@ def fermiintclosed(order, eta, spin_fact):
     # set logger
     logger = logging.getLogger(sys._getframe().f_code.co_name)
     logger.debug("Running fermiintclosed.")
+
+    # lazy import og gsl
+    import gsl
 
     # check for bogus r values
     if order < -2:

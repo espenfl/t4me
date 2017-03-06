@@ -8,46 +8,49 @@ import numpy
 # INTERPOLATION TECHNIQUES. UNCOMMENT THE OPTIONAL
 # IF YOU FEEL YOU WANT TO TEST THESE FEATURES.
 
-# required (global version)
-# USE THIS AND TAILOR IF YOU HAVE USED SU INSTALLB
-# globallib = "/usr/lib64"
-# globalinclude = "/usr/include"
-
-# spgliblib = globallib
-# spglibinclude = globalinclude + "/spglib"
-# gsllib = globallib
-# gslinclude = globalinclude + "/gsl"
-
-# required (local version)
-# USE THIS AND TAILOR IF YOU INSTALLED AS LOCAL USER
 home = "/home/flagre"
 locallib = home + "/local/lib"
 localinclude = home + "/local/include"
 
-spgliblib = locallib
-spglibinclude = localinclude + "/spglib"
+# ABSOLUTELY REQUIRED
+
+# Spglib
+# this is for a local version of spglib
+#spgliblib = locallib
+#spglibinclude = localinclude + "/spglib"
+# this is for the submodule version (recommended)
+spgliblib = "spglib/lib"
+spglibinclude = "spglib/include/spglib"
+
+# OPTIONAL
+# GNU GSL
 gsllib = locallib
 # (the gsl .h files use gsl/somefile.h)
 gslinclude = localinclude
 
-# optional
+# Intel MKL (only needed for SKW)
 mkllib = "/opt/intel/mkl/lib/intel64"
 mklinclude = "/opt/intel/mkl/include"
 fftwlib = mkllib
 fftwinclude = mklinclude + "/fftw"
 
+# SKW interpolation
 skwlib = "skw"
 skwinclude = "skw"
 
+# Einspline
 einsplinelib = locallib
 einsplineinclude = localinclude + "/einspline"
 
+# Cubature
 cubaturelib = locallib
 cubatureinclude = localinclude + "/cubature"
 
+# Wildmagic
 wildmagiclib = "/usr/lib64"
 wildmagicinclude = "/usr/include/WildMagic"
 
+# For development purposes
 #gptoolslib = locallib
 #gptoolsinclude = localinclude + "/gptools"
 
@@ -87,11 +90,15 @@ ext = [Extension("gsl", ["gsl_interface/gsl.pyx"],
                  extra_compile_args=[
                      "-std=c++11"],
                  language="c++"),
-
+       # special include for tetrahedron_method.c
+       # (to be fixed in the future) when this is fully separted
+       # in spglib, tetrahedron_method is compiled and linked manually
+       # by the compile script in the base directory
        Extension("spglib_interface", ["spglib_interface/spglib.pyx"],
-                 include_dirs=[spglibinclude, numpy.get_include()],
+                 include_dirs=[spglibinclude, spglibinclude +
+                               "/../../src", numpy.get_include()],
                  library_dirs=[spgliblib],
-                 libraries=["symspg", "stdc++"],
+                 libraries=["symspg", "tetrahedron", "stdc++"],
                  extra_compile_args=[
                      "-std=c++11", "-g", "-w", "-fno-omit-frame-pointer", "-fno-builtin-malloc -fno-builtin-calloc -fno-builtin-realloc -fno-builtin-free"],
                  extra_link_args=["-g"],
@@ -102,6 +109,11 @@ ext = [Extension("gsl", ["gsl_interface/gsl.pyx"],
        #                 libraries=["profiler", "tcmalloc"]),
        ]
 
-setup(
-    cmdclass={'build_ext': build_ext},
-    ext_modules=ext)
+setup(name='T4M',
+      version='1.0',
+      description='',
+      author='Espen Flage-Larsen',
+      author_email='espen.flage-larsen@sintef.no',
+      url='',
+      cmdclass={'build_ext': build_ext},
+      ext_modules=ext)

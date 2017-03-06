@@ -20,6 +20,7 @@
 #include <numeric>
 extern "C" {
 #include <spglib.h>
+#include <tetrahedron_method.h>
 }
 
 /* Interface to spglib
@@ -756,7 +757,7 @@ void tetra_weights(std::vector<std::vector<double> > &energies,
   
   // fetch relative grid addresses of the tetrahedrons around one point
   int relative_grid_address[24][4][3];
-  spg_get_tetrahedra_relative_grid_address(relative_grid_address,
+  thm_get_relative_grid_address(relative_grid_address,
 					   rec_basis);
   
   // scaling
@@ -801,11 +802,11 @@ void tetra_weights(std::vector<std::vector<double> > &energies,
 	// would also be 1/energy_samples units
         weights[energy][band][kpoint] = spin_degen[band] * scaling *
 	  ibz_weights[kpoint] *
-	  spg_get_tetrahedra_integration_weight(energy_samples[energy],
+	  thm_get_integration_weight(energy_samples[energy],
 						local_energies, 'I'); 
 	int_weights[energy][band][kpoint] =
 	  spin_degen[band] * scaling * ibz_weights[kpoint] *
-	  spg_get_tetrahedra_integration_weight(energy_samples[energy],
+	  thm_get_integration_weight(energy_samples[energy],
 						local_energies, 'J');
       } 
     }

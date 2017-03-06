@@ -15,13 +15,13 @@
 # -------------------------------------------------------#
 # Do you want to interpolate the supplied
 # bandstructure?
-dispersion_interpolate: True # n/a
+dispersion_interpolate: False # n/a
 # What is the target k-point sampling?
-dispersion_interpolate_sampling: [15,15,15] # n/a
+dispersion_interpolate_sampling: [5,5,5] # n/a
 # What interpolation method to use?
-dispersion_interpolate_method: "rbf" # n/a
+dispersion_interpolate_method: "wildmagic" # n/a
 # What sub method to use?
-dispersion_interpolate_type: "" # n/a
+dispersion_interpolate_type: "akima" # n/a
 # Use numerical differentiation to calculate the
 # velocities if they are not present on entry, or/and
 # use numerical differentiation to extract the
@@ -97,7 +97,7 @@ transport_energycutband: 1.0 # eV
 transport_include_bands: [] # n/a
 # Do you want to use the analytical spherical scattering
 # models?
-transport_use_analytic_scattering: True # n/a
+transport_use_analytic_scattering: False # n/a
 # Do you want to calculate the scattering on the fly
 # during integration?
 transport_use_scattering_ontfly: False # n/a

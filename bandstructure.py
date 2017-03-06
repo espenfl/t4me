@@ -1139,7 +1139,10 @@ class Bandstructure():
             | Can be any of:
             | {"nearest", "linear"}, when `itype` is set to `interpn`.
             | {"multiquadric", "inverse_multiquadric", "gaussian", "linear",
-            | "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`.
+            | "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`
+            | and when the Scipy variety is used (the `alglib` variable set
+            | to False in the :func:`interpolate` function). If `alglib` is
+            | set to True (default), then `itype_sub` does not have to be set.
             | {"natural", "flat", "periodic", "antiperiodic"}, when `itype`
             | is set to `einspline`.
             | {"trilinear, tricubic_exact, tricubic_bspline, akima"},
@@ -1212,7 +1215,10 @@ class Bandstructure():
             | Can be any of:
             | {"nearest", "linear"}, when `itype` is set to `interpn`.
             | {"multiquadric", "inverse_multiquadric", "gaussian", "linear",
-            | "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`.
+            | "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`
+            | and when the Scipy variety is used (the `alglib` variable set
+            | to False in the :func:`interpolate` function). If `alglib` is
+            | set to True (default), then `itype_sub` does not have to be set.
             | {"natural", "flat", "periodic", "antiperiodic"}, when `itype`
             | is set to `einspline`.
             | {"trilinear, tricubic_exact, tricubic_bspline, akima"},
@@ -1279,7 +1285,10 @@ class Bandstructure():
             | Can be any of:
             | {"nearest", "linear"}, when `itype` is set to `interpn`.
             | {"multiquadric", "inverse_multiquadric", "gaussian", "linear",
-            | "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`.
+            | "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`
+            | and when the Scipy variety is used (the `alglib` variable set
+            | to False in the :func:`interpolate` function). If `alglib` is
+            | set to True (default), then `itype_sub` does not have to be set.
             | {"natural", "flat", "periodic", "antiperiodic"}, when `itype`
             | is set to `einspline`.
             | {"trilinear, tricubic_exact, tricubic_bspline, akima"},
@@ -1353,7 +1362,10 @@ class Bandstructure():
             | Can be any of:
             | {"nearest", "linear"}, when `itype` is set to `interpn`.
             | {"multiquadric", "inverse_multiquadric", "gaussian", "linear",
-            | "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`.
+            | "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`
+            | and when the Scipy variety is used (the `alglib` variable set
+            | to False in the :func:`interpolate` function). If `alglib` is
+            | set to True (default), then `itype_sub` does not have to be set.
             | {"natural", "flat", "periodic", "antiperiodic"}, when `itype`
             | is set to `einspline`.
             | {"trilinear, tricubic_exact, tricubic_bspline, akima"},
@@ -1484,14 +1496,18 @@ class Bandstructure():
             `dispersion_interpolate_method` in the general configuration file
             sets this.
         itype_sub : string, optional
-            Can be any of:
-            {"nearest", "linear"}, when `itype` is set to `interpn`.
-            {"multiquadric", "inverse_multiquadric", "gaussian", "linear",
-            "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`.
-            {"natural", "flat", "periodic", "antiperiodic"}, when `itype`
-            is set to `einspline`.
-            {"trilinear, tricubic_exact, tricubic_bspline, akima"},
-            when `itype` is set to `wildmagic`.
+            | Can be any of:
+            | {"nearest", "linear"}, when `itype` is set to `interpn`.
+            | {"multiquadric", "inverse_multiquadric", "gaussian", "linear",
+            | "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`
+            | and when the Scipy variety is used (the `alglib` variable set
+            | to False in the :func:`interpolate` function). If `alglib` is
+            | set to True (default), then `itype_sub` does not have to be set.
+            | {"natural", "flat", "periodic", "antiperiodic"}, when `itype`
+            | is set to `einspline`.
+            | {"trilinear, tricubic_exact, tricubic_bspline, akima"},
+            | when `itype` is set to `wildmagic`.
+
             The subtype of the interpolation method.
         kpoint_mesh : ndarray, optional
             | Dimension: (M, 3)
@@ -1714,6 +1730,9 @@ class Bandstructure():
             ivel1 = np.zeros((num_bands, num_new_kpoints), dtype=np.double)
             ivel2 = np.zeros((num_bands, num_new_kpoints), dtype=np.double)
             ivel3 = np.zeros((num_bands, num_new_kpoints), dtype=np.double)
+        # used to select rbf method (defaults later to True if RBF is
+        # selected)
+        alglib = False
         # loop bands for python stuff, otherwise do loop of bands inside C
         # routines
         if itype == "linearnd" or itype == "interpn" or itype == "rbf":
@@ -1800,14 +1819,17 @@ class Bandstructure():
                                          str(status.terminationtype) +
                                          " for the energies. Exiting.")
                             sys.exit(1)
-                        new_grid_x = new_grid[:, 0].tolist()
-                        print new_grid_x
-                        new_grid_y = new_grid[:, 1].tolist()
-                        new_grid_z = new_grid[:, 2].tolist()
-                        ien_band = np.array(xalglib.rbfcalc3(inter,
-                                                             new_grid_x,
-                                                             new_grid_y,
-                                                             new_grid_z))
+                        # this is not good at all from a performance
+                        # perspective, but Alglib does not in its current
+                        # form accept broadcasting so this is going to be
+                        # slow.
+                        # make a C module or lift it into Cython in the future
+                        for k in range(num_new_kpoints):
+                            ien[band][k] = np.array(
+                                xalglib.rbfcalc3(inter,
+                                                 new_grid[k, 0],
+                                                 new_grid[k, 1],
+                                                 new_grid[k, 2]))
                         if ivelocities:
                             # do the same for the velocities
                             # direction 1
@@ -1822,10 +1844,13 @@ class Bandstructure():
                                              str(status.terminationtype) +
                                              " for the velocities. Exiting.")
                                 sys.exit(1)
-                            ivel1_band = np.array(xalglib.rbfcalc3(inter,
-                                                                   new_grid_x,
-                                                                   new_grid_y,
-                                                                   new_grid_z))
+                            for k in range(num_new_kpoints):
+                                ivel1[band][k] = np.array(
+                                    xalglib.rbfcalc3(inter,
+                                                     new_grid[k, 0],
+                                                     new_grid[k, 1],
+                                                     new_grid[k, 2]))
+
                             # direction 2
                             kxkykzscalar = np.column_stack(
                                 (old_grid, velocities[band][1])).tolist()
@@ -1838,10 +1863,13 @@ class Bandstructure():
                                              str(status.terminationtype) +
                                              " for the velocities. Exiting.")
                                 sys.exit(1)
-                            ivel2_band = np.array(xalglib.rbfcalc3(inter,
-                                                                   new_grid_x,
-                                                                   new_grid_y,
-                                                                   new_grid_z))
+                            for k in range(num_new_kpoints):
+                                ivel2[band][k] = np.array(
+                                    xalglib.rbfcalc3(inter,
+                                                     new_grid[k, 0],
+                                                     new_grid[k, 1],
+                                                     new_grid[k, 2]))
+
                             # direction 3
                             kxkykzscalar = np.column_stack(
                                 (old_grid, velocities[band][2])).tolist()
@@ -1854,10 +1882,13 @@ class Bandstructure():
                                              str(status.terminationtype) +
                                              " for the velocities. Exiting.")
                                 sys.exit(1)
-                            ivel3_band = np.array(xalglib.rbfcalc3(inter,
-                                                                   new_grid_x,
-                                                                   new_grid_y,
-                                                                   new_grid_z))
+                            for k in range(num_new_kpoints):
+                                ivel3[band][k] = np.array(
+                                    xalglib.rbfcalc3(inter,
+                                                     new_grid[k, 0],
+                                                     new_grid[k, 1],
+                                                     new_grid[k, 2]))
+
                     else:
                         # this RBF routine uses crazy amounts of memory
                         kx_old, ky_old, kz_old = old_grid.T
@@ -1889,12 +1920,13 @@ class Bandstructure():
                                 kx_old, ky_old, kz_old, velocities[band][2],
                                 function=itype_sub, smooth=smooth)
                             ivel3_band = intervel3(kx_new, ky_new, kz_new)
-
-                ien[band] = ien_band
-                if ivelocities:
-                    ivel1[band] = ivel1_band
-                    ivel2[band] = ivel2_band
-                    ivel3[band] = ivel3_band
+                # we do this internally if alglib is True
+                if not alglib:
+                    ien[band] = ien_band
+                    if ivelocities:
+                        ivel1[band] = ivel1_band
+                        ivel2[band] = ivel2_band
+                        ivel3[band] = ivel3_band
 
         # loop over bands in the C code
         if itype == "einspline":

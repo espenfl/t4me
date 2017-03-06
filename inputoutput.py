@@ -1242,16 +1242,18 @@ def dump_bandstruct_line(bs, kstart, kend, filename="band",
         `dispersion_interpolate_method` in param.yml sets this.
     itype_sub : string, optional
         | Can be any of:
-        | {"nearest", "linear"}, when `itype` is set to "interpn".
+        | {"nearest", "linear"}, when `itype` is set to `interpn`.
         | {"multiquadric", "inverse_multiquadric", "gaussian", "linear",
-        | "cubic", "quintic", "thin_plate"}, when `itype` is set to "rbf".
+        | "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`
+        | and when the Scipy variety is used (the `alglib` variable set
+        | to False in the :func:`interpolate` function). If `alglib` is
+        | set to True (default), then `itype_sub` does not have to be set.
         | {"natural", "flat", "periodic", "antiperiodic"}, when `itype`
-        | is set to "einspline".
-        | {"trilinear, tricubic_exact, tricubic_bspline, akima"}, when
-        | `itype` is set to "wildmagic".
+        | is set to `einspline`.
+        | {"trilinear, tricubic_exact, tricubic_bspline, akima"},
+        | when `itype` is set to `wildmagic`.
 
         The subtype of the interpolation method.
-
 
     Returns
     -------

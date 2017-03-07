@@ -53,8 +53,8 @@ def spglib_error():
 def gsl_warning():
     # set logger
     logger = logging.getLogger(sys._getframe().f_code.co_name)
-    logger.error("Could not locate the GSL interface. Please "
-                 "do not use this functionality. Continuing.")
+    logger.warning("Could not locate the GSL interface. Please "
+                   "do not use this functionality. Continuing.")
 
 
 def alglib_warning():

@@ -50,7 +50,7 @@ def main():
     try:
         import gsl
     except ImportError:
-        inputoutput.gsl_error()
+        inputoutput.gsl_warning()
 
     # check spglib and load
     try:

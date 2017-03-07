@@ -59,7 +59,7 @@ dispersion_w90_tb_max_distance: 10 # AA
 # -------------------------------------------------------#
 # Do you want to calculate the electronic
 # transport tensors?
-transport_calc: False # n/a
+transport_calc: True # n/a
 # Which method to use?
 transport_method: "numerick"
 # Which integration method to use?
@@ -219,7 +219,7 @@ acceptor_degen_fact: 0.25 # #
 # Acceptor energy:
 acceptor_energy: 0.0 # eV
 # Input data and parameter read in. Consult manual.
-read: param # n/a
+read: vasp # n/a
 # Filename for the input data etc. Consult manual.
 readfile: "" # n/a
 # Do you want to use scissor operator?

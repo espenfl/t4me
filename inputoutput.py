@@ -48,15 +48,13 @@ def spglib_error():
     sys.exit(1)
 
 
-def gsl_error():
+# warnings
+
+def gsl_warning():
     # set logger
     logger = logging.getLogger(sys._getframe().f_code.co_name)
     logger.error("Could not locate the GSL interface. Please "
-                 "run 'python setup.py build_ext --inplace before "
-                 "continuing. Exiting.")
-    sys.exit(1)
-
-# warnings
+                 "do not use this functionality. Continuing.")
 
 
 def alglib_warning():

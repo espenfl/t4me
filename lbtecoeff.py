@@ -21,6 +21,7 @@ import sys
 import math
 import logging
 import numpy as np
+import scipy.integrate as scii
 
 # locals
 import lbteint
@@ -1006,33 +1007,140 @@ def numerick(tr, chempots, temperatures, bs=None):
         # first check that the scattering array have been set up on
         # the energy grid
         scattering.check_scattering(tr)
-        numbands = tr.included_bands.size
-        sigma_band = np.zeros((numbands, 3, 3))
-        seebeck_band = np.zeros((numbands, 3, 3))
-        lorenz_band = np.zeros((numbands, 3, 3))
-        # loop temperature and chemical potential manually
-        # (broadcast later?)
-        for tindex, temp in np.ndenumerate(temperatures):
-            for cindex, chempot in np.ndenumerate(chempots):
+        method = 2
+        if method == 0:
+            # lazy imports
+            import cython_functions
+            sigma, seebeck, lorenz = cython_functions.calc_trncoeff(tr)
+        elif method == 1:
+            numbands = tr.included_bands.size
+            sigma_band = np.zeros((numbands, 3, 3))
+            seebeck_band = np.zeros((numbands, 3, 3))
+            lorenz_band = np.zeros((numbands, 3, 3))
+            # loop temperature and chemical potential manually
+            # (broadcast later?)
+            for tindex, temp in np.ndenumerate(temperatures):
                 beta = 1e5 / temp / constants.kb
-                for band in range(numbands):
-                    band_actual = tr.included_bands[band]
-                    spin_deg = tr.bs.spin_degen[band_actual]
-                    energies = tr.bs.energies[band_actual]
-                    velocities = tr.bs.velocities[band_actual]
-                    scatter = tr.scattering_total_inv[tindex[0], band_actual]
-                    sigmasigma = lbteint.scipy_k_integrals_discrete(
-                        tr, "normal", energies, velocities, scatter, chempot,
-                        beta, 0.0, spin_deg,
-                        method=tr.param.transport_integration_method)
-                    sigmachi = lbteint.scipy_k_integrals_discrete(
-                        tr, "normal", energies, velocities, scatter, chempot,
-                        beta, 1.0, spin_deg,
-                        method=tr.param.transport_integration_method)
-                    sigmakappa = lbteint.scipy_k_integrals_discrete(
-                        tr, "normal", energies, velocities, scatter, chempot,
-                        beta, 2.0, spin_deg,
-                        method=tr.param.transport_integration_method)
+                for cindex, chempot in np.ndenumerate(chempots):
+                    for band in range(numbands):
+                        band_actual = tr.included_bands[band]
+                        spin_deg = tr.bs.spin_degen[band_actual]
+                        energies = tr.bs.energies[band_actual]
+                        velocities = tr.bs.velocities[band_actual]
+                        scatter = tr.scattering_total_inv[
+                            tindex[0], band_actual]
+                        sigmasigma = lbteint.scipy_k_integrals_discrete(
+                            tr, "normal", energies, velocities, scatter, chempot,
+                            beta, 0.0, spin_deg,
+                            method=tr.param.transport_integration_method)
+                        sigmachi = lbteint.scipy_k_integrals_discrete(
+                            tr, "normal", energies, velocities, scatter, chempot,
+                            beta, 1.0, spin_deg,
+                            method=tr.param.transport_integration_method)
+                        sigmakappa = lbteint.scipy_k_integrals_discrete(
+                            tr, "normal", energies, velocities, scatter, chempot,
+                            beta, 2.0, spin_deg,
+                            method=tr.param.transport_integration_method)
+                        # conductivity
+                        bandvaluesigma = sigmasigma
+                        # for the seebeck, the units in front of the integral in
+                        # the Sigmas cancels
+                        # remember to do matrix and not elementwise
+                        # for all tensors
+                        # check if sigma is singular
+                        sigmainv = utils.invert_matrix(sigmasigma)
+                        bandvalueseebeck = np.dot(sigmainv, sigmachi)
+                        # and now the lorenz (same with the units)
+                        bandvaluelorenz = (np.dot(sigmakappa, sigmainv) -
+                                           np.dot(np.dot(sigmachi, bandvalueseebeck),
+                                                  sigmainv))
+                        # set sigma pr band (adjust units later)
+                        sigma_band[band] = bandvaluesigma
+                        # set seebeck pr band (adjust units later)
+                        seebeck_band[band] = bandvalueseebeck
+                        # set lorenz pr band (adjust units later)
+                        lorenz_band[band] = bandvaluelorenz
+
+                    # now we need to calculate the multiband totals and
+                    # add explicit temperature dependency, first conductivity
+                    sigma_total = np.sum(sigma_band, axis=0)
+                    # some temporaries
+                    # do not print invalid multiplies
+                    with np.errstate(invalid='ignore'):
+                        seebecktimessigma = np.multiply(
+                            seebeck_band, sigma_band)
+                        seebeck2timessigma = np.multiply(
+                            np.power(seebeck_band, 2.0), sigma_band)
+                        lorenztimessigma = np.multiply(lorenz_band, sigma_band)
+                    # then seebeck (remove nans etc.)
+                    seebeck_total = np.nan_to_num(
+                        np.sum(seebecktimessigma, axis=0) / sigma_total)
+                    # then lorenz (remove nans etc.)
+                    lorenz_total = np.nan_to_num((
+                        np.sum(lorenztimessigma, axis=0) +
+                        np.sum(seebeck2timessigma, axis=0)) /
+                        sigma_total - np.power(
+                        np.sum(seebecktimessigma, axis=0) /
+                        sigma_total, 2.0))
+
+                    # now set units and add temperature scaling
+                    sigma_units = 1e11 * constants.g0 / \
+                        (16 * np.power(constants.pi, 2.0) *
+                         constants.hbar * constants.kb) / temp
+                    seebeck_units = -1e6 / temp
+                    lorenz_units = 1e8 / np.power(temp, 2.0)
+
+                    # and add units to the integrals
+                    sigma[tindex, cindex] = sigma_units * sigma_total
+                    seebeck[tindex, cindex] = seebeck_units * seebeck_total
+                    lorenz[tindex, cindex] = lorenz_units * lorenz_total
+
+        elif method == 2:
+            numbands = tr.included_bands.size
+            sigma_band = np.zeros((numbands, 3, 3))
+            seebeck_band = np.zeros((numbands, 3, 3))
+            lorenz_band = np.zeros((numbands, 3, 3))
+            # loop temperature and chemical potential manually
+            # (broadcast later?)
+            kx, ky, kz = tr.lattice.fetch_kmesh_unit_vecs(direct=False)
+            ksampling = tr.lattice.ksampling
+            kx = kx[1] - kx[0]
+            ky = ky[1] - ky[0]
+            kz = kz[1] - kz[0]
+            energies = energies[tr.included_bands]
+            velocities = velocities[tr.included_bands]
+            spin_degen = tr.bs.spin_degen[tr.included_bands]
+            for tindex, temp in np.ndenumerate(temperatures):
+                beta = 1e5 / temp / constants.kb
+                # now set units and add temperature scaling
+                sigma_units = 1e11 * constants.g0 / \
+                    (16 * np.power(constants.pi, 2.0) *
+                     constants.hbar * constants.kb) / temp
+                seebeck_units = -1e6 / temp
+                lorenz_units = 1e8 / np.power(temp, 2.0)
+                for cindex, chempot in np.ndenumerate(chempots):
+                    tau = tr.scattering_total_inv[tindex, tr.included_bands]
+                    integrand = lbteint.concatenate_integrand_band(
+                        energies, velocities, tau, spin_degen,
+                        chempot, beta, 0.0)
+                    integrand_shaped = integrand.reshape(
+                        3, 3, ksampling[0], ksampling[1], ksampling[2])
+                    sigmasigma = scii.trapz(scii.trapz(scii.trapz(
+                        integrand_shaped, dx=kz, axis=4), dx=ky, axis=3), dx=kx, axis=2)
+                    integrand = lbteint.concatenate_integrand_band(
+                        energies, velocities, tau, spin_degen,
+                        chempot, beta, 1.0)
+                    integrand_shaped = integrand.reshape(
+                        3, 3, ksampling[0], ksampling[1], ksampling[2])
+                    sigmachi = scii.trapz(scii.trapz(scii.trapz(
+                        integrand_shaped, dx=kz, axis=4), dx=ky, axis=3), dx=kx, axis=2)
+                    integrand = lbteint.concatenate_integrand_band(
+                        energies, velocities, tau, spin_degen,
+                        chempot, beta, 2.0)
+                    integrand_shaped = integrand.reshape(
+                        3, 3, ksampling[0], ksampling[1], ksampling[2])
+                    sigmakappa = scii.trapz(scii.trapz(scii.trapz(
+                        integrand_shaped, dx=kz, axis=4), dx=ky, axis=3), dx=kx, axis=2)
                     # conductivity
                     bandvaluesigma = sigmasigma
                     # for the seebeck, the units in front of the integral in
@@ -1046,45 +1154,11 @@ def numerick(tr, chempots, temperatures, bs=None):
                     bandvaluelorenz = (np.dot(sigmakappa, sigmainv) -
                                        np.dot(np.dot(sigmachi, bandvalueseebeck),
                                               sigmainv))
-                    # set sigma pr band (adjust units later)
-                    sigma_band[band] = bandvaluesigma
-                    # set seebeck pr band (adjust units later)
-                    seebeck_band[band] = bandvalueseebeck
-                    # set lorenz pr band (adjust units later)
-                    lorenz_band[band] = bandvaluelorenz
 
-                # now we need to calculate the multiband totals and
-                # add explicit temperature dependency, first conductivity
-                sigma_total = np.sum(sigma_band, axis=0)
-                # some temporaries
-                # do not print invalid multiplies
-                with np.errstate(invalid='ignore'):
-                    seebecktimessigma = np.multiply(seebeck_band, sigma_band)
-                    seebeck2timessigma = np.multiply(
-                        np.power(seebeck_band, 2.0), sigma_band)
-                    lorenztimessigma = np.multiply(lorenz_band, sigma_band)
-                # then seebeck (remove nans etc.)
-                seebeck_total = np.nan_to_num(
-                    np.sum(seebecktimessigma, axis=0) / sigma_total)
-                # then lorenz (remove nans etc.)
-                lorenz_total = np.nan_to_num((
-                    np.sum(lorenztimessigma, axis=0) +
-                    np.sum(seebeck2timessigma, axis=0)) /
-                    sigma_total - np.power(
-                    np.sum(seebecktimessigma, axis=0) /
-                    sigma_total, 2.0))
-
-                # now set units and add temperature scaling
-                sigma_units = 1e11 * constants.g0 / \
-                    (16 * np.power(constants.pi, 2.0) *
-                     constants.hbar * constants.kb) / temp
-                seebeck_units = -1e6 / temp
-                lorenz_units = 1e8 / np.power(temp, 2.0)
-
-                # and add units to the integrals
-                sigma[tindex, cindex] = sigma_units * sigma_total
-                seebeck[tindex, cindex] = seebeck_units * seebeck_total
-                lorenz[tindex, cindex] = lorenz_units * lorenz_total
+                    # and add units to the integrals
+                    sigma[tindex, cindex] = sigma_units * bandvaluesigma
+                    seebeck[tindex, cindex] = seebeck_units * bandvalueseebeck
+                    lorenz[tindex, cindex] = lorenz_units * bandvaluelorenz
 
     # here we use weighted integration, accuracy cannot be controlled,
     # but it is rather fast and easy, currently linear tetrahedron and

@@ -17,7 +17,7 @@
 # bandstructure?
 dispersion_interpolate: False # n/a
 # What is the target k-point sampling?
-dispersion_interpolate_sampling: [5,5,5] # n/a
+dispersion_interpolate_sampling: [15,15,15] # n/a
 # What interpolation method to use?
 dispersion_interpolate_method: "wildmagic" # n/a
 # What sub method to use?
@@ -135,7 +135,7 @@ dos_interpolate_method: "wildmagic" # n/a
 # What sub method to use?
 dos_interpolate_type: "akima" # n/a
 # What type of integration method to use?
-dos_integrating_method: "tetra" # n/a
+dos_integrating_method: "trapz" # n/a
 # This is a bit redundant, users please leave this
 # set at False
 dos_smear_then_interpolate: False # n/a
@@ -148,11 +148,11 @@ dos_smear_then_interpolate: False # n/a
 # -------------------------------------------------------#
 # -------------------------------------------------------#
 # Minimum temperature:
-temperature_min: 100 # K
+temperature_min: 300 # K
 # Maximum temperature:
-temperature_max: 700 # K
+temperature_max: 300 # K
 # Number of temperature steps:
-temperature_steps: 7 # n/a
+temperature_steps: 1 # n/a
 # Generate Gamma centered k-point grids? Anything else
 # is currently experimental, so beware of wrong results
 gamma_center: True # n/a

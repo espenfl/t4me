@@ -29,6 +29,7 @@ import lbtecoeff
 import constants
 import inputoutput
 
+
 class Transport(object):
     """ Involves all transport related routines.
 
@@ -298,7 +299,14 @@ class Transport(object):
         try:
             self.scattering_tau0
         except AttributeError:
-            logger.error("The user wants to calculate the transport tensors, but no scattering mechanisms have been configured. Please make an object of the Transport() class, which setups up the scattering from the param.yml and bandparam.yml files before caling the routine that does the transport tensor calculations. Exiting.")
+            logger.error("The user wants to calculate the transport "
+                         "tensors, but no scattering mechanisms have "
+                         "been configured. Please make an object of "
+                         "the Transport() class, which setups up the "
+                         "scattering from the param.yml and "
+                         "bandparam.yml files before caling the routine "
+                         "that does the transport tensor calculations. "
+                         "Exiting.")
             sys.exit(1)
 
         # set defaults
@@ -462,10 +470,10 @@ class Transport(object):
 
         if tr is None:
             self.included_bands = np.array(
-                transport_included_bands)
+                transport_included_bands, dtype='intc')
         else:
             tr.included_bands = np.array(
-                transport_included_bands)
+                transport_included_bands, dtype='intc')
 
     def calc_carrier_concentration(self, temperature, chempot, dos=None,
                                    dos_energies=None, band_decomp=False,

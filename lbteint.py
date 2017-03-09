@@ -27,6 +27,7 @@ import scattering
 import constants
 import inputoutput
 import utils
+import cython_functions
 
 
 def scipy_k_integrals(eta, beta, effmass, e0, i, l, m, method="tplquad"):
@@ -44,10 +45,10 @@ def scipy_k_integrals(eta, beta, effmass, e0, i, l, m, method="tplquad"):
     effmass : ndarray
         | Dimension: (3)
 
-        The effective mass along the three reciprocal unit vectors in 
+        The effective mass along the three reciprocal unit vectors in
         units of the free electron mass.
     e0 : float
-        The energy shift, e.g. :math:`E=\\hbar^2 k^2/2m + E_0`, where 
+        The energy shift, e.g. :math:`E=\\hbar^2 k^2/2m + E_0`, where
         :math:`E_0` is the energy shift in eV.
     i : int
         The order of the transport tensor.
@@ -56,7 +57,7 @@ def scipy_k_integrals(eta, beta, effmass, e0, i, l, m, method="tplquad"):
     m : {0,1,2}
         The second index of the transport tensor
     method : {"tplquad"}, optional
-        The SciPy three dimensional integration method using 
+        The SciPy three dimensional integration method using
         :func:`scipy.integrate.tplquad`.
 
     Returns
@@ -87,7 +88,7 @@ def scipy_k_integrals_discrete(transport, integrand_type, energies, velocities,
                                scattering, chempot, beta, order,
                                spin_fact, method="trapz"):
     """
-    Calculates the three dimensional integrals over the k-points 
+    Calculates the three dimensional integrals over the k-points
     for discrete data using SciPy integration functions for discrete data.
 
     Parameters
@@ -147,13 +148,9 @@ def scipy_k_integrals_discrete(transport, integrand_type, energies, velocities,
 
     # now prepare the data that is to be integrated
     if integrand_type == "normal":
-        denom = 1.0 + np.cosh((energies - chempot) * beta)
-        integrand = spin_fact * np.power(energies[
-            np.newaxis, np.newaxis, :] - chempot, order) * \
-            velocities[:, np.newaxis, :] * velocities[np.newaxis, :, :] * \
-            scattering[np.newaxis, np.newaxis, :] / \
-            denom[np.newaxis, np.newaxis, :]
-        # now reshape
+        integrand = concatenate_integrand(energies, velocities,
+                                          scattering, spin_fact, chempot,
+                                          beta, order)
         integrand_shaped = integrand.reshape(
             3, 3, ksampling[0], ksampling[1], ksampling[2])
     else:
@@ -161,13 +158,8 @@ def scipy_k_integrals_discrete(transport, integrand_type, energies, velocities,
                      integrand_type + " is not supported. Exiting.")
         sys.exit(1)
 
-    if method != "romb":
-        integral = func[method](func[method](func[method](
-            integrand_shaped, dx=kz, axis=4), dx=ky, axis=3), dx=kx, axis=2)
-
-    else:
-        integral = func[method](func[method](func[method](
-            integrand_shaped, dx=kz, axis=4), dx=ky, axis=3), dx=kx, axis=2)
+    integral = func[method](func[method](func[method](
+        integrand_shaped, dx=kz, axis=4), dx=ky, axis=3), dx=kx, axis=2)
 
     return integral
 
@@ -691,3 +683,27 @@ def analytic_k_space_velocity(kx, ky, kz, effmass, i):
         return 2.0 * constants.bandunit * ky / effmass[1]
     if i == 2:
         return 2.0 * constants.bandunit * kz / effmass[2]
+
+
+def concatenate_integrand(energies, velocities, scattering,
+                          spin_fact, chempot, beta, order):
+    denom = 1.0 + np.cosh((energies - chempot) * beta)
+    integrand = spin_fact * np.power(energies[
+        np.newaxis, np.newaxis, :] - chempot, order) * \
+        velocities[:, np.newaxis, :] * velocities[np.newaxis, :, :] * \
+        scattering[np.newaxis, np.newaxis, :] / \
+        denom[np.newaxis, np.newaxis, :]
+    return integrand
+
+
+def concatenate_integrand_band(energies, velocities, tau,
+                               spin_fact, chempot, beta, order):
+    denom = 1.0 + np.cosh((energies - chempot) * beta)
+    integrand = spin_fact[:, np.newaxis, np.newaxis, np.newaxis] * \
+        np.power(energies[:, np.newaxis, np.newaxis, :] - chempot, order) * \
+        velocities[:, :, np.newaxis, :] * velocities[:, np.newaxis, :, :] * \
+        tau[:, np.newaxis, np.newaxis, :] / \
+        denom[:, np.newaxis, np.newaxis, :]
+    # sum bands
+    integrand = np.sum(integrand, axis=0)
+    return integrand

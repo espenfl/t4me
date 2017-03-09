@@ -164,6 +164,91 @@ def scipy_k_integrals_discrete(transport, integrand_type, energies, velocities,
     return integral
 
 
+def scipy_k_integrals_discrete2(tr, energies, velocities,
+                                scattering, chempot, beta,
+                                spin_fact, kx, ky, kz, order,
+                                method="trapz"):
+    """
+    Calculates the three dimensional integrals over the k-points
+    for discrete data using SciPy integration functions for discrete data.
+
+    Parameters
+    ----------
+    transport : object
+        A `Transport()` object
+    chempot : float
+        The chemical potential in eV
+    beta : float
+        The :math:`\\beta` factor, :math:`(\\mathrm{k_b}T)^{-1}` in eV.
+    spin_fact : int
+        The spin factor, 1 for non-spin degeneracy and 2 for spin degeneracy.
+    kx, ky, kz : float, float, float
+        The spacing in inverse AA between the points along each direction.
+    order : float
+        The order of the energy minus chemical potential term in the 
+        denominator.
+    method : {"trapz", "simps", "romb"}, optional
+        The SciPy three dimensional integration method for the
+        :func:`scipy.integrate.trapz`, :func:`scipy.integrate.simps` and
+        the :func:`scipy.integrate.romb` functions, respectively. Defaults
+        to "trapz".
+
+    """
+
+    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger.debug("Running scipy_k_integrals for discrete data.")
+    func = {"trapz": scipy.integrate.trapz,
+            "simps": scipy.integrate.simps,
+            "romb": scipy.integrate.romb}
+    if method is None:
+        method = tr.param.transport_integration_method
+    if method not in func:
+        logger.error("The supplied method is not recognized. Exiting.")
+        sys.exit(1)
+
+    ksampling = tr.lattice.ksampling
+
+    # set integrand
+    integrand = concatenate_integrand_band(
+        energies, velocities, scattering, spin_fact,
+        chempot, beta, 0.0)
+
+    # reshape integrand
+    integrand_shaped = integrand.reshape(
+        3, 3, ksampling[0], ksampling[1], ksampling[2])
+
+    # now if we want romberg, we need to check for grid samples
+    if method == "romb":
+        logger.info("Running SciPy Romberg integration for discrete "
+                    "data.")
+        if not utils.is_power_of_two(ksampling[0] - 1):
+            logger.error("User requests romberg integration, but "
+                         "the samplings in the first direction is not "
+                         "2^k - 1. Exiting.")
+            sys.exit(1)
+        if not utils.is_power_of_two(ksampling[1] - 1):
+            logger.error("User requests romberg integration, but "
+                         "the samplings in the second direction is not "
+                         "2^k - 1. Exiting.")
+            sys.exit(1)
+        if not utils.is_power_of_two(ksampling[2] - 1):
+            logger.error("User requests romberg integration, but "
+                         "the samplings in the third direction is not "
+                         "2^k - 1. Exiting.")
+            sys.exit(1)
+    elif method == "trapz":
+        logger.info("Running SciPy trapeziodal integration for "
+                    "discrete data.")
+    elif method == "simps":
+        logger.info("Running SciPy Simpson integration for discrete "
+                    "data.")
+
+    integral = func[method](func[method](func[method](
+        integrand_shaped, dx=kz, axis=4), dx=ky, axis=3), dx=kx, axis=2)
+
+    return integral
+
+
 def scipy_e_integrals(transport, integrand, e_min, e_max, w0,
                       eta, beta, energy_trans,
                       effmass, order, spin_fact, method="quad"):

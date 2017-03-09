@@ -21,7 +21,6 @@ import sys
 import math
 import logging
 import numpy as np
-import scipy.integrate as scii
 
 # locals
 import lbteint
@@ -1007,6 +1006,14 @@ def numerick(tr, chempots, temperatures, bs=None):
         # first check that the scattering array have been set up on
         # the energy grid
         scattering.check_scattering(tr)
+
+        # set distance between points in each direction
+        kx, ky, kz = tr.lattice.fetch_kmesh_unit_vecs(direct=False)
+        # assume regular grid spacing
+        kx = kx[1] - kx[0]
+        ky = ky[1] - ky[0]
+        kz = kz[1] - kz[0]
+
         method = 2
         if method == 0:
             # lazy imports
@@ -1102,14 +1109,9 @@ def numerick(tr, chempots, temperatures, bs=None):
             lorenz_band = np.zeros((numbands, 3, 3))
             # loop temperature and chemical potential manually
             # (broadcast later?)
-            kx, ky, kz = tr.lattice.fetch_kmesh_unit_vecs(direct=False)
-            ksampling = tr.lattice.ksampling
-            kx = kx[1] - kx[0]
-            ky = ky[1] - ky[0]
-            kz = kz[1] - kz[0]
             energies = energies[tr.included_bands]
             velocities = velocities[tr.included_bands]
-            spin_degen = tr.bs.spin_degen[tr.included_bands]
+            spin_fact = tr.bs.spin_degen[tr.included_bands]
             for tindex, temp in np.ndenumerate(temperatures):
                 beta = 1e5 / temp / constants.kb
                 # now set units and add temperature scaling
@@ -1119,46 +1121,38 @@ def numerick(tr, chempots, temperatures, bs=None):
                 seebeck_units = -1e6 / temp
                 lorenz_units = 1e8 / np.power(temp, 2.0)
                 for cindex, chempot in np.ndenumerate(chempots):
-                    tau = tr.scattering_total_inv[tindex, tr.included_bands]
-                    integrand = lbteint.concatenate_integrand_band(
-                        energies, velocities, tau, spin_degen,
-                        chempot, beta, 0.0)
-                    integrand_shaped = integrand.reshape(
-                        3, 3, ksampling[0], ksampling[1], ksampling[2])
-                    sigmasigma = scii.trapz(scii.trapz(scii.trapz(
-                        integrand_shaped, dx=kz, axis=4), dx=ky, axis=3), dx=kx, axis=2)
-                    integrand = lbteint.concatenate_integrand_band(
-                        energies, velocities, tau, spin_degen,
-                        chempot, beta, 1.0)
-                    integrand_shaped = integrand.reshape(
-                        3, 3, ksampling[0], ksampling[1], ksampling[2])
-                    sigmachi = scii.trapz(scii.trapz(scii.trapz(
-                        integrand_shaped, dx=kz, axis=4), dx=ky, axis=3), dx=kx, axis=2)
-                    integrand = lbteint.concatenate_integrand_band(
-                        energies, velocities, tau, spin_degen,
-                        chempot, beta, 2.0)
-                    integrand_shaped = integrand.reshape(
-                        3, 3, ksampling[0], ksampling[1], ksampling[2])
-                    sigmakappa = scii.trapz(scii.trapz(scii.trapz(
-                        integrand_shaped, dx=kz, axis=4), dx=ky, axis=3), dx=kx, axis=2)
+                    scatter = tr.scattering_total_inv[tindex,
+                                                      tr.included_bands]
+                    sigmasigma = lbteint.scipy_k_integrals_discrete2(
+                        tr, energies, velocities, scatter, chempot,
+                        beta, spin_fact, kx, ky, kz, 0.0,
+                        method=tr.param.transport_integration_method)
+                    sigmachi = lbteint.scipy_k_integrals_discrete2(
+                        tr, energies, velocities, scatter, chempot,
+                        beta, spin_fact, kx, ky, kz, 1.0,
+                        method=tr.param.transport_integration_method)
+                    sigmakappa = lbteint.scipy_k_integrals_discrete2(
+                        tr, energies, velocities, scatter, chempot,
+                        beta, spin_fact, kx, ky, kz, 2.0,
+                        method=tr.param.transport_integration_method)
                     # conductivity
-                    bandvaluesigma = sigmasigma
+                    sigma_nounit = sigmasigma
                     # for the seebeck, the units in front of the integral in
                     # the Sigmas cancels
                     # remember to do matrix and not elementwise
                     # for all tensors
                     # check if sigma is singular
                     sigmainv = utils.invert_matrix(sigmasigma)
-                    bandvalueseebeck = np.dot(sigmainv, sigmachi)
+                    seebeck_nounit = np.dot(sigmainv, sigmachi)
                     # and now the lorenz (same with the units)
-                    bandvaluelorenz = (np.dot(sigmakappa, sigmainv) -
-                                       np.dot(np.dot(sigmachi, bandvalueseebeck),
-                                              sigmainv))
+                    lorenz_nounit = (np.dot(sigmakappa, sigmainv) -
+                                     np.dot(np.dot(sigmachi, seebeck_nounit),
+                                            sigmainv))
 
                     # and add units to the integrals
-                    sigma[tindex, cindex] = sigma_units * bandvaluesigma
-                    seebeck[tindex, cindex] = seebeck_units * bandvalueseebeck
-                    lorenz[tindex, cindex] = lorenz_units * bandvaluelorenz
+                    sigma[tindex, cindex] = sigma_units * sigma_nounit
+                    seebeck[tindex, cindex] = seebeck_units * seebeck_nounit
+                    lorenz[tindex, cindex] = lorenz_units * lorenz_nounit
 
     # here we use weighted integration, accuracy cannot be controlled,
     # but it is rather fast and easy, currently linear tetrahedron and

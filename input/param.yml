@@ -148,11 +148,11 @@ dos_smear_then_interpolate: False # n/a
 # -------------------------------------------------------#
 # -------------------------------------------------------#
 # Minimum temperature:
-temperature_min: 300 # K
+temperature_min: 100 # K
 # Maximum temperature:
-temperature_max: 300 # K
+temperature_max: 700 # K
 # Number of temperature steps:
-temperature_steps: 1 # n/a
+temperature_steps: 7 # n/a
 # Generate Gamma centered k-point grids? Anything else
 # is currently experimental, so beware of wrong results
 gamma_center: True # n/a

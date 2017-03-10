@@ -1014,9 +1014,14 @@ def numerick(tr, chempots, temperatures, bs=None):
         ky = ky[1] - ky[0]
         kz = kz[1] - kz[0]
 
+        # currently method 2 is the fastest, so use this
         method = 2
         if method == 0:
             # lazy imports
+            # this is currently too slow...and comparable to
+            # method 1, even with memoryviews, valgrind says it is
+            # the calls to cosh that kills it. Does NumPy have a faster
+            # implementation of this? I find this very strange.
             import cython_functions
             sigma, seebeck, lorenz = cython_functions.calc_trncoeff(tr)
         elif method == 1:

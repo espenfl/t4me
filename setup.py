@@ -95,7 +95,8 @@ ext = [
     # (to be fixed in the future) when this is fully separted
     # in spglib, tetrahedron_method is compiled and linked manually
     # by the compile script in the base directory
-    Extension("cython_functions", ["cython_functions.pyx"]),
+    Extension("cython_functions", ["cython_functions.pyx"],
+              extra_compile_args=["-ffast-math"]),
     Extension("spglib_interface", ["spglib_interface/spglib.pyx"],
               include_dirs=[spglibinclude,
                             "spglib/src", numpy.get_include()],

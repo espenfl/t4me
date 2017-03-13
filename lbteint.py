@@ -210,7 +210,7 @@ def scipy_k_integrals_discrete2(tr, energies, velocities,
     # set integrand
     integrand = concatenate_integrand_band(
         energies, velocities, scattering, spin_fact,
-        chempot, beta, 0.0)
+        chempot, beta, order)
 
     # reshape integrand
     integrand_shaped = integrand.reshape(

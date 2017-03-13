@@ -1021,7 +1021,7 @@ def numerick(tr, chempots, temperatures, bs=None):
             # this is currently too slow...and comparable to
             # method 1, even with memoryviews, valgrind says it is
             # the calls to cosh that kills it. Does NumPy have a faster
-            # implementation of this? I find this very strange.
+            # implementation of this?
             import cython_functions
             sigma, seebeck, lorenz = cython_functions.calc_trncoeff(tr)
         elif method == 1:
@@ -1033,6 +1033,12 @@ def numerick(tr, chempots, temperatures, bs=None):
             # (broadcast later?)
             for tindex, temp in np.ndenumerate(temperatures):
                 beta = 1e5 / temp / constants.kb
+                # now set units and add temperature scaling
+                sigma_units = 1e11 * constants.g0 / \
+                    (16 * np.power(constants.pi, 2.0) *
+                     constants.hbar * constants.kb) / temp
+                seebeck_units = -1e6 / temp
+                lorenz_units = 1e8 / np.power(temp, 2.0)
                 for cindex, chempot in np.ndenumerate(chempots):
                     for band in range(numbands):
                         band_actual = tr.included_bands[band]
@@ -1094,13 +1100,6 @@ def numerick(tr, chempots, temperatures, bs=None):
                         sigma_total - np.power(
                         np.sum(seebecktimessigma, axis=0) /
                         sigma_total, 2.0))
-
-                    # now set units and add temperature scaling
-                    sigma_units = 1e11 * constants.g0 / \
-                        (16 * np.power(constants.pi, 2.0) *
-                         constants.hbar * constants.kb) / temp
-                    seebeck_units = -1e6 / temp
-                    lorenz_units = 1e8 / np.power(temp, 2.0)
 
                     # and add units to the integrals
                     sigma[tindex, cindex] = sigma_units * sigma_total

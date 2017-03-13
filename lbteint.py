@@ -27,7 +27,6 @@ import scattering
 import constants
 import inputoutput
 import utils
-import cython_functions
 
 
 def scipy_k_integrals(eta, beta, effmass, e0, i, l, m, method="tplquad"):

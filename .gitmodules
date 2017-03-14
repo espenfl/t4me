@@ -1,3 +1,6 @@
 [submodule "spglib"]
 	path = spglib
 	url = https://github.com/atztogo/spglib.git
+[submodule "mpi4py"]
+	path = mpi4py
+	url = https://bitbucket.org/mpi4py/mpi4py.git

@@ -21,27 +21,29 @@ disable_existing_loggers: False
 
 formatters:
   simple:
-    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    format: "%(asctime)s %(message)s\n"
+  detailed:
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s\n"
     
 handlers:
   console:
     class: logging.StreamHandler
     level: ERROR 
-    formatter: simple
+    formatter: detailed
     stream: ext://sys.stdout
   file:
     class: logging.FileHandler
     level: INFO 
-    mode: w
-    formatter: simple
+    mode: w 
+    formatter: simple 
     filename: output/info.log
-
+    
 loggers:
   tests:
     level: DEBUG
-    handlers: [console,file]
+    handlers: [console, file]
     propagate: no
 
 root:
   level: DEBUG
-  handlers: [console,file]
+  handlers: [console, file]

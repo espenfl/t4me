@@ -1430,7 +1430,7 @@ class Bandstructure():
 
         # set logger
         logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.info("Running calc_velocities.")
+        logger.debug("Running calc_velocities.")
 
         energies = self.energies
         ksampling = self.lattice.ksampling
@@ -2382,7 +2382,7 @@ class Bandstructure():
 
         # set logger
         logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.info("Running calc_density_of_states.")
+        logger.debug("Running calc_density_of_states.")
 
         # set some constants
         num_bands = self.energies.shape[0]

@@ -40,6 +40,9 @@ def main():
     import transport
     import inputoutput
 
+    # dump a startup message
+    inputoutput.start_message()
+
     # this is not so very clean, but in order to avoid
     # code running at the top of our modules (sphinx complains e.g.)
     # we here check if all modules can be imported, if not, prints
@@ -221,6 +224,12 @@ def main():
         # dump dos as well
         if not param.transport_use_analytic_scattering:
             inputoutput.dump_density_of_states(bs, filename="dos")
+
+    # dump message at the end
+    inputoutput.end_message()
+
+    # shutdown logger
+    logging.shutdown()
 
 if __name__ == '__main__':
 

@@ -1435,3 +1435,57 @@ def file_handler(filename="", file_handler=None, status=None):
         except:
             logger.error("Could not open " + filename + ". Exiting.")
             sys.exit(1)
+
+
+def start_message():
+    """
+    Prints a startup message to the log file.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+
+    """
+
+    logger = logging.getLogger(sys._getframe().f_code.co_name)
+
+    # dump logo
+    logger.info("Starting T4ME. "
+                + constants.logo + "\n"
+                "T4ME - Transport for Materials\n"
+                "Version: " + constants.version + "\n"
+                "License: GNU GPL v3\n"
+                "Documentation: https://espenfl.github.io/t4me \n"
+                "Git repo: git@github.com:espenfl/t4me.git\n"
+                "Developed by: Espen Flage-Larsen\n"
+                "Contact: espen.flage-larsen@sintef.no\n"
+                "Additional contributions or extensions of the code\n"
+                "are welcome and greatly appreciated. Please contact\n"
+                "the developer to coordinate.\n"
+                "\n\n"
+                "////   Starting calculations according to set configuration.   ////\n")
+
+
+def end_message():
+    """
+    Prints an end message to the log file.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+
+    """
+
+    logger = logging.getLogger(sys._getframe().f_code.co_name)
+
+    # dump logo
+    logger.info("Calculations finished.\n"
+                "\n\n////   End of calculations                                     ////\n")

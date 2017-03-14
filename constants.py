@@ -21,6 +21,8 @@ import math
 import logging
 import numpy as np
 
+version = "1.0"
+
 kb = 8.6173324  # eV/K *10^-5 is not defined here
 hbar = 6.58211928  # eV s *10^-16 is not defined here
 jtoev = 6.24150934  # eV *10^18 is not defined here
@@ -189,3 +191,14 @@ elements = {"x": 0,
             "uuh": 116,
             "uus": 117,
             "uuo": 118, }
+
+logo = """                                            \n
+       _________________  ____  ___    _______________\n
+      /            /   / /   / /   \__/   /          /\n
+     /____    ____/   / /   / /          /   _______/ \n
+         /   /   /   /_/   /_/          /   /___      \n
+        /   /   /           /   /\_/   /   ____/      \n
+       /   /   /_____    __/   /  /   /   /_______    \n
+      /   /         /   / /   /  /   /           /    \n
+     /___/         /___/ /___/  /___/___________/     \n\n"""
+ 

@@ -218,8 +218,8 @@ def scipy_k_integrals_discrete2(tr, energies, velocities,
 
     # now if we want romberg, we need to check for grid samples
     if method == "romb":
-        logger.info("Running SciPy Romberg integration for discrete "
-                    "data.")
+        logger.debug("Running SciPy Romberg integration for discrete "
+                     "data.")
         if not utils.is_power_of_two(ksampling[0] - 1):
             logger.error("User requests romberg integration, but "
                          "the samplings in the first direction is not "
@@ -236,11 +236,11 @@ def scipy_k_integrals_discrete2(tr, energies, velocities,
                          "2^k - 1. Exiting.")
             sys.exit(1)
     elif method == "trapz":
-        logger.info("Running SciPy trapeziodal integration for "
-                    "discrete data.")
+        logger.debug("Running SciPy trapeziodal integration for "
+                     "discrete data.")
     elif method == "simps":
-        logger.info("Running SciPy Simpson integration for discrete "
-                    "data.")
+        logger.debug("Running SciPy Simpson integration for discrete "
+                     "data.")
 
     integral = func[method](func[method](func[method](
         integrand_shaped, dx=kz, axis=4), dx=ky, axis=3), dx=kx, axis=2)

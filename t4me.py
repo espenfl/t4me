@@ -94,13 +94,16 @@ def main():
     # read param file
     param = inputoutput.Param(inputoutput.readparam())
 
-    # check if mpi4py is available
-    param.mpi = True
+    # check if mpi4py is available (parallel could be
+    # False or True at this point)
     try:
         import mpi4py
     except ImportError:
+        # certainly do not run in parallel mode if
+        # mpi4py cannot be loaded, regardless of what
+        # the user wants
         inputoutput.mpi4py_message()
-        param.mpi = False
+        param.parallel = False
 
     # optional, run tests for functionality
     if param.run_tests:

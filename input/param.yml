@@ -232,5 +232,7 @@ displaytb: False # n/a
 # (saves memory), but need to be enabled to see
 # the values of each mechanism
 onlytotalrate: True
+# Paralel mode?
+parallel: False
 # Run tests? If so, nothing else is done
 run_tests: False

@@ -1124,21 +1124,56 @@ def numerick(tr, chempots, temperatures, bs=None):
                      constants.hbar * constants.kb) / temp
                 seebeck_units = -1e6 / temp
                 lorenz_units = 1e8 / np.power(temp, 2.0)
-                for cindex, chempot in np.ndenumerate(chempots):
-                    scatter = tr.scattering_total_inv[tindex,
-                                                      tr.included_bands]
-                    sigmasigma = lbteint.scipy_k_integrals_discrete2(
-                        tr, energies, velocities, scatter, chempot,
-                        beta, spin_fact, kx, ky, kz, 0.0,
-                        method=tr.param.transport_integration_method)
-                    sigmachi = lbteint.scipy_k_integrals_discrete2(
-                        tr, energies, velocities, scatter, chempot,
-                        beta, spin_fact, kx, ky, kz, 1.0,
-                        method=tr.param.transport_integration_method)
-                    sigmakappa = lbteint.scipy_k_integrals_discrete2(
-                        tr, energies, velocities, scatter, chempot,
-                        beta, spin_fact, kx, ky, kz, 2.0,
-                        method=tr.param.transport_integration_method)
+                if tr.param.parallel:
+                    # use mpi4py to distribute calculations over
+                    # chemical potentials
+                    from mpi4py import MPI
+                    comm = MPI.COMM_WORLD
+                    rank = comm.Get_rank()
+                    size = comm.Get_size()
+                    num_chempots = chempots.size
+                    l_num_chempots = num_chempots / size
+                    # check that the chemical potential can be evenly
+                    # divided.
+                    if rank == 0:
+                        if (num_chempots % size != 0):
+                            logger.error("The number sampling of the chemical "
+                                         "potential is not evenly dividable by "
+                                         "the number of MPI ranks requested. "
+                                         "Exiting.")
+                            sys.exit(1)
+                    for cindex, chempot in np.ndenumerate(chempots):
+                        scatter = tr.scattering_total_inv[tindex,
+                                                          tr.included_bands]
+                        sigmasigma = lbteint.scipy_k_integrals_discrete2(
+                            tr, energies, velocities, scatter, chempot,
+                            beta, spin_fact, kx, ky, kz, 0.0,
+                            method=tr.param.transport_integration_method)
+                        sigmachi = lbteint.scipy_k_integrals_discrete2(
+                            tr, energies, velocities, scatter, chempot,
+                            beta, spin_fact, kx, ky, kz, 1.0,
+                            method=tr.param.transport_integration_method)
+                        sigmakappa = lbteint.scipy_k_integrals_discrete2(
+                            tr, energies, velocities, scatter, chempot,
+                            beta, spin_fact, kx, ky, kz, 2.0,
+                            method=tr.param.transport_integration_method)
+                else:
+                    # serial version
+                    for cindex, chempot in np.ndenumerate(chempots):
+                        scatter = tr.scattering_total_inv[tindex,
+                                                          tr.included_bands]
+                        sigmasigma = lbteint.scipy_k_integrals_discrete2(
+                            tr, energies, velocities, scatter, chempot,
+                            beta, spin_fact, kx, ky, kz, 0.0,
+                            method=tr.param.transport_integration_method)
+                        sigmachi = lbteint.scipy_k_integrals_discrete2(
+                            tr, energies, velocities, scatter, chempot,
+                            beta, spin_fact, kx, ky, kz, 1.0,
+                            method=tr.param.transport_integration_method)
+                        sigmakappa = lbteint.scipy_k_integrals_discrete2(
+                            tr, energies, velocities, scatter, chempot,
+                            beta, spin_fact, kx, ky, kz, 2.0,
+                            method=tr.param.transport_integration_method)
                     # conductivity
                     sigma_nounit = sigmasigma
                     # for the seebeck, the units in front of the integral in

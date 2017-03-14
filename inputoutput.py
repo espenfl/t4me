@@ -128,14 +128,14 @@ def einspline_warning():
         einspline_warning_printed = True
 
 
-def mpi4py_warning():
-    global mpi4py_warning_printed
-    if not mpi4py_warning_printed:
+def mpi4py_message():
+    global mpi4py_message_printed
+    if not mpi4py_message_printed:
         # set logger
         logger = logging.getLogger(sys._getframe().f_code.co_name)
         logger.warning("Could not locate the mpi4py module. Continuing "
                        "without MPI support.")
-        mpi4py_warning_printed = True
+        mpi4py_message_printed = True
 
 
 class Param(object):

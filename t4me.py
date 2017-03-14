@@ -94,6 +94,14 @@ def main():
     # read param file
     param = inputoutput.Param(inputoutput.readparam())
 
+    # check if mpi4py is available
+    param.mpi = True
+    try:
+        import mpi4py
+    except ImportError:
+        inputoutput.mpi4py_message()
+        param.mpi = False
+
     # optional, run tests for functionality
     if param.run_tests:
         import tests

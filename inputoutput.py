@@ -35,6 +35,7 @@ wildmagic_warning_printed = False
 cubature_warning_printed = False
 einspline_warning_printed = False
 alglib_warning_printed = False
+mpi4py_message_printed = False
 
 # errors that cause exits
 
@@ -125,6 +126,16 @@ def einspline_warning():
                        "interface. Make sure you do not call any of its "
                        "functions as this will yield errors. Continuing.")
         einspline_warning_printed = True
+
+
+def mpi4py_warning():
+    global mpi4py_warning_printed
+    if not mpi4py_warning_printed:
+        # set logger
+        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger.warning("Could not locate the mpi4py module. Continuing "
+                       "without MPI support.")
+        mpi4py_warning_printed = True
 
 
 class Param(object):

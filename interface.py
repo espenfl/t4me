@@ -735,10 +735,6 @@ def bandstructure_vasp(bs, location=None, filename=None):
     logger = logging.getLogger(sys._getframe().f_code.co_name)
     logger.debug("Running bandstructure_vasp.")
 
-    logger.info(
-        "SPIN DEGENERACY NEED TO BE INVESTIGATED BETTER FOR VASP "
-        "INPUT. PLEASE DO NOT DECOMPOSE YOUR CALCULATION INTO SPINS "
-        "BEFORE THIS FEATURE IS FULLY TESTED.")
     if filename is None:
         # check param as well
         if bs.param.readfile == "":
@@ -762,6 +758,11 @@ def bandstructure_vasp(bs, location=None, filename=None):
         './/parameters/separator[@name="electronic"]/'
         'separator[@name="electronic spin"]/'
         'i[@name="ISPIN"]').text)
+
+    # if ISPIN = 2 quit (not sufficiently tested)
+    if ispin == 2:
+        logger.error("The code is not yet sufficiently tested for "
+                     "different spin channels (ISPIN=2). Exiting. ")
 
     # fetch nedos
     num_samples_dos = int(

@@ -21,6 +21,7 @@ import sys
 import math
 import logging
 import numpy as np
+import tqdm
 
 # locals
 import lbteint

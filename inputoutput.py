@@ -1421,6 +1421,7 @@ def file_handler(filename="", file_handler=None, status=None):
         A file object
 
     """
+    # get logger
     logger = logging.getLogger(sys._getframe().f_code.co_name)
 
     if status is None:
@@ -1451,6 +1452,7 @@ def start_message():
 
     """
 
+    # get logger
     logger = logging.getLogger(sys._getframe().f_code.co_name)
 
     # dump logo
@@ -1484,6 +1486,7 @@ def end_message():
 
     """
 
+    # get logger
     logger = logging.getLogger(sys._getframe().f_code.co_name)
 
     # dump logo

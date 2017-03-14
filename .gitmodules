@@ -1,3 +1,6 @@
 [submodule "spglib"]
 	path = spglib
 	url = https://github.com/atztogo/spglib.git
+[submodule "pypar"]
+	path = pypar
+	url = https://github.com/daleroberts/pypar.git

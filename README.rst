@@ -2,6 +2,23 @@
 T4ME - Transport 4 MatErials
 ############################
 
+       _________________  ____  ___    _______________
+
+      /            /   / /   / /   \__/   /          /
+
+     /____    ____/   / /   / /          /   _______/ 
+
+         /   /   /   /_/   /_/          /   /___      
+
+        /   /   /           /   /\_/   /   ____/      
+
+       /   /   /_____    __/   /  /   /   /_______    
+
+      /   /         /   / /   /  /   /           /    
+
+     /___/         /___/ /___/  /___/___________/    
+
+
 Routines to calculate the transport properties of materials
 using the linearized Boltzmann Transport Equations (BTE)
 in the Relaxtion-Time-Approximation (RTA).
@@ -21,9 +38,10 @@ Prerequisites
 =============
 
 In its basic form T4ME only need the following
-dependencies: `Spglib <https://atztogo.github.io/spglib/>`_
-and `GNU Scientific Library <https://www.gnu.org/software/gsl/>`_.
+dependency: `Spglib <https://atztogo.github.io/spglib/>`_.
 Additional optional dependencies include:
+`PyPar <https://code.google.com/archive/p/pypar/>`_,
+`GNU Scientific Library <https://www.gnu.org/software/gsl/>`_,
 `Einspline <http://einspline.sourceforge.net/>`_,
 `Cubature <http://ab-initio.mit.edu/wiki/index.php/Cubature>`_,
 `GeometricTools <https://www.geometrictools.com/>`_

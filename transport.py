@@ -223,7 +223,7 @@ class Transport(object):
                 # interpolation routine does not get out of bounds
                 # (dos energy samples sometimes are inside the energy
                 # (range of the eigenvalues)
-                scattering.pad_selfcattering_values(self)
+                scattering.pad_scattering_values(self)
 
     def calc_transport_tensors(self, bs=None, temperatures=None,
                                chempots=None, method=None, transport=False):

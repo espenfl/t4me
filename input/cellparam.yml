@@ -20,4 +20,4 @@ direct: True
 atomtypes: [X]
 # The k-point sampling along each axis of the reciprocal
 # unit cell
-ksampling: [31,31,31]
+ksampling: [15,15,15]

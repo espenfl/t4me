@@ -516,7 +516,7 @@ def bandstructure_param(bs, location=None, filename=None):
     effmass = np.zeros((numbands, 3))
     a = np.zeros((numbands, 3))
     e0 = np.zeros(numbands)
-    status = np.empty(numbands, dtype='string')
+    status = np.empty(numbands, dtype='str')
     kshift = np.zeros((numbands, 3))
     select_scattering = np.zeros((numbands, 12), dtype='intc')
     explicit_prefact = np.zeros((numbands, 11), dtype='intc')

@@ -1048,21 +1048,21 @@ def numerick(tr, chempots, temperatures, bs=None):
                         scatter = tr.scattering_total_inv[
                             tindex[0], band_actual]
                         sigmasigma = lbteint.scipy_k_integrals_discrete(
-                            tr, "normal", energies, velocities, scatter, chempot,
-                            beta, 0.0, spin_deg,
+                            tr, "normal", energies, velocities, scatter,
+                            chempot, beta, 0.0, spin_deg,
                             method=tr.param.transport_integration_method)
                         sigmachi = lbteint.scipy_k_integrals_discrete(
-                            tr, "normal", energies, velocities, scatter, chempot,
-                            beta, 1.0, spin_deg,
+                            tr, "normal", energies, velocities, scatter,
+                            chempot, beta, 1.0, spin_deg,
                             method=tr.param.transport_integration_method)
                         sigmakappa = lbteint.scipy_k_integrals_discrete(
-                            tr, "normal", energies, velocities, scatter, chempot,
-                            beta, 2.0, spin_deg,
+                            tr, "normal", energies, velocities, scatter,
+                            chempot, beta, 2.0, spin_deg,
                             method=tr.param.transport_integration_method)
                         # conductivity
                         bandvaluesigma = sigmasigma
-                        # for the seebeck, the units in front of the integral in
-                        # the Sigmas cancels
+                        # for the seebeck, the units in front of the integral
+                        # in the Sigmas cancels
                         # remember to do matrix and not elementwise
                         # for all tensors
                         # check if sigma is singular
@@ -1070,7 +1070,8 @@ def numerick(tr, chempots, temperatures, bs=None):
                         bandvalueseebeck = np.dot(sigmainv, sigmachi)
                         # and now the lorenz (same with the units)
                         bandvaluelorenz = (np.dot(sigmakappa, sigmainv) -
-                                           np.dot(np.dot(sigmachi, bandvalueseebeck),
+                                           np.dot(np.dot(sigmachi,
+                                                         bandvalueseebeck),
                                                   sigmainv))
                         # set sigma pr band (adjust units later)
                         sigma_band[band] = bandvaluesigma
@@ -1174,24 +1175,25 @@ def numerick(tr, chempots, temperatures, bs=None):
                             tr, energies, velocities, scatter, chempot,
                             beta, spin_fact, kx, ky, kz, 2.0,
                             method=tr.param.transport_integration_method)
-                    # conductivity
-                    sigma_nounit = sigmasigma
-                    # for the seebeck, the units in front of the integral in
-                    # the Sigmas cancels
-                    # remember to do matrix and not elementwise
-                    # for all tensors
-                    # check if sigma is singular
-                    sigmainv = utils.invert_matrix(sigmasigma)
-                    seebeck_nounit = np.dot(sigmainv, sigmachi)
-                    # and now the lorenz (same with the units)
-                    lorenz_nounit = (np.dot(sigmakappa, sigmainv) -
-                                     np.dot(np.dot(sigmachi, seebeck_nounit),
-                                            sigmainv))
-
-                    # and add units to the integrals
-                    sigma[tindex, cindex] = sigma_units * sigma_nounit
-                    seebeck[tindex, cindex] = seebeck_units * seebeck_nounit
-                    lorenz[tindex, cindex] = lorenz_units * lorenz_nounit
+                        # conductivity
+                        sigma_nounit = sigmasigma
+                        # for the seebeck, the units in front of the integral
+                        # in the Sigmas cancels
+                        # remember to do matrix and not elementwise
+                        # for all tensors
+                        # check if sigma is singular
+                        sigmainv = utils.invert_matrix(sigmasigma)
+                        seebeck_nounit = np.dot(sigmainv, sigmachi)
+                        # and now the lorenz (same with the units)
+                        lorenz_nounit = (np.dot(sigmakappa, sigmainv) -
+                                         np.dot(np.dot(sigmachi,
+                                                       seebeck_nounit),
+                                                sigmainv))
+                        # and add units to the integrals
+                        sigma[tindex, cindex] = sigma_units * sigma_nounit
+                        seebeck[tindex, cindex] = seebeck_units * \
+                            seebeck_nounit
+                        lorenz[tindex, cindex] = lorenz_units * lorenz_nounit
 
     # here we use weighted integration, accuracy cannot be controlled,
     # but it is rather fast and easy, currently linear tetrahedron and

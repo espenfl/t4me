@@ -17,7 +17,7 @@
 # bandstructure?
 dispersion_interpolate: False # n/a
 # What is the target k-point sampling?
-dispersion_interpolate_sampling: [5,5,5] # n/a
+dispersion_interpolate_sampling: [15,15,15] # n/a
 # What interpolation method to use?
 dispersion_interpolate_method: "wildmagic" # n/a
 # What sub method to use?
@@ -28,7 +28,7 @@ dispersion_interpolate_type: "akima" # n/a
 # velocities after the dispersions have been
 # interpolated (used by default for the interpolat
 # routines that do not support velocity extraction)
-dispersion_velocities_numdiff: False # n/a
+dispersion_velocities_numdiff: True # n/a
 # Do you want to dump dispersion line to file before
 # interpolation?
 dispersion_write_preinter: False # n/a
@@ -63,7 +63,7 @@ transport_calc: True # n/a
 # Which method to use?
 transport_method: "numerick"
 # Which integration method to use?
-transport_integration_method: "cubature" # n/a
+transport_integration_method: "trapz" # n/a
 # Which smearing to use (only applied if
 # integration method is set to "smeared")
 transport_integration_spectral_smearing: 0.02 # eV
@@ -97,7 +97,7 @@ transport_energycutband: 1.0 # eV
 transport_include_bands: [] # n/a
 # Do you want to use the analytical spherical scattering
 # models?
-transport_use_analytic_scattering: True # n/a
+transport_use_analytic_scattering: False  # n/a
 # Do you want to calculate the scattering on the fly
 # during integration?
 transport_use_scattering_ontfly: False # n/a
@@ -219,7 +219,7 @@ acceptor_degen_fact: 0.25 # #
 # Acceptor energy:
 acceptor_energy: 0.0 # eV
 # Input data and parameter read in. Consult manual.
-read: param # n/a
+read: vasp # n/a
 # Filename for the input data etc. Consult manual.
 readfile: "" # n/a
 # Do you want to use scissor operator?

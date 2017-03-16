@@ -870,6 +870,14 @@ def numerick(tr, chempots, temperatures, bs=None):
                     "'wildmagic'. Exiting.")
                 sys.exit(1)
     if tr.param.transport_integration_method == "cubature":
+        # first check if the cell is regular, otherwise eject as the
+        # extraction of the velocities for the Wildmagic routines does
+        # not work for non-regular grids
+        if not tr.lattice.regular:
+            logger.error("The Cubature/Wildmagic integration method only "
+                         "works for systems with a cubic, tetragonal or "
+                         "a orthorhombic unit cell. Exiting.")
+            sys.exit(1)
         # check that the right interpolation method is selected, if not, set
         # and continue
         if tr.param.transport_interpolate_method != "wildmagic":

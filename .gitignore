@@ -3,6 +3,8 @@
 *.log
 *.a
 *.o
+'*
+#*
 build
 timings
 external

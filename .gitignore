@@ -1,2 +1,7 @@
 *.so
 *.pyc
+*.log
+.a
+.o
+build
+xalglib.py

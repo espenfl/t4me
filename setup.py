@@ -55,23 +55,23 @@ wildmagicinclude = "/usr/include/WildMagic"
 #gptoolsinclude = localinclude + "/gptools"
 
 ext = [
-    #        Extension("gsl", ["gsl_interface/gsl.pyx"],
-    #                 include_dirs=[gslinclude, numpy.get_include()],
-    #                 library_dirs=[gsllib],
-    #                 libraries=["gsl", "gslcblas"]),
+    Extension("gsl", ["gsl_interface/gsl.pyx"],
+              include_dirs=[gslinclude, numpy.get_include()],
+              library_dirs=[gsllib],
+              libraries=["gsl", "gslcblas"]),
 
-    #       Extension("einspline", ["einspline_interface/einspline.pyx"],
-    #                 include_dirs=[einsplineinclude, numpy.get_include()],
-    #                 library_dirs=[einsplinelib],
-    #                 libraries=["einspline"],
-    #                 extra_compile_args=["-std=c++11"],
-    #                 language="c++"),
+    Extension("einspline", ["einspline_interface/einspline.pyx"],
+              include_dirs=[einsplineinclude, numpy.get_include()],
+              library_dirs=[einsplinelib],
+              libraries=["einspline"],
+              extra_compile_args=["-std=c++11"],
+              language="c++"),
 
-    #       Extension("wildmagic", ["wildmagic_interface/wildmagic.pyx"],
-    #                 include_dirs=[wildmagicinclude, numpy.get_include()],
-    #                 library_dirs=[wildmagiclib],
-    #                 libraries=["Wm5Core", "Wm5Mathematics"],
-    #                 language="c++"),
+    Extension("wildmagic", ["wildmagic_interface/wildmagic.pyx"],
+              include_dirs=[wildmagicinclude, numpy.get_include()],
+              library_dirs=[wildmagiclib],
+              libraries=["Wm5Core", "Wm5Mathematics"],
+              language="c++"),
 
     Extension("cubature_wildmagic", ["cubature_wildmagic_interface/cubature_wildmagic.pyx"],
               include_dirs=[cubatureinclude,
@@ -94,8 +94,8 @@ ext = [
     # (to be fixed in the future) when this is fully separted
     # in spglib, tetrahedron_method is compiled and linked manually
     # by the compile script in the base directory
-    Extension("cython_functions", ["cython_functions.pyx"],
-              extra_compile_args=["-ffast-math"]),
+    # Extension("cython_functions", ["cython_functions.pyx"],
+    #          extra_compile_args=["-ffast-math"]),
     Extension("spglib_interface", ["spglib_interface/spglib.pyx"],
               include_dirs=[spglibinclude,
                             "spglib/src", numpy.get_include()],

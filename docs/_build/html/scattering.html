@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -30,10 +31,6 @@
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="T4ME 1 documentation" href="index.html" />
-    <link rel="up" title="&lt;no title&gt;" href="modules.html" />
-    <link rel="next" title="t4me module" href="t4me.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="modules.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -68,19 +65,7 @@
      href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">scattering module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="t4me.html">t4me module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transport.html">transport module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbteint.html">lbteint module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbtecoeff.html">lbtecoeff module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lattice.html">lattice module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bandstructure.html">bandstructure module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="inputoutput.html">inputoutput module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="interface.html">interface module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">utils module</a></li>
-</ul>
-</ul>
+      aria-labelledby="dLabelGlobalToc"></ul>
 </li>
               
                 <li class="dropdown">
@@ -101,14 +86,6 @@
             
               
                 
-  <li>
-    <a href="modules.html" title="Previous Chapter: <no title>"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; <no title></span>
-    </a>
-  </li>
-  <li>
-    <a href="t4me.html" title="Next Chapter: t4me module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">t4me module &raquo;</span>
-    </a>
-  </li>
               
             
             
@@ -116,7 +93,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="_sources/scattering.txt"
+  <a href="_sources/scattering.rst.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -285,7 +262,7 @@ parameter <cite>kind</cite>. Defaults to &#8220;linear&#8221;.</p>
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html#scipy.interpolate.interp1d" title="(in SciPy v0.18.1)"><code class="xref py py-obj docutils literal"><span class="pre">scipy.interpolate.interp1d</span></code></a></p>
+<p class="last"><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html#scipy.interpolate.interp1d" title="(in SciPy v0.19.0)"><code class="xref py py-obj docutils literal"><span class="pre">scipy.interpolate.interp1d</span></code></a></p>
 </div>
 <p class="rubric">Notes</p>
 <p>Here we only perform an interpolation on the array containing the total
@@ -655,7 +632,7 @@ mechanisms.</p>
     </p>
     <p>
         &copy; Copyright 2016, Espen Flage-Larsen.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
     </p>
   </div>
 </footer>

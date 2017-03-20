@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -30,10 +31,6 @@
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="T4ME 1 documentation" href="index.html" />
-    <link rel="up" title="&lt;no title&gt;" href="modules.html" />
-    <link rel="next" title="lbtecoeff module" href="lbtecoeff.html" />
-    <link rel="prev" title="transport module" href="transport.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -68,19 +65,7 @@
      href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="scattering.html">scattering module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="t4me.html">t4me module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transport.html">transport module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">lbteint module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbtecoeff.html">lbtecoeff module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lattice.html">lattice module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bandstructure.html">bandstructure module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="inputoutput.html">inputoutput module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="interface.html">interface module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">utils module</a></li>
-</ul>
-</ul>
+      aria-labelledby="dLabelGlobalToc"></ul>
 </li>
               
                 <li class="dropdown">
@@ -101,14 +86,6 @@
             
               
                 
-  <li>
-    <a href="transport.html" title="Previous Chapter: transport module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; transport module</span>
-    </a>
-  </li>
-  <li>
-    <a href="lbtecoeff.html" title="Next Chapter: lbtecoeff module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">lbtecoeff module &raquo;</span>
-    </a>
-  </li>
               
             
             
@@ -116,7 +93,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="_sources/lbteint.txt"
+  <a href="_sources/lbteint.rst.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -309,6 +286,16 @@ externally.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="lbteint.concatenate_integrand">
+<code class="descclassname">lbteint.</code><code class="descname">concatenate_integrand</code><span class="sig-paren">(</span><em>energies</em>, <em>velocities</em>, <em>scattering</em>, <em>spin_fact</em>, <em>chempot</em>, <em>beta</em>, <em>order</em><span class="sig-paren">)</span><a class="headerlink" href="#lbteint.concatenate_integrand" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lbteint.concatenate_integrand_band">
+<code class="descclassname">lbteint.</code><code class="descname">concatenate_integrand_band</code><span class="sig-paren">(</span><em>energies</em>, <em>velocities</em>, <em>tau</em>, <em>spin_fact</em>, <em>chempot</em>, <em>beta</em>, <em>order</em><span class="sig-paren">)</span><a class="headerlink" href="#lbteint.concatenate_integrand_band" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="lbteint.fermiintclosed">
 <code class="descclassname">lbteint.</code><code class="descname">fermiintclosed</code><span class="sig-paren">(</span><em>order</em>, <em>eta</em>, <em>spin_fact</em><span class="sig-paren">)</span><a class="headerlink" href="#lbteint.fermiintclosed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of the closed expressions for 
@@ -369,13 +356,13 @@ order of the integral.</p>
 <table class="docutils citation" frame="void" id="halen-1985-joap-assatfioo" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>P.&nbsp;Van Halen and D.&nbsp;L. Pulfrey. Accurate, short series approximations to fermi–dirac integrals of order -1/2, 1/2, 1, 3/2, 2, 5/2, 3, and 7/2. <em>Journal of Applied Physics</em>, 57(12):5271–5274, jun 1985. <a class="reference external" href="http://dx.doi.org/10.1063/1.335269">doi:10.1063/1.335269</a>.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>P.&nbsp;Van Halen and D.&nbsp;L. Pulfrey. Accurate, short series approximations to fermi–dirac integrals of order -1/2, 1/2, 1, 3/2, 2, 5/2, 3, and 7/2. <em>Journal of Applied Physics</em>, 57(12):5271–5274, jun 1985. <a class="reference external" href="https://doi.org/10.1063/1.335269">doi:10.1063/1.335269</a>.</td></tr>
 </tbody>
 </table>
 <table class="docutils citation" frame="void" id="halen-1986-joap-essatfioo" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>P.&nbsp;Van Halen and D.&nbsp;L. Pulfrey. Erratum: “accurate, short series approximation to fermi–dirac integrals of order -1/2, 1/2, 1, 3/2, 2, 5/2, 3, and 7/2&#8217;&#8217; [j. appl. phys. 57, 5271 (1985)]. <em>Journal of Applied Physics</em>, 59(6):2264–2265, mar 1986. <a class="reference external" href="http://dx.doi.org/10.1063/1.337053">doi:10.1063/1.337053</a>.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>P.&nbsp;Van Halen and D.&nbsp;L. Pulfrey. Erratum: “accurate, short series approximation to fermi–dirac integrals of order -1/2, 1/2, 1, 3/2, 2, 5/2, 3, and 7/2&#8217;&#8217; [j. appl. phys. 57, 5271 (1985)]. <em>Journal of Applied Physics</em>, 59(6):2264–2265, mar 1986. <a class="reference external" href="https://doi.org/10.1063/1.337053">doi:10.1063/1.337053</a>.</td></tr>
 </tbody>
 </table>
 </p>
@@ -608,7 +595,7 @@ calculation of the Hall factor).</p>
 <dt id="lbteint.scipy_e_integrals">
 <code class="descclassname">lbteint.</code><code class="descname">scipy_e_integrals</code><span class="sig-paren">(</span><em>transport</em>, <em>integrand</em>, <em>e_min</em>, <em>e_max</em>, <em>w0</em>, <em>eta</em>, <em>beta</em>, <em>energy_trans</em>, <em>effmass</em>, <em>order</em>, <em>spin_fact</em>, <em>method='quad'</em><span class="sig-paren">)</span><a class="headerlink" href="#lbteint.scipy_e_integrals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the one dimensional energy integrals using
-the SciPy function <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.quad.html#scipy.integrate.quad" title="(in SciPy v0.18.1)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.quad()</span></code></a>.</p>
+the SciPy function <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.quad.html#scipy.integrate.quad" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.quad()</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -682,7 +669,7 @@ where <img class="math" src="_images/math/10c4bd0c5cfb7a116bde63541919dfbbf32822
 <p><strong>method</strong> : {&#8220;quad&#8221;}, optional</p>
 <blockquote>
 <div><p>The SciPy three dimensional integration method using
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.quad.html#scipy.integrate.quad" title="(in SciPy v0.18.1)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.quad()</span></code></a>.</p>
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.quad.html#scipy.integrate.quad" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.quad()</span></code></a>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -700,7 +687,7 @@ where <img class="math" src="_images/math/10c4bd0c5cfb7a116bde63541919dfbbf32822
 <dt id="lbteint.scipy_k_integrals">
 <code class="descclassname">lbteint.</code><code class="descname">scipy_k_integrals</code><span class="sig-paren">(</span><em>eta</em>, <em>beta</em>, <em>effmass</em>, <em>e0</em>, <em>i</em>, <em>l</em>, <em>m</em>, <em>method='tplquad'</em><span class="sig-paren">)</span><a class="headerlink" href="#lbteint.scipy_k_integrals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the three dimensional wave vector integrals using
-the SciPy function <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.tplquad.html#scipy.integrate.tplquad" title="(in SciPy v0.18.1)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.tplquad()</span></code></a>.</p>
+the SciPy function <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.tplquad.html#scipy.integrate.tplquad" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.tplquad()</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -719,12 +706,12 @@ eV.</p>
 <div><div class="line-block">
 <div class="line">Dimension: (3)</div>
 </div>
-<p>The effective mass along the three reciprocal unit vectors in 
+<p>The effective mass along the three reciprocal unit vectors in
 units of the free electron mass.</p>
 </div></blockquote>
 <p><strong>e0</strong> : float</p>
 <blockquote>
-<div><p>The energy shift, e.g. <img class="math" src="_images/math/a73c1ebbd905ff1ba3a52ecdc85e6bbf8d41e32a.png" alt="E=\hbar^2 k^2/2m + E_0"/>, where 
+<div><p>The energy shift, e.g. <img class="math" src="_images/math/a73c1ebbd905ff1ba3a52ecdc85e6bbf8d41e32a.png" alt="E=\hbar^2 k^2/2m + E_0"/>, where
 <img class="math" src="_images/math/10c4bd0c5cfb7a116bde63541919dfbbf3282298.png" alt="E_0"/> is the energy shift in eV.</p>
 </div></blockquote>
 <p><strong>i</strong> : int</p>
@@ -741,8 +728,8 @@ units of the free electron mass.</p>
 </div></blockquote>
 <p><strong>method</strong> : {&#8220;tplquad&#8221;}, optional</p>
 <blockquote>
-<div><p>The SciPy three dimensional integration method using 
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.tplquad.html#scipy.integrate.tplquad" title="(in SciPy v0.18.1)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.tplquad()</span></code></a>.</p>
+<div><p>The SciPy three dimensional integration method using
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.tplquad.html#scipy.integrate.tplquad" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.tplquad()</span></code></a>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -756,14 +743,14 @@ units of the free electron mass.</p>
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.tplquad.html#scipy.integrate.tplquad" title="(in SciPy v0.18.1)"><code class="xref py py-obj docutils literal"><span class="pre">scipy.integrate.tplquad</span></code></a></p>
+<p class="last"><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.tplquad.html#scipy.integrate.tplquad" title="(in SciPy v0.19.0)"><code class="xref py py-obj docutils literal"><span class="pre">scipy.integrate.tplquad</span></code></a></p>
 </div>
 </dd></dl>
 
 <dl class="function">
 <dt id="lbteint.scipy_k_integrals_discrete">
 <code class="descclassname">lbteint.</code><code class="descname">scipy_k_integrals_discrete</code><span class="sig-paren">(</span><em>transport</em>, <em>integrand_type</em>, <em>energies</em>, <em>velocities</em>, <em>scattering</em>, <em>chempot</em>, <em>beta</em>, <em>order</em>, <em>spin_fact</em>, <em>method='trapz'</em><span class="sig-paren">)</span><a class="headerlink" href="#lbteint.scipy_k_integrals_discrete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the three dimensional integrals over the k-points 
+<dd><p>Calculates the three dimensional integrals over the k-points
 for discrete data using SciPy integration functions for discrete data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -788,8 +775,8 @@ for discrete data using SciPy integration functions for discrete data.</p>
 <p><strong>method</strong> : {&#8220;trapz&#8221;, &#8220;simps&#8221;, &#8220;romb&#8221;}, optional</p>
 <blockquote>
 <div><p>The SciPy three dimensional integration method for the
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.trapz.html#scipy.integrate.trapz" title="(in SciPy v0.18.1)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.trapz()</span></code></a>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.simps.html#scipy.integrate.simps" title="(in SciPy v0.18.1)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.simps()</span></code></a> and
-the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.romb.html#scipy.integrate.romb" title="(in SciPy v0.18.1)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.romb()</span></code></a> functions, respectively. Defaults
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.trapz.html#scipy.integrate.trapz" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.trapz()</span></code></a>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.simps.html#scipy.integrate.simps" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.simps()</span></code></a> and
+the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.romb.html#scipy.integrate.romb" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.romb()</span></code></a> functions, respectively. Defaults
 to &#8220;trapz&#8221;.</p>
 </div></blockquote>
 </td>
@@ -797,6 +784,53 @@ to &#8220;trapz&#8221;.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>integral</strong> : float</p>
 <blockquote class="last">
 <div><p>The resulting integral over the wave vectors.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="lbteint.scipy_k_integrals_discrete2">
+<code class="descclassname">lbteint.</code><code class="descname">scipy_k_integrals_discrete2</code><span class="sig-paren">(</span><em>tr</em>, <em>energies</em>, <em>velocities</em>, <em>scattering</em>, <em>chempot</em>, <em>beta</em>, <em>spin_fact</em>, <em>kx</em>, <em>ky</em>, <em>kz</em>, <em>order</em>, <em>method='trapz'</em><span class="sig-paren">)</span><a class="headerlink" href="#lbteint.scipy_k_integrals_discrete2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the three dimensional integrals over the k-points
+for discrete data using SciPy integration functions for discrete data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>transport</strong> : object</p>
+<blockquote>
+<div><p>A <cite>Transport()</cite> object</p>
+</div></blockquote>
+<p><strong>chempot</strong> : float</p>
+<blockquote>
+<div><p>The chemical potential in eV</p>
+</div></blockquote>
+<p><strong>beta</strong> : float</p>
+<blockquote>
+<div><p>The <img class="math" src="_images/math/410a9d0df9c135dd73b269cba7ef04dcfd932b1f.png" alt="\beta"/> factor, <img class="math" src="_images/math/005b655f9ba638f997af693dcbbb70c03d02b629.png" alt="(\mathrm{k_b}T)^{-1}"/> in eV.</p>
+</div></blockquote>
+<p><strong>spin_fact</strong> : int</p>
+<blockquote>
+<div><p>The spin factor, 1 for non-spin degeneracy and 2 for spin degeneracy.</p>
+</div></blockquote>
+<p><strong>kx, ky, kz</strong> : float, float, float</p>
+<blockquote>
+<div><p>The spacing in inverse AA between the points along each direction.</p>
+</div></blockquote>
+<p><strong>order</strong> : float</p>
+<blockquote>
+<div><p>The order of the energy minus chemical potential term in the 
+denominator.</p>
+</div></blockquote>
+<p><strong>method</strong> : {&#8220;trapz&#8221;, &#8220;simps&#8221;, &#8220;romb&#8221;}, optional</p>
+<blockquote class="last">
+<div><p>The SciPy three dimensional integration method for the
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.trapz.html#scipy.integrate.trapz" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.trapz()</span></code></a>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.simps.html#scipy.integrate.simps" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.simps()</span></code></a> and
+the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.romb.html#scipy.integrate.romb" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.romb()</span></code></a> functions, respectively. Defaults
+to &#8220;trapz&#8221;.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -819,7 +853,7 @@ to &#8220;trapz&#8221;.</p>
     </p>
     <p>
         &copy; Copyright 2016, Espen Flage-Larsen.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
     </p>
   </div>
 </footer>

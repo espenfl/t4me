@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -30,10 +31,6 @@
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="T4ME 1 documentation" href="index.html" />
-    <link rel="up" title="&lt;no title&gt;" href="modules.html" />
-    <link rel="next" title="inputoutput module" href="inputoutput.html" />
-    <link rel="prev" title="lattice module" href="lattice.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -68,17 +65,12 @@
      href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="scattering.html">scattering module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="t4me.html">t4me module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transport.html">transport module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbteint.html">lbteint module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbtecoeff.html">lbtecoeff module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lattice.html">lattice module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">bandstructure module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="inputoutput.html">inputoutput module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="interface.html">interface module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">utils module</a></li>
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">General input parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
 </ul>
 </ul>
 </li>
@@ -101,14 +93,6 @@
             
               
                 
-  <li>
-    <a href="lattice.html" title="Previous Chapter: lattice module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; lattice module</span>
-    </a>
-  </li>
-  <li>
-    <a href="inputoutput.html" title="Next Chapter: inputoutput module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">inputoutput m... &raquo;</span>
-    </a>
-  </li>
               
             
             
@@ -116,7 +100,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="_sources/bandstructure.txt"
+  <a href="_sources/bandstructure.rst.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -294,9 +278,9 @@ relevant transport region.</p>
 <blockquote>
 <div><p>The integration method used to calculate the DOS:</p>
 <div class="line-block">
-<div class="line">&#8220;trapz&#8221; trapeziodal integration, uses <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.trapz.html#scipy.integrate.trapz" title="(in SciPy v0.18.1)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.trapz()</span></code></a></div>
-<div class="line">&#8220;simps&#8221; simpson integration, uses <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.simps.html#scipy.integrate.simps" title="(in SciPy v0.18.1)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.simps()</span></code></a></div>
-<div class="line">&#8220;romb&#8221; romberb integration, uses <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.romb.html#scipy.integrate.romb" title="(in SciPy v0.18.1)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.romb()</span></code></a></div>
+<div class="line">&#8220;trapz&#8221; trapeziodal integration, uses <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.trapz.html#scipy.integrate.trapz" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.trapz()</span></code></a></div>
+<div class="line">&#8220;simps&#8221; simpson integration, uses <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.simps.html#scipy.integrate.simps" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.simps()</span></code></a></div>
+<div class="line">&#8220;romb&#8221; romberb integration, uses <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.romb.html#scipy.integrate.romb" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.romb()</span></code></a></div>
 <div class="line">&#8220;tetra&#8221; tetrahedron method, uses the linear tetrahedron method
 implemented in
 <a class="reference external" href="https://atztogo.github.io/spglib/">Spglib</a>
@@ -365,8 +349,38 @@ points, where N is determined from dos_energies.</p>
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.trapz.html#scipy.integrate.trapz" title="(in SciPy v0.18.1)"><code class="xref py py-obj docutils literal"><span class="pre">scipy.integrate.trapz</span></code></a>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.simps.html#scipy.integrate.simps" title="(in SciPy v0.18.1)"><code class="xref py py-obj docutils literal"><span class="pre">scipy.integrate.simps</span></code></a>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.romb.html#scipy.integrate.romb" title="(in SciPy v0.18.1)"><code class="xref py py-obj docutils literal"><span class="pre">scipy.integrate.romb</span></code></a></p>
+<p class="last"><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.trapz.html#scipy.integrate.trapz" title="(in SciPy v0.19.0)"><code class="xref py py-obj docutils literal"><span class="pre">scipy.integrate.trapz</span></code></a>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.simps.html#scipy.integrate.simps" title="(in SciPy v0.19.0)"><code class="xref py py-obj docutils literal"><span class="pre">scipy.integrate.simps</span></code></a>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.romb.html#scipy.integrate.romb" title="(in SciPy v0.19.0)"><code class="xref py py-obj docutils literal"><span class="pre">scipy.integrate.romb</span></code></a></p>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.calc_velocities">
+<code class="descname">calc_velocities</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.calc_velocities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the electron group velocities
+from the electron energy dispersion</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bs</strong> : object, optional</p>
+<blockquote>
+<div><p>A <cite>Bandstructure()</cite> object. Defaults to the
+active object.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Does not call any interpolation routines such
+that the velocities can be extracted directly from the
+electron energy dispersion by numerical differentiation.
+Uses the <code class="xref py py-func docutils literal"><span class="pre">gradient()</span></code> from NumPy.</p>
+<p>Overwrites any entry of exising <cite>velocities</cite> in <cite>bs</cite>
+and sets <cite>gen_velocities</cite> to False.</p>
 </dd></dl>
 
 <dl class="method">
@@ -527,7 +541,10 @@ file sets this.</p>
 <div class="line">Can be any of:</div>
 <div class="line">{&#8220;nearest&#8221;, &#8220;linear&#8221;}, when <cite>itype</cite> is set to <cite>interpn</cite>.</div>
 <div class="line">{&#8220;multiquadric&#8221;, &#8220;inverse_multiquadric&#8221;, &#8220;gaussian&#8221;, &#8220;linear&#8221;,</div>
-<div class="line">&#8220;cubic&#8221;, &#8220;quintic&#8221;, &#8220;thin_plate&#8221;}, when <cite>itype</cite> is set to <cite>rbf</cite>.</div>
+<div class="line">&#8220;cubic&#8221;, &#8220;quintic&#8221;, &#8220;thin_plate&#8221;}, when <cite>itype</cite> is set to <cite>rbf</cite></div>
+<div class="line">and when the Scipy variety is used (the <cite>alglib</cite> variable set</div>
+<div class="line">to False in the <a class="reference internal" href="#bandstructure.Bandstructure.interpolate" title="bandstructure.Bandstructure.interpolate"><code class="xref py py-func docutils literal"><span class="pre">interpolate()</span></code></a> function). If <cite>alglib</cite> is</div>
+<div class="line">set to True (default), then <cite>itype_sub</cite> does not have to be set.</div>
 <div class="line">{&#8220;natural&#8221;, &#8220;flat&#8221;, &#8220;periodic&#8221;, &#8220;antiperiodic&#8221;}, when <cite>itype</cite></div>
 <div class="line">is set to <cite>einspline</cite>.</div>
 <div class="line">{&#8220;trilinear, tricubic_exact, tricubic_bspline, akima&#8221;},</div>
@@ -599,7 +616,10 @@ file sets this.</p>
 <div class="line">Can be any of:</div>
 <div class="line">{&#8220;nearest&#8221;, &#8220;linear&#8221;}, when <cite>itype</cite> is set to <cite>interpn</cite>.</div>
 <div class="line">{&#8220;multiquadric&#8221;, &#8220;inverse_multiquadric&#8221;, &#8220;gaussian&#8221;, &#8220;linear&#8221;,</div>
-<div class="line">&#8220;cubic&#8221;, &#8220;quintic&#8221;, &#8220;thin_plate&#8221;}, when <cite>itype</cite> is set to <cite>rbf</cite>.</div>
+<div class="line">&#8220;cubic&#8221;, &#8220;quintic&#8221;, &#8220;thin_plate&#8221;}, when <cite>itype</cite> is set to <cite>rbf</cite></div>
+<div class="line">and when the Scipy variety is used (the <cite>alglib</cite> variable set</div>
+<div class="line">to False in the <a class="reference internal" href="#bandstructure.Bandstructure.interpolate" title="bandstructure.Bandstructure.interpolate"><code class="xref py py-func docutils literal"><span class="pre">interpolate()</span></code></a> function). If <cite>alglib</cite> is</div>
+<div class="line">set to True (default), then <cite>itype_sub</cite> does not have to be set.</div>
 <div class="line">{&#8220;natural&#8221;, &#8220;flat&#8221;, &#8220;periodic&#8221;, &#8220;antiperiodic&#8221;}, when <cite>itype</cite></div>
 <div class="line">is set to <cite>einspline</cite>.</div>
 <div class="line">{&#8220;trilinear, tricubic_exact, tricubic_bspline, akima&#8221;},</div>
@@ -696,7 +716,10 @@ file sets this.</p>
 <div class="line">Can be any of:</div>
 <div class="line">{&#8220;nearest&#8221;, &#8220;linear&#8221;}, when <cite>itype</cite> is set to <cite>interpn</cite>.</div>
 <div class="line">{&#8220;multiquadric&#8221;, &#8220;inverse_multiquadric&#8221;, &#8220;gaussian&#8221;, &#8220;linear&#8221;,</div>
-<div class="line">&#8220;cubic&#8221;, &#8220;quintic&#8221;, &#8220;thin_plate&#8221;}, when <cite>itype</cite> is set to <cite>rbf</cite>.</div>
+<div class="line">&#8220;cubic&#8221;, &#8220;quintic&#8221;, &#8220;thin_plate&#8221;}, when <cite>itype</cite> is set to <cite>rbf</cite></div>
+<div class="line">and when the Scipy variety is used (the <cite>alglib</cite> variable set</div>
+<div class="line">to False in the <a class="reference internal" href="#bandstructure.Bandstructure.interpolate" title="bandstructure.Bandstructure.interpolate"><code class="xref py py-func docutils literal"><span class="pre">interpolate()</span></code></a> function). If <cite>alglib</cite> is</div>
+<div class="line">set to True (default), then <cite>itype_sub</cite> does not have to be set.</div>
 <div class="line">{&#8220;natural&#8221;, &#8220;flat&#8221;, &#8220;periodic&#8221;, &#8220;antiperiodic&#8221;}, when <cite>itype</cite></div>
 <div class="line">is set to <cite>einspline</cite>.</div>
 <div class="line">{&#8220;trilinear, tricubic_exact, tricubic_bspline, akima&#8221;},</div>
@@ -770,7 +793,10 @@ file sets this.</p>
 <div class="line">Can be any of:</div>
 <div class="line">{&#8220;nearest&#8221;, &#8220;linear&#8221;}, when <cite>itype</cite> is set to <cite>interpn</cite>.</div>
 <div class="line">{&#8220;multiquadric&#8221;, &#8220;inverse_multiquadric&#8221;, &#8220;gaussian&#8221;, &#8220;linear&#8221;,</div>
-<div class="line">&#8220;cubic&#8221;, &#8220;quintic&#8221;, &#8220;thin_plate&#8221;}, when <cite>itype</cite> is set to <cite>rbf</cite>.</div>
+<div class="line">&#8220;cubic&#8221;, &#8220;quintic&#8221;, &#8220;thin_plate&#8221;}, when <cite>itype</cite> is set to <cite>rbf</cite></div>
+<div class="line">and when the Scipy variety is used (the <cite>alglib</cite> variable set</div>
+<div class="line">to False in the <a class="reference internal" href="#bandstructure.Bandstructure.interpolate" title="bandstructure.Bandstructure.interpolate"><code class="xref py py-func docutils literal"><span class="pre">interpolate()</span></code></a> function). If <cite>alglib</cite> is</div>
+<div class="line">set to True (default), then <cite>itype_sub</cite> does not have to be set.</div>
 <div class="line">{&#8220;natural&#8221;, &#8220;flat&#8221;, &#8220;periodic&#8221;, &#8220;antiperiodic&#8221;}, when <cite>itype</cite></div>
 <div class="line">is set to <cite>einspline</cite>.</div>
 <div class="line">{&#8220;trilinear, tricubic_exact, tricubic_bspline, akima&#8221;},</div>
@@ -991,15 +1017,20 @@ sets this.</p>
 </div></blockquote>
 <p><strong>itype_sub</strong> : string, optional</p>
 <blockquote>
-<div><p>Can be any of:
-{&#8220;nearest&#8221;, &#8220;linear&#8221;}, when <cite>itype</cite> is set to <cite>interpn</cite>.
-{&#8220;multiquadric&#8221;, &#8220;inverse_multiquadric&#8221;, &#8220;gaussian&#8221;, &#8220;linear&#8221;,
-&#8220;cubic&#8221;, &#8220;quintic&#8221;, &#8220;thin_plate&#8221;}, when <cite>itype</cite> is set to <cite>rbf</cite>.
-{&#8220;natural&#8221;, &#8220;flat&#8221;, &#8220;periodic&#8221;, &#8220;antiperiodic&#8221;}, when <cite>itype</cite>
-is set to <cite>einspline</cite>.
-{&#8220;trilinear, tricubic_exact, tricubic_bspline, akima&#8221;},
-when <cite>itype</cite> is set to <cite>wildmagic</cite>.
-The subtype of the interpolation method.</p>
+<div><div class="line-block">
+<div class="line">Can be any of:</div>
+<div class="line">{&#8220;nearest&#8221;, &#8220;linear&#8221;}, when <cite>itype</cite> is set to <cite>interpn</cite>.</div>
+<div class="line">{&#8220;multiquadric&#8221;, &#8220;inverse_multiquadric&#8221;, &#8220;gaussian&#8221;, &#8220;linear&#8221;,</div>
+<div class="line">&#8220;cubic&#8221;, &#8220;quintic&#8221;, &#8220;thin_plate&#8221;}, when <cite>itype</cite> is set to <cite>rbf</cite></div>
+<div class="line">and when the Scipy variety is used (the <cite>alglib</cite> variable set</div>
+<div class="line">to False in the <a class="reference internal" href="#bandstructure.Bandstructure.interpolate" title="bandstructure.Bandstructure.interpolate"><code class="xref py py-func docutils literal"><span class="pre">interpolate()</span></code></a> function). If <cite>alglib</cite> is</div>
+<div class="line">set to True (default), then <cite>itype_sub</cite> does not have to be set.</div>
+<div class="line">{&#8220;natural&#8221;, &#8220;flat&#8221;, &#8220;periodic&#8221;, &#8220;antiperiodic&#8221;}, when <cite>itype</cite></div>
+<div class="line">is set to <cite>einspline</cite>.</div>
+<div class="line">{&#8220;trilinear, tricubic_exact, tricubic_bspline, akima&#8221;},</div>
+<div class="line">when <cite>itype</cite> is set to <cite>wildmagic</cite>.</div>
+</div>
+<p>The subtype of the interpolation method.</p>
 </div></blockquote>
 <p><strong>kpoint_mesh</strong> : ndarray, optional</p>
 <blockquote>
@@ -1548,7 +1579,7 @@ relevant to PythTB.</p>
     </p>
     <p>
         &copy; Copyright 2016, Espen Flage-Larsen.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
     </p>
   </div>
 </footer>

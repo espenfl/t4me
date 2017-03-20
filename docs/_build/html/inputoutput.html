@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -30,10 +31,6 @@
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="T4ME 1 documentation" href="index.html" />
-    <link rel="up" title="&lt;no title&gt;" href="modules.html" />
-    <link rel="next" title="interface module" href="interface.html" />
-    <link rel="prev" title="bandstructure module" href="bandstructure.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -68,19 +65,7 @@
      href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="scattering.html">scattering module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="t4me.html">t4me module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transport.html">transport module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbteint.html">lbteint module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbtecoeff.html">lbtecoeff module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lattice.html">lattice module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bandstructure.html">bandstructure module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">inputoutput module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="interface.html">interface module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">utils module</a></li>
-</ul>
-</ul>
+      aria-labelledby="dLabelGlobalToc"></ul>
 </li>
               
                 <li class="dropdown">
@@ -101,14 +86,6 @@
             
               
                 
-  <li>
-    <a href="bandstructure.html" title="Previous Chapter: bandstructure module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; bandstructure...</span>
-    </a>
-  </li>
-  <li>
-    <a href="interface.html" title="Next Chapter: interface module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">interface module &raquo;</span>
-    </a>
-  </li>
               
             
             
@@ -116,7 +93,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="_sources/inputoutput.txt"
+  <a href="_sources/inputoutput.rst.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -162,6 +139,11 @@
 <p class="rubric">Notes</p>
 <p>Read a YAML paramter file.</p>
 </dd></dl>
+
+<dl class="function">
+<dt id="inputoutput.alglib_warning">
+<code class="descclassname">inputoutput.</code><code class="descname">alglib_warning</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.alglib_warning" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="inputoutput.cubature_warning">
@@ -217,13 +199,16 @@ Defaults to &#8220;band&#8221;.</p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">Can be any of:</div>
-<div class="line">{&#8220;nearest&#8221;, &#8220;linear&#8221;}, when <cite>itype</cite> is set to &#8220;interpn&#8221;.</div>
+<div class="line">{&#8220;nearest&#8221;, &#8220;linear&#8221;}, when <cite>itype</cite> is set to <cite>interpn</cite>.</div>
 <div class="line">{&#8220;multiquadric&#8221;, &#8220;inverse_multiquadric&#8221;, &#8220;gaussian&#8221;, &#8220;linear&#8221;,</div>
-<div class="line">&#8220;cubic&#8221;, &#8220;quintic&#8221;, &#8220;thin_plate&#8221;}, when <cite>itype</cite> is set to &#8220;rbf&#8221;.</div>
+<div class="line">&#8220;cubic&#8221;, &#8220;quintic&#8221;, &#8220;thin_plate&#8221;}, when <cite>itype</cite> is set to <cite>rbf</cite></div>
+<div class="line">and when the Scipy variety is used (the <cite>alglib</cite> variable set</div>
+<div class="line">to False in the <code class="xref py py-func docutils literal"><span class="pre">interpolate()</span></code> function). If <cite>alglib</cite> is</div>
+<div class="line">set to True (default), then <cite>itype_sub</cite> does not have to be set.</div>
 <div class="line">{&#8220;natural&#8221;, &#8220;flat&#8221;, &#8220;periodic&#8221;, &#8220;antiperiodic&#8221;}, when <cite>itype</cite></div>
-<div class="line">is set to &#8220;einspline&#8221;.</div>
-<div class="line">{&#8220;trilinear, tricubic_exact, tricubic_bspline, akima&#8221;}, when</div>
-<div class="line"><cite>itype</cite> is set to &#8220;wildmagic&#8221;.</div>
+<div class="line">is set to <cite>einspline</cite>.</div>
+<div class="line">{&#8220;trilinear, tricubic_exact, tricubic_bspline, akima&#8221;},</div>
+<div class="line">when <cite>itype</cite> is set to <cite>wildmagic</cite>.</div>
 </div>
 <p>The subtype of the interpolation method.</p>
 </div></blockquote>
@@ -357,6 +342,22 @@ Consult header of the files for the ordering.</p>
 <dd></dd></dl>
 
 <dl class="function">
+<dt id="inputoutput.end_message">
+<code class="descclassname">inputoutput.</code><code class="descname">end_message</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.end_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints an end message to the log file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="inputoutput.file_handler">
 <code class="descclassname">inputoutput.</code><code class="descname">file_handler</code><span class="sig-paren">(</span><em>filename=''</em>, <em>file_handler=None</em>, <em>status=None</em><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.file_handler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open and close files</p>
@@ -389,8 +390,13 @@ Consult header of the files for the ordering.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="inputoutput.gsl_error">
-<code class="descclassname">inputoutput.</code><code class="descname">gsl_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.gsl_error" title="Permalink to this definition">¶</a></dt>
+<dt id="inputoutput.gsl_warning">
+<code class="descclassname">inputoutput.</code><code class="descname">gsl_warning</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.gsl_warning" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="inputoutput.mpi4py_message">
+<code class="descclassname">inputoutput.</code><code class="descname">mpi4py_message</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.mpi4py_message" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
@@ -504,6 +510,22 @@ Defaults to &#8220;param.yml&#8221;.</p>
 <dd></dd></dl>
 
 <dl class="function">
+<dt id="inputoutput.start_message">
+<code class="descclassname">inputoutput.</code><code class="descname">start_message</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.start_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints a startup message to the log file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="inputoutput.wildmagic_warning">
 <code class="descclassname">inputoutput.</code><code class="descname">wildmagic_warning</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.wildmagic_warning" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -523,7 +545,7 @@ Defaults to &#8220;param.yml&#8221;.</p>
     </p>
     <p>
         &copy; Copyright 2016, Espen Flage-Larsen.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
     </p>
   </div>
 </footer>

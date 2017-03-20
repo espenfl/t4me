@@ -28,10 +28,10 @@ dispersion_interpolate_type: "akima" # n/a
 # velocities after the dispersions have been
 # interpolated (used by default for the interpolat
 # routines that do not support velocity extraction)
-dispersion_velocities_numdiff: True # n/a
+dispersion_velocities_numdiff: False # n/a
 # Do you want to dump dispersion line to file before
 # interpolation?
-dispersion_write_preinter: False # n/a
+dispersion_write_preinter: True # n/a
 # Do you want to dump dispersion line to file after
 # interpolation?
 dispersion_write_postinter: False # n/a
@@ -40,7 +40,7 @@ dispersion_write_postinter: False # n/a
 dispersion_write_start: [0.0, 0.0, 0.0] # n/a
 # End k-point in direct coordinates for the
 # dispersion line:
-dispersion_write_end: [0.5, 0.0, 0.0] # n/a
+dispersion_write_end: [0.5, 0.5, 0.0] # n/a
 # Number of k-points along line extration:
 num_kpoints_along_line: 20 # n/a
 # Parameters that are passed to PythTB when reading
@@ -59,7 +59,7 @@ dispersion_w90_tb_max_distance: 10 # AA
 # -------------------------------------------------------#
 # Do you want to calculate the electronic
 # transport tensors?
-transport_calc: True # n/a
+transport_calc: False # n/a
 # Which method to use?
 transport_method: "numerick"
 # Which integration method to use?
@@ -86,7 +86,7 @@ transport_interpolate_type: "akima" # n/a
 # The minimum chemical potential:
 transport_chempot_min: -0.4 # eV
 # The maximum chemical potential:
-transport_chempot_max: 1.0 # eV
+transport_chempot_max: 0.4 # eV
 # The samples between the minimum and maximum of
 # the chemical potential:
 transport_chempot_samples: 100 # n/a
@@ -97,7 +97,7 @@ transport_energycutband: 1.0 # eV
 transport_include_bands: [] # n/a
 # Do you want to use the analytical spherical scattering
 # models?
-transport_use_analytic_scattering: False  # n/a
+transport_use_analytic_scattering: True  # n/a
 # Do you want to calculate the scattering on the fly
 # during integration?
 transport_use_scattering_ontfly: False # n/a

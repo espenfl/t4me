@@ -1,7 +1,9 @@
 *.so
 *.pyc
 *.log
-.a
-.o
+*.a
+*.o
 build
+timings
+external
 xalglib.py

@@ -771,8 +771,6 @@ class Bandstructure():
                             "the Kane model is " +
                             str(last_valid_energy) +
                             " eV. Turning of band folding.")
-            # make sure we do not fold in this case
-            self.param.band_folding = False
             energy = constants.bandunit * k2 / effmass
             # need to loop manually to fill the array outside the
             # valid range

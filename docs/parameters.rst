@@ -369,6 +369,7 @@ coefficients. If the list is empty, use all bands within the range set by
 :ref:``transport_energycutband``. Band index starts at 1.
 
 ::
+   
    transport_include_bands: [3, 4, 10]
 
 Calculate the transport coefficients for band 3, 4 and 10. 
@@ -387,7 +388,7 @@ Use the density-of-states to set up the scattering mechanisms.
    
 ``transport_use_scattering_ontfly``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Deteremines if the scattering values should also be integrated on-the-fly
+Determines if the scattering values should also be integrated on-the-fly
 when performing Cubature integration. Only relevant if
 ``transport_integration_method`` is set to `cubature`.
 
@@ -409,7 +410,7 @@ e.g. external data. Currently only works for the VASP interface.
 Do not exclude the valence bands during read-in.
 
 ``transport_drop_conduction``
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Determines if all conduction bands should be dropped while reading
 e.g. external data. Currently only works for the VASP interface.
 
@@ -428,5 +429,272 @@ is set to `cubature`
 ::
 
    transport_isotropic: False
+
+``temperature_min``
+~~~~~~~~~~~~~~~~~~~
+The minimum temperature in K.
+
+::
+
+   temperature_min: 100
+
+The minimum temperature is set at 100 K.
+
+``temperature_max``
+~~~~~~~~~~~~~~~~~~~
+The maximum temperature in K.
+
+::
+   
+   temperature_max: 700
+
+The maximum temperature is set at 700 K.
+
+``temperature_steps``
+~~~~~~~~~~~~~~~~~~~~~
+The number of temperature steps from ``temperature_min``
+to ``temperature_max``.
+
+::
+   
+   temperature_steps: 7
+
+In total 7 temperature steps, resulting in temperature
+samplings at 100, 200, 300, 400, 500, 600 and 700 K.
+
+``gamma_center``
+~~~~~~~~~~~~~~~~
+:math:`\\Gamma` centered k-point grids? Anything else is currently
+not supported (or tested).
+
+::
+
+   gamma_center: True
+
+Notifies that the k-point grids are :math:`\\Gamma` centered.
+
+``maxeint``
+~~~~~~~~~~~
+The limites of the dimensionless carrier energy :math:`\\eta`
+used for the numerical solution of the Fermi-Dirac integrals.
+Only relevant if ``transport_method`` is set to `numerick`.
+
+::
+   
+   maxeint: 100
+
+Sets the limits of the Fermi-Dirac integrals to 100 :math:`\\eta`.
+
+``occ_cutoff``
+~~~~~~~~~~~~~~
+The cutoff to use when detecting occupancies. Used for detecting
+the valence band maximum, conduction band minimum and then also for
+the band gap.
+
+::
+   
+   occ_cutoff: 1.0e-4
+
+The occupancy cutoff is set at 1.0e-4, which means that states with
+an occupancy less than this will be assumed not occupied and vice
+versa.
+
+``e_fermi_in_gap``
+~~~~~~~~~~~~~~~~~~
+Determines if the Fermi level is to be placed in the middle of
+the gap.
+
+::
+
+   e_fermi_in_gap: False
+
+Do not place the Fermi level in the middle of the gap.
+
+``e_fermi``
+~~~~~~~~~~~
+Determine if one should shift the energies to the supplied
+Fermi level (usually read in the interface).
+
+::
+   e_fermi: True
+
+Shift the energies such that zero is placed at the supplied
+Fermi level.
+
+
+``e_vbm``
+~~~~~~~~~
+Determines if to set the Fermi level at the valence band
+maximum.
+
+::
+   
+   e_vbm: False
+
+Do not set the Fermi level at the top valence band.
+
+``e_shift``
+~~~~~~~~~~~
+After all alignments have been performed, perform
+this additional shift. Units in eV.
+
+::
+
+   e_shift: 0.0
+
+Sets the additional energy shift to 0 eV.
+
+``cubature_h``
+~~~~~~~~~~~~~~
+Determines if to use p- or h-cubature for the Cubature integration.
+Consult the manual at
+`Cubature <http://ab-initio.mit.edu/wiki/index.php/Cubature>`_
+Only relevant if ``transport_integration_method`` is set to `cubature`.
+
+::
+   
+   cubature_h: False
+
+Use p-cubature.
+
+
+``cubature_max_it``
+~~~~~~~~~~~~~~~~~~~
+The maximum number of iterations while performing Cubature
+integration.
+Consult the manual at
+`Cubature <http://ab-initio.mit.edu/wiki/index.php/Cubature>`_
+Only relevant if ``transport_integration_method`` is set to `cubature`.
+
+::
+   
+   cubature_max_it: 0
+
+No maximum limit to the number of iterations (integration stops
+when ``cubature_abs_err`` or ``cubature_rel_err`` is reached)
+
+``cubature_abs_err``
+~~~~~~~~~~~~~~~~~~~~
+The absolute error when the Cubature integration is truncated.
+Consult the manual at
+`Cubature <http://ab-initio.mit.edu/wiki/index.php/Cubature>`_
+Only relevant if ``transport_integration_method`` is set to `cubature`.
+
+::
+   
+   cubature_abs_err: 0.0
+
+The relative error is set at 0.0. If ``cubature_rel_err`` is set
+larger than zero, it takes precense.
+
+``cubature_rel_err``
+~~~~~~~~~~~~~~~~~~~~
+The relative error when the Cubature integration is truncated.
+Consult the manual at
+`Cubature <http://ab-initio.mit.edu/wiki/index.php/Cubature>`_
+Only relevant if ``transport_integration_method`` is set to `cubature`.
+
+::
+
+   cubature_rel_err: 0.01
+
+Truncate the Cubature integration after a relative error of 0.01
+is reached. Notice that sometimes, if the transport coefficients are
+small (think off-diagonal elements in a isotropic system) it can be
+difficult to obtain the requested relative error and the one
+enters in practice an infinite loop. Carefully setting
+``cubature_max_it`` can alleviate this.
+
+``skw_expansion_factor``
+~~~~~~~~~~~~~~~~~~~~~~~~
+The expansion factor used in the SKW routine. It is basically
+tells how many unit cells that can be used. Only relevant if
+``dispersion_interpolate_method`` is set to `skw`.
+
+::
+   
+   skw_expansion_factor: 5
+
+Use 5 unit cells in each direction. In a second step a sphere is cut
+from this volume, thus removing the points in the far corners of
+this volume in the interpolation procedure.
+
+``carrier_valence_energy``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+The cutoff in which where to interpret the carriers as p-type.
+Used in the calculation of the carrier concentration. Units in
+eV.
+
+::
+   
+   carrier_valence_energy: 0.0
+
+Would make sure all carriers at negative energies are interpreted
+as p-type.
+
+``carrier_conduction_energy``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The cutoff in which where to interpret the carriers as n-type.
+Used in the calculation of the carrier concentration. Units in
+eV.
+
+::
+   
+   carrier_valence_energy: 0.0
+
+Would make sure all carriers at positive energies are interpreted
+as n-type.
+
+
+``carrier_dos_analytick``
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Determines if the carrier concentration should be recaculated after
+being set up with analytical models. Only relevant if the band structure
+is generated from analytical models.
+
+::
+   
+   carrier_dos_analytick: True
+
+Do not recalculate and use the analytical expressions for the carrier
+concentration.
+
+``defect_ionization``
+~~~~~~~~~~~~~~~~~~~~~
+
+# Use defect ionization?
+defect_ionization: False # n/a
+# How many donors?
+donor_number: 0.0 # 10^21 cm^-3
+# Donor degeneration factor:
+donor_degen_fact: 0.75 # #
+# Donor energy:
+donor_energy: 0.0 # eV
+# How many acceptors?
+acceptor_number: 0.0 # 10^21 cm^-3
+# Acceptor degeneration factor:
+acceptor_degen_fact: 0.25 # #
+# Acceptor energy:
+acceptor_energy: 0.0 # eV
+# Input data and parameter read in. Consult manual.
+read: vasp # n/a
+# Filename for the input data etc. Consult manual.
+readfile: "" # n/a
+# Do you want to use scissor operator?
+scissor: False # eV or n/a
+# What symprec to use?
+symprec: 1.0e-6
+# Dump tight binding construction data to std out?
+displaytb: False # n/a
+# Print output from libraries bundled with T4ME
+libinfo: True # n/a
+# Only store total scattering rate
+# (saves memory), but need to be enabled to see
+# the values of each mechanism
+onlytotalrate: True
+# Paralel mode?
+parallel: False
+# Run tests? If so, nothing else is done
+run_tests: False
 
 

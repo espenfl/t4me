@@ -89,7 +89,7 @@ necessary. In addition there are calls to external
 routines through Cython, particularly the optional libraries.
 It should support Python > 2.7 and Python 3.
 
-The main driver for the program is the :file:`t4me.py` file
+The main driver for the program is the `t4me.py` file
 located in the main directory. This is used to execute
 the program and call necessary subroutines. In its standard
 configuration this should serve most users.
@@ -111,4 +111,4 @@ License
 *******
 
 This project is licensed under the GNU GPLv3. Please see
-:file:`LICENSE.md` for additional details.
+`LICENSE.md` for additional details.

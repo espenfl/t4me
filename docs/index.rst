@@ -12,6 +12,7 @@ Documentation
    :maxdepth: 1 
 
    preq
+   download
    install
    tests
    input

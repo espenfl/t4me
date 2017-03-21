@@ -69,6 +69,7 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
@@ -616,7 +617,7 @@ calculation of the Hall factor).</p>
 <dt id="lbteint.scipy_e_integrals">
 <code class="descclassname">lbteint.</code><code class="descname">scipy_e_integrals</code><span class="sig-paren">(</span><em>transport</em>, <em>integrand</em>, <em>e_min</em>, <em>e_max</em>, <em>w0</em>, <em>eta</em>, <em>beta</em>, <em>energy_trans</em>, <em>effmass</em>, <em>order</em>, <em>spin_fact</em>, <em>method='quad'</em><span class="sig-paren">)</span><a class="headerlink" href="#lbteint.scipy_e_integrals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the one dimensional energy integrals using
-the SciPy function <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.quad.html#scipy.integrate.quad" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.quad()</span></code></a>.</p>
+the SciPy function <code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.quad()</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -690,7 +691,7 @@ where <img class="math" src="_images/math/10c4bd0c5cfb7a116bde63541919dfbbf32822
 <p><strong>method</strong> : {&#8220;quad&#8221;}, optional</p>
 <blockquote>
 <div><p>The SciPy three dimensional integration method using
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.quad.html#scipy.integrate.quad" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.quad()</span></code></a>.</p>
+<code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.quad()</span></code>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -708,7 +709,7 @@ where <img class="math" src="_images/math/10c4bd0c5cfb7a116bde63541919dfbbf32822
 <dt id="lbteint.scipy_k_integrals">
 <code class="descclassname">lbteint.</code><code class="descname">scipy_k_integrals</code><span class="sig-paren">(</span><em>eta</em>, <em>beta</em>, <em>effmass</em>, <em>e0</em>, <em>i</em>, <em>l</em>, <em>m</em>, <em>method='tplquad'</em><span class="sig-paren">)</span><a class="headerlink" href="#lbteint.scipy_k_integrals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the three dimensional wave vector integrals using
-the SciPy function <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.tplquad.html#scipy.integrate.tplquad" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.tplquad()</span></code></a>.</p>
+the SciPy function <code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.tplquad()</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -750,7 +751,7 @@ units of the free electron mass.</p>
 <p><strong>method</strong> : {&#8220;tplquad&#8221;}, optional</p>
 <blockquote>
 <div><p>The SciPy three dimensional integration method using
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.tplquad.html#scipy.integrate.tplquad" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.tplquad()</span></code></a>.</p>
+<code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.tplquad()</span></code>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -764,7 +765,7 @@ units of the free electron mass.</p>
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.tplquad.html#scipy.integrate.tplquad" title="(in SciPy v0.19.0)"><code class="xref py py-obj docutils literal"><span class="pre">scipy.integrate.tplquad</span></code></a></p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">scipy.integrate.tplquad</span></code></p>
 </div>
 </dd></dl>
 
@@ -796,8 +797,8 @@ for discrete data using SciPy integration functions for discrete data.</p>
 <p><strong>method</strong> : {&#8220;trapz&#8221;, &#8220;simps&#8221;, &#8220;romb&#8221;}, optional</p>
 <blockquote>
 <div><p>The SciPy three dimensional integration method for the
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.trapz.html#scipy.integrate.trapz" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.trapz()</span></code></a>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.simps.html#scipy.integrate.simps" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.simps()</span></code></a> and
-the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.romb.html#scipy.integrate.romb" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.romb()</span></code></a> functions, respectively. Defaults
+<code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.trapz()</span></code>, <code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.simps()</span></code> and
+the <code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.romb()</span></code> functions, respectively. Defaults
 to &#8220;trapz&#8221;.</p>
 </div></blockquote>
 </td>
@@ -849,8 +850,8 @@ denominator.</p>
 <p><strong>method</strong> : {&#8220;trapz&#8221;, &#8220;simps&#8221;, &#8220;romb&#8221;}, optional</p>
 <blockquote class="last">
 <div><p>The SciPy three dimensional integration method for the
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.trapz.html#scipy.integrate.trapz" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.trapz()</span></code></a>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.simps.html#scipy.integrate.simps" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.simps()</span></code></a> and
-the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.romb.html#scipy.integrate.romb" title="(in SciPy v0.19.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.romb()</span></code></a> functions, respectively. Defaults
+<code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.trapz()</span></code>, <code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.simps()</span></code> and
+the <code class="xref py py-func docutils literal"><span class="pre">scipy.integrate.romb()</span></code> functions, respectively. Defaults
 to &#8220;trapz&#8221;.</p>
 </div></blockquote>
 </td>

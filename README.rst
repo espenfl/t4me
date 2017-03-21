@@ -98,7 +98,8 @@ Contributing and versioning
 ***************************
 
 Standard Git versioning is utilized. Contributions are welcome,
-encouraged and (greatly) appreciated.
+encouraged and (greatly) appreciated. Please go here:
+`T4ME@GitHub <https://github.com/espenfl/t4me>`_
 
 Author
 ******

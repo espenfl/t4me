@@ -600,7 +600,6 @@ def bandstructure_param(bs, location=None, filename=None):
         tight_hop.append(banddata["thop"])
         tight_orb.append(banddata["torb"])
         tight_onsite.append(banddata["tonsite"])
-        tight_adj_onsite.append(banddata["tadjust_onsite_zero"])
         # if band is non-spherical, print warning
         # if transport_use_analytic_scattering is also set
         if (bandparams[band][0] != 0

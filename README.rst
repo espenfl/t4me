@@ -2,6 +2,7 @@
 T4ME - Transport 4 MatErials
 ############################
 
+.. parsed-literal::
        _________________  ____  ___    _______________
 
       /            /   / /   / /   \__/   /          /
@@ -18,16 +19,67 @@ T4ME - Transport 4 MatErials
 
      /___/         /___/ /___/  /___/___________/    
 
-
 Routines to calculate the transport properties of materials
 using the linearized Boltzmann Transport Equations (BTE)
 in the Relaxtion-Time-Approximation (RTA).
 
 Features
 ********
+- Modular, easily extendable by users
 
-Here comes a condensed list of features.
-
+- Band structures:
+  
+  - Generate the band structure from analytic function
+    
+    - Spherical bands
+    - Spherical bands pluss a quartic correction
+    - Kane type of bands
+    - Tight binding bands
+      
+  - Read from first-principle codes
+    
+    - Interface to VASP is included
+    - Interface to read Wannier90 input and output files
+      and use these to construct tight binding orbitals using
+      PythTB is included.
+    
+  - Read from NumPy datafiles
+    
+- Scattering properties:
+  
+  - Spherical energy dispersion models:
+    
+    - Acoustic phonon scattering from deformations
+    - Non-polar optical phonon scattering (not fully tested)
+    - Piezoelectric acoustic phonon scattering (not fully tested)
+    - Polar optical phonon scattering (not fully tested)
+    - Intervalley phonon scattering (not fully tested)
+    - Ionized impurity scattering
+      
+  - Density of states models:
+    - Acoustic phonon scattering from deformations
+    - Non-polar optical phonon scattering (not fully tested)
+    - Polar optical phonon scattering (not fully tested)
+    - Intervalley phonon scattering (not fully tested)
+      
+  - Alloy scattering
+    
+- Solution of the transport and density of states integrals:
+  
+  - Trapezoidal, Simpson and Romberg integration of a static
+    input grid
+  - Linear tetrahedron method
+  - Weighed sum method
+  - Cubature integration with on-the-fly interpolation
+    
+- Interpolation of the band structure and scattering properties:
+  
+  - All routines available in SciPy
+  - GeometricTools/WildMagic regular grid routines
+  - The RGF-ML routine available in ALGLIB
+  - Einspline
+   
+    
 Structure
 *********
 
@@ -39,7 +91,8 @@ It should support Python > 2.7 and Python 3.
 
 The main driver for the program is the :file:`t4me.py` file
 located in the main directory. This is used to execute
-the program and call necessary subroutines.
+the program and call necessary subroutines. In its standard
+configuration this should serve most users.
 
 Contributing and versioning
 ***************************
@@ -50,7 +103,7 @@ encouraged and (greatly) appreciated.
 Author
 ******
 
-Espen Flage-Larsen with finances from the Norwegian
+Espen Flage-Larsen with funding from the Norwegian
 Research Council, Thelma project (228854).
 
 License

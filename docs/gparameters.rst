@@ -1,11 +1,20 @@
-.. parameters:
+.. gparameters:
 
 General input parameters
 ========================
 
 .. contents::
-   depth: 2
+   :depth: 2
+   :local: 
 
+Notes about format
+------------------
+The input files follow normal YAML conventions.
+Please inspect the sample file :file:`input/param.yml`.
+Even though many parameters have default values if not
+specified the user should always run the calculations with
+fully specified input files for consistency and reproducibility.
+      
 Dispersion relations
 --------------------
 
@@ -143,8 +152,7 @@ Here 20 points is used along the line.
 Sets the zero energy in the band structure. This parameter is
 passed to `zero_energy` in the :func:`model` function in the :class:`w90`
 class in PythTB and is used if the Wannier90 interface of PythTB is to be
-used to set up the input. This needs to be enabled in the :ref:`param`
-parameter. Please consult the
+used to set up the input. Please consult the
 `PythTB manual <http://physics.rutgers.edu/pythtb/usage.html>`_
 for additional details. In units of eV. Usually set to the Fermi level or
 the top of the valence band.
@@ -475,7 +483,117 @@ Density of states
 
 Here follows input parameters related to the calculation of the
 density of states.
+
+``dos_calc``
+~~~~~~~~~~~~
+Determines if the user wants to calculate the density of states.
+Even if this flag is set to `False`, the density of states is
+sometimes calculated if needed, e.g. if the density of states
+dependent scattering models are employed. However, with this
+parameter set to `True` and e.g. ``transport_calc`` set to
+`False` it is possible to only calculate the density of states.
+
+::
    
+   dos_calc: False
+
+Do not calculate the density of states.
+
+``dos_e_min``
+~~~~~~~~~~~~~
+The minimum energy to use for the density of states calculation.
+In units of eV. The reference is with respect to the aligned Fermi
+level and consequetive shift that might have been applied. Note
+that the range of density of states calculation might change if
+it is called from other routines, e.g. the density of states
+dependent scattering models in order to cover enough energies.
+
+::
+   
+   dos_e_min: -5.0
+
+Calculate the density of states from -5.0 eV.
+
+``dos_e_max``
+~~~~~~~~~~~~~
+The maximum energy to use for the density of states calculation.
+In units of eV. The reference is with respect to the aligned Fermi
+level and consequetive shift that might have been applied. Note
+that the range of density of states calculation might change if
+it is called from other routines, e.g. the density of states
+dependent scattering models in order to cover enough energies.
+
+::
+   
+   dos_e_max: 2.0
+
+Calculate the density of states to 2.0 eV.
+
+``dos_num_samples``
+~~~~~~~~~~~~~~~~~~~
+The number of energy samples between ``dos_e_min`` and
+``dos_e_max``.
+
+::
+   
+   dos_num_samples: 1000
+
+Use 1000 energy points from ``dos_e_min`` to ``dos_e_max``.
+
+``dos_smearing``
+~~~~~~~~~~~~~~~~
+Gaussian smearing factor in units of eV. Only relevant if
+``dos_integrating_method`` is set to `smeared`, `trapz`,
+`simps` or `romb`.
+
+::
+   
+   dos_smearing: 0.1
+
+``dos_interpolate_method``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Similar to the transport integrals it is possible to
+integrate the density of states using Cubature with on the
+fly interpolation through the functions available in
+GeometricTools/WildMagic. Only relevant if
+``dos_integrating_method`` is set to `cubature`.
+
+::
+   
+   dos_interpolate_method: "wildmagic"
+
+The only valid option if ``dos_integrating_method``
+is set to `cubature`.
+
+``dos_interpolate_type``
+~~~~~~~~~~~~~~~~~~~~~~~~
+Determines which interpolation type to use if
+``dos_integrating_method`` is set to `cubature`,
+otherwise not relevant.
+
+::
+   
+   dos_interpolate_type: "akima"
+
+Use on the fly Akima interpolation during Cubature integration.
+
+``dos_integrating_method``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Determines which method of integration to use to obtain the
+density of states. The following options are available:
+
+- `trapz` trapezoidal integration
+- `simps` Simpson integration
+- `romb` Romberg integration
+- `tetra` linear tetrahedron method without Blochl corrections
+- `cubature` Cubature integration with on the fly interpolation
+
+::
+   
+   dos_integrating_method: "trapz"
+
+Use trapezoidal integration to obtain the density of states.
+
 General parameters
 ------------------
 
@@ -563,9 +681,9 @@ the gap.
 
 Example:
 ::
-
+   
    e_fermi_in_gap: False
-
+   
 Do not place the Fermi level in the middle of the gap.
 
 ``e_fermi``
@@ -575,6 +693,7 @@ Fermi level (usually read in the interface).
 
 Example:
 ::
+   
    e_fermi: True
 
 Shift the energies such that zero is placed at the supplied

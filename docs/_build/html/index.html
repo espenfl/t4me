@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Documentation &#8212; T4ME 1 documentation</title>
+    <title>T4ME - Transport 4 MatErials &#8212; T4ME 1 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -51,7 +51,7 @@
         </button>
         <a class="navbar-brand" href="#">
           T4ME</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.5</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -69,9 +69,13 @@
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parameters.html">General input parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
 <li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Custom interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
 </ul>
 </ul>
 </li>
@@ -85,7 +89,15 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Documentation</a></li>
+<li><a class="reference internal" href="#">T4ME - Transport 4 MatErials</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#structure">Structure</a></li>
+<li><a class="reference internal" href="#contributing-and-versioning">Contributing and versioning</a></li>
+<li><a class="reference internal" href="#author">Author</a></li>
+<li><a class="reference internal" href="#license">License</a></li>
+<li><a class="reference internal" href="#documentation">Documentation</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -129,16 +141,127 @@
   <div class="row">
     <div class="col-md-12 content">
       
-  <div class="section" id="documentation">
-<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="t4me-transport-4-materials">
+<h1>T4ME - Transport 4 MatErials<a class="headerlink" href="#t4me-transport-4-materials" title="Permalink to this headline">¶</a></h1>
+<pre class="literal-block">
+  _________________  ____  ___    _______________
+
+ /            /   / /   / /   __/   /          /
+
+/____    ____/   / /   / /          /   _______/
+
+    /   /   /   /_/   /_/          /   /___
+
+   /   /   /           /   /_/   /   ____/
+
+  /   /   /_____    __/   /  /   /   /_______
+
+ /   /         /   / /   /  /   /           /
+
+/___/         /___/ /___/  /___/___________/
+</pre>
+<p>Routines to calculate the transport properties of materials
+using the linearized Boltzmann Transport Equations (BTE)
+in the Relaxtion-Time-Approximation (RTA).</p>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Modular, easily extendable by users</li>
+<li>Band structures:<ul>
+<li>Generate the band structure from analytic function<ul>
+<li>Spherical bands</li>
+<li>Spherical bands pluss a quartic correction</li>
+<li>Kane type of bands</li>
+<li>Tight binding bands</li>
+</ul>
+</li>
+<li>Read from first-principle codes<ul>
+<li>Interface to VASP is included</li>
+<li>Interface to read Wannier90 input and output files
+and use these to construct tight binding orbitals using
+PythTB is included.</li>
+</ul>
+</li>
+<li>Read from NumPy datafiles</li>
+</ul>
+</li>
+<li>Scattering properties:<ul>
+<li>Spherical energy dispersion models:<ul>
+<li>Acoustic phonon scattering from deformations</li>
+<li>Non-polar optical phonon scattering (not fully tested)</li>
+<li>Piezoelectric acoustic phonon scattering (not fully tested)</li>
+<li>Polar optical phonon scattering (not fully tested)</li>
+<li>Intervalley phonon scattering (not fully tested)</li>
+<li>Ionized impurity scattering</li>
+</ul>
+</li>
+<li>Density of states models:
+- Acoustic phonon scattering from deformations
+- Non-polar optical phonon scattering (not fully tested)
+- Polar optical phonon scattering (not fully tested)
+- Intervalley phonon scattering (not fully tested)</li>
+<li>Alloy scattering</li>
+</ul>
+</li>
+<li>Solution of the transport and density of states integrals:<ul>
+<li>Trapezoidal, Simpson and Romberg integration of a static
+input grid</li>
+<li>Linear tetrahedron method</li>
+<li>Weighed sum method</li>
+<li>Cubature integration with on-the-fly interpolation</li>
+</ul>
+</li>
+<li>Interpolation of the band structure and scattering properties:<ul>
+<li>All routines available in SciPy</li>
+<li>GeometricTools/WildMagic regular grid routines</li>
+<li>The RGF-ML routine available in ALGLIB</li>
+<li>Einspline</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="structure">
+<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
+<p>The structure of the program is simple: the main routines
+are written in Python utlizing NumPy and SciPy where
+necessary. In addition there are calls to external
+routines through Cython, particularly the optional libraries.
+It should support Python &gt; 2.7 and Python 3.</p>
+<p>The main driver for the program is the <code class="file docutils literal"><span class="pre">t4me.py</span></code> file
+located in the main directory. This is used to execute
+the program and call necessary subroutines. In its standard
+configuration this should serve most users.</p>
+</div>
+<div class="section" id="contributing-and-versioning">
+<h2>Contributing and versioning<a class="headerlink" href="#contributing-and-versioning" title="Permalink to this headline">¶</a></h2>
+<p>Standard Git versioning is utilized. Contributions are welcome,
+encouraged and (greatly) appreciated.</p>
+</div>
+<div class="section" id="author">
+<h2>Author<a class="headerlink" href="#author" title="Permalink to this headline">¶</a></h2>
+<p>Espen Flage-Larsen with funding from the Norwegian
+Research Council, Thelma project (228854).</p>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>This project is licensed under the GNU GPLv3. Please see
+<code class="file docutils literal"><span class="pre">LICENSE.md</span></code> for additional details.</p>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parameters.html">General input parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
 <li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Custom interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
 </ul>
+</div>
 </div>
 </div>
 

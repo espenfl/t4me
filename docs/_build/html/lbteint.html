@@ -31,6 +31,8 @@
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="lbtecoeff module" href="lbtecoeff.html" />
+    <link rel="prev" title="transport module" href="transport.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -50,7 +52,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           T4ME</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.5</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -65,7 +67,18 @@
      href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"></ul>
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Custom interfaces</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+</ul>
 </li>
               
                 <li class="dropdown">
@@ -86,6 +99,14 @@
             
               
                 
+  <li>
+    <a href="transport.html" title="Previous Chapter: transport module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; transport module</span>
+    </a>
+  </li>
+  <li>
+    <a href="lbtecoeff.html" title="Next Chapter: lbtecoeff module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">lbtecoeff module &raquo;</span>
+    </a>
+  </li>
               
             
             
@@ -330,10 +351,10 @@ and 2 for spin degeneracy.</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>Utilizes the GSL <a class="reference internal" href="#gsl" id="id1">[1]</a> library and a few inlined
+<p>Utilizes the GSL <a class="reference internal" href="#gsl" id="id1">[gsl16]</a> library and a few inlined
 function from the literature. Consult Ref. 
-<a class="reference internal" href="#halen-1985-joap-assatfioo" id="id2">[2]</a> and Ref.
-<a class="reference internal" href="#halen-1986-joap-essatfioo" id="id3">[3]</a> 
+<a class="reference internal" href="#halen-1985-joap-assatfioo" id="id2">[HP85]</a> and Ref.
+<a class="reference internal" href="#halen-1986-joap-essatfioo" id="id3">[HP86]</a> 
 as a suplement. The Gamma factor renormalization which 
 is included in the GSL returns should be removed and
 this is done in the interface Cython file.</p>
@@ -350,19 +371,19 @@ order of the integral.</p>
 <p id="bibtex-bibliography-lbteint-0"><table class="docutils citation" frame="void" id="gsl" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Gnu scientific library. <span><a class="reference external" href="#"></a></span>http://www.gnu.org/software/gsl, 2016.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[gsl16]</a></td><td>Gnu scientific library. <span><a class="reference external" href="#"></a></span>http://www.gnu.org/software/gsl, 2016.</td></tr>
 </tbody>
 </table>
 <table class="docutils citation" frame="void" id="halen-1985-joap-assatfioo" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>P.&nbsp;Van Halen and D.&nbsp;L. Pulfrey. Accurate, short series approximations to fermi–dirac integrals of order -1/2, 1/2, 1, 3/2, 2, 5/2, 3, and 7/2. <em>Journal of Applied Physics</em>, 57(12):5271–5274, jun 1985. <a class="reference external" href="https://doi.org/10.1063/1.335269">doi:10.1063/1.335269</a>.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[HP85]</a></td><td>P.&nbsp;Van Halen and D.&nbsp;L. Pulfrey. Accurate, short series approximations to fermi–dirac integrals of order -1/2, 1/2, 1, 3/2, 2, 5/2, 3, and 7/2. <em>Journal of Applied Physics</em>, 57(12):5271–5274, jun 1985. <a class="reference external" href="https://doi.org/10.1063/1.335269">doi:10.1063/1.335269</a>.</td></tr>
 </tbody>
 </table>
 <table class="docutils citation" frame="void" id="halen-1986-joap-essatfioo" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>P.&nbsp;Van Halen and D.&nbsp;L. Pulfrey. Erratum: “accurate, short series approximation to fermi–dirac integrals of order -1/2, 1/2, 1, 3/2, 2, 5/2, 3, and 7/2&#8217;&#8217; [j. appl. phys. 57, 5271 (1985)]. <em>Journal of Applied Physics</em>, 59(6):2264–2265, mar 1986. <a class="reference external" href="https://doi.org/10.1063/1.337053">doi:10.1063/1.337053</a>.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id3">[HP86]</a></td><td>P.&nbsp;Van Halen and D.&nbsp;L. Pulfrey. Erratum: “accurate, short series approximation to fermi–dirac integrals of order -1/2, 1/2, 1, 3/2, 2, 5/2, 3, and 7/2&#8217;&#8217; [j. appl. phys. 57, 5271 (1985)]. <em>Journal of Applied Physics</em>, 59(6):2264–2265, mar 1986. <a class="reference external" href="https://doi.org/10.1063/1.337053">doi:10.1063/1.337053</a>.</td></tr>
 </tbody>
 </table>
 </p>

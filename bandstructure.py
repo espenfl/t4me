@@ -770,7 +770,7 @@ class Bandstructure():
                             "DISCONTINUITY. Last valid energy for "
                             "the Kane model is " +
                             str(last_valid_energy) +
-                            " eV. Turning of band folding.")
+                            " eV. Remember no band folding is performed.")
             energy = constants.bandunit * k2 / effmass
             # need to loop manually to fill the array outside the
             # valid range
@@ -1090,14 +1090,12 @@ class Bandstructure():
                 sys.exit(1)
         # fetch k-point grid in cartersian
         k = self.lattice.fetch_kmesh(direct=False)
-        # do first band (no folding)
         # first energy
         energy = generate_energy(k, self.effmass[band], a=self.a[band],
                                  e0=self.e0[band], kshift=self.kshift[band])
         # then velocity
         vx, vy, vz = generate_velocity(k, self.effmass[band], a=self.a[band],
                                        kshift=self.kshift[band])
-        # then do folding, if necessary
         # THIS DOES NOT WORK FOR MULTIBAND SCENARIOS, KILL IT
         # ACTUALLY, THIS FOLDING NEEDS TO BE FIXED IN ORDER TO GET THE
         # BAND INDEX FIRST DISABLE UNTIL FIXED!
@@ -2476,6 +2474,8 @@ class Bandstructure():
             # somethimes we do not want to print library output
             info = self.param.libinfo
             if interpol_method == "wildmagic":
+                # testing parameter
+                smear_then_interpolate = False
                 if interpol_type not in constants.wildmagic_methods:
                     logger.error("The specified interpol_type is not "
                                  "recognized by the Wildmagic method, "
@@ -2495,7 +2495,7 @@ class Bandstructure():
                         num_samples, num_bands,
                         self.param.dos_smearing,
                         3,
-                        self.param.dos_smear_then_interpolate,
+                        smear_then_interpolate,
                         volume, volume_bz,
                         max_it, abs_err, rel_err, h,
                         info,
@@ -2511,7 +2511,7 @@ class Bandstructure():
                         num_bands,
                         self.param.dos_smearing,
                         0,
-                        self.param.dos_smear_then_interpolate,
+                        smear_then_interpolate,
                         volume, volume_bz,
                         max_it, abs_err, rel_err, h,
                         info,
@@ -2526,7 +2526,7 @@ class Bandstructure():
                         num_samples, num_bands,
                         self.param.dos_smearing,
                         1,
-                        self.param.dos_smear_then_interpolate,
+                        smear_then_interpolate,
                         volume, volume_bz,
                         max_it, abs_err, rel_err, h,
                         info,
@@ -2541,7 +2541,7 @@ class Bandstructure():
                         num_samples, num_bands,
                         self.param.dos_smearing,
                         2,
-                        self.param.dos_smear_then_interpolate,
+                        smear_then_interpolate,
                         volume, volume_bz,
                         max_it, abs_err, rel_err, h,
                         info,

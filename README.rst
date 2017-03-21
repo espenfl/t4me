@@ -23,6 +23,11 @@ Routines to calculate the transport properties of materials
 using the linearized Boltzmann Transport Equations (BTE)
 in the Relaxtion-Time-Approximation (RTA).
 
+Please go to the 
+`T4ME <https://espenfl.github.io/t4me/>`_ 
+website for more extensive documentation and
+information regarding usage.
+
 Features
 ********
 - Modular, easily extendable by users

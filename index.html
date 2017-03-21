@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -30,8 +31,7 @@
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="T4ME 1 documentation" href="#" />
-    <link rel="next" title="&lt;no title&gt;" href="modules.html" />
+    <link rel="next" title="Prerequisites" href="preq.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -51,7 +51,7 @@
         </button>
         <a class="navbar-brand" href="#">
           T4ME</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.5</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -67,16 +67,15 @@
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
-<li class="toctree-l1"><a class="reference internal" href="scattering.html">scattering module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="t4me.html">t4me module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transport.html">transport module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbteint.html">lbteint module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbtecoeff.html">lbtecoeff module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lattice.html">lattice module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bandstructure.html">bandstructure module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="inputoutput.html">inputoutput module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="interface.html">interface module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">utils module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Custom interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
 </ul>
 </ul>
 </li>
@@ -91,20 +90,12 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">T4ME - Transport 4 MatErials</a><ul>
-<li><a class="reference internal" href="#getting-started">Getting started</a><ul>
-<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li><a class="reference internal" href="#installing">Installing</a></li>
+<li><a class="reference internal" href="#features">Features</a></li>
 <li><a class="reference internal" href="#structure">Structure</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#running-tests">Running tests</a></li>
-<li><a class="reference internal" href="#built-with">Built With</a></li>
-<li><a class="reference internal" href="#versioning">Versioning</a></li>
+<li><a class="reference internal" href="#contributing-and-versioning">Contributing and versioning</a></li>
 <li><a class="reference internal" href="#author">Author</a></li>
-<li><a class="reference internal" href="#license">License</a><ul>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#license">License</a></li>
+<li><a class="reference internal" href="#documentation">Documentation</a></li>
 </ul>
 </li>
 </ul>
@@ -116,7 +107,7 @@
               
                 
   <li>
-    <a href="modules.html" title="Next Chapter: <no title>"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet"><no title> &raquo;</span>
+    <a href="preq.html" title="Next Chapter: Prerequisites"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Prerequisites &raquo;</span>
     </a>
   </li>
               
@@ -126,7 +117,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="_sources/index.txt"
+  <a href="_sources/index.rst.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -152,124 +143,123 @@
       
   <div class="section" id="t4me-transport-4-materials">
 <h1>T4ME - Transport 4 MatErials<a class="headerlink" href="#t4me-transport-4-materials" title="Permalink to this headline">¶</a></h1>
+<pre class="literal-block">
+  _________________  ____  ___    _______________
+
+ /            /   / /   / /   __/   /          /
+
+/____    ____/   / /   / /          /   _______/
+
+    /   /   /   /_/   /_/          /   /___
+
+   /   /   /           /   /_/   /   ____/
+
+  /   /   /_____    __/   /  /   /   /_______
+
+ /   /         /   / /   /  /   /           /
+
+/___/         /___/ /___/  /___/___________/
+</pre>
 <p>Routines to calculate the transport properties of materials
 using the linearized Boltzmann Transport Equations (BTE)
 in the Relaxtion-Time-Approximation (RTA).</p>
-<div class="section" id="getting-started">
-<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
-<p>How to get going is here briefly explained.</p>
-<div class="section" id="prerequisites">
-<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
-<p>In its basic form T4ME only need the following
-dependencies: <a class="reference external" href="https://atztogo.github.io/spglib/">Spglib</a>
-and <a class="reference external" href="https://www.gnu.org/software/gsl/">GNU Scientific Library</a>.
-Additional optional dependencies include:
-<a class="reference external" href="http://einspline.sourceforge.net/">Einspline</a>,
-<a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/Cubature">Cubature</a>,
-<a class="reference external" href="https://www.geometrictools.com/">GeometricTools</a>
-(use Wildmagic 5.14).</p>
-</div>
-<div class="section" id="installing">
-<h3>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h3>
-<p>Please consult the [setup]{setup.py} file for details on
-how to configure the location of the include and libraries.
-Then execute:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build_ext</span> <span class="o">--</span><span class="n">inplace</span>
-</pre></div>
-</div>
-<p>And you should be able to now execute t4me.py which is
-the main driver routine:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">t4me</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Modular, easily extendable by users</li>
+<li>Band structures:<ul>
+<li>Generate the band structure from analytic function<ul>
+<li>Spherical bands</li>
+<li>Spherical bands pluss a quartic correction</li>
+<li>Kane type of bands</li>
+<li>Tight binding bands</li>
+</ul>
+</li>
+<li>Read from first-principle codes<ul>
+<li>Interface to VASP is included</li>
+<li>Interface to read Wannier90 input and output files
+and use these to construct tight binding orbitals using
+PythTB is included.</li>
+</ul>
+</li>
+<li>Read from NumPy datafiles</li>
+</ul>
+</li>
+<li>Scattering properties:<ul>
+<li>Spherical energy dispersion models:<ul>
+<li>Acoustic phonon scattering from deformations</li>
+<li>Non-polar optical phonon scattering (not fully tested)</li>
+<li>Piezoelectric acoustic phonon scattering (not fully tested)</li>
+<li>Polar optical phonon scattering (not fully tested)</li>
+<li>Intervalley phonon scattering (not fully tested)</li>
+<li>Ionized impurity scattering</li>
+</ul>
+</li>
+<li>Density of states models:
+- Acoustic phonon scattering from deformations
+- Non-polar optical phonon scattering (not fully tested)
+- Polar optical phonon scattering (not fully tested)
+- Intervalley phonon scattering (not fully tested)</li>
+<li>Alloy scattering</li>
+</ul>
+</li>
+<li>Solution of the transport and density of states integrals:<ul>
+<li>Trapezoidal, Simpson and Romberg integration of a static
+input grid</li>
+<li>Linear tetrahedron method</li>
+<li>Weighed sum method</li>
+<li>Cubature integration with on-the-fly interpolation</li>
+</ul>
+</li>
+<li>Interpolation of the band structure and scattering properties:<ul>
+<li>All routines available in SciPy</li>
+<li>GeometricTools/WildMagic regular grid routines</li>
+<li>The RGF-ML routine available in ALGLIB</li>
+<li>Einspline</li>
+</ul>
+</li>
+</ul>
 </div>
 <div class="section" id="structure">
-<h3>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h3>
+<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
 <p>The structure of the program is simple: the main routines
 are written in Python utlizing NumPy and SciPy where
 necessary. In addition there are calls to external
-routines through Cython. It should support Python &gt; 2.7 and
-Python 3.</p>
-<p>The main driver for the program is the <cite>t4me.py</cite> file
+routines through Cython, particularly the optional libraries.
+It should support Python &gt; 2.7 and Python 3.</p>
+<p>The main driver for the program is the <code class="file docutils literal"><span class="pre">t4me.py</span></code> file
 located in the main directory. This is used to execute
-the program. The parameters and input files are located,
-and should be located (for user supplied input files) in
-the <cite>input</cite> folder. Here three parameters files should
-also be present:</p>
-<ul class="simple">
-<li><cite>param.yml</cite> - contains the main parameters, which
-routines to execute, what type of integration,
-interpolation etc. to perform and what input
-files to use.</li>
-<li><cite>cellparam.yml</cite> - contains details of the unit cell, its atoms
-and the reciprocal sampling density.</li>
-<li><cite>bandparam.yml</cite> - contains parameters for band generation,
-the scattering parameters for each band
-and the parameters to
-use in the tight binding generation
-(if that is needed).</li>
-</ul>
-<p>These files are documented, please consult respective files
-for detailed information of how to set the relevant
-parameters.</p>
+the program and call necessary subroutines. In its standard
+configuration this should serve most users.</p>
 </div>
-</div>
-<div class="section" id="running-tests">
-<h2>Running tests<a class="headerlink" href="#running-tests" title="Permalink to this headline">¶</a></h2>
-<p>Some very simple tests are included located inside the
-<cite>tests</cite> folder. They contain the necessary input files
-to run the tests and should not be modified. The tests
-can be executed by setting <cite>run_tests</cite> to True in the
-main parameter file located by default in <cite>input/param.yml</cite>.
-Then all tests are executed by issuing:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">t4me</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="built-with">
-<h2>Built With<a class="headerlink" href="#built-with" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><a class="reference external" href="https://atztogo.github.io/spglib/">Spglib</a></li>
-<li><a class="reference external" href="https://www.gnu.org/software/gsl/">GNU Scientific Library</a></li>
-<li><a class="reference external" href="http://einspline.sourceforge.net/">Einspline</a></li>
-<li><a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/Cubature">Cubature</a></li>
-<li><a class="reference external" href="https://www.geometrictools.com/">GeometricTools</a></li>
-</ul>
-</div>
-<div class="section" id="versioning">
-<h2>Versioning<a class="headerlink" href="#versioning" title="Permalink to this headline">¶</a></h2>
-<p>Standard Git versioning is utilized.</p>
+<div class="section" id="contributing-and-versioning">
+<h2>Contributing and versioning<a class="headerlink" href="#contributing-and-versioning" title="Permalink to this headline">¶</a></h2>
+<p>Standard Git versioning is utilized. Contributions are welcome,
+encouraged and (greatly) appreciated.</p>
 </div>
 <div class="section" id="author">
 <h2>Author<a class="headerlink" href="#author" title="Permalink to this headline">¶</a></h2>
-<p>Espen Flage-Larsen with finances from the Norwegian
+<p>Espen Flage-Larsen with funding from the Norwegian
 Research Council, Thelma project (228854).</p>
 </div>
 <div class="section" id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
 <p>This project is licensed under the GNU GPLv3. Please see
 <code class="file docutils literal"><span class="pre">LICENSE.md</span></code> for additional details.</p>
-<p>Contents:</p>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="scattering.html">scattering module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="t4me.html">t4me module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transport.html">transport module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbteint.html">lbteint module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbtecoeff.html">lbtecoeff module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lattice.html">lattice module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bandstructure.html">bandstructure module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="inputoutput.html">inputoutput module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="interface.html">interface module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">utils module</a></li>
-</ul>
-</div>
-<div class="section" id="indices-and-tables">
-<h3>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Custom interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
 </ul>
 </div>
 </div>
@@ -288,7 +278,7 @@ Research Council, Thelma project (228854).</p>
     </p>
     <p>
         &copy; Copyright 2016, Espen Flage-Larsen.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
     </p>
   </div>
 </footer>

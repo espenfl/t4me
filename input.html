@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>&lt;no title&gt; &#8212; T4ME 1 documentation</title>
+    <title>Input &#8212; T4ME 1 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -30,9 +31,8 @@
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="T4ME 1 documentation" href="index.html" />
-    <link rel="next" title="scattering module" href="scattering.html" />
-    <link rel="prev" title="T4ME - Transport 4 MatErials" href="index.html" />
+    <link rel="next" title="General input parameters" href="gparameters.html" />
+    <link rel="prev" title="Running tests" href="tests.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -52,7 +52,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           T4ME</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.5</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -67,17 +67,16 @@
      href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
-<li class="toctree-l1"><a class="reference internal" href="scattering.html">scattering module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="t4me.html">t4me module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transport.html">transport module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbteint.html">lbteint module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbtecoeff.html">lbtecoeff module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lattice.html">lattice module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bandstructure.html">bandstructure module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="inputoutput.html">inputoutput module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="interface.html">interface module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">utils module</a></li>
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Custom interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
 </ul>
 </ul>
 </li>
@@ -90,7 +89,13 @@
      href="#">Page <b class="caret"></b></a>
   <ul class="dropdown-menu localtoc"
       role="menu"
-      aria-labelledby="dLabelLocalToc"></ul>
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Input</a><ul>
+<li><a class="reference internal" href="#the-input-parameters">The input parameters</a></li>
+</ul>
+</li>
+</ul>
+</ul>
 </li>
               
             
@@ -98,11 +103,11 @@
               
                 
   <li>
-    <a href="index.html" title="Previous Chapter: T4ME - Transport 4 MatErials"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; T4ME - Transp...</span>
+    <a href="tests.html" title="Previous Chapter: Running tests"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Running tests</span>
     </a>
   </li>
   <li>
-    <a href="scattering.html" title="Next Chapter: scattering module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">scattering mo... &raquo;</span>
+    <a href="gparameters.html" title="Next Chapter: General input parameters"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">General input... &raquo;</span>
     </a>
   </li>
               
@@ -112,7 +117,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="_sources/modules.txt"
+  <a href="_sources/input.rst.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -136,20 +141,35 @@
   <div class="row">
     <div class="col-md-12 content">
       
-  <p>==</p>
+  <div class="section" id="input">
+<h1>Input<a class="headerlink" href="#input" title="Permalink to this headline">¶</a></h1>
+<p>The program relies on three parameter files written in YAML.
+They should all reside inside the <cite>input</cite> directory.</p>
+<ul class="simple">
+<li><code class="file docutils literal"><span class="pre">input/param.yml</span></code> - contains the main parameters, which
+routines to execute, what type of integration,
+interpolation etc. to perform and what input
+files to use.</li>
+<li><code class="file docutils literal"><span class="pre">input/bandparam.yml</span></code> - contains parameters for band generation,
+the scattering parameters for each band
+and the parameters to
+use in the tight binding generation
+(if that is needed).</li>
+<li><code class="file docutils literal"><span class="pre">input/cellparam.yml</span></code> - contains details of the unit cell, its atoms
+and the reciprocal sampling density.</li>
+</ul>
+<p>In addition if external input files be used they should also
+be placed in the <cite>input</cite> folder.</p>
+<div class="section" id="the-input-parameters">
+<h2>The input parameters<a class="headerlink" href="#the-input-parameters" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="scattering.html">scattering module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="t4me.html">t4me module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transport.html">transport module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbteint.html">lbteint module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbtecoeff.html">lbtecoeff module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lattice.html">lattice module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bandstructure.html">bandstructure module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="inputoutput.html">inputoutput module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="interface.html">interface module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">utils module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gparameters.html">General input parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bparameters.html">Band structure input parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cparameters.html">Unit cell input parameters</a></li>
 </ul>
+</div>
+</div>
 </div>
 
 
@@ -165,7 +185,7 @@
     </p>
     <p>
         &copy; Copyright 2016, Espen Flage-Larsen.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
     </p>
   </div>
 </footer>

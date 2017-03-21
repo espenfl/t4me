@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -30,7 +31,6 @@
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="T4ME 1 documentation" href="index.html" />
 
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -57,7 +57,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           T4ME</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.5</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -73,16 +73,15 @@
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
-<li class="toctree-l1"><a class="reference internal" href="scattering.html">scattering module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="t4me.html">t4me module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transport.html">transport module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbteint.html">lbteint module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lbtecoeff.html">lbtecoeff module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lattice.html">lattice module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bandstructure.html">bandstructure module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="inputoutput.html">inputoutput module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="interface.html">interface module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">utils module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Custom interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
 </ul>
 </ul>
 </li>
@@ -133,13 +132,23 @@
    <h1>Python Module Index</h1>
 
    <div class="modindex-jumpbox">
+   <a href="#cap-b"><strong>b</strong></a> | 
    <a href="#cap-i"><strong>i</strong></a> | 
+   <a href="#cap-l"><strong>l</strong></a> | 
    <a href="#cap-s"><strong>s</strong></a> | 
    <a href="#cap-t"><strong>t</strong></a> | 
    <a href="#cap-u"><strong>u</strong></a>
    </div>
 
-   <table class="indextable modindextable" cellspacing="0" cellpadding="2">
+   <table class="indextable modindextable">
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-b"><td></td><td>
+       <strong>b</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="bandstructure.html#module-bandstructure"><code class="xref">bandstructure</code></a></td><td>
+       <em></em></td></tr>
      <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
      <tr class="cap" id="cap-i"><td></td><td>
        <strong>i</strong></td><td></td></tr>
@@ -152,6 +161,24 @@
        <td></td>
        <td>
        <a href="interface.html#module-interface"><code class="xref">interface</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-l"><td></td><td>
+       <strong>l</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="lattice.html#module-lattice"><code class="xref">lattice</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="lbtecoeff.html#module-lbtecoeff"><code class="xref">lbtecoeff</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="lbteint.html#module-lbteint"><code class="xref">lbteint</code></a></td><td>
        <em></em></td></tr>
      <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
      <tr class="cap" id="cap-s"><td></td><td>
@@ -168,6 +195,11 @@
        <td></td>
        <td>
        <a href="t4me.html#module-t4me"><code class="xref">t4me</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="transport.html#module-transport"><code class="xref">transport</code></a></td><td>
        <em></em></td></tr>
      <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
      <tr class="cap" id="cap-u"><td></td><td>
@@ -192,7 +224,7 @@
     </p>
     <p>
         &copy; Copyright 2016, Espen Flage-Larsen.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
     </p>
   </div>
 </footer>

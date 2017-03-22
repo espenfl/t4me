@@ -214,11 +214,21 @@ def main():
                                                  itype="linearnd",
                                                  itype_sub="linear")
 
+    # do the user want effective mass data?
+    if param.dispersion_effmass:
+        # calculate effective mass
+        bs.calc_effective_mass()
+        # write effective mass
+        inputoutput.dump_effmass(bs, filename="effmass")
+
     # calculation of the density of states?
     if param.dos_calc:
         # calculate
         bs.calc_density_of_states(spin_degen=True)
         # write dos
+        logger.error("Writeout of the effective mass tensor "
+                     "have not yet been included.")
+        sys.exit(1)
         inputoutput.dump_density_of_states(bs, filename="dos")
 
     # transport calcs?

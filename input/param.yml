@@ -42,7 +42,15 @@ dispersion_write_start: [0.0, 0.0, 0.0] # n/a
 # dispersion line:
 dispersion_write_end: [0.5, 0.5, 0.0] # n/a
 # Number of k-points along line extration:
-num_kpoints_along_line: 20 # n/a
+dispersion_num_kpoints_along_line: 20 # n/a
+# Calculate effective mass tensor?
+dispersion_effmass: False
+# Diagonalize the effective mass tensor?
+dispersion_effmass_diagonalize: False
+# Transformation vectors for the effective mass tensor
+# given in direct coordinates, if empty no
+# transformation is performed
+dispersion_effmass_transform: []
 # Parameters that are passed to PythTB when reading
 # Wannier90 data. Please consult the PythTB manual
 # for additional details.

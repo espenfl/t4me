@@ -136,16 +136,57 @@ Example:
    
    dispersion_write_end: [0.5, 0.0, 0.0]
 
-``num_kpoints_along_line``
+``dispersion_num_kpoints_along_line``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 How many samples to use along the line to be extracted.
 
 Example:
 ::
 
-   num_kpoints_along_line: 20
+   dispersion_num_kpoints_along_line: 20
 
 Here 20 points is used along the line.
+
+``dispersion_effmass``
+~~~~~~~~~~~~~~~~~~~~~~
+Calculate the effective mass tensor along the unit vectors
+of the configured reciprocal cell. The resulting tensor
+is in units of the free electron mass. Currently it is not
+printed out and an error will occur.
+
+Example:
+::
+
+   dispersion_effmass: False
+
+Do not calculate the effective mass tensor.
+
+``dispersion_effmass_diagonalize``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Diagonalize the calculated effective mass tensor. Currently
+the diagonal elements and the eigenvectors are not printed
+out and an error will occur.
+
+Example:
+::
+
+   dispersion_effmass_diagonalize: False
+
+Do not diagonalize the effective mass tensor.
+
+``dispersion_effmass_transform``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The transformation vectors for the effective mass tensor.
+The elements [0,:] give the first vector, [1,:] the second
+and [2,:] the third. Should be given in direct coordinates.
+If the array is left empty, no transformation is performed.
+
+Example:
+::
+
+   dispersion_effmass_transform: []
+
+Do not transform the effective mass tensor.
 
 ``dispersion_w90_tb_zero_energy``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

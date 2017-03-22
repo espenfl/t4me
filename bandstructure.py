@@ -1183,7 +1183,8 @@ class Bandstructure():
             (kstart, kend), bz_border, constants.zerocut)
 
         kpts = self.lattice.fetch_kpoints_along_line(
-            kstart, kend, self.param.num_kpoints_along_line, direct=False)
+            kstart, kend, self.param.dispersion_num_kpoints_along_line,
+            direct=False)
         velocities = self.fetch_velocities_at_kpoints(
             kpts, itype=itype, itype_sub=itype_sub)
 
@@ -1328,7 +1329,7 @@ class Bandstructure():
             (kstart, kend), bz_border, constants.zerocut)
 
         kpts = self.lattice.fetch_kpoints_along_line(
-            kstart, kend, self.param.num_kpoints_along_line,
+            kstart, kend, self.param.dispersion_num_kpoints_along_line,
             direct=False)
         energies = self.fetch_energies_at_kpoints(
             kpoint_mesh=kpts, itype=itype, itype_sub=itype_sub)
@@ -1477,8 +1478,21 @@ class Bandstructure():
 
         # store effective mass (effmass already exists from the
         # readin from bandparam.yml) in units of the free electron mass
-        self.effmass_tensor = 100 * np.power(constants.hbarsqcsq, 2.0) * \
+        effmass_tensor = 100 * np.power(constants.hbarsqcsq, 2.0) * \
             np.linalg.inv(inv_mass) / constants.elmasscsq
+
+        if self.param.dispersion_effmass_diagonalize:
+            # diagonalize?
+            w, v = np.linalg.eig(effmass_tensor)
+            self.effmass_eigenval = w
+            self.effmass_eigenvec = v
+        elif self.param.dispersion_effmass_transform:
+            # transform?
+            trans = np.array(self.param.dispersion_effmass_transform).T
+            self.effmass_tensor = np.matmul(effmass_tensor, trans)
+        else:
+            # just store the tensor
+            self.effmass_tensor = effmass_tensor
 
     def calc_velocities(self, velocities=None):
         """

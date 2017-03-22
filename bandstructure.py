@@ -1397,20 +1397,111 @@ class Bandstructure():
                                                   itype_sub=itype_sub)
         return energies
 
-    def calc_velocities(self):
+    def calc_effective_mass(self):
+        """
+        Calculates the effective mass tensor. Currently the effective
+        mass tensor is not diagonalized.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
+
+        Notes
+        -----
+        Upon complettion the effective mass is stored in the 
+        current `Bandstructure()` object.
+
+        Also, the velocities have to be precalculated before 
+        calling this routine.
+
+        """
+
+        # set logger
+        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger.debug("Running calc_effective_mass.")
+
+        # check if the velocities exists
+        if self.gen_velocities:
+            logger.error("Please generate the velocities before "
+                         "calling the calc_effective_mass routine. "
+                         "Exiting.")
+            sys.exit(1)
+
+        # check that there is sensible values stored in the
+        # velocities
+        if not self.check_velocities():
+            logger.error("The velocity data does not seem to be "
+                         "realistic. Very small values are detected. "
+                         "Exiting. ")
+            sys.exit(1)
+
+        # define tensor
+        num_bands = self.energies.shape[0]
+        num_kpoints = self.energies.shape[1]
+        inv_mass = np.zeros((num_bands, 3, 3, num_kpoints))
+
+        # if we need to interpolate
+        # let us make sure the interpolation sampling is
+        # the same as the input
+        if not self.param.dispersion_velocities_numdiff:
+            ksampling_inter = np.copy(
+                self.param.dispersion_interpolate_sampling)
+            self.param.dispersion_interpolate_sampling = \
+                self.lattice.ksampling
+
+        # here we could use inline and rely on broadcasting,
+        # but do it simple now
+        # we also calculate to many elements due to its symmetric
+        # nature but again it is simple
+        for d in range(3):
+            if self.param.dispersion_velocities_numdiff:
+                # velocities was obtained with numerical difference,
+                # use same procedure for the effective mass
+                inv_mass[:, :, d, :] = self.calc_velocities(
+                    self.velocities[:, d, :])
+            else:
+                # here we have to get velocities by interpolation
+                dummy, inv_mass[:, :, d, :], dummy = \
+                    self.interpolate(ienergies=True, ivelocities=True,
+                                     store_inter=False,
+                                     energies=self.velocities[:, d, :])
+
+        # reset ksampling_inter
+        if not self.param.dispersion_velocities_numdiff:
+            self.param.dispersion_interpolate_sampling = \
+                ksampling_inter
+
+        # store effective mass (effmass already exists from the
+        # readin from bandparam.yml) in units of the free electron mass
+        self.effmass_tensor = 100 * np.power(constants.hbarsqcsq, 2.0) * \
+            np.linalg.inv(inv_mass) / constants.elmasscsq
+
+    def calc_velocities(self, velocities=None):
         """
         Calculate the electron group velocities
         from the electron energy dispersion
 
         Parameters
         ----------
-        bs : object, optional
-            A `Bandstructure()` object. Defaults to the
-            active object.
+        velocities : ndarray, optional
+            | Dimension: (N, M)
+
+            Contains the group velocity along a specific direction 
+            for N bands and M k-points. If supplied the velocities 
+            of the velocities are calculated, or more specifically 
+            the inverse effective mass tensor (without prefactor)
 
         Returns
         -------
-        None
+        velocities : ndarray, optional
+            | Dimension: (N, 3, M)
+
+            The velocities of the velocity. Only returned if
+            `velocities` have been supplied to the routine.
 
         Notes
         -----
@@ -1420,7 +1511,8 @@ class Bandstructure():
         Uses the :func:`gradient` from NumPy.
 
         Overwrites any entry of exising `velocities` in `bs`
-        and sets `gen_velocities` to False.
+        and sets `gen_velocities` to False if `velocities` is
+        not supplied.
 
         """
 
@@ -1428,24 +1520,34 @@ class Bandstructure():
         logger = logging.getLogger(sys._getframe().f_code.co_name)
         logger.debug("Running calc_velocities.")
 
-        energies = self.energies
+        if velocities is None:
+            # if velocities is not supplied use the energies and
+            # calculate the velocities
+            e_or_v = self.energies
+        else:
+            # if velocities is supplied calculate the velocities
+            # of the supplied velocity
+            e_or_v = velocities
+
         ksampling = self.lattice.ksampling
-        num_kpoints = energies.shape[1]
-        num_bands = energies.shape[0]
+        num_kpoints = e_or_v.shape[1]
+        num_bands = e_or_v.shape[0]
 
         # assume equally spaced grid and fetch
         # spacing along each direction
         dx, dy, dz = self.lattice.fetch_kmesh_spacing(direct=False)
 
+        # fetch velocities
         # reshape
-        energies_shaped = np.reshape(energies, (num_bands,
-                                                ksampling[0],
-                                                ksampling[1],
-                                                ksampling[2]), order='C')
+        e_or_v_shaped = np.reshape(e_or_v,
+                                   (num_bands,
+                                    ksampling[0],
+                                    ksampling[1],
+                                    ksampling[2]), order='C')
         # call gradient from NumPy to obtain the gradients and
         # pass spacings (grid is seldom cubic with spacing of 1.0)
         # also, make sure we do nothing to the band axis
-        vx, vy, vz = np.gradient(energies_shaped,
+        vx, vy, vz = np.gradient(e_or_v_shaped,
                                  dx, dy, dz, axis=(1, 2, 3))
 
         # flatten and store
@@ -1458,18 +1560,26 @@ class Bandstructure():
                                np.reshape(vz, (num_bands,
                                                num_kpoints),
                                           order='C')])
+
         # need band first, then direction, then k-points
         velocities = np.swapaxes(velocities, 0, 1)
 
-        # no need to generate velocities again
-        self.gen_velocities = False
+        if velocities is None:
+            # store the calculated velocities
+            # no need to generate velocities again
+            self.gen_velocities = False
 
-        # set velocities in current object
-        self.velocities = velocities
+            # set velocities in current object
+            self.velocities = velocities
+        else:
+            # return the velocities of the velocities
+            # for a specific direction
+            return velocities
 
     def interpolate(self, iksampling=None, ienergies=True,
                     ivelocities=False, itype=None, itype_sub=None,
-                    kpoint_mesh=None, store_inter=False):
+                    kpoint_mesh=None, store_inter=False,
+                    energies=None):
         """
         Interpolates the energies and velocity dispersion.
 
@@ -1511,27 +1621,35 @@ class Bandstructure():
             Supplied k - point grid for extraction as an alternative
             to iksampling. Should be supplied in cartesian coordinates
             and should not extend the border of the original grid.
+            Usefull for line extraction etc.
         store_inter : boolean, optional
             Store the new interpolated energies and velocities in
             the supplied object. Also modifies the current `Lattice()` object
             with the new grid etc. if that has been modified.
             Defaults to False.
+        energies : ndarray, optional
+            | Dimension: (N,J)
+
+            An input array containing the energies (or some other)
+            quantity that can fly through with the same structure, e.g.
+            the velocities along a certain direction for N bands and J
+            k-points.
 
         Returns
         -------
-        ien, ivel1, ivel2, ivel3 : ndarray, ndarray, ndarray, ndarray
-            | Dimension: (M), (M, 3), (M, 3), (M, 3)
+        ien, ivel : ndarray, ndarray
+            | Dimension: (N,M), (N,3,M)
 
             The energy dispersions in eV, and group velocities in eVAA
             along indexes each axis of the reciprocal basis are returned
-            for M new k - points if velocities is supplied, or if the
-            `gen_velocities` tag is set to True in the current
+            for N bands and M new k - points if velocities is supplied, 
+            or if the `gen_velocities` tag is set to True in the current
             `Bandstructure()` object.
         ien, False, False, False : ndarray, boolean, boolean, boolean
-            | Dimension: (M)
+            | Dimension: (N,M)
 
-            The energy dispersions in eV for the M new k - points if
-            `velocities` is not supplied or `gen_velocities` is
+            The energy dispersions in eV for N bands and M new k-points 
+            if `velocities` is not supplied or `gen_velocities` is
             set to False.
 
         See Also
@@ -1556,13 +1674,14 @@ class Bandstructure():
         wildmagic_einspline_direct = False
 
         if ienergies:
-            try:
-                energies = self.energies
-            except AttributeError:
-                logger.error(
-                    "The energies is not stored in the current "
-                    "Bandstructure() object. Exiting.")
-                sys.exit(1)
+            if energies is None:
+                try:
+                    energies = self.energies
+                except AttributeError:
+                    logger.error(
+                        "The energies is not stored in the current "
+                        "Bandstructure() object. Exiting.")
+                    sys.exit(1)
 
         if ivelocities:
             try:

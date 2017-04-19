@@ -15,7 +15,7 @@
 # -------------------------------------------------------#
 # Do you want to interpolate the supplied
 # bandstructure?
-dispersion_interpolate: True # n/a
+dispersion_interpolate: False # n/a
 # What is the target k-point sampling?
 dispersion_interpolate_sampling: [51,51,51] # n/a
 # What interpolation method to use?
@@ -67,7 +67,7 @@ dispersion_w90_tb_max_distance: 10 # AA
 # -------------------------------------------------------#
 # Do you want to calculate the electronic
 # transport tensors?
-transport_calc: False # n/a
+transport_calc: True # n/a
 # Which method to use?
 transport_method: "numerick"
 # Which integration method to use?
@@ -94,10 +94,10 @@ transport_interpolate_type: "akima" # n/a
 # The minimum chemical potential:
 transport_chempot_min: -0.4 # eV
 # The maximum chemical potential:
-transport_chempot_max: 0.4 # eV
+transport_chempot_max: 1.0 # eV
 # The samples between the minimum and maximum of
 # the chemical potential:
-transport_chempot_samples: 100 # n/a
+transport_chempot_samples: 20 # n/a
 # Drop bands in the calculation that lie outside the
 # chemical potential range pluss and minus the following:
 transport_energycutband: 1.0 # eV
@@ -105,7 +105,7 @@ transport_energycutband: 1.0 # eV
 transport_include_bands: [] # n/a
 # Do you want to use the analytical spherical scattering
 # models?
-transport_use_analytic_scattering: True  # n/a
+transport_use_analytic_scattering: False  # n/a
 # Do you want to calculate the scattering on the fly
 # during integration?
 transport_use_scattering_ontfly: False # n/a
@@ -156,11 +156,11 @@ dos_smear_then_interpolate: False # n/a
 # -------------------------------------------------------#
 # -------------------------------------------------------#
 # Minimum temperature:
-temperature_min: 100 # K
+temperature_min: 300 # K
 # Maximum temperature:
-temperature_max: 700 # K
+temperature_max: 300 # K
 # Number of temperature steps:
-temperature_steps: 7 # n/a
+temperature_steps: 1 # n/a
 # Generate Gamma centered k-point grids? Anything else
 # is currently experimental, so beware of wrong results
 gamma_center: True # n/a

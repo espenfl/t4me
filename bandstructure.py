@@ -1494,7 +1494,7 @@ class Bandstructure():
             # just store the tensor
             self.effmass_tensor = effmass_tensor
 
-    def calc_velocities(self, velocities=None):
+    def calc_velocities(self, velocities=None, store=True):
         """
         Calculate the electron group velocities
         from the electron energy dispersion
@@ -1508,6 +1508,10 @@ class Bandstructure():
             for N bands and M k-points. If supplied the velocities 
             of the velocities are calculated, or more specifically 
             the inverse effective mass tensor (without prefactor)
+        store : boolean, optional
+            If True, store the calculated velocities in the
+            active `Bandstructure()` object, else return the
+            velocity array. Defaults to True.
 
         Returns
         -------
@@ -1515,7 +1519,7 @@ class Bandstructure():
             | Dimension: (N, 3, M)
 
             The velocities of the velocity. Only returned if
-            `velocities` have been supplied to the routine.
+            `store` is set to False.
 
         Notes
         -----
@@ -1578,7 +1582,7 @@ class Bandstructure():
         # need band first, then direction, then k-points
         velocities = np.swapaxes(velocities, 0, 1)
 
-        if velocities is None:
+        if store:
             # store the calculated velocities
             # no need to generate velocities again
             self.gen_velocities = False

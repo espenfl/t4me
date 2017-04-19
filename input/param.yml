@@ -15,7 +15,7 @@
 # -------------------------------------------------------#
 # Do you want to interpolate the supplied
 # bandstructure?
-dispersion_interpolate: True # n/a
+dispersion_interpolate: False # n/a
 # What is the target k-point sampling?
 dispersion_interpolate_sampling: [51,51,51] # n/a
 # What interpolation method to use?
@@ -94,10 +94,10 @@ transport_interpolate_type: "akima" # n/a
 # The minimum chemical potential:
 transport_chempot_min: -0.4 # eV
 # The maximum chemical potential:
-transport_chempot_max: 0.4 # eV
+transport_chempot_max: 1.0 # eV
 # The samples between the minimum and maximum of
 # the chemical potential:
-transport_chempot_samples: 100 # n/a
+transport_chempot_samples: 20 # n/a
 # Drop bands in the calculation that lie outside the
 # chemical potential range pluss and minus the following:
 transport_energycutband: 1.0 # eV
@@ -158,9 +158,13 @@ dos_smear_then_interpolate: False # n/a
 # Minimum temperature:
 temperature_min: 300 # K
 # Maximum temperature:
-temperature_max: 700 # K
+temperature_max: 300 # K
 # Number of temperature steps:
+<<<<<<< HEAD
 temperature_steps: 5 # n/a
+=======
+temperature_steps: 1 # n/a
+>>>>>>> fb6762966847a9f777277d5d3c46addef9d68d90
 # Generate Gamma centered k-point grids? Anything else
 # is currently experimental, so beware of wrong results
 gamma_center: True # n/a

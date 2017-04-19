@@ -1023,7 +1023,7 @@ def numerick(tr, chempots, temperatures, bs=None):
         kz = kz[1] - kz[0]
 
         # currently method 2 is the fastest, so use this
-        method = 2
+        method = 1
         if method == 0:
             # lazy imports
             # this is currently too slow...and comparable to

@@ -124,9 +124,9 @@ def scipy_k_integrals_discrete(transport, integrand_type, energies, velocities,
     kx, ky, kz = transport.lattice.fetch_kmesh_unit_vecs(direct=False)
     ksampling = transport.lattice.ksampling
     # assume regular grid spacing
-    kx = kx[1] - kx[0]
-    ky = ky[1] - ky[0]
-    kz = kz[1] - kz[0]
+    #kx = kx[1] - kx[0]
+    #ky = ky[1] - ky[0]
+    #kz = kz[1] - kz[0]
     # now if we want romberg, we need to check for grid samples
     if method == "romb":
         if not utils.is_power_of_two(ksampling[0] - 1):
@@ -158,7 +158,7 @@ def scipy_k_integrals_discrete(transport, integrand_type, energies, velocities,
         sys.exit(1)
 
     integral = func[method](func[method](func[method](
-        integrand_shaped, dx=kz, axis=4), dx=ky, axis=3), dx=kx, axis=2)
+        integrand_shaped, kz, axis=4), ky, axis=3), kx, axis=2)
 
     return integral
 
@@ -243,7 +243,7 @@ def scipy_k_integrals_discrete2(tr, energies, velocities,
                      "data.")
 
     integral = func[method](func[method](func[method](
-        integrand_shaped, dx=kz, axis=4), dx=ky, axis=3), dx=kx, axis=2)
+                integrand_shaped, dx=kz, axis=4), dx=ky, axis=3), dx=kx, axis=2)
 
     return integral
 

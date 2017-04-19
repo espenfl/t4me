@@ -8,7 +8,7 @@ import numpy
 # INTERPOLATION TECHNIQUES. UNCOMMENT THE OPTIONAL
 # IF YOU FEEL YOU WANT TO TEST THESE FEATURES.
 
-home = "/home/flagre"
+home = "/home/efl"
 locallib = home + "/local/lib"
 localinclude = home + "/local/include"
 
@@ -47,8 +47,8 @@ cubaturelib = locallib
 cubatureinclude = localinclude + "/cubature"
 
 # Wildmagic
-wildmagiclib = "/usr/lib64"
-wildmagicinclude = "/usr/include/WildMagic"
+wildmagiclib = locallib
+wildmagicinclude = localinclude + "/wildmagic"
 
 # For development purposes
 #gptoolslib = locallib

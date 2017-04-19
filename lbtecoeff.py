@@ -1022,13 +1022,9 @@ def numerick(tr, chempots, temperatures, bs=None):
         ky = ky[1] - ky[0]
         kz = kz[1] - kz[0]
 
-<<<<<<< HEAD
-        # currently method 2 is the fastest, so use this
-=======
         # currently method 2 is the fastest, but accuracy in
         # sigma flatlines at somewhere between 1e-4 and 1e-5
         # investigate further before switching entirely to method 2
->>>>>>> fb6762966847a9f777277d5d3c46addef9d68d90
         method = 1
         if method == 0:
             # lazy imports

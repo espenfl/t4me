@@ -160,11 +160,7 @@ temperature_min: 300 # K
 # Maximum temperature:
 temperature_max: 300 # K
 # Number of temperature steps:
-<<<<<<< HEAD
-temperature_steps: 5 # n/a
-=======
 temperature_steps: 1 # n/a
->>>>>>> fb6762966847a9f777277d5d3c46addef9d68d90
 # Generate Gamma centered k-point grids? Anything else
 # is currently experimental, so beware of wrong results
 gamma_center: True # n/a

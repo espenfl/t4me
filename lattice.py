@@ -430,7 +430,6 @@ class Lattice():
         symprec = self.param.symprec
 
         if direct:
-
             kmesh_unit_vec = np.array([np.unique(
                 np.floor(self.kmesh[:, 0] / symprec).astype(int)) * symprec,
                 np.unique(
@@ -438,6 +437,13 @@ class Lattice():
                 np.unique(
                 np.floor(self.kmesh[:, 2] / symprec).astype(int)) * symprec])
         else:
+            # this only makes sense in direct mode for grids that are not
+            # regular as we would have many more unique points than the
+            # base k-point sampling due to to the shifted coordinate axes
+            # if not self.regular:
+            #    logger.error("Do not call this routine if the grid is "
+            #                 "not regular. Exiting.")
+            #    # sys.exit(1)
             kmesh_cart = self.dir_to_cart(self.kmesh)
             kmesh_unit_vec = np.array([np.unique(
                 np.floor(kmesh_cart[:, 0] / symprec).astype(int)) * symprec,
@@ -445,7 +451,6 @@ class Lattice():
                 np.floor(kmesh_cart[:, 1] / symprec).astype(int)) * symprec,
                 np.unique(
                 np.floor(kmesh_cart[:, 2] / symprec).astype(int)) * symprec])
-
         return kmesh_unit_vec
 
     def fetch_kpoints_along_line(self, kstart, kend, stepping,
@@ -899,11 +904,11 @@ class Lattice():
 
         # detect values in upper trigonal
         if self.unitcell[np.triu_indices(
-                3, k=1)].all() > constants.zerocut:
+                3, k=1)].any() > constants.zerocut:
             regular = False
         # detect values in lower trigonal
         if self.unitcell[np.tril_indices(
-                3, k=-1)].all() > constants.zerocut:
+                3, k=-1)].any() > constants.zerocut:
             regular = False
 
         return regular

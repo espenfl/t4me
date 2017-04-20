@@ -31,6 +31,7 @@ cdef extern from "spglib_interface.cpp":
                                        int * is_shifted,
                                        int * mesh_points,
                                        int * mapping,
+                                       char * intsym,
                                        int is_time_reversal,
                                        double symprec)
 
@@ -88,17 +89,20 @@ def get_reciprocal_mesh(
         np.ndarray[int, ndim=1, mode="c"] mapping not None,
         is_time_reversal=True, symprec=1e-5):
 
+    cdef char c_intsym[11]
     num_atoms = anumbers.shape[0]
-    get_reciprocal_mesh_interface(& mesh[0],
-                                   & lattice[0, 0],
-                                   & positions[0, 0],
-                                   & anumbers[0],
-                                   num_atoms,
-                                   & is_shifted[0],
-                                   & mesh_points[0, 0],
-                                   & mapping[0],
-                                   is_time_reversal,
-                                   symprec)
+    get_reciprocal_mesh_interface( & mesh[0],
+                                  & lattice[0, 0],
+                                  & positions[0, 0],
+                                  & anumbers[0],
+                                  num_atoms,
+                                  & is_shifted[0],
+                                  & mesh_points[0, 0],
+                                  & mapping[0],
+                                  & c_intsym[0],
+                                  is_time_reversal,
+                                  symprec)
+    return str(c_intsym.decode())
 
 
 def calc_density_of_states_interface(
@@ -121,21 +125,21 @@ def calc_density_of_states_interface(
     # convert bool to int (cython<->with bool does not work very well)
     cdef np.ndarray[int, ndim = 1, mode = "c"] spin_degen_int = \
         spin_degen.astype(dtype="intc")
-    calc_dos_weights( & energy[0, 0],
-                     & grid_address[0, 0],
-                     & mapping_bz_to_ibz[0],
-                     & mapping_ibz_to_bz[0],
-                     & ibz_weights[0],
-                     & mesh[0],
-                     & rec_basis[0, 0],
-                     & energy_samples[0],
-                     num_energy_samples, num_bands, num_kpoints_ibz,
-                     & spin_degen_int[0],
-                     volume, volume_bz,
-                     weight_type,
-                     smearing,
-                     & dos[0, 0], &
-                     int_dos[0, 0])
+    calc_dos_weights(& energy[0, 0],
+                      & grid_address[0, 0],
+                      & mapping_bz_to_ibz[0],
+                      & mapping_ibz_to_bz[0],
+                      & ibz_weights[0],
+                      & mesh[0],
+                      & rec_basis[0, 0],
+                      & energy_samples[0],
+                      num_energy_samples, num_bands, num_kpoints_ibz,
+                      & spin_degen_int[0],
+                      volume, volume_bz,
+                      weight_type,
+                      smearing,
+                      & dos[0, 0], &
+                      int_dos[0, 0])
 
 
 def calc_transport_tensors_weights_interface(
@@ -162,24 +166,24 @@ def calc_transport_tensors_weights_interface(
     # convert bool to int (cython<->with bool does not work very well)
     cdef np.ndarray[int, ndim = 1, mode = "c"] spin_degen_int = \
         spin_degen.astype(dtype="intc")
-    calc_transport_tensors_weights(& energies[0, 0],
-                                    & velocities[0, 0, 0],
-                                    & scattering[0, 0, 0],
-                                    & temperatures[0],
-                                    & chempots[0],
-                                    & grid_address[0, 0],
-                                    & mapping_bz_to_ibz[0],
-                                    & mapping_ibz_to_bz[0],
-                                    & ibz_weights[0],
-                                    & mesh[0],
-                                    & rec_basis[0, 0],
-                                    num_bands, num_kpoints_ibz,
-                                    num_temp_steps,
-                                    num_chempot_steps, int_method,
-                                    energy_samples, weight_type,
-                                    smearing,
-                                    energy_cutoff, volume,
-                                    & spin_degen_int[0],
-                                    & cond[0, 0, 0, 0],
-                                    & seebeck[0, 0, 0, 0],
-                                    & lorenz[0, 0, 0, 0])
+    calc_transport_tensors_weights( & energies[0, 0],
+                                   & velocities[0, 0, 0],
+                                   & scattering[0, 0, 0],
+                                   & temperatures[0],
+                                   & chempots[0],
+                                   & grid_address[0, 0],
+                                   & mapping_bz_to_ibz[0],
+                                   & mapping_ibz_to_bz[0],
+                                   & ibz_weights[0],
+                                   & mesh[0],
+                                   & rec_basis[0, 0],
+                                   num_bands, num_kpoints_ibz,
+                                   num_temp_steps,
+                                   num_chempot_steps, int_method,
+                                   energy_samples, weight_type,
+                                   smearing,
+                                   energy_cutoff, volume,
+                                   & spin_degen_int[0],
+                                   & cond[0, 0, 0, 0],
+                                   & seebeck[0, 0, 0, 0],
+                                   & lorenz[0, 0, 0, 0])

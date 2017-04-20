@@ -161,13 +161,15 @@ class Lattice():
         # set logger
         logger = logging.getLogger(sys._getframe().f_code.co_name)
         logger.debug("Running generate_consistent_mesh.")
-
         if ((self.mapping_bz_to_ibz is None)
                 or (self.mapping_ibz_to_bz is None)):
             if (self.kmesh is None) and (self.kmesh_ired is not None):
                 # have IBZ, generate BZ
                 kmesh = copy.deepcopy(self.kmesh_ired)
                 self.create_kmesh_spg()
+                np.set_printoptions(threshold=np.nan)
+                # print kmesh
+                # print self.kmesh_ired
                 if kmesh.shape[0] != self.kmesh_ired.shape[0]:
                     logger.error(
                         "The numbers of IBZ points does not correspond "
@@ -811,22 +813,27 @@ class Lattice():
         logger.info("Calling Spglib to set up the grid with a sampling "
                     "sampling of " + str(ksampling[0]) + "x" +
                     str(ksampling[0]) + "x" + str(ksampling[2]) + ".")
+        # the international symbol returned from spglib
         if self.param.read == "vasp" or borderless:
             logger.info(
                 "Running borderless compatible k-point generation etc. "
                 "(VASP, SKW, etc.)")
             # VASP does not include bz borders in the k-point set
             # call spglib with symprec 10 times vasp value
-            spglib_interface.get_reciprocal_mesh(
+            intsym = spglib_interface.get_reciprocal_mesh(
                 ksampling, np.ascontiguousarray(self.unitcell.T),
                 self.positions, self.species, shift, k,
-                spg_mapping, is_time_reversal=False, symprec=1e-6)
+                spg_mapping, is_time_reversal=False,
+                symprec=self.param.symprec)
         else:
             # call spglib
-            spglib_interface.get_reciprocal_mesh(
+            intsym = spglib_interface.get_reciprocal_mesh(
                 ksampling, np.ascontiguousarray(self.unitcell.T),
                 self.positions, self.species, shift, k,
-                spg_mapping, is_time_reversal=True, symprec=1e-4)
+                spg_mapping, is_time_reversal=True,
+                symprec=self.param.symprec)
+        logger.info("Spglib detected the symmetry " + intsym +
+                    " with symprec set to " + str(self.param.symprec))
         # build array for IBZ
         k_ired = k[np.unique(spg_mapping, return_index=True)[1]]
         # sort mesh

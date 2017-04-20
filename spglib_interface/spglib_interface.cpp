@@ -42,7 +42,8 @@ void get_reciprocal_mesh_interface(int *mesh, double *lattice, double
 				   *positions, int *anumbers, 
 				   unsigned int num_atoms, 
 				   int *is_shifted, int *mesh_points, 
-				   int *mapping, 
+				   int *mapping,
+                                   char *intsym,
 				   int is_time_reversal, 
 				   double symprec);
 
@@ -839,7 +840,8 @@ void get_reciprocal_mesh_interface(int *mesh, double *lattice,
 				   int *anumbers, 
 				   unsigned int num_atoms, 
 				   int *is_shifted, 
-				   int *mesh_points, int *mapping, 
+				   int *mesh_points, int *mapping,
+                                   char *intsym,
 				   int is_time_reversal, 
 				   double symprec) {
   
@@ -871,10 +873,13 @@ void get_reciprocal_mesh_interface(int *mesh, double *lattice,
     }
   }
 
+  // fetch the international symmetry group
+  spg_get_international(intsym, temp_lattice,
+                             temp_positions, anumbers,
+                             num_atoms, symprec);
+
   // then get the kpoint mesh and associated ibz through the mapping
   // table
-  
-  //std::cout << num_atoms << ' ' << symprec << std::endl;
   spg_get_ir_reciprocal_mesh(temp_mesh_points,mapping,mesh,
 			     is_shifted,is_time_reversal,
 			     temp_lattice,temp_positions,
@@ -884,7 +889,6 @@ void get_reciprocal_mesh_interface(int *mesh, double *lattice,
     for (j=0;j<3;j++) {
       *((int *)mesh_points + i*3 + j)=temp_mesh_points[i][j];
     }
-    //std::cout << temp_mesh_points[i][0] << ' ' << temp_mesh_points[i][1] << ' ' << temp_mesh_points[i][2] << std::endl;
   }
 }
 

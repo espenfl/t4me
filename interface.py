@@ -251,10 +251,17 @@ def lattice_vasp(lattice, location=None, filename=None):
     # get divisions, IBZ kpoints and location of the eigenvalues and
     # dos
     if kinter < 2:
+        # sometimes when running VASP it ejects multiple k-point
+        # sets, for instance when the the full grid is needed.
+        # in order to allow for this we here assume that the first
+        # IBZ set printed before the calculations tag contains the
+        # true IBZ grid,
+        # usually there is only one eigenval tag so this is not a
+        # problem
         divisions = tree.find(
-            './/kpoints/generation/v[@name="divisions"]')
+            'kpoints/generation/v[@name="divisions"]')
         kpoints = tree.findall(
-            './/kpoints/varray[@name="kpointlist"]/v')
+            'kpoints/varray[@name="kpointlist"]/v')
         if lvel:
             kpoints_full = tree.findall(
                 './/kpoints[@comment="interpolated in the full '

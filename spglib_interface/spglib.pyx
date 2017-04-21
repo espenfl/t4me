@@ -102,8 +102,7 @@ def get_reciprocal_mesh(
                                   & c_intsym[0],
                                   is_time_reversal,
                                   symprec)
-    return str(c_intsym.decode())
-
+    return c_intsym.decode()
 
 def calc_density_of_states_interface(
         np.ndarray[double, ndim=2, mode="c"] energy not None,

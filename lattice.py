@@ -455,25 +455,130 @@ class Lattice():
                 np.floor(kmesh_cart[:, 2] / symprec).astype(int)) * symprec])
         return kmesh_unit_vec
 
-    def fetch_kpoints_along_line(self, kstart, kend, stepping,
-                                 direct=True):
+    def check_for_duplicate_points(self):
         """
-        Calculates the k-points along a line in the full BZ
-        k-point mesh
+        Checks for duplicate k-points. This is currently not supported.
 
         Parameters
         ----------
-        kstart : ndarray
+        None
+
+        Returns
+        -------
+        None
+
+        """
+
+        # set logger
+        logger = logging.getLogger(sys._getframe().f_code.co_name)
+
+        # cutoff for symmetry detection, differences outside this
+        # is irrelevant and should be considered the same points
+        symprec = self.param.symprec
+
+        # convert to int within symprec
+        kmesh_int = np.floor(self.kmesh / symprec).astype(int)
+
+        # print kmesh_int
+        # check the shape of the uniques
+        kmesh_int = np.ascontiguousarray(kmesh_int)
+        unique_kmesh = np.unique(kmesh_int.view(
+            [('', kmesh_int.dtype)] * kmesh_int.shape[1]))
+
+        unique_shape = unique_kmesh.view(kmesh_int.dtype).reshape(
+            (unique_kmesh.shape[0], kmesh_int.shape[1])).shape
+
+        # do checks
+        if unique_shape != kmesh_int.shape:
+            logger.error("Duplicate k-points was detected "
+                         "using a symprec of " + str(symprec) + ". "
+                         "Exiting.")
+            sys.exit(1)
+
+    def fetch_length_runitcell_vecs(self):
+        """
+        Returns the length of each reciprocal lattice vector.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
+
+        """
+
+        return \
+            np.linalg.norm(self.runitcell[0]), \
+            np.linalg.norm(self.runitcell[1]), \
+            np.linalg.norm(self.runitcell[2])
+
+    def fetch_kmesh_step_size(self, direct=False):
+        """
+        Returns the step size along each direction.
+
+        Parameters
+        ----------
+        direct : boolean, optional
+            If True the step size is returned in direct coordinates,
+            otherwise it is returned in AA^{-1} units. Defaults to
+            False.
+
+        Notes
+        -----
+        Regularly spaced and ordered grids are assumed.
+
+        """
+
+        # set logger
+        logger = logging.getLogger(sys._getframe().f_code.co_name)
+
+        # check for duplicate points
+        self.check_for_duplicate_points()
+
+        # no duplicates detected, calculate step size
+        shiftx = self.ksampling[2] * self.ksampling[1]
+        shifty = self.ksampling[1]
+        stepx = self.kmesh[shiftx, 0] - self.kmesh[shiftx - 1, 0]
+        stepy = self.kmesh[shifty, 1] - self.kmesh[shifty - 1, 1]
+        stepz = self.kmesh[1, 2] - self.kmesh[0, 2]
+
+        # check that no stepping is zero inside symprec
+        if (stepx < self.param.symprec) or \
+           (stepy < self.param.symprec) or \
+           (stepz < self.param.symprec):
+            logger.error("The k-point step size is zero in one "
+                         "of the directions. Are you sure the grid "
+                         "is regular? Exiting.")
+            sys.exit(1)
+
+        if direct:
+            return stepx, stepy, stepz
+        else:
+            # fetch length of reciprocal lattice vectors
+            lenx, leny, lenz = self.fetch_length_runitcell_vecs()
+            return stepx * lenx, stepy * leny, stepz * lenz
+
+    def fetch_kpoints_along_line(self, kstart, kend, stepping,
+                                 direct=True):
+        """
+        Calculates the k - points along a line in the full BZ
+        k - point mesh
+
+        Parameters
+        ----------
+        kstart: ndarray
             | Dimension: (3)
 
-            The start k-point in direct coordinates.
-        kend : ndarray
+            The start k - point in direct coordinates.
+        kend: ndarray
             | Dimension: (3)
 
-            The end k-point in direct coordinates.
-        stepping : int
+            The end k - point in direct coordinates.
+        stepping: int
             The N number of steps along the line.
-        direct : boolean
+        direct: boolean
             If True direct coordinates are returned, else
             cartesian coordinates are returned.
 
@@ -482,7 +587,7 @@ class Lattice():
         ndarray
             | Dimension: (N)
 
-            The N number of k-point cartesian coordinates
+            The N number of k - point cartesian coordinates
             along the line.
 
         """
@@ -506,8 +611,8 @@ class Lattice():
 
         Parameters
         ----------
-        unitcell : ndarray, optional
-            | Dimension: (3,3)
+        unitcell: ndarray, optional
+            | Dimension: (3, 3)
 
             A reciprocal unitcell. Defaults to the internal
             runitcell for the current `Lattice()` object.
@@ -515,9 +620,9 @@ class Lattice():
         Returns
         -------
         ndarray
-            | Dimension: (3,3)
+            | Dimension: (3, 3)
 
-            The real unitcell, with :math:`\\vec{a_1}`=[0][:] etc.
+            The real unitcell, with: math: `\\vec{a_1}` = [0][:] etc.
 
         """
 
@@ -536,8 +641,8 @@ class Lattice():
 
         Parameters
         ----------
-        unitcell : ndarray, optional
-            | Dimension: (3,3)
+        unitcell: ndarray, optional
+            | Dimension: (3, 3)
 
             A real unitcell. Defaults to the unitcell for the
             current `Lattice()` object.
@@ -545,9 +650,9 @@ class Lattice():
         Returns
         -------
         ndarray
-            | Dimension: (3,3)
+            | Dimension: (3, 3)
 
-            The reciprocal unitcell, with :math:`\\vec{b_1}`=[0][:]
+            The reciprocal unitcell, with: math: `\\vec{b_1}` = [0][:]
             etc.
 
         """
@@ -569,11 +674,11 @@ class Lattice():
 
         Parameters
         ----------
-        v : ndarray
+        v: ndarray
             | Dimension: (3)
 
             The supplied cartesian vector.
-        real : boolean
+        real: boolean
             If set to False, the reciprocal unitcell is used,
             is set to True, the unitcell is used.
 
@@ -604,11 +709,11 @@ class Lattice():
 
         Parameters
         ----------
-        v : ndarray
+        v: ndarray
             | Dimension: (3)
 
             The input direct vector.
-        real : boolean
+        real: boolean
             If set to False, the reciprocal unitcell is used,
             is set to True, the unitcell is used.
 
@@ -630,43 +735,6 @@ class Lattice():
         else:
             direct = np.dot(v, np.linalg.inv(self.unitcell))
         return direct
-
-    def fetch_kmesh_spacing(self, direct=True):
-        """
-        Returns the spacing along
-        each direction for the k-point grid
-
-        Parameters
-        ----------
-        direct : boolean, optional
-            Set to true if the direct spacing is needed, otherwise
-            the cartesian distance is returned.
-
-        Returns
-        -------
-        dx, dy, dz, : int
-            The grid spacing along each direction.
-
-        Notes
-        -----
-        This routine only works if the grid along each dimension
-        is equally spaced.
-
-        """
-
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running fetch_grid_spacing.")
-
-        kmesh = self.fetch_kmesh(direct, ired=False)
-        ksampling = self.ksampling
-        # assume equal spacing along each direction
-        dx = np.abs(kmesh[ksampling[2] * ksampling[1], 0] -
-                    kmesh[0, 0])
-        dy = np.abs(kmesh[ksampling[2], 1] - kmesh[0, 1])
-        dz = np.abs(kmesh[1, 2] - kmesh[0, 2])
-
-        return dx, dy, dz
 
     def fetch_bz_border(self, kmesh=None, direct=True):
         """
@@ -772,9 +840,9 @@ class Lattice():
         This routines use spglib, an excellent tool written by A. Togo
         : cite: `spglib`
 
-        .. rubric:: References
+        .. rubric: : References
 
-        .. bibliography:: references.bib
+        .. bibliography: : references.bib
            : style: unsrt
            : filter: docname in docnames
 
@@ -898,7 +966,7 @@ class Lattice():
 
         Returns
         -------
-        regular : boolean
+        regular: boolean
             True if regular, False otherwise.
 
         """

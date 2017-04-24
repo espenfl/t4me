@@ -121,12 +121,14 @@ def scipy_k_integrals_discrete(transport, integrand_type, energies, velocities,
     if method not in func:
         logger.error("The supplied method is not recognized. Exiting.")
         sys.exit(1)
-    kx, ky, kz = transport.lattice.fetch_kmesh_unit_vecs(direct=False)
+    #kx, ky, kz = transport.lattice.fetch_kmesh_unit_vecs(direct=False)
+    kx, ky, kz = transport.lattice.fetch_kmesh_step_size(direct=False)
+    print kx, ky, kz
     ksampling = transport.lattice.ksampling
     # assume regular grid spacing
-    kx = kx[1] - kx[0]
-    ky = ky[1] - ky[0]
-    kz = kz[1] - kz[0]
+    #kx = kx[1] - kx[0]
+    #ky = ky[1] - ky[0]
+    #kz = kz[1] - kz[0]
     # now if we want romberg, we need to check for grid samples
     if method == "romb":
         if not utils.is_power_of_two(ksampling[0] - 1):

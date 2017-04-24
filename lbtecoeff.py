@@ -1015,13 +1015,6 @@ def numerick(tr, chempots, temperatures, bs=None):
         # the energy grid
         scattering.check_scattering(tr)
 
-        # set distance between points in each direction
-        kx, ky, kz = tr.lattice.fetch_kmesh_unit_vecs(direct=False)
-        # assume regular grid spacing
-        kx = kx[1] - kx[0]
-        ky = ky[1] - ky[0]
-        kz = kz[1] - kz[0]
-
         # currently method 2 is the fastest, but accuracy in
         # sigma flatlines at somewhere between 1e-4 and 1e-5
         # investigate further before switching entirely to method 2
@@ -1118,6 +1111,9 @@ def numerick(tr, chempots, temperatures, bs=None):
                     lorenz[tindex, cindex] = lorenz_units * lorenz_total
 
         elif method == 2:
+            # set distance between points in each direction
+            kx, ky, kz = tr.lattice.fetch_kmesh_step_size(direct=False)
+
             numbands = tr.included_bands.size
             sigma_band = np.zeros((numbands, 3, 3))
             seebeck_band = np.zeros((numbands, 3, 3))

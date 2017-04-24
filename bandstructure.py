@@ -2694,12 +2694,10 @@ class Bandstructure():
                 integral_method == "romb":
             logger.debug(
                 "Running trapeziodal, simpson or romberg integration.")
-            #kx, ky, kz = self.lattice.fetch_kmesh_unit_vecs(direct=False)
-            # assume regular grid
-            #kx = kx[1] - kx[0]
-            #ky = ky[1] - ky[0]
-            #kz = kz[1] - kz[0]
+
+            # fetch step size
             kx, ky, kz = self.lattice.fetch_kmesh_step_size(direct=False)
+
             # now if we want romberg, we need to check for add grid samples
             # also make sure that kx, ky, kz is a float and the space between
             # each point for romberb (only trapz and simps support array)

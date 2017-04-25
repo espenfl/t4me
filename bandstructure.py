@@ -1554,6 +1554,7 @@ class Bandstructure():
         # assume equally spaced grid and fetch
         # spacing along each direction
         dx, dy, dz = self.lattice.fetch_kmesh_step_size(direct=False)
+        print dx, dy, dz
 
         # fetch velocities
         # reshape

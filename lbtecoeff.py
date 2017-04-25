@@ -1111,9 +1111,6 @@ def numerick(tr, chempots, temperatures, bs=None):
                     lorenz[tindex, cindex] = lorenz_units * lorenz_total
 
         elif method == 2:
-            # set distance between points in each direction
-            kx, ky, kz = tr.lattice.fetch_kmesh_step_size(direct=False)
-
             numbands = tr.included_bands.size
             sigma_band = np.zeros((numbands, 3, 3))
             seebeck_band = np.zeros((numbands, 3, 3))
@@ -1134,6 +1131,7 @@ def numerick(tr, chempots, temperatures, bs=None):
                 if tr.param.parallel:
                     # use mpi4py to distribute calculations over
                     # chemical potentials
+                    # DOES NOT WORK AT THE MOMENT.
                     from mpi4py import MPI
                     comm = MPI.COMM_WORLD
                     rank = comm.Get_rank()
@@ -1154,15 +1152,15 @@ def numerick(tr, chempots, temperatures, bs=None):
                                                           tr.included_bands]
                         sigmasigma = lbteint.scipy_k_integrals_discrete2(
                             tr, energies, velocities, scatter, chempot,
-                            beta, spin_fact, kx, ky, kz, 0.0,
+                            beta, spin_fact, 0.0,
                             method=tr.param.transport_integration_method)
                         sigmachi = lbteint.scipy_k_integrals_discrete2(
                             tr, energies, velocities, scatter, chempot,
-                            beta, spin_fact, kx, ky, kz, 1.0,
+                            beta, spin_fact, 1.0,
                             method=tr.param.transport_integration_method)
                         sigmakappa = lbteint.scipy_k_integrals_discrete2(
                             tr, energies, velocities, scatter, chempot,
-                            beta, spin_fact, kx, ky, kz, 2.0,
+                            beta, spin_fact, 2.0,
                             method=tr.param.transport_integration_method)
                 else:
                     # serial version
@@ -1171,15 +1169,15 @@ def numerick(tr, chempots, temperatures, bs=None):
                                                           tr.included_bands]
                         sigmasigma = lbteint.scipy_k_integrals_discrete2(
                             tr, energies, velocities, scatter, chempot,
-                            beta, spin_fact, kx, ky, kz, 0.0,
+                            beta, spin_fact, 0.0,
                             method=tr.param.transport_integration_method)
                         sigmachi = lbteint.scipy_k_integrals_discrete2(
                             tr, energies, velocities, scatter, chempot,
-                            beta, spin_fact, kx, ky, kz, 1.0,
+                            beta, spin_fact, 1.0,
                             method=tr.param.transport_integration_method)
                         sigmakappa = lbteint.scipy_k_integrals_discrete2(
                             tr, energies, velocities, scatter, chempot,
-                            beta, spin_fact, kx, ky, kz, 2.0,
+                            beta, spin_fact, 2.0,
                             method=tr.param.transport_integration_method)
                         # conductivity
                         sigma_nounit = sigmasigma

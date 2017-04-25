@@ -540,9 +540,11 @@ class Lattice():
         # no duplicates detected, calculate step size
         shiftx = self.ksampling[2] * self.ksampling[1]
         shifty = self.ksampling[1]
-        stepx = self.kmesh[shiftx, 0] - self.kmesh[shiftx - 1, 0]
-        stepy = self.kmesh[shifty, 1] - self.kmesh[shifty - 1, 1]
-        stepz = self.kmesh[1, 2] - self.kmesh[0, 2]
+
+        kmesh = self.fetch_kmesh(direct=direct)
+        stepx = kmesh[shiftx, 0] - kmesh[shiftx - 1, 0]
+        stepy = kmesh[shifty, 1] - kmesh[shifty - 1, 1]
+        stepz = kmesh[1, 2] - kmesh[0, 2]
 
         # check that no stepping is zero inside symprec
         if (stepx < self.param.symprec) or \
@@ -689,6 +691,19 @@ class Lattice():
 
             The direct vector.
 
+        Notes
+        -----
+            Typically the transformation in reciprocal space is
+
+            .. math::\\vec{k}B=\\vec{k}',
+
+            .. math::\\vec{k}=\\vec{k}'B^{-1},
+
+            where :math:`\\vec{k}` and :math:`\\vec{k}'` is the
+            reciprocal vector in direct and cartesian coordinate
+            systems, respectively. Here, B is the reciprocal unit
+            cell.
+
         """
 
         # set logger
@@ -723,6 +738,19 @@ class Lattice():
             | Dimension: (3)
 
             The cartesian vector.
+
+        Notes
+        -----
+            Typically the transformation in reciprocal space is
+
+            .. math::\\vec{k}B=\\vec{k}',
+
+            .. math::\\vec{k}=\\vec{k}'B^{-1},
+
+            where :math:`\\vec{k}` and :math:`\\vec{k}'` is the
+            reciprocal vector in direct and cartesian coordinate
+            systems, respectively. Here, B is the reciprocal unit
+            cell.
 
         """
 

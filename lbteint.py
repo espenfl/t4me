@@ -83,7 +83,7 @@ def scipy_k_integrals(eta, beta, effmass, e0, i, l, m, method="tplquad"):
                         args=(eta, beta, effmass, e0, i, l, m), epsabs=1e-2)[0]
 
 
-def scipy_k_integrals_discrete(transport, integrand_type, energies, velocities,
+def scipy_k_integrals_discrete(tr, integrand_type, energies, velocities,
                                scattering, chempot, beta, order,
                                spin_fact, method="trapz"):
     """
@@ -92,7 +92,7 @@ def scipy_k_integrals_discrete(transport, integrand_type, energies, velocities,
 
     Parameters
     ----------
-    transport : object
+    tr : object
         A `Transport()` object
     chempot : float
         The chemical potential in eV
@@ -121,8 +121,11 @@ def scipy_k_integrals_discrete(transport, integrand_type, energies, velocities,
     if method not in func:
         logger.error("The supplied method is not recognized. Exiting.")
         sys.exit(1)
-    kx, ky, kz = transport.lattice.fetch_kmesh_step_size(direct=False)
-    ksampling = transport.lattice.ksampling
+    # fetch step size in direct coordinates and set Jacobian, which is
+    # needed since we perform the integration in direct coordinates
+    kx, ky, kz = tr.lattice.fetch_kmesh_step_size(direct=True)
+    jacobian = np.linalg.det(tr.lattice.runitcell)
+    ksampling = tr.lattice.ksampling
     # now if we want romberg, we need to check for grid samples
     if method == "romb":
         if not utils.is_power_of_two(ksampling[0] - 1):
@@ -156,12 +159,15 @@ def scipy_k_integrals_discrete(transport, integrand_type, energies, velocities,
     integral = func[method](func[method](func[method](
         integrand_shaped, dx=kz, axis=4), dx=ky, axis=3), dx=kx, axis=2)
 
+    # add Jacobian (we integrate in direct coordinates)
+    integral = jacobian * integral
+
     return integral
 
 
 def scipy_k_integrals_discrete2(tr, energies, velocities,
                                 scattering, chempot, beta,
-                                spin_fact, kx, ky, kz, order,
+                                spin_fact, order,
                                 method="trapz"):
     """
     Calculates the three dimensional integrals over the k-points
@@ -169,7 +175,7 @@ def scipy_k_integrals_discrete2(tr, energies, velocities,
 
     Parameters
     ----------
-    transport : object
+    tr : object
         A `Transport()` object
     chempot : float
         The chemical potential in eV
@@ -201,6 +207,10 @@ def scipy_k_integrals_discrete2(tr, energies, velocities,
         logger.error("The supplied method is not recognized. Exiting.")
         sys.exit(1)
 
+    # fetch step size in direct coordinates and set Jacobian, which is
+    # needed since we perform the integration in direct coordinates
+    kx, ky, kz = tr.lattice.fetch_kmesh_step_size(direct=True)
+    jacobian = np.linalg.det(tr.lattice.runitcell)
     ksampling = tr.lattice.ksampling
 
     # set integrand
@@ -231,6 +241,7 @@ def scipy_k_integrals_discrete2(tr, energies, velocities,
                          "the samplings in the third direction is not "
                          "2^k - 1. Exiting.")
             sys.exit(1)
+
     elif method == "trapz":
         logger.debug("Running SciPy trapeziodal integration for "
                      "discrete data.")
@@ -240,6 +251,9 @@ def scipy_k_integrals_discrete2(tr, energies, velocities,
 
     integral = func[method](func[method](func[method](
         integrand_shaped, dx=kz, axis=4), dx=ky, axis=3), dx=kx, axis=2)
+
+    # add Jacobian (we integrate in direct coordinates)
+    integral = jacobian * integral
 
     return integral
 

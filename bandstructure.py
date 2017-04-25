@@ -932,7 +932,8 @@ class Bandstructure():
                              "states calculations. Exiting.")
                 sys.exit(1)
             # use density of states effective mass
-            effmass[band] = np.power(np.prod(effmass[band]), 1.0 / 3.0)
+            effmass[band] = np.power(np.prod(
+                np.abs(self.effmass[band])), 1.0 / 3.0)
             energy_shift = dos_energies - e0[band]
             status = self.status[band]
             # conduction
@@ -1413,10 +1414,10 @@ class Bandstructure():
 
         Notes
         -----
-        Upon complettion the effective mass is stored in the 
+        Upon complettion the effective mass is stored in the
         current `Bandstructure()` object.
 
-        Also, the velocities have to be precalculated before 
+        Also, the velocities have to be precalculated before
         calling this routine.
 
         """
@@ -1504,9 +1505,9 @@ class Bandstructure():
         velocities : ndarray, optional
             | Dimension: (N, M)
 
-            Contains the group velocity along a specific direction 
-            for N bands and M k-points. If supplied the velocities 
-            of the velocities are calculated, or more specifically 
+            Contains the group velocity along a specific direction
+            for N bands and M k-points. If supplied the velocities
+            of the velocities are calculated, or more specifically
             the inverse effective mass tensor (without prefactor)
         store : boolean, optional
             If True, store the calculated velocities in the
@@ -1554,7 +1555,6 @@ class Bandstructure():
         # assume equally spaced grid and fetch
         # spacing along each direction
         dx, dy, dz = self.lattice.fetch_kmesh_step_size(direct=False)
-        print dx, dy, dz
 
         # fetch velocities
         # reshape
@@ -1661,13 +1661,13 @@ class Bandstructure():
 
             The energy dispersions in eV, and group velocities in eVAA
             along indexes each axis of the reciprocal basis are returned
-            for N bands and M new k - points if velocities is supplied, 
+            for N bands and M new k - points if velocities is supplied,
             or if the `gen_velocities` tag is set to True in the current
             `Bandstructure()` object.
         ien, False, False, False : ndarray, boolean, boolean, boolean
             | Dimension: (N,M)
 
-            The energy dispersions in eV for N bands and M new k-points 
+            The energy dispersions in eV for N bands and M new k-points
             if `velocities` is not supplied or `gen_velocities` is
             set to False.
 
@@ -2696,8 +2696,10 @@ class Bandstructure():
             logger.debug(
                 "Running trapeziodal, simpson or romberg integration.")
 
-            # fetch step size
-            kx, ky, kz = self.lattice.fetch_kmesh_step_size(direct=False)
+            # fetch step size in direct coordinates and set Jacobian, which is
+            # needed since we perform the integration in direct coordinates
+            kx, ky, kz = self.lattice.fetch_kmesh_step_size(direct=True)
+            jacobian = np.linalg.det(self.lattice.runitcell)
 
             # now if we want romberg, we need to check for add grid samples
             # also make sure that kx, ky, kz is a float and the space between
@@ -2757,6 +2759,9 @@ class Bandstructure():
                 "Use: 'tetra', 'cubature','trapz','simps' or 'romb'. "
                 "Exiting.")
             sys.exit(1)
+
+        # add Jacobian (we integrate in direct coordinates)
+        dos = jacobian * dos
         dos_total = dos.sum(-2)
         if not return_data:
             self.dos_partial = dos

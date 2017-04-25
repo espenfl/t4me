@@ -124,7 +124,7 @@ transport_isotropic: True # n/a
 # -------------------------------------------------------#
 # -------------------------------------------------------#
 # Do you want to calculate the density of states?
-dos_calc: False # n/a
+dos_calc: True # n/a
 # The minimum energy used for the density of states
 # calculations:
 dos_e_min: -5.0 # eV

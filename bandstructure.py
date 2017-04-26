@@ -1556,8 +1556,6 @@ class Bandstructure():
         # spacing along each direction
         dx, dy, dz = self.lattice.fetch_kmesh_step_size(direct=False)
 
-        print dx, dy, dz
-
         # fetch velocities
         # reshape
         e_or_v_shaped = np.reshape(e_or_v,

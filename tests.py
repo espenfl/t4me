@@ -350,6 +350,62 @@ class TestTransportIntegralsFast(unittest.TestCase):
         self.assertTrue(np.all(
             difference_in_lorenz[:, :, 0, 0] < 1e-3))
 
+    def test_trapz_spherical_one_band_tri_fast(self):
+        """
+        Test the direct integrals in reciprocal space against
+        the results of the closed Fermi-Dirac integrals
+        for a single valence band with a free electron mass,
+        acoustic phonon scattering, at 700 K for
+        chemical potential between -0.4 and 0.4 eV
+        in 10 steps. The supplied grid is 31x31x31.
+        Here, we perform the calculation in a trigonal cell,
+        which should be the same as the cubic (or the closed)
+        if all metric is in ordnung.
+
+        """
+        test_number = 11
+        # fetch bandstructure
+        bs = read_and_setup_bandstructure(test_number)
+
+        # now we do the numeric version
+        bs.param.transport_method = "closed"
+        # set up transport
+        tran = transport.Transport(bs)
+        tran.calc_transport_tensors()
+        sigma_closed = tran.sigma
+        seebeck_closed = tran.seebeck
+        lorenz_closed = tran.lorenz
+
+        # now we do the numerick version
+        bs.param.transport_method = "numerick"
+
+        # set up transport
+        tran = transport.Transport(bs)
+        tran.calc_transport_tensors()
+        sigma_numerick = tran.sigma
+        seebeck_numerick = tran.seebeck
+        lorenz_numerick = tran.lorenz
+
+        # now calculate the relative difference
+        # ignore invalid value and divide by zero errors
+        np.seterr(invalid='ignore', divide='ignore')
+        difference_in_sigma = np.abs(
+            (sigma_numerick - sigma_closed) / sigma_closed)
+        difference_in_seebeck = np.abs(
+            (seebeck_numerick - seebeck_closed) / seebeck_closed)
+        difference_in_lorenz = np.abs(
+            (lorenz_numerick - lorenz_closed) / lorenz_closed)
+
+        # now test, only first element along diagonal (xx)
+        # at the supplied grid of 31x31x31 they all should
+        # match to within 1e-3
+        self.assertTrue(np.all(
+            difference_in_sigma[:, :, 0, 0] < 1e-3))
+        self.assertTrue(np.all(
+            difference_in_seebeck[:, :, 0, 0] < 1e-3))
+        self.assertTrue(np.all(
+            difference_in_lorenz[:, :, 0, 0] < 1e-3))
+
     def test_trapz_spherical_one_band_numdiff_fast(self):
         """
         Test the direct integrals in reciprocal space against
@@ -376,6 +432,70 @@ class TestTransportIntegralsFast(unittest.TestCase):
 
         # now we do the numerick version
         bs.param.transport_method = "numerick"
+
+        # and make sure to turn on the recalculation of
+        # the velocities by numerical differences
+        bs.param.dispersion_velocities_numdiff = True
+        # set up transport
+        tran = transport.Transport(bs)
+        tran.calc_transport_tensors()
+        sigma_numerick = tran.sigma
+        seebeck_numerick = tran.seebeck
+        lorenz_numerick = tran.lorenz
+
+        # now calculate the relative difference
+        # ignore invalid value and divide by zero errors
+        np.seterr(invalid='ignore', divide='ignore')
+        difference_in_sigma = np.abs(
+            (sigma_numerick - sigma_closed) / sigma_closed)
+        difference_in_seebeck = np.abs(
+            (seebeck_numerick - seebeck_closed) / seebeck_closed)
+        difference_in_lorenz = np.abs(
+            (lorenz_numerick - lorenz_closed) / lorenz_closed)
+
+        # now test, only first element along diagonal (xx)
+        # at the supplied grid of 31x31x31 they all should
+        # match to within 1e-3
+        self.assertTrue(np.all(
+            difference_in_sigma[:, :, 0, 0] < 1e-3))
+        self.assertTrue(np.all(
+            difference_in_seebeck[:, :, 0, 0] < 1e-3))
+        self.assertTrue(np.all(
+            difference_in_lorenz[:, :, 0, 0] < 1e-3))
+
+    def test_trapz_spherical_one_band_tri_numdiff_fast(self):
+        """
+        Test the direct integrals in reciprocal space against
+        the results of the closed Fermi-Dirac integrals
+        for a single valence band with a free electron mass,
+        acoustic phonon scattering, at 700 K for
+        chemical potential between -0.4 and 0.4 eV
+        in 10 steps. Here, the velocities are recalculated
+        by numerical difference. The supplied grid is 31x31x31.
+        Here, we perform the calculation in a trigonal cell,
+        which should be the same as the cubic (or the closed)
+        if all metric is in ordnung.
+
+        """
+        test_number = 12
+        # fetch bandstructure
+        bs = read_and_setup_bandstructure(test_number)
+
+        # now we do the numeric version
+        bs.param.transport_method = "closed"
+        # set up transport
+        tran = transport.Transport(bs)
+        tran.calc_transport_tensors()
+        sigma_closed = tran.sigma
+        seebeck_closed = tran.seebeck
+        lorenz_closed = tran.lorenz
+
+        # now we do the numerick version
+        bs.param.transport_method = "numerick"
+
+        # and make sure to turn on the recalculation of
+        # the velocities by numerical differences
+        bs.param.dispersion_velocities_numdiff = True
         # set up transport
         tran = transport.Transport(bs)
         tran.calc_transport_tensors()

@@ -22,6 +22,13 @@ dispersion_interpolate_sampling: [31,31,31] # n/a
 dispersion_interpolate_method: "wildmagic" # n/a
 # What sub method to use?
 dispersion_interpolate_type: "akima" # n/a
+# Use numerical differentiation to calculate the
+# velocities if they are not present on entry, or/and
+# use numerical differentiation to extract the
+# velocities after the dispersions have been
+# interpolated (used by default for the interpolat
+# routines that do not support velocity extraction)
+dispersion_velocities_numdiff: True # n/a
 # Do you want to dump dispersion line to file before
 # interpolation?
 dispersion_write_preinter: False # n/a
@@ -35,7 +42,15 @@ dispersion_write_start: [0.0, 0.0, 0.0] # n/a
 # dispersion line:
 dispersion_write_end: [0.5, 0.0, 0.0] # n/a
 # Number of k-points along line extration:
-num_kpoints_along_line: 100 # n/a
+dispersion_num_kpoints_along_line: 100 # n/a
+# Calculate effective mass tensor?
+dispersion_effmass: False
+# Diagonalize the effective mass tensor?
+dispersion_effmass_diagonalize: False
+# Transformation vectors for the effective mass tensor
+# given in direct coordinates, if empty no
+# transformation is performed
+dispersion_effmass_transform: []
 # Parameters that are passed to PythTB when reading
 # Wannier90 data. Please consult the PythTB manual
 # for additional details.
@@ -221,5 +236,13 @@ scissor: False # eV or n/a
 symprec: 1.0e-6
 # Dump tight binding construction data to std out?
 displaytb: False # n/a
+# Print output from libraries bundled with T4ME
+libinfo: True # n/a
+# Only store total scattering rate
+# (saves memory), but need to be enabled to see
+# the values of each mechanism
+onlytotalrate: True
+# Paralel mode?
+parallel: False
 # Run tests? If so, nothing else is done
 run_tests: True

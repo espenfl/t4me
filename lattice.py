@@ -389,7 +389,6 @@ class Lattice():
             Contains M k-points representing the k-point mesh.
 
         """
-
         # set logger
         logger = logging.getLogger(sys._getframe().f_code.co_name)
         logger.debug("Running fetch_kmesh.")
@@ -527,7 +526,12 @@ class Lattice():
 
         Notes
         -----
-        Regularly spaced and ordered grids are assumed.
+        Regularly spaced and ordered grids are assumed. Also, the 
+        step size returned is with respect to the reciprocal unit 
+        cells unit vectors. If `direct` is True the step size between 
+        0 and 1 is returned, while for False, this step size is 
+        scaled by the length of the reciprocal unit vectors 
+        in :math:`AA^{-1}`.
 
         """
 
@@ -541,11 +545,10 @@ class Lattice():
         shiftx = self.ksampling[2] * self.ksampling[1]
         shifty = self.ksampling[1]
 
-        kmesh = self.fetch_kmesh(direct=direct)
+        kmesh = self.fetch_kmesh(direct=True)
         stepx = kmesh[shiftx, 0] - kmesh[shiftx - 1, 0]
         stepy = kmesh[shifty, 1] - kmesh[shifty - 1, 1]
         stepz = kmesh[1, 2] - kmesh[0, 2]
-
         # check that no stepping is zero inside symprec
         if (stepx < self.param.symprec) or \
            (stepy < self.param.symprec) or \
@@ -554,7 +557,6 @@ class Lattice():
                          "of the directions. Are you sure the grid "
                          "is regular? Exiting.")
             sys.exit(1)
-
         if direct:
             return stepx, stepy, stepz
         else:

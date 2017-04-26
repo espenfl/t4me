@@ -28,7 +28,7 @@ dispersion_interpolate_type: "akima" # n/a
 # velocities after the dispersions have been
 # interpolated (used by default for the interpolat
 # routines that do not support velocity extraction)
-dispersion_velocities_numdiff: False # n/a
+dispersion_velocities_numdiff: True # n/a
 # Do you want to dump dispersion line to file before
 # interpolation?
 dispersion_write_preinter: False # n/a
@@ -94,10 +94,10 @@ transport_interpolate_type: "akima" # n/a
 # The minimum chemical potential:
 transport_chempot_min: -0.4 # eV
 # The maximum chemical potential:
-transport_chempot_max: 0.4 # eV
+transport_chempot_max: 1.0 # eV
 # The samples between the minimum and maximum of
 # the chemical potential:
-transport_chempot_samples: 100 # n/a
+transport_chempot_samples: 20 # n/a
 # Drop bands in the calculation that lie outside the
 # chemical potential range pluss and minus the following:
 transport_energycutband: 1.0 # eV
@@ -124,7 +124,7 @@ transport_isotropic: True # n/a
 # -------------------------------------------------------#
 # -------------------------------------------------------#
 # Do you want to calculate the density of states?
-dos_calc: True # n/a
+dos_calc: False # n/a
 # The minimum energy used for the density of states
 # calculations:
 dos_e_min: -5.0 # eV

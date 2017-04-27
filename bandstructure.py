@@ -1712,11 +1712,20 @@ class Bandstructure():
                 sys.exit(1)
 
         if iksampling is None:
-            iksampling = np.array(self.param.dispersion_interpolate_sampling)
+            # here we also allow the user to specify the step size
+            if np.all(self.param.dispersion_interpolate_sampling) == 0:
+                iksampling = self.lattice.fetch_ksampling_from_stepsize(
+                    self.param.dispersion_interpolate_step_size)
+            else:
+                iksampling = np.array(
+                    self.param.dispersion_interpolate_sampling)
+
+        # check if iksampling is sensible
+        self.lattice.check_sensible_ksampling(iksampling)
 
         # set interpolate method from param file, if not supplied
-        # also demand that is itype or itype_sub is supplied, the other also
-        # has to be supplied
+        # also demand that is itype or itype_sub is supplied, the other
+        # also has to be supplied
         needs_sub = {"interpn", "rbf", "einspline", "wildmagic"}
         if (itype is None) and (itype_sub is None):
             itype = self.param.dispersion_interpolate_method

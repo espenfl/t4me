@@ -15,9 +15,14 @@
 # -------------------------------------------------------#
 # Do you want to interpolate the supplied
 # bandstructure?
-dispersion_interpolate: False # n/a
-# What is the target k-point sampling?
-dispersion_interpolate_sampling: [51,51,51] # n/a
+dispersion_interpolate: True # n/a
+# What is the target k-point sampling? Set to [0,0,0]
+# if you rather want to use
+# dispersion_interpolate_step_size
+dispersion_interpolate_sampling: [0,0,0] # n/a
+# What is the target k-point step size along each direction
+# in units of inverse AA?
+dispersion_interpolate_step_size: [0.1, 0.1, 0.1]
 # What interpolation method to use?
 dispersion_interpolate_method: "wildmagic" # n/a
 # What sub method to use?
@@ -245,4 +250,4 @@ onlytotalrate: True
 # Paralel mode?
 parallel: False
 # Run tests? If so, nothing else is done
-run_tests: True
+run_tests: False

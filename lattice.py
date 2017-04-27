@@ -454,6 +454,63 @@ class Lattice():
                 np.floor(kmesh_cart[:, 2] / symprec).astype(int)) * symprec])
         return kmesh_unit_vec
 
+    def check_sensible_ksampling(self, ksampling):
+        """
+        Check if the ksampling is sensible.
+
+        Parameters
+        ----------
+        ksampling : ndarray
+            | Dimension: (3)
+
+            The k-point sampling along each reciprocal lattice vector.
+
+        Returns
+        -------
+        None
+
+        """
+
+        # set logger
+        logger = logging.getLogger(sys._getframe().f_code.co_name)
+
+        if np.any(ksampling) > 200:
+            logger.error("A ksampling was detected above 200. This seems "
+                         "extremely high. Please reconsider what is to be "
+                         "done. Exiting.")
+            sys.exit(1)
+
+    def fetch_ksampling_from_stepsize(self, step_sizes):
+        """
+        Calculates the ksampling based on the step size.
+
+        Parameters
+        ----------
+        step_sizes : ndarray
+            | Dimension: (3)
+
+            The step size along each reciprocal unit vector
+
+        Returns
+        -------
+        ksampling : float, float, float
+            The suggested sampling along each reciprocal unit vector
+
+        """
+
+        # fetch the length in AA of the reciprocal unit vectors
+        lengths = self.fetch_length_runitcell_vecs()
+
+        # ceil to make sure we at least have this step size
+        ksampling = np.ceil(lengths / step_sizes).astype(int)
+
+        # also make sure the grid is odd
+        for dir in range(3):
+            if utils.is_even(ksampling[dir]):
+                ksampling[dir] = ksampling[dir] + 1
+
+        return ksampling
+
     def check_for_duplicate_points(self):
         """
         Checks for duplicate k-points. This is currently not supported.
@@ -504,14 +561,18 @@ class Lattice():
 
         Returns
         -------
-        None
+        ndarray
+            | Dimension: (3)
+
+            The lenght of each reciprocal lattice vector in 
+            inverse AA.
 
         """
 
-        return \
-            np.linalg.norm(self.runitcell[0]), \
-            np.linalg.norm(self.runitcell[1]), \
-            np.linalg.norm(self.runitcell[2])
+        return np.array([
+            np.linalg.norm(self.runitcell[0]),
+            np.linalg.norm(self.runitcell[1]),
+            np.linalg.norm(self.runitcell[2])])
 
     def fetch_kmesh_step_size(self, direct=False):
         """
@@ -523,6 +584,11 @@ class Lattice():
             If True the step size is returned in direct coordinates,
             otherwise it is returned in AA^{-1} units. Defaults to
             False.
+
+        Returns
+        -------
+        stepx, stepy, stepz : float, float, float
+            The step size along each reciprocal lattice vector.
 
         Notes
         -----
@@ -546,8 +612,8 @@ class Lattice():
         shifty = self.ksampling[1]
 
         kmesh = self.fetch_kmesh(direct=True)
-        stepx = kmesh[shiftx, 0] - kmesh[shiftx - 1, 0]
-        stepy = kmesh[shifty, 1] - kmesh[shifty - 1, 1]
+        stepx = kmesh[shiftx, 0] - kmesh[0, 0]
+        stepy = kmesh[shifty, 1] - kmesh[0, 1]
         stepz = kmesh[1, 2] - kmesh[0, 2]
         # check that no stepping is zero inside symprec
         if (stepx < self.param.symprec) or \
@@ -561,8 +627,9 @@ class Lattice():
             return stepx, stepy, stepz
         else:
             # fetch length of reciprocal lattice vectors
-            lenx, leny, lenz = self.fetch_length_runitcell_vecs()
-            return stepx * lenx, stepy * leny, stepz * lenz
+            lengths = self.fetch_length_runitcell_vecs()
+            return stepx * lengths[0], stepy * lengths[1], \
+                stepz * lengths[2]
 
     def fetch_kpoints_along_line(self, kstart, kend, stepping,
                                  direct=True):

@@ -505,9 +505,9 @@ class Lattice():
         ksampling = np.ceil(lengths / step_sizes).astype(int)
 
         # also make sure the grid is odd
-        for dir in range(3):
-            if utils.is_even(ksampling[dir]):
-                ksampling[dir] = ksampling[dir] + 1
+        for i in range(3):
+            if utils.is_even(ksampling[i]):
+                ksampling[i] = ksampling[i] + 1
 
         return ksampling
 

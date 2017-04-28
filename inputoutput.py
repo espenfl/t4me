@@ -1396,9 +1396,9 @@ def dump_bandstruct_line(bs, kstart, kend, filename="band",
             "##########################################################\n")
         bands_file.write("{:<7s}".format("Dist."))
         for band in range(vel.shape[0]):
-            for dir in range(3):
+            for i in range(3):
                 bands_file.write("{:>16s}".format(
-                    "dE_{" + str(band + 1) + "}(k)/dk_" + str(dir + 1)))
+                    "dE_{" + str(band + 1) + "}(k)/dk_" + str(i + 1)))
         bands_file.write("\n")
         for kpoint in range(kpts.shape[0]):
             bands_file.write("{:>7.4f}".format(kpoint_length[kpoint]))

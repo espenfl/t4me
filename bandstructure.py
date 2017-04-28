@@ -1839,10 +1839,9 @@ class Bandstructure():
                         "Be carefull when modifying this grid in the future.")
             lattice_old = copy.deepcopy(self.lattice)
             # sets if we should use the old scaling factor (problems with
-            # even grids)
+            # even grids), the new approach is tested and should allow
+            # to use even and odd grids
             old_scaling_factor = False
-            print "OLD:"
-            print self.lattice.kmesh
             if itype != "skw":
                 if old_scaling_factor:
                     # calculate scaling factor
@@ -1891,8 +1890,6 @@ class Bandstructure():
                 dvec = (1 - 1e-6) * dvec
                 self.lattice.kmesh = self.lattice.kmesh * dvec
                 self.lattice.kmesh_ired = self.lattice.kmesh_ired * dvec
-                print "NEW:"
-                print self.lattice.kmesh
                 # use direct for Wildmagic and Einspline, cartesian
                 # for the rest
                 if itype == "wildmagic" or itype == "einspline":

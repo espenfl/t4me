@@ -1838,20 +1838,61 @@ class Bandstructure():
                         "original bz zone to avoid extrapolation issues. "
                         "Be carefull when modifying this grid in the future.")
             lattice_old = copy.deepcopy(self.lattice)
-            direct_width_bz_old = (ksampling - 1) / (ksampling.astype(
-                dtype="double"))
-            direct_width_bz_new = (iksampling - 1) / (iksampling.astype(
-                dtype="double"))
-            dvec = direct_width_bz_old / direct_width_bz_new
-            # we also have to be sure that the grid does not extend its
-            # border (most routines does not support extrapolation)
-            dvec = (1 - 1e-6) * dvec
+            # sets if we should use the old scaling factor (problems with
+            # even grids)
+            old_scaling_factor = False
+            print "OLD:"
+            print self.lattice.kmesh
             if itype != "skw":
+                if old_scaling_factor:
+                    # calculate scaling factor
+                    # need to make sure that all min/max points along each
+                    # direction of the direct grid is within the original,
+                    # the scaling factor is the largest factor returned from
+                    # this scaling
+                    direct_width_bz_old = (ksampling - 1) / \
+                                          (ksampling.astype(dtype="double"))
+                    direct_width_bz_new = (iksampling - 1) / \
+                                          (iksampling.astype(dtype="double"))
+                    dvec = direct_width_bz_old / direct_width_bz_new
+
+                else:
+                    kmin_old = np.zeros(3)
+                    kmax_old = np.zeros(3)
+                    kmesh = self.lattice.fetch_kmesh(direct=True)
+                    # store the min and max for each direction of the old
+                    # grid
+                    for i in range(3):
+                        kmin_old[i] = np.amin(kmesh[:, i])
+                        kmax_old[i] = np.amax(kmesh[:, i])
                 self.lattice.create_kmesh_spg(iksampling)
+                if not old_scaling_factor:
+                    ratio = np.zeros(6)
+                    kmesh = self.lattice.fetch_kmesh(direct=True)
+                    # if the new grid extens outside
+                    # the previously calculated min and max values
+                    # calculate the ration, the biggest of which
+                    # will scale the whole grid so that it is inside their
+                    # original boundry
+                    for i in range(3):
+                        ratio[i] = np.amin(kmesh[:, i]) / kmin_old[i]
+                        ratio[i + 3] = np.amax(kmesh[:, i]) / kmax_old[i]
+                        # no ratios should be negative
+                        if np.any(ratio) < 0:
+                            logger.error("The ratio of the minimum and "
+                                         "maximum between the old and new "
+                                         "k-point grid is negative. Please "
+                                         "check your grids. Exiting.")
+                            sys.exit(1)
+                        # find largest and set scaling
+                        dvec = 1.0 / np.amax(ratio)
                 # now this is the crucial part, scale the grid by
                 # dvec to pull it inside the borders
+                dvec = (1 - 1e-6) * dvec
                 self.lattice.kmesh = self.lattice.kmesh * dvec
                 self.lattice.kmesh_ired = self.lattice.kmesh_ired * dvec
+                print "NEW:"
+                print self.lattice.kmesh
                 # use direct for Wildmagic and Einspline, cartesian
                 # for the rest
                 if itype == "wildmagic" or itype == "einspline":

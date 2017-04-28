@@ -19,7 +19,7 @@ dispersion_interpolate: True # n/a
 # What is the target k-point sampling? Set to [0,0,0]
 # if you rather want to use
 # dispersion_interpolate_step_size
-dispersion_interpolate_sampling: [0,0,0] # n/a
+dispersion_interpolate_sampling: [21,21,21] # n/a
 # What is the target k-point step size along each direction
 # in units of inverse AA?
 dispersion_interpolate_step_size: [0.1, 0.1, 0.1]
@@ -232,7 +232,7 @@ acceptor_degen_fact: 0.25 # #
 # Acceptor energy:
 acceptor_energy: 0.0 # eV
 # Input data and parameter read in. Consult manual.
-read: param # n/a
+read: vasp # n/a
 # Filename for the input data etc. Consult manual.
 readfile: "" # n/a
 # Do you want to use scissor operator?

@@ -760,24 +760,6 @@ def dump_transport_coefficients(tr, filename_tag=""):
     cc_file.write(
         "#  4. Column: p-type carrier concen. in 10^21 cm^-3      #\n")
     cc_file.write(
-        "#  5. Column: carrier conc. in 10^21 cm^-3 (xx tensor)   #\n")
-    cc_file.write(
-        "#  6. Column: carrier conc. in 10^21 cm^-3 (yy tensor)   #\n")
-    cc_file.write(
-        "#  7. Column: carrier conc. in 10^21 cm^-3 (zz tensor)   #\n")
-    cc_file.write(
-        "#  8. Column: carrier conc. in 10^21 cm^-3 (xy tensor)   #\n")
-    cc_file.write(
-        "#  8. Column: carrier conc. in 10^21 cm^-3 (xz tensor)   #\n")
-    cc_file.write(
-        "#  9. Column: carrier conc. in 10^21 cm^-3 (yx tensor)   #\n")
-    cc_file.write(
-        "# 10. Column: carrier conc. in 10^21 cm^-3 (yz tensor)   #\n")
-    cc_file.write(
-        "# 11. Column: carrier conc. in 10^21 cm^-3 (zx tensor)   #\n")
-    cc_file.write(
-        "# 12. Column: carrier conc. in 10^21 cm^-3 (zy tensor)   #\n")
-    cc_file.write(
         "#                                                        #\n")
     cc_file.write(
         "#  Data is blocked on temperature in K                   #\n")

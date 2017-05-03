@@ -1,0 +1,253 @@
+##########################################################
+##########################################################
+#                                                        #
+##########################################################
+#                                                        #
+#               General configuration file               #
+#                                                        #
+##########################################################
+# -------------------------------------------------------#
+# -------------------------------------------------------#
+#                                                        #
+#  Dispersion related parameters                         #
+#                                                        #
+# -------------------------------------------------------#
+# -------------------------------------------------------#
+# Do you want to interpolate the supplied
+# bandstructure?
+dispersion_interpolate: False # n/a
+# What is the target k-point sampling? Set to [0,0,0]
+# if you rather want to use
+# dispersion_interpolate_step_size
+dispersion_interpolate_sampling: [21,21,21] # n/a
+# What is the target k-point step size along each direction
+# in units of inverse AA?
+dispersion_interpolate_step_size: [0.1, 0.1, 0.1]
+# What interpolation method to use?
+dispersion_interpolate_method: "wildmagic" # n/a
+# What sub method to use?
+dispersion_interpolate_type: "akima" # n/a
+# Use numerical differentiation to calculate the
+# velocities if they are not present on entry, or/and
+# use numerical differentiation to extract the
+# velocities after the dispersions have been
+# interpolated (used by default for the interpolat
+# routines that do not support velocity extraction)
+dispersion_velocities_numdiff: True # n/a
+# Do you want to dump dispersion line to file before
+# interpolation?
+dispersion_write_preinter: False # n/a
+# Do you want to dump dispersion line to file after
+# interpolation?
+dispersion_write_postinter: False # n/a
+# Start k-point in direct coordinates for the
+# dispersion line:
+dispersion_write_start: [0.0, 0.0, 0.0] # n/a
+# End k-point in direct coordinates for the
+# dispersion line:
+dispersion_write_end: [0.5, 0.5, 0.0] # n/a
+# Number of k-points along line extration:
+dispersion_num_kpoints_along_line: 20 # n/a
+# Calculate effective mass tensor?
+dispersion_effmass: False
+# Diagonalize the effective mass tensor?
+dispersion_effmass_diagonalize: False
+# Transformation vectors for the effective mass tensor
+# given in direct coordinates, if empty no
+# transformation is performed
+dispersion_effmass_transform: []
+# Parameters that are passed to PythTB when reading
+# Wannier90 data. Please consult the PythTB manual
+# for additional details.
+dispersion_w90_tb_zero_energy: 0.0 # eV
+dispersion_w90_tb_min_hopping_norm: 0.01 # eV
+dispersion_w90_tb_max_distance: 10 # AA
+
+# -------------------------------------------------------#
+# -------------------------------------------------------#
+#                                                        #
+#  Electronic transport related parameters               #
+#                                                        #
+# -------------------------------------------------------#
+# -------------------------------------------------------#
+# Do you want to calculate the electronic
+# transport tensors?
+transport_calc: True # n/a
+# Which method to use?
+transport_method: "numerick"
+# Which integration method to use?
+transport_integration_method: "trapz" # n/a
+# Which smearing to use (only applied if
+# integration method is set to "smeared")
+transport_integration_spectral_smearing: 0.02 # eV
+# How dense sampling do you want to use when
+# generating the weights and thus later the integral
+# over energy. Only valid if the integration method
+# is "tetra" or "smeared".
+transport_integration_spectral_density: 1000 # n/a
+# How far out from the chemical potential min and
+# max values do you want to truncate the spectral
+# sampling?
+transport_integration_spectral_energy_cutoff: 1.0 # eV
+# What type of interpolation method to use when
+# running on-the-fly interpolation during integration
+# (only "wildmagic" is currently implemented and this
+# only works if the integration method is "cubature")?
+transport_interpolate_method: "wildmagic" # n/a
+# What type of sub method to use?
+transport_interpolate_type: "akima" # n/a
+# The minimum chemical potential:
+transport_chempot_min: -0.4 # eV
+# The maximum chemical potential:
+transport_chempot_max: 1.0 # eV
+# The samples between the minimum and maximum of
+# the chemical potential:
+transport_chempot_samples: 20 # n/a
+# Drop bands in the calculation that lie outside the
+# chemical potential range pluss and minus the following:
+transport_energycutband: 1.0 # eV
+# Include only the following bands in the calculation:
+transport_include_bands: [] # n/a
+# Do you want to use the analytical spherical scattering
+# models?
+transport_use_analytic_scattering: False  # n/a
+# Do you want to calculate the scattering on the fly
+# during integration?
+transport_use_scattering_ontfly: False # n/a
+# Do you want to drop all valence bands?
+transport_drop_valence: False # n/a
+# Do you want to drop all conduction bands?
+transport_drop_conduction: False # n/a
+# Is this system isotropic?
+transport_isotropic: True # n/a
+
+# -------------------------------------------------------#
+# -------------------------------------------------------#
+#                                                        #
+#  Density of states related parameters                  #
+#                                                        #
+# -------------------------------------------------------#
+# -------------------------------------------------------#
+# Do you want to calculate the density of states?
+dos_calc: False # n/a
+# The minimum energy used for the density of states
+# calculations:
+dos_e_min: -5.0 # eV
+# The maximum energy used for the density of states
+# calculations:
+dos_e_max: 2.0 # eV
+# The number of energy samples between the min and max:
+dos_num_samples: 1000 # n/a
+# The Gaussian smearing (if "smeared", "trapz", "simps"
+# or "romb" is used)
+dos_smearing: 0.1 # eV
+# What on-the-fly interpolation method to use during
+# integration (only "wildmagic" is available and the
+# integration method have to be "cubature").
+dos_interpolate_method: "wildmagic" # n/a
+# What sub method to use?
+dos_interpolate_type: "akima" # n/a
+# What type of integration method to use?
+dos_integrating_method: "trapz" # n/a
+# This is a bit redundant, users please leave this
+# set at False
+dos_smear_then_interpolate: False # n/a
+
+# -------------------------------------------------------#
+# -------------------------------------------------------#
+#                                                        #
+#  General parameters                                    #
+#                                                        #
+# -------------------------------------------------------#
+# -------------------------------------------------------#
+# Minimum temperature:
+temperature_min: 300 # K
+# Maximum temperature:
+temperature_max: 300 # K
+# Number of temperature steps:
+temperature_steps: 1 # n/a
+# Generate Gamma centered k-point grids? Anything else
+# is currently experimental, so beware of wrong results
+gamma_center: True # n/a
+# The integration limits for the Fermi integrals when
+# "numeric" is used for the transport method:
+maxeint: 100 # eps = energy/kT
+# The cutoff to use when detecting occupancies and thus
+# also valence band maximum, conduction band minimum and
+# band gap:
+occ_cutoff: 1.0e-4 # n/a
+# Do band folding when generating analytic bands? This
+# have not been testet. Users please leave this at False
+# and generate tight binding bands instead with the
+# PythTB interface
+band_folding: False
+# Place the Fermi energy in the gap? Currently this is
+# a bit pointless, so users please leave this at False
+e_fermi_in_gap: False # n/a
+# If True, use the Fermi level from e.g. the VASP input
+# file (or other file, depending on the interface present)
+e_fermi: True # n/a
+# Set the zero at the valence band maximum?
+e_vbm: False # n/a
+# Shift the whole electron energy dispersion by the
+# following amount:
+e_shift: 0.0 # eV
+# Use h cubature? If False, p cubature is used instead.
+cubature_h: False  # n/a
+# The number of iterations in the cubature routines
+cubature_max_it: 0 # n/a
+# The absolute error when the cubature refinement is
+# truncated
+cubature_abs_err: 0.0 # n/a
+# The relative error when the cubature refinement is
+# truncated. Beware that due to small values, it is
+# difficult to use this is general. A combination of
+# this and the max_it is recommended. Please check for
+# convergence.
+cubature_rel_err: 0.01 # n/a
+# The expansion factor (number of R vectors in the
+# radius) of the SKW interpolation routine
+skw_expansion_factor: 30 # n/a
+# The carrier valence energy:
+carrier_valence_energy: 0.0 # eV
+# The carrier conduction energy:
+carrier_conduction_energy: 0.0 # eV
+# Use the carrier concentration calculated using
+# analytick expressions. If True, do not recalculate
+# dos numerically when calculating the carrier
+# concentration
+carrier_dos_analytick: True # n/a
+# Use defect ionization?
+defect_ionization: False # n/a
+# How many donors?
+donor_number: 0.0 # 10^21 cm^-3
+# Donor degeneration factor:
+donor_degen_fact: 0.75 # #
+# Donor energy:
+donor_energy: 0.0 # eV
+# How many acceptors?
+acceptor_number: 0.0 # 10^21 cm^-3
+# Acceptor degeneration factor:
+acceptor_degen_fact: 0.25 # #
+# Acceptor energy:
+acceptor_energy: 0.0 # eV
+# Input data and parameter read in. Consult manual.
+read: vasp # n/a
+# Filename for the input data etc. Consult manual.
+readfile: "" # n/a
+# Do you want to use scissor operator?
+scissor: False # eV or n/a
+# What symprec to use?
+symprec: 1.0e-6
+# Dump tight binding construction data to std out?
+displaytb: False # n/a
+# Print output from libraries bundled with T4ME
+libinfo: True # n/a
+# Only store total scattering rate
+# (saves memory), but need to be enabled to see
+# the values of each mechanism
+onlytotalrate: True
+# Paralel mode?
+parallel: False
+# Run tests? If so, nothing else is done
+run_tests: False

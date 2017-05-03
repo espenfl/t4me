@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Examples &#8212; T4ME 1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Custom interfaces" href="interfaces.html" />
+    <link rel="prev" title="Tutorials" href="tutorial.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          T4ME</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Custom interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Examples</a><ul>
+<li><a class="reference internal" href="#a-spherical-band">A spherical band</a><ul>
+<li><a class="reference internal" href="#preparation">Preparation</a></li>
+<li><a class="reference internal" href="#the-general-parameters">The general parameters</a></li>
+<li><a class="reference internal" href="#the-band-parameters">The band parameters</a></li>
+<li><a class="reference internal" href="#the-cell-parameters">The cell parameters</a></li>
+<li><a class="reference internal" href="#execution">Execution</a></li>
+<li><a class="reference internal" href="#output">Output</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#silicon-from-first-principles">Silicon from first-principles</a><ul>
+<li><a class="reference internal" href="#id1">Preparation</a></li>
+<li><a class="reference internal" href="#id2">The general parameters</a></li>
+<li><a class="reference internal" href="#id3">The band parameters</a></li>
+<li><a class="reference internal" href="#id4">Execution</a></li>
+<li><a class="reference internal" href="#id5">Output</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="tutorial.html" title="Previous Chapter: Tutorials"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Tutorials</span>
+    </a>
+  </li>
+  <li>
+    <a href="interfaces.html" title="Next Chapter: Custom interfaces"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Custom interf... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/examples.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#a-spherical-band" id="id6">A spherical band</a><ul>
+<li><a class="reference internal" href="#preparation" id="id7">Preparation</a></li>
+<li><a class="reference internal" href="#the-general-parameters" id="id8">The general parameters</a></li>
+<li><a class="reference internal" href="#the-band-parameters" id="id9">The band parameters</a></li>
+<li><a class="reference internal" href="#the-cell-parameters" id="id10">The cell parameters</a></li>
+<li><a class="reference internal" href="#execution" id="id11">Execution</a></li>
+<li><a class="reference internal" href="#output" id="id12">Output</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#silicon-from-first-principles" id="id13">Silicon from first-principles</a><ul>
+<li><a class="reference internal" href="#id1" id="id14">Preparation</a></li>
+<li><a class="reference internal" href="#id2" id="id15">The general parameters</a></li>
+<li><a class="reference internal" href="#id3" id="id16">The band parameters</a></li>
+<li><a class="reference internal" href="#id4" id="id17">Execution</a></li>
+<li><a class="reference internal" href="#id5" id="id18">Output</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="a-spherical-band">
+<h2><a class="toc-backref" href="#id6">A spherical band</a><a class="headerlink" href="#a-spherical-band" title="Permalink to this headline">¶</a></h2>
+<p>Here a short example of how to calculate the transport
+coefficients from analytical band generation is presented.</p>
+<div class="section" id="preparation">
+<h3><a class="toc-backref" href="#id7">Preparation</a><a class="headerlink" href="#preparation" title="Permalink to this headline">¶</a></h3>
+<p>Start with the <code class="file docutils literal"><span class="pre">param.yml</span></code>, <code class="file docutils literal"><span class="pre">bandparam.yml</span></code>
+and <code class="file docutils literal"><span class="pre">cellparam.yml</span></code> located in the <cite>tests/1</cite> directory.</p>
+<p>Copy these files into an <cite>input</cite> directory where you
+want to execute T4ME.</p>
+</div>
+<div class="section" id="the-general-parameters">
+<h3><a class="toc-backref" href="#id8">The general parameters</a><a class="headerlink" href="#the-general-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Here follows a brief explanation of the general parameters that
+need attention. They are already specified in the sample
+<code class="file docutils literal"><span class="pre">param.yml</span></code> file so the user should not have to change
+this for a test run. All other parameters should at this point
+not need to be touched.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">transport_calc</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>Perform the calculation of the transport coefficients.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">transport_method</span><span class="p">:</span> <span class="s2">&quot;closed&quot;</span>
+</pre></div>
+</div>
+<p>Utilize the Fermi-Dirac integrals form of the integrals.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">transport_chempot_min</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.4</span>
+</pre></div>
+</div>
+<p>The minimum chemical potential to sample, in eV.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">transport_chempot_max</span><span class="p">:</span> <span class="mf">0.4</span>
+</pre></div>
+</div>
+<p>The maximum chemical potential to sample, in eV.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">transport_chempot_samples</span><span class="p">:</span> <span class="mi">100</span>
+</pre></div>
+</div>
+<p>How many samples do you want between
+<code class="docutils literal"><span class="pre">transport_chempot_min</span></code> and <code class="docutils literal"><span class="pre">transport_chempot_max</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">transport_use_analytic_scattering</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>Use spherical and analytic models for the electron scattering.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">temperature_min</span><span class="p">:</span> <span class="mi">300</span>
+</pre></div>
+</div>
+<p>The minimum temperature in K.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">temperature_max</span><span class="p">:</span> <span class="mi">300</span>
+</pre></div>
+</div>
+<p>The maximum temperature in K.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">temperature_steps</span><span class="p">:</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>The number of temperature steps between
+<code class="docutils literal"><span class="pre">temperature_min</span></code> and <code class="docutils literal"><span class="pre">temperature_max</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">read</span><span class="p">:</span> <span class="n">param</span>
+</pre></div>
+</div>
+<p>Read and generate electronic structure from the file
+<code class="file docutils literal"><span class="pre">bandparam.yml</span></code>.</p>
+</div>
+<div class="section" id="the-band-parameters">
+<h3><a class="toc-backref" href="#id9">The band parameters</a><a class="headerlink" href="#the-band-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Here follows a brief explanation of the band parameters that
+need attention. They are already specified in the sample
+<code class="file docutils literal"><span class="pre">bandparam.yml</span></code> file so the user should not have to change
+this for a test run. All other parameters should at this point
+not need to be touched.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Band</span> <span class="mi">1</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>Only generate one band.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">:</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Use spherical band generation.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">effmass</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Effective mass in units of the free electron mass. For spherical
+bands, this needs to be equal along each direction. Negative mass
+gives bands that curve downwards.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">e0</span><span class="p">:</span> <span class="mf">0.0</span>
+</pre></div>
+</div>
+<p>The energy shift in eV.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">status</span><span class="p">:</span> <span class="n">v</span>
+</pre></div>
+</div>
+<p>A valence band.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">select_scattering</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Acoustic phonon scattering is selected.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">d_a</span><span class="p">:</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>Deformation potential in units of eV.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">speed_sound</span><span class="p">:</span> <span class="mi">10000</span>
+</pre></div>
+</div>
+<p>Speed of sound in units of m/s.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">rho</span><span class="p">:</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>The density of the material in units of <img class="math" src="_images/math/55070ec34e06bd428907c0b97b2ea5d130063045.png" alt="\mathrm{g}/\mathrm{cm}^3"/>.</p>
+</div>
+<div class="section" id="the-cell-parameters">
+<h3><a class="toc-backref" href="#id10">The cell parameters</a><a class="headerlink" href="#the-cell-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Here follows a brief explanation of the cell parameters that
+need attention. They are already specified in the sample
+<code class="file docutils literal"><span class="pre">cellparam.yml</span></code> file so the user should not have to change
+this for a test run. All other parameters should at this point
+not need to be touched.</p>
+<p>This data is mainly used to set up the symmetry of the Brillouin zone,
+the k-point mesh and the mapping between the irreducible and full
+Brillouin zone.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span><span class="p">:</span> <span class="p">[</span><span class="mf">5.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]</span>
+<span class="n">b</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">5.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]</span>
+<span class="n">c</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">5.0</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The vectors determining the unit cell. Units in AA.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pos</span><span class="p">:</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>Put one atom at zero.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">atomtypes</span><span class="p">:</span> <span class="p">[</span><span class="n">X</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Of type X.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ksampling</span><span class="p">:</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">11</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Request a k-point sampling in the full Brillouin zone of
+11 points along each reciprocal unit cell vector.</p>
+</div>
+<div class="section" id="execution">
+<h3><a class="toc-backref" href="#id11">Execution</a><a class="headerlink" href="#execution" title="Permalink to this headline">¶</a></h3>
+<p>After all parameters have been set (should only be
+necessary to copy files as stated before) the transport
+coefficients can be calculated by executing</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">t4me</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>During execution the file <code class="file docutils literal"><span class="pre">info.log</span></code> in the directory
+<cite>output</cite> can be inspected in order to assess progress and that
+everything works as expected.</p>
+</div>
+<div class="section" id="output">
+<h3><a class="toc-backref" href="#id12">Output</a><a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h3>
+<p>On completion the transport coefficients can be found in the
+<cite>output</cite> directory.</p>
+</div>
+</div>
+<div class="section" id="silicon-from-first-principles">
+<h2><a class="toc-backref" href="#id13">Silicon from first-principles</a><a class="headerlink" href="#silicon-from-first-principles" title="Permalink to this headline">¶</a></h2>
+<p>Here a short example of how to calculate the transport
+coefficients from a VASP output file (typically
+<code class="file docutils literal"><span class="pre">vasprun.xml</span></code>) is presented.</p>
+<div class="section" id="id1">
+<h3><a class="toc-backref" href="#id14">Preparation</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Start with the <code class="file docutils literal"><span class="pre">param.yml</span></code>, <code class="file docutils literal"><span class="pre">bandparam.yml</span></code>
+located in the <cite>tests/13</cite> directory. In the same directory
+a sample <code class="file docutils literal"><span class="pre">vasprun.xml</span></code> file is also provided.</p>
+<p>Copy these files into an <cite>input</cite> directory where you
+want to execute T4ME.</p>
+</div>
+<div class="section" id="id2">
+<h3><a class="toc-backref" href="#id15">The general parameters</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Here follows a brief explanation of the general parameters that
+need attention. They are already specified in the sample
+<code class="file docutils literal"><span class="pre">param.yml</span></code> file so the user should not have to change
+this for a test run. All other parameters should at this point
+not need to be touched.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dispersion_interpolate</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>We do not want to interpolate the input at this step.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dispersion_velocities_numdiff</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>We need to calculate the group velocities of the electrons
+as this is not supplied by VASP by default.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">transport_calc</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>Calculate the transport coefficients.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">transport_method</span><span class="p">:</span> <span class="s2">&quot;numerick&quot;</span>
+</pre></div>
+</div>
+<p>Integrate numerically in k-space.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">transport_integration_method</span><span class="p">:</span> <span class="s2">&quot;trapz&quot;</span>
+</pre></div>
+</div>
+<p>Used trapezoidal integration.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">transport_chempot_min</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.4</span>
+</pre></div>
+</div>
+<p>The minimum chemical potential to sample, in eV.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">transport_chempot_max</span><span class="p">:</span> <span class="mf">1.0</span>
+</pre></div>
+</div>
+<p>The maximum chemical potential to sample, in eV.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">transport_chempot_samples</span><span class="p">:</span> <span class="mi">20</span>
+</pre></div>
+</div>
+<p>How many samples do you want between
+<code class="docutils literal"><span class="pre">transport_chempot_min</span></code> and <code class="docutils literal"><span class="pre">transport_chempot_max</span></code>.
+Computational time and storage may vary depending on how this
+parameter is set.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">transport_use_analytic_scattering</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>Use density-of-states models for the electron scattering.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dos_integrating_method</span><span class="p">:</span> <span class="s2">&quot;trapz&quot;</span>
+</pre></div>
+</div>
+<p>In order to calculate the scattering, it is necessary to
+calculate the density-of-states. Here this is done by using
+the trapezoidal integration with the delta function approximated
+by a Gaussian.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dos_smearing</span><span class="p">:</span> <span class="mf">0.1</span>
+</pre></div>
+</div>
+<p>The smearing factor in eV used for the Gaussian approximation of the delta
+function. This needs to be sufficiently big in order for the
+density-of-states to converge, but also in order for the
+scattering data to have a smooth onset at the carrier energy. It is
+recommended that this, for calculations of scattering properties is
+not set below 0.1 eV.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">temperature_min</span><span class="p">:</span> <span class="mi">300</span>
+</pre></div>
+</div>
+<p>The minimum temperature in K.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">temperature_max</span><span class="p">:</span> <span class="mi">300</span>
+</pre></div>
+</div>
+<p>The maximum temperature in K.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">temperature_steps</span><span class="p">:</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>The number of temperature steps between
+<code class="docutils literal"><span class="pre">temperature_min</span></code> and <code class="docutils literal"><span class="pre">temperature_max</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">e_fermi</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>Set the zero in energy to Fermi level supplied by
+the first-principle code, here VASP. The
+<code class="docutils literal"><span class="pre">transport_chempot_min</span></code> and <code class="docutils literal"><span class="pre">transport_chempot_max</span></code>
+parameters are thus set with reference to the shifted
+grid where the zero in energy is usually at the
+top valence band.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">read</span><span class="p">:</span> <span class="n">vasp</span>
+</pre></div>
+</div>
+<p>Read data from VASP output files, here <code class="file docutils literal"><span class="pre">vasprun.xml</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">symprec</span><span class="p">:</span> <span class="mf">1e-6</span>
+</pre></div>
+</div>
+<p>The symmetry cutoff used to detect symmetry. Should somewhat match
+with the value used in VASP. Passed along to Spglib to generate the
+irreducible to full Brillouin zone mapping.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">onlytotalrate</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>Only store the total concatenated relaxation time arrays. Saves memory.</p>
+</div>
+<div class="section" id="id3">
+<h3><a class="toc-backref" href="#id16">The band parameters</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>Here follows a brief explanation of the band parameters that
+need attention. They are already specified in the sample
+<code class="file docutils literal"><span class="pre">bandparam.yml</span></code> file so the user should not have to change
+this for a test run. All other parameters should at this point
+not need to be touched.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Band</span> <span class="mi">1</span><span class="o">-</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>Tells the reader that it should apply all consecutive parameters
+to all the bands in the supplied system.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">select_scattering</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Only use constant scattering.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">tau0_c</span><span class="p">:</span> <span class="mi">100</span>
+</pre></div>
+</div>
+<p>The value of the constant relaxation time in fs.</p>
+</div>
+<div class="section" id="id4">
+<h3><a class="toc-backref" href="#id17">Execution</a><a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>After all parameters have been set (should only be
+necessary to copy files as stated before) the transport
+coefficients can be calculated by executing</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">t4me</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>During execution the file <code class="file docutils literal"><span class="pre">info.log</span></code> in the directory
+<cite>output</cite> can be inspected in order to assess progress and that
+everything works as expected.</p>
+</div>
+<div class="section" id="id5">
+<h3><a class="toc-backref" href="#id18">Output</a><a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>On completion the transport coefficients can be found in the
+<cite>output</cite> directory.</p>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2016, Espen Flage-Larsen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

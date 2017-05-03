@@ -81,9 +81,6 @@ class Bandstructure():
 
     .. todo:: Add interfaces to other first principle codes.
 
-    .. todo:: Add detailed documentation of the YAML configuration
-              files.
-
     """
 
     def __init__(self, lattice, param, location=None, filename=None):
@@ -113,6 +110,24 @@ class Bandstructure():
         # scissor operator?
         if self.param.scissor:
             self.apply_scissor_operator()
+
+        # generate the velocities if they are not present
+        # and if the user does not want to use the extraction
+        # of the interpolation routines
+        # makes more sense to have this in lbtecoeff.py or
+        # similar, but sometimes one would want to check the
+        # velocities and we thus need them before checking if
+        # user wants to dump dispersion relation (imcludes velocities
+        # if present).
+        # also, if user wants to preinterpolate, wait with velocity
+        # extraction
+        if param.dispersion_velocities_numdiff and \
+           not param.dispersion_interpolate:
+            if not self.gen_velocities:
+                logger.warning("The velocities already exist. This data will "
+                               "be overwritten. Continuing.")
+            logger.info("Extracting the velocities by finite difference")
+            self.calc_velocities()
 
     def locate_vbm(self, energies, occ):
         """

@@ -965,9 +965,9 @@ class Lattice():
             if utils.is_even(ksampling[2]):
                 ksampling[2] + 1
         else:
-            logger.error(
+            logger.info(
                 "Please set gamma centered to True and supply/generate "
-                "a gamma centered grid. Exiting.")
+                "a gamma centered grid.")
             sys.exit(1)
         # make sure ksampling have correct dtype
         ksampling = np.ascontiguousarray(ksampling, dtype='intc')

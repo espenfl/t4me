@@ -652,6 +652,64 @@ class TestTransportIntegralsFast(unittest.TestCase):
 
 class TestTransportIntegralsSlow(unittest.TestCase):
 
+    def test_si_45_primitive(self):
+        """
+        Test where the primitive cell of silicon is
+        used at an input grid density of 45x45x45.
+        This is not fully converged, but should still
+        yield a reprentative test which checks the
+        integration of a first-principle input in
+        a cell which is not cubic. The chemical potential
+        runs between -0.4 and 1.0 eV (band gap of rougly 0.6 eV).
+        Test performed at 300 K.
+
+        """
+
+        test_number = 13
+
+        # fetch bandstructure
+        bs = read_and_setup_bandstructure(test_number)
+
+        # calculate the velocities
+        bs.calc_velocities()
+
+        # set up transport
+        tran = transport.Transport(bs)
+        tran.calc_transport_tensors()
+        sigma_calc = np.nan_to_num(tran.sigma)
+        seebeck_calc = np.nan_to_num(tran.seebeck)
+        lorenz_calc = np.nan_to_num(tran.lorenz)
+
+        # set up reference values to check against
+        # only check values at -0.4, 0.0 and 1.0 eV
+        sigma_ref = np.array([1.15318353e+07, 4.80341217e+05,
+                              1.32443426e+07])
+        seebeck_ref = np.array([2.48607881e+01, 1.76853559e+02,
+                                -3.48020329e+01])
+        lorenz_ref = np.array([2.35013836e+00, 1.95915531e+00,
+                               2.43547386e+00])
+
+        # now calculate the relative difference
+        np.seterr(divide='ignore', invalid='ignore')
+        difference_in_sigma = np.nan_to_num(
+            (sigma_calc[0, [0, 5, 19], 0, 0] -
+             sigma_ref) / sigma_ref)
+        difference_in_seebeck = np.nan_to_num(
+            (seebeck_calc[0, [0, 5, 19], 0, 0] -
+             seebeck_ref) / seebeck_ref)
+        difference_in_lorenz = np.nan_to_num(
+            (lorenz_calc[0, [0, 5, 19], 0, 0] -
+             lorenz_ref) / lorenz_ref)
+
+        # should match down to numerical precision for all chemical
+        # potentials
+        self.assertTrue(np.all(np.abs(
+            difference_in_sigma[:]) < 1e-7))
+        self.assertTrue(np.all(np.abs(
+            difference_in_seebeck[:]) < 1e-7))
+        self.assertTrue(np.all(np.abs(
+            difference_in_lorenz[:]) < 1e-7))
+
     def test_trapz_spherical_one_band(self):
         """
         Test the direct integrals in reciprocal space against

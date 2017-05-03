@@ -27,6 +27,30 @@ import constants
 import numpy as np
 
 
+def check_file(filename):
+    """
+    Check if a file exists
+
+    Parameters
+    ----------
+    filename : string
+        The location and filename of the file to be checked.
+
+    Returns
+    -------
+    None
+
+    """
+
+    # set logger
+    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger.debug("Running check_file.")
+
+    if not os.path.isfile(filename):
+        logger.error(filename + "was not found. Exiting.")
+        sys.exit(1)
+
+
 def check_directory(path):
     """
     Check that the directory exists

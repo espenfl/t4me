@@ -1,0 +1,23 @@
+##########################################################
+##########################################################
+#                                                        #
+##########################################################
+#                                                        #
+#                Cell configuration file                 #
+#                                                        #
+##########################################################
+# The unit cell, units in AA
+a: [3.535533905932737622,3.535533905932737622,0.0]
+b: [0.0,3.535533905932737622,3.535533905932737622]
+c: [3.535533905932737622,0.0,3.535533905932737622]
+# The list of atomic positions in direct or cartesian
+# coordinates
+pos: [[0.0,0.0,0.0]]
+# Is the atomic positions given in direct coordinates?
+direct: True
+# Atom species for each position. Periodic table
+# abbreviations (case insensitive)
+atomtypes: [X]
+# The k-point sampling along each axis of the reciprocal
+# unit cell
+ksampling: [31,31,31]

@@ -9,3 +9,4 @@ build
 timings
 external
 xalglib.py
+skw_test.py

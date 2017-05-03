@@ -2,7 +2,7 @@ from distutils.core import setup, Extension
 from Cython.Distutils import build_ext
 import numpy
 
-# THE ONLY DEPENDENCIES NEEDED ARE THE GSL AND
+# THE ONLY STRICT DEPENDENCIES NEEDED ARE
 # SPGLIB 1.7.4. THE OTHERS ARE OPTIONAL AND IF NOT
 # INSTALLED WILL LIMIT THE CHOICE OF INTEGRATION AND
 # INTERPOLATION TECHNIQUES. UNCOMMENT THE OPTIONAL
@@ -12,17 +12,24 @@ home = "/home/flagre"
 locallib = home + "/local/lib"
 localinclude = home + "/local/include"
 
-# ABSOLUTELY REQUIRED
+
+# THE FOLLOWING IS ABSOLUTELY REQUIRED
 
 # Spglib
-# this is for a local version of spglib
+# this is for a local version of spglib, meaning
+# if you compile your own version
 #spgliblib = locallib
 #spglibinclude = localinclude + "/spglib"
-# this is for the submodule version (recommended)
+
+# this is for the submodule version (recommended),
+# meaning that you use the git submodule version
+# of Spglib that is included
 spgliblib = "spglib/lib"
 spglibinclude = "spglib/include/spglib"
 
-# OPTIONAL
+
+# THE FOLLOWING LIBRARIES ARE OPTIONAL
+
 # GNU GSL
 gsllib = locallib
 # (the gsl .h files use gsl/somefile.h)
@@ -83,15 +90,15 @@ ext = [
               extra_compile_args=["-O3", "-w",
                                          "-std=c++11"],
               language="c++"),
-    #       Extension("skw_interface", ["skw_interface/skw.pyx"],
-    #                 include_dirs=[spglibinclude, mklinclude,
-    #                               skwinclude, fftwinclude, numpy.get_include()],
-    #                 library_dirs=[spgliblib, fftwlib, mkllib, skwlib],
-    #                 libraries=["stdc++", "mkl_rt", "pthread",
-    #                            "m", "dl", "skw", "symspg", "fftw3xc_intel"],
-    #                 extra_compile_args=[
-    #                     "-std=c++11"],
-    #                 language="c++"),
+    #    Extension("skw_interface", ["skw_interface/skw.pyx"],
+    #              include_dirs=[spglibinclude, mklinclude,
+    #                            skwinclude, fftwinclude, numpy.get_include()],
+    #              library_dirs=[spgliblib, fftwlib, mkllib, skwlib],
+    #              libraries=["stdc++", "mkl_rt", "pthread",
+    #                         "m", "dl", "skw", "symspg", "fftw3xc_intel"],
+    #              extra_compile_args=[
+    #                  "-std=c++11"],
+    #              language="c++"),
     # special include for tetrahedron_method.c
     # (to be fixed in the future) when this is fully separted
     # in spglib, tetrahedron_method is compiled and linked manually
@@ -113,7 +120,7 @@ ext = [
     #                 libraries=["profiler", "tcmalloc"]),
 ]
 
-setup(name='T4M',
+setup(name='T4ME',
       version='1.0',
       description='',
       author='Espen Flage-Larsen',

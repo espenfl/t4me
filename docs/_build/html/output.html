@@ -91,7 +91,20 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Output</a></li>
+<li><a class="reference internal" href="#">Output</a><ul>
+<li><a class="reference internal" href="#files">Files</a><ul>
+<li><a class="reference internal" href="#electrical-conductivity">Electrical conductivity</a></li>
+<li><a class="reference internal" href="#seebeck-coefficients">Seebeck coefficients</a></li>
+<li><a class="reference internal" href="#lorenz-coefficient">Lorenz coefficient</a></li>
+<li><a class="reference internal" href="#the-electrothermal-conductivity">The electrothermal conductivity</a></li>
+<li><a class="reference internal" href="#the-charge-carrier-concentration">The charge carrier concentration</a></li>
+<li><a class="reference internal" href="#the-hall-coefficient">The Hall coefficient</a></li>
+<li><a class="reference internal" href="#the-relaxation-times">The relaxation times</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#visualization">Visualization</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -141,10 +154,80 @@
       
   <div class="section" id="output">
 <h1>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#files" id="id1">Files</a><ul>
+<li><a class="reference internal" href="#electrical-conductivity" id="id2">Electrical conductivity</a></li>
+<li><a class="reference internal" href="#seebeck-coefficients" id="id3">Seebeck coefficients</a></li>
+<li><a class="reference internal" href="#lorenz-coefficient" id="id4">Lorenz coefficient</a></li>
+<li><a class="reference internal" href="#the-electrothermal-conductivity" id="id5">The electrothermal conductivity</a></li>
+<li><a class="reference internal" href="#the-charge-carrier-concentration" id="id6">The charge carrier concentration</a></li>
+<li><a class="reference internal" href="#the-hall-coefficient" id="id7">The Hall coefficient</a></li>
+<li><a class="reference internal" href="#the-relaxation-times" id="id8">The relaxation times</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#visualization" id="id9">Visualization</a></li>
+</ul>
+</div>
 <p>The transport coefficients are written to the <cite>output</cite>
-directory. The log file <cite>info.log</cite> is also written in
+directory. The log file <code class="file docutils literal"><span class="pre">info.log</span></code> is also written in
 this directory and can be monitored during a run to
 check the process.</p>
+<p>The following files are of importance:</p>
+<div class="section" id="files">
+<h2><a class="toc-backref" href="#id1">Files</a><a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="electrical-conductivity">
+<h3><a class="toc-backref" href="#id2">Electrical conductivity</a><a class="headerlink" href="#electrical-conductivity" title="Permalink to this headline">¶</a></h3>
+<p>The electrical conductivity can be found in the file <code class="file docutils literal"><span class="pre">sigma</span></code>.
+In units of <img class="math" src="_images/math/42cc15906bcf933a631496cf2c9dcee3faf055d3.png" alt="\mathrm{S/m}"/>. Consult the documentation in the
+header of the output file for layout.</p>
+</div>
+<div class="section" id="seebeck-coefficients">
+<h3><a class="toc-backref" href="#id3">Seebeck coefficients</a><a class="headerlink" href="#seebeck-coefficients" title="Permalink to this headline">¶</a></h3>
+<p>The Seebeck coefficient can be found in the file <code class="file docutils literal"><span class="pre">seebeck</span></code>.
+In units of <img class="math" src="_images/math/e3e77c7e378cccf89ba1fffa6e2a31435eae0c94.png" alt="\mu \mathrm{V/K}"/>. Consult the
+documentation in the header of the output file for layout.</p>
+</div>
+<div class="section" id="lorenz-coefficient">
+<h3><a class="toc-backref" href="#id4">Lorenz coefficient</a><a class="headerlink" href="#lorenz-coefficient" title="Permalink to this headline">¶</a></h3>
+<p>The Lorenz coefficient can be found in the file <code class="file docutils literal"><span class="pre">lorenz</span></code>.
+In units of <img class="math" src="_images/math/4b9404eca2d0336e98813f8e6bdd66527baedf68.png" alt="10^{-8} \mathrm{V^2/K^2}"/>. Consult the
+documentation in the header of the output file for layout.</p>
+</div>
+<div class="section" id="the-electrothermal-conductivity">
+<h3><a class="toc-backref" href="#id5">The electrothermal conductivity</a><a class="headerlink" href="#the-electrothermal-conductivity" title="Permalink to this headline">¶</a></h3>
+<p>The electrical part of the thermal conductivity can be found in
+the file <code class="file docutils literal"><span class="pre">kappae</span></code>. In units of <img class="math" src="_images/math/bdb46f3bea010c6f32a67dc64f16a6e34f297257.png" alt="\mathrm{W}/\mathrm{mK}"/></p>
+</div>
+<div class="section" id="the-charge-carrier-concentration">
+<h3><a class="toc-backref" href="#id6">The charge carrier concentration</a><a class="headerlink" href="#the-charge-carrier-concentration" title="Permalink to this headline">¶</a></h3>
+<p>The charge carrier concentration can be located in the file <code class="file docutils literal"><span class="pre">cc</span></code>.
+In units of <img class="math" src="_images/math/a09ef94619238dd7673f569ab91ca1d6b1a0a6f4.png" alt="10^{21} \mathrm{cm}^{-3}"/>. Consult the
+documentation in the header of the output file for layout.</p>
+</div>
+<div class="section" id="the-hall-coefficient">
+<h3><a class="toc-backref" href="#id7">The Hall coefficient</a><a class="headerlink" href="#the-hall-coefficient" title="Permalink to this headline">¶</a></h3>
+<p>The Hall coefficient (big R) can be located in the file <code class="file docutils literal"><span class="pre">hall</span></code>.
+In units of <img class="math" src="_images/math/ef0c3e58cff9399cadcd89177cd681012bfdb5dc.png" alt="\mathrm{cm}^3/\mathrm{C}"/>. Consult the
+documentation in the header of the output file for layout.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">NOT YET IMPLEMENTED WHEN FIRST-PRINCIPLE INPUT IS
+UTILIZED (ONLY FILLED WITH BOGUS DATA).
+ONLY WORKS FOR SPHERICAL BANDS AT THE MOMENT.</p>
+</div>
+</div>
+<div class="section" id="the-relaxation-times">
+<h3><a class="toc-backref" href="#id8">The relaxation times</a><a class="headerlink" href="#the-relaxation-times" title="Permalink to this headline">¶</a></h3>
+<p>The total relaxation time for each band can be found in
+<code class="file docutils literal"><span class="pre">scattering_band_n</span></code>, for band number <cite>n</cite>. In units of fs.</p>
+</div>
+</div>
+<div class="section" id="visualization">
+<h2><a class="toc-backref" href="#id9">Visualization</a><a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
+<p>Data can easily be visualized with Gnuplot. Currently no automatic
+visualization is performed. Data is blocked on temperature.</p>
+</div>
 </div>
 
 

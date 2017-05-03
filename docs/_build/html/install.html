@@ -143,13 +143,21 @@
 <h1>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h1>
 <p>Please consult the <code class="file docutils literal"><span class="pre">setup.py</span></code> file for details on
 how to configure the location of the include and libraries.
-Then execute:</p>
+Then execute</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build_ext</span> <span class="o">--</span><span class="n">inplace</span>
 </pre></div>
 </div>
 <p>And you should be able to now execute t4me.py which is
-the main driver routine:</p>
+the main driver routine</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">t4me</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>This should execute cleanly. However, it might be usefull to
+run T4ME from other locations. In order to for this to work, the
+main directory of T4ME needs to be added to your <code class="docutils literal"><span class="pre">PYTHONPATH</span></code>
+environmental variable. Usually, this can be done (in bash) by
+adding the following to your <code class="file docutils literal"><span class="pre">.bashrc</span></code> or <code class="file docutils literal"><span class="pre">.bash_profile</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>export PYTHONPATH=$PYTHONPATH:/home/username/somepath/t4me
 </pre></div>
 </div>
 </div>

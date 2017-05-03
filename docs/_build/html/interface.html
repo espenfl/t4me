@@ -280,7 +280,7 @@ later. Flags are automatically set for this. The bandstructure
 configuration file is still read due to the need of the
 scattering properties etc.</p>
 <p>This interface is enabled by setting <cite>read</cite> in the general
-configuration file to &#8220;vasp&#8221;.</p>
+configuration file to vasp.</p>
 </dd></dl>
 
 <dl class="function">
@@ -545,6 +545,48 @@ parameters needed for later processing.</p>
 in the YAML parameter file is not overwritten.</p>
 <p>Additional parameters pertaining VASP are stored inside the <cite>Param()</cite>
 object with a <cite>vasp</cite> preemble, i.e. <cite>param.vasp_something</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="interface.read_band_parameters">
+<code class="descclassname">interface.</code><code class="descname">read_band_parameters</code><span class="sig-paren">(</span><em>bs</em>, <em>numbands</em>, <em>location=None</em>, <em>filename=None</em><span class="sig-paren">)</span><a class="headerlink" href="#interface.read_band_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads and stores the information in the band
+parameters configuration file (bandparam.yml).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bs</strong> : object</p>
+<blockquote>
+<div><p>The active <cite>Bandstructure()</cite> object.</p>
+</div></blockquote>
+<p><strong>numbands</strong> : int</p>
+<blockquote>
+<div><p>The number of bands</p>
+</div></blockquote>
+<p><strong>location</strong> : string, optional</p>
+<blockquote>
+<div><p>The folder in which the band configuration
+file is placed. Defaults to the relative
+folder &#8220;input&#8221;.</p>
+</div></blockquote>
+<p><strong>filename</strong> : string, optional</p>
+<blockquote>
+<div><p>The filename of the band configuration file.
+Defaults to bandparam.yml.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Reads and stores the values in the band configuration file.
+When writing custom interfaces it is sufficient to call this
+routine in order for the setup of the individual band
+parameters to be consistent.</p>
 </dd></dl>
 
 </div>

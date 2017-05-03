@@ -47,7 +47,7 @@ Interpolates the input band structure to a grid density of
 k-point grid.
 
 ``dispersion_interpolate_step_size``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The target k-point step size in inverse AA. In order for this
 parameter to work, the user have to set
 

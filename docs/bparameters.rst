@@ -179,8 +179,8 @@ the scattering mechanisms are given.
 ``select_scattering``
 ~~~~~~~~~~~~~~~~~~~~~
 Determines which scattering mechnisms to apply for the current
-band. Set element to `1` to include
-scattering, `0` otherwise.
+band. Set element to 1 to include
+scattering, 0 otherwise.
 Currently the following scattering mechanisms have been
 implemented (the number indicate array index, starting at 1):
 

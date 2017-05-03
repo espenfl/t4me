@@ -9,3 +9,5 @@ are encouraged to write tests for any added functionality.
 
 Tests can be run by setting the ``run_tests`` in the general parameter file,
 typically the file :file:`param.yml`.
+
+Most of the tests rely on the GSL library, so please install it.

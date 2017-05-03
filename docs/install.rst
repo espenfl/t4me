@@ -6,7 +6,7 @@ how to configure the location of the include and libraries.
 
 Only Spglib (in principle the only requirement for minimal
 functionality against calculations based on first-principle
-data) is included as a submodule. This can be activated by
+data) is included as a Git submodule. This can be activated by
 
 ::
 
@@ -22,7 +22,11 @@ And Spglib can be build with the included :file:`build_spglib`
 It is possible to build Spglib elsewhere, but consult
 :file:`build_spglib` and make sure that the
 :file:`tetrahedron_method.h` is also inside the include
-directory.
+directory. For instance, if access to Git is difficult one
+should make a `spglib` folder in the main T4ME directory
+and place a recent Spglib version there. This would give the
+same data structure as if using the Git submodule.
+The build script :file:`build_spglib` can then be executed.
 
 All other libraries need to be built externally and linked in.
 

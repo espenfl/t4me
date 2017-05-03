@@ -16,8 +16,13 @@
 # Do you want to interpolate the supplied
 # bandstructure?
 dispersion_interpolate: True # n/a
-# What is the target k-point sampling?
+# What is the target k-point sampling? Set to [0,0,0]
+# if you rather want to use
+# dispersion_interpolate_step_size
 dispersion_interpolate_sampling: [81,81,81] # n/a
+# What is the target k-point step size along each direction
+# in units of inverse AA?
+dispersion_interpolate_step_size: [0.1, 0.1, 0.1]
 # What interpolation method to use?
 dispersion_interpolate_method: "wildmagic" # n/a
 # What sub method to use?
@@ -28,7 +33,7 @@ dispersion_interpolate_type: "akima" # n/a
 # velocities after the dispersions have been
 # interpolated (used by default for the interpolat
 # routines that do not support velocity extraction)
-dispersion_velocities_numdiff: True # n/a
+dispersion_velocities_numdiff: False # n/a
 # Do you want to dump dispersion line to file before
 # interpolation?
 dispersion_write_preinter: False # n/a

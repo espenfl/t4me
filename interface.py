@@ -181,14 +181,14 @@ def lattice_vasp(lattice, location=None, filename=None):
     if filename is None:
         # check param as well
         if lattice.param.readfile == "":
-            vasp_filename = "input/vasprun.xml"
+            vasp_filename = "vasprun.xml"
         else:
             vasp_filename = lattice.param.readfile
+    if location is not None:
+        vasp_filename = location + "/" + vasp_filename
     else:
-        if location is not None:
-            vasp_filename = location + "/" + filename
-        else:
-            vasp_filename = "input/" + filename
+        vasp_filename = "input/" + vasp_filename
+    utils.check_file(vasp_filename)
     tree = ET.ElementTree(file=vasp_filename)
     # fetch symprec
     lattice.param.vasp_symprec = float(
@@ -569,14 +569,14 @@ def bandstructure_vasp(bs, location=None, filename=None):
     if filename is None:
         # check param as well
         if bs.param.readfile == "":
-            vasp_filename = "input/vasprun.xml"
+            vasp_filename = "vasprun.xml"
         else:
             vasp_filename = bs.param.readfile
+    if location is not None:
+        vasp_filename = location + "/" + vasp_filename
     else:
-        if location is not None:
-            vasp_filename = location + "/" + filename
-        else:
-            vasp_filename = "input/" + filename
+        vasp_filename = "input/" + vasp_filename
+    utils.check_file(vasp_filename)
     tree = ET.ElementTree(file=vasp_filename)
 
     # fetch nelect

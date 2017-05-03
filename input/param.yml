@@ -15,7 +15,7 @@
 # -------------------------------------------------------#
 # Do you want to interpolate the supplied
 # bandstructure?
-dispersion_interpolate: True # n/a
+dispersion_interpolate: False # n/a
 # What is the target k-point sampling? Set to [0,0,0]
 # if you rather want to use
 # dispersion_interpolate_step_size
@@ -250,4 +250,4 @@ onlytotalrate: True
 # Paralel mode?
 parallel: False
 # Run tests? If so, nothing else is done
-run_tests: True
+run_tests: False

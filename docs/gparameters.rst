@@ -46,6 +46,24 @@ Interpolates the input band structure to a grid density of
 45, 45 and 45 k-points along the unit axis of the supplied
 k-point grid.
 
+``dispersion_interpolate_step_size``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The target k-point step size in inverse AA. In order for this
+parameter to work, the user have to set
+
+::
+
+   dispersion_interpolate_sampling: [0,0,0]
+
+Example:
+::
+
+   dispersion_interpolate_sampling: [0.1,0.1,0.1]
+
+Creates a k-point sampling that is at least as dense as to give
+a step size of 0.1 inverse AA between each k-point along each
+reciprocal axis.
+
 ``dispersion_interpolate_method``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Choses which interpolative method to use

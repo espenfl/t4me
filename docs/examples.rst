@@ -188,6 +188,28 @@ Of type X.
 Request a k-point sampling in the full Brillouin zone of
 11 points along each reciprocal unit cell vector.
 
+If one uses the Fermi-Dirac integrals, i.e. setting
+
+::
+
+   transport_method: "closed"
+
+or
+
+::
+
+   transport_method: "numeric"
+   
+the entries in this file is of no importance. However, as
+soon as
+
+::
+
+   transport_method: "numerick"
+
+the entries matter, for the symmetry, k-point grid layout,
+volume scaling factors etc.
+
 Execution
 ~~~~~~~~~
 After all parameters have been set (should only be necessary

@@ -110,11 +110,7 @@ transport_energycutband: 1.0 # eV
 transport_include_bands: [] # n/a
 # Do you want to use the analytical spherical scattering
 # models?
-<<<<<<< HEAD
-transport_use_analytic_scattering: True  # n/a
-=======
 transport_use_analytic_scattering: False  # n/a
->>>>>>> 92a8d864cc102828c4721ad103fa88c463a4b13f
 # Do you want to calculate the scattering on the fly
 # during integration?
 transport_use_scattering_ontfly: False # n/a
@@ -254,8 +250,4 @@ onlytotalrate: True
 # Paralel mode?
 parallel: False
 # Run tests? If so, nothing else is done
-<<<<<<< HEAD
 run_tests: True
-=======
-run_tests: False
->>>>>>> 92a8d864cc102828c4721ad103fa88c463a4b13f

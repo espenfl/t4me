@@ -155,7 +155,7 @@ Example:
    dispersion_write_end: [0.5, 0.0, 0.0]
 
 ``dispersion_num_kpoints_along_line``
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 How many samples to use along the line to be extracted.
 
 Example:

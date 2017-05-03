@@ -5,8 +5,6 @@ The transport coefficients are written to the `output` directory.
 The log file :file:`info.log` is also written in this directory
 and can be monitored during a run to check the process.
 
-The following files are of importance:
-
 Files
 -----
 
@@ -45,7 +43,7 @@ The Hall coefficient (big R) can be located in the :file:`hall`.
 In units of :math:`\mathrm{cm}^3/\mathrm{C}`. Consult the documentation
 in the header of the output file for layout.
 
-.. warning: NOT YET IMPLEMENTED WHEN FIRST-PRINCIPLE INPUT IS UTILIZED
+.. warning:: NOT YET IMPLEMENTED WHEN FIRST-PRINCIPLE INPUT IS UTILIZED
    (ONLY FILLED WITH BOGUS DATA). ONLY WORKS FOR SPHERICAL
    BANDS AT THE MOMENT.
 

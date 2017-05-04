@@ -1850,16 +1850,17 @@ class Bandstructure():
         # included
         # WE ONLY DO THIS IF kpoint_mesh IS None
         if kpoint_mesh is None:
-            logger.info("The kpoint mesh have been adjusted in the "
-                        "interpolation routines and sqeezed into the "
-                        "original bz zone to avoid extrapolation issues. "
-                        "Be carefull when modifying this grid in the future.")
             lattice_old = copy.deepcopy(self.lattice)
             # sets if we should use the old scaling factor (problems with
             # even grids), the new approach is tested and should allow
             # to use even and odd grids
             old_scaling_factor = False
             if itype != "skw":
+                logger.info("The kpoint mesh have been adjusted in the "
+                            "interpolation routines and sqeezed into the "
+                            "original bz zone to avoid extrapolation issues. "
+                            "Be carefull when modifying this grid in the "
+                            "future.")
                 if old_scaling_factor:
                     # calculate scaling factor
                     # need to make sure that all min/max points along each

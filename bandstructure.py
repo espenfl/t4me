@@ -1769,13 +1769,15 @@ class Bandstructure():
 
         gen_velocities = self.gen_velocities
         if gen_velocities and ivelocities:
-            if not ((itype == "einspline") or (itype == "wildmagic")):
+            if not ((itype == "einspline") or (itype == "wildmagic")
+                    or (itype == "skw")):
                 logger.error("Gradient extraction for the band "
                              "velocities are only supported for the "
                              "einspline/wildmagic_akima/"
                              "wildmagic_tricubic_bspline/"
                              "wildmagic_tricubic_exact/"
-                             "wildmagic_trilinear interpolation method. "
+                             "wildmagic_trilinear/"
+                             "skw interpolation method. "
                              "Please change and rerun. Exiting.")
                 sys.exit(1)
 

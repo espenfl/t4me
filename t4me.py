@@ -145,7 +145,7 @@ def main():
     if param.dispersion_interpolate:
         logger.info("Pre-interpolating the dispersion data.")
         if bs.gen_velocities and not param.dispersion_velocities_numdiff:
-            if lat.regular:
+            if lat.regular or param.dispersion_interpolate_method == "skw":
                 # for a regular grid it is okey for us to extract velocities
                 # on the fly
                 logger.info("Interpolating the energies and extracting the "

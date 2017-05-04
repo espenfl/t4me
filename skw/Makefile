@@ -7,7 +7,7 @@ CC = g++
 CFLAGS = -fPIC -std=c++11
 LD = ar rvs
 #DEBUG = -g -DINFO -DDEBUG_FFT
-#DEBUG = -DINFO 
+DEBUG = -DINFO 
 
 default: $(TARGET)
 

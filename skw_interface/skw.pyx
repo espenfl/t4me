@@ -39,13 +39,13 @@ def interpolate(np.ndarray[double, ndim=2, mode="c"] energies not None, np.ndarr
     # Calculate the size of the output array from SKW. This has to be done
     # since we cannot utilize dynamical resizing etc. This is not very nice
     # so consider to fix this in the future.
+    rmax = np.zeros(3, dtype=int)
     latvec_norm = np.linalg.norm(lattice, axis=1)
     latvec_norm_longest = np.argmax(latvec_norm)
     k_points_along_longest = np.int(
         np.floor(ksampling[latvec_norm_longest] / 2.0))
     vol_fact = np.power(6.0 / np.pi, 1.0 / 3.0)
     factor = np.power(star_radius_factor, 1.0 / 3.0)
-    rmax = np.zeros(3, dtype=int)
     rmax[latvec_norm_longest] = np.int(
         np.ceil(factor * vol_fact * k_points_along_longest))
     if latvec_norm_longest == 0:
@@ -70,7 +70,8 @@ def interpolate(np.ndarray[double, ndim=2, mode="c"] energies not None, np.ndarr
             np.ceil(factor * vol_fact * k_points_along_longest *
                     latvec_norm[2] / latvec_norm[1]))
 
-    est_num_ikpoints = (2 * rmax[0] + 1) * \
+    # here we multiply by a factor 2 in addition to have some overhead
+    est_num_ikpoints = 2 * (2 * rmax[0] + 1) * \
         (2 * rmax[1] + 1) * (2 * rmax[2] + 1)
 
     # use one dimensional linear arrays here since they are overpadded in size

@@ -25,7 +25,7 @@ dispersion_interpolate_sampling: [21,21,21] # n/a
 dispersion_interpolate_step_size: [0.1, 0.1, 0.1]
 # The expansion factor (number of R vectors in the
 # radius) of the SKW interpolation routine
-skw_expansion_factor: 4 # n/a
+skw_expansion_factor: 15 # n/a
 # What interpolation method to use?
 dispersion_interpolate_method: "skw" # n/a
 # What sub method to use?
@@ -36,7 +36,7 @@ dispersion_interpolate_type: "akima" # n/a
 # velocities after the dispersions have been
 # interpolated (used by default for the interpolat
 # routines that do not support velocity extraction)
-dispersion_velocities_numdiff: True # n/a
+dispersion_velocities_numdiff: False # n/a
 # Do you want to dump dispersion line to file before
 # interpolation?
 dispersion_write_preinter: False # n/a
@@ -105,7 +105,7 @@ transport_chempot_min: -0.4 # eV
 transport_chempot_max: 1.0 # eV
 # The samples between the minimum and maximum of
 # the chemical potential:
-transport_chempot_samples: 20 # n/a
+transport_chempot_samples: 100 # n/a
 # Drop bands in the calculation that lie outside the
 # chemical potential range pluss and minus the following:
 transport_energycutband: 1.0 # eV

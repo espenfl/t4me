@@ -2432,15 +2432,6 @@ class Bandstructure():
                         "routines within symprec defined in params.yml. "
                         "Exiting.")
                     sys.exit(1)
-                # write information regarding how dense of a mesh was
-                # generated with the given SKW expansion factor since this is
-                # not know a priori
-                logger.info("The SKW interpolation routine with an expansion "
-                            "factor of " + str(factor) +
-                            " generated a new mesh "
-                            "of " + str(iksampling[0]) + "x" + str(iksampling[1]) +
-                            "x" + str(iksampling[2]))
-
             self.energies = ien
             if ivelocities or gen_velocities:
                 self.velocities = ivel

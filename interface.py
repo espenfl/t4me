@@ -934,7 +934,12 @@ def bandstructure_vasp(bs, location=None, filename=None):
                        "be used. Hope you know what your are doing. "
                        "We recommend setting transport_use_analytic to "
                        "False in order to invoke the numeric routines to "
-                       "calculate the carrier scattering. Continuing.")
+                       "calculate the carrier scattering. "
+                       "Also, in this case "
+                       "the program might use an extreme amount of memory "
+                       "since the scattering arrays are stored for all "
+                       "possible mechanisms, not just the enabled ones. "
+                       "Continuing.")
     if bandcount != numbands:
         logger.error(
             "The number of band parameters in bandparams.yml does not "

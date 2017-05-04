@@ -25,7 +25,7 @@ dispersion_interpolate_sampling: [21,21,21] # n/a
 dispersion_interpolate_step_size: [0.1, 0.1, 0.1]
 # The expansion factor (number of R vectors in the
 # radius) of the SKW interpolation routine
-skw_expansion_factor: 15 # n/a
+skw_expansion_factor: 8 # n/a
 # What interpolation method to use?
 dispersion_interpolate_method: "skw" # n/a
 # What sub method to use?

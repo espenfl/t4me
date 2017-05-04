@@ -82,7 +82,7 @@ void fetch_sym_ops(std::vector<std::vector<double> > &lattice, std::vector<std::
    of a set of linear equations.
 
    In this context the lattice vectors are used to interpolate the band dispersion by using
-   EFL:   a plane wave expansion of these lattice vectors and (NEW AND ORGINAL?) the kpoints. 
+   a plane wave expansion of these lattice vectors and the kpoints. 
    This interpolation scheme is often termed Fourier interpolation, star interpolation etc.
    We use the translation symmetry to our advantage. In addition the point symmetry is used
    to exclude symmetry equivalent generated lattice vectors.
@@ -272,7 +272,7 @@ void generate_lat_vec(std::vector<std::vector<double> > &lattice, std::vector<st
     if (add_vector==true) {
       r.push_back(r_tmp[r_index[i]]);
       rl.push_back(r_length[r_index[i]]);
-      INFO_DUMP(std::cout << "SWK: storing lattice vector: " << std::setw(2) << r_tmp[r_index[i]][0] << ' ' << std::setw(2) << r_tmp[r_index[i]][1] << ' ' << std::setw(2) << r_tmp[r_index[i]][2] << ", of length=" << r_length[r_index[i]] << std::endl);
+      INFO_DUMP(std::cout << "SKW: storing lattice vector: " << std::setw(2) << r_tmp[r_index[i]][0] << ' ' << std::setw(2) << r_tmp[r_index[i]][1] << ' ' << std::setw(2) << r_tmp[r_index[i]][2] << ", of length=" << r_length[r_index[i]] << std::endl);
     }
   }
   INFO_DUMP(std::cout << "SKW: total number of points remaining after symmetrization: " << r.size() << std::endl); 
@@ -527,7 +527,7 @@ void interpolate(std::vector<std::vector<double> > &epsilons, std::vector<std::v
   int n=n0*n1*n2;
 
   int num_bands=epsilons.size();
-  
+
   // resize vectors
   kpoints.resize(n,std::vector<double> (3));
   energies.resize(num_bands,std::vector<double> (n));
@@ -537,8 +537,7 @@ void interpolate(std::vector<std::vector<double> > &epsilons, std::vector<std::v
   fftw_complex *in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex)*n);
   fftw_complex *out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex)*n);
 
-  // now fill input array with the epsilons for one test band
-  // later add loop for band
+  // now fill input array with the epsilons
   for (int band=0;band<num_bands;band++) {
     // do energies and velocities, energies slotted at dir=3
     for (int dir=3;dir>=0;dir--) {

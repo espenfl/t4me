@@ -31,14 +31,48 @@ cdef extern from "skw_interface.cpp":
 def interpolate(np.ndarray[double, ndim=2, mode="c"] energies not None, np.ndarray[double, ndim=2, mode="c"] kpoints not None, np.ndarray[int, ndim=1, mode="c"] ksampling not None, np.ndarray[double, ndim=2, mode="c"] lattice not None, np.ndarray[double, ndim=2, mode="c"] positions not None, np.ndarray[int, ndim=1, mode="c"] species not None, double star_radius_factor):
     # configure logger
     logger = logging.getLogger(sys._getframe().f_code.co_name)
-    # this is slightly bigger than the expected array size, disect later
-    # we want the determination to be handled in the C routine,
-    # a good estimate is
-    cdef int est_num_ikpoints = int(np.power(np.ceil(star_radius_factor * 6.0 *
-                                                     np.amax(ksampling) / np.pi), 3.0))
+
     cdef int num_atoms = species.shape[0]
     cdef int num_kpoints = kpoints.shape[0]
     cdef int num_bands = energies.shape[0]
+
+    # Calculate the size of the output array from SKW. This has to be done
+    # since we cannot utilize dynamical resizing etc. This is not very nice
+    # so consider to fix this in the future.
+    latvec_norm = np.linalg.norm(lattice, axis=1)
+    latvec_norm_longest = np.argmax(latvec_norm)
+    k_points_along_longest = np.int(
+        np.floor(ksampling[latvec_norm_longest] / 2.0))
+    vol_fact = np.power(6.0 / np.pi, 1.0 / 3.0)
+    factor = np.power(star_radius_factor, 1.0 / 3.0)
+    rmax = np.zeros(3, dtype=int)
+    rmax[latvec_norm_longest] = np.int(
+        np.ceil(factor * vol_fact * k_points_along_longest))
+    if latvec_norm_longest == 0:
+        rmax[1] = np.int(
+            np.ceil(factor * vol_fact * k_points_along_longest *
+                    latvec_norm[0] / latvec_norm[1]))
+        rmax[2] = np.int(
+            np.ceil(factor * vol_fact * k_points_along_longest *
+                    latvec_norm[0] / latvec_norm[2]))
+    if latvec_norm_longest == 1:
+        rmax[0] = np.int(
+            np.ceil(factor * vol_fact * k_points_along_longest *
+                    latvec_norm[1] / latvec_norm[0]))
+        rmax[2] = np.int(
+            np.ceil(factor * vol_fact * k_points_along_longest *
+                    latvec_norm[1] / latvec_norm[2]))
+    else:
+        rmax[0] = np.int(
+            np.ceil(factor * vol_fact * k_points_along_longest *
+                    latvec_norm[2] / latvec_norm[0]))
+        rmax[1] = np.int(
+            np.ceil(factor * vol_fact * k_points_along_longest *
+                    latvec_norm[2] / latvec_norm[1]))
+
+    est_num_ikpoints = (2 * rmax[0] + 1) * \
+        (2 * rmax[1] + 1) * (2 * rmax[2] + 1)
+
     # use one dimensional linear arrays here since they are overpadded in size
     # it is easier to disect away the end on linear arrays
     cdef np.ndarray[double, ndim = 1, mode = "c"] ikpoints = np.zeros(est_num_ikpoints * 3, dtype="double")

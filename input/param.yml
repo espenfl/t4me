@@ -15,7 +15,7 @@
 # -------------------------------------------------------#
 # Do you want to interpolate the supplied
 # bandstructure?
-dispersion_interpolate: False # n/a
+dispersion_interpolate: True # n/a
 # What is the target k-point sampling? Set to [0,0,0]
 # if you rather want to use
 # dispersion_interpolate_step_size
@@ -23,8 +23,11 @@ dispersion_interpolate_sampling: [21,21,21] # n/a
 # What is the target k-point step size along each direction
 # in units of inverse AA?
 dispersion_interpolate_step_size: [0.1, 0.1, 0.1]
+# The expansion factor (number of R vectors in the
+# radius) of the SKW interpolation routine
+skw_expansion_factor: 4 # n/a
 # What interpolation method to use?
-dispersion_interpolate_method: "wildmagic" # n/a
+dispersion_interpolate_method: "skw" # n/a
 # What sub method to use?
 dispersion_interpolate_type: "akima" # n/a
 # Use numerical differentiation to calculate the
@@ -205,9 +208,6 @@ cubature_abs_err: 0.0 # n/a
 # this and the max_it is recommended. Please check for
 # convergence.
 cubature_rel_err: 0.01 # n/a
-# The expansion factor (number of R vectors in the
-# radius) of the SKW interpolation routine
-skw_expansion_factor: 30 # n/a
 # The carrier valence energy:
 carrier_valence_energy: 0.0 # eV
 # The carrier conduction energy:
@@ -242,7 +242,7 @@ symprec: 1.0e-6
 # Dump tight binding construction data to std out?
 displaytb: False # n/a
 # Print output from libraries bundled with T4ME
-libinfo: True # n/a
+libinfo: False # n/a
 # Only store total scattering rate
 # (saves memory), but need to be enabled to see
 # the values of each mechanism
@@ -250,4 +250,4 @@ onlytotalrate: True
 # Paralel mode?
 parallel: False
 # Run tests? If so, nothing else is done
-run_tests: "slow"
+run_tests: False

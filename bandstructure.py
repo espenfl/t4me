@@ -2383,20 +2383,23 @@ class Bandstructure():
             species = self.lattice.species
             factor = self.param.skw_expansion_factor
             ksampling = self.lattice.ksampling
+
             # SKW works with the IBZ
-            # controlling SKW grid is difficult, so just eat it
+            # controlling the final SKW grid density is difficult,
+            # so just eat it...modifications to this later should be
+            # avoided
             new_grid, ien, ivel, iksampling = skw_interface.\
                 interpolate(np.ascontiguousarray(energies, dtype="double"),
                             np.ascontiguousarray(
-                    old_grid, dtype="double"),
-                    np.ascontiguousarray(
-                    ksampling, dtype="intc"),
-                    np.ascontiguousarray(
-                    unitcell, dtype="double"),
-                    np.ascontiguousarray(
-                    positions, dtype="double"),
-                    np.ascontiguousarray(species, dtype="intc"),
-                    factor)
+                                old_grid, dtype="double"),
+                            np.ascontiguousarray(
+                                ksampling, dtype="intc"),
+                            np.ascontiguousarray(
+                                unitcell, dtype="double"),
+                            np.ascontiguousarray(
+                                positions, dtype="double"),
+                            np.ascontiguousarray(species, dtype="intc"),
+                            factor)
 
         else:
             if gen_velocities or ivelocities:
@@ -2429,6 +2432,14 @@ class Bandstructure():
                         "routines within symprec defined in params.yml. "
                         "Exiting.")
                     sys.exit(1)
+                # write information regarding how dense of a mesh was
+                # generated with the given SKW expansion factor since this is
+                # not know a priori
+                logger.info("The SKW interpolation routine with an expansion "
+                            "factor of " + str(factor) +
+                            " generated a new mesh "
+                            "of " + str(iksampling[0]) + "x" + str(iksampling[1]) +
+                            "x" + str(iksampling[2]))
 
             self.energies = ien
             if ivelocities or gen_velocities:

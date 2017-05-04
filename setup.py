@@ -3,7 +3,7 @@ from Cython.Distutils import build_ext
 import numpy
 
 # THE ONLY STRICT DEPENDENCIES NEEDED ARE
-# SPGLIB 1.7.4. THE OTHERS ARE OPTIONAL AND IF NOT
+# SPGLIB. THE OTHERS ARE OPTIONAL AND IF NOT
 # INSTALLED WILL LIMIT THE CHOICE OF INTEGRATION AND
 # INTERPOLATION TECHNIQUES. UNCOMMENT THE OPTIONAL
 # IF YOU FEEL YOU WANT TO TEST THESE FEATURES.
@@ -90,15 +90,15 @@ ext = [
     #              extra_compile_args=["-O3", "-w",
     #                                         "-std=c++11"],
     #              language="c++"),
-    #    Extension("skw_interface", ["skw_interface/skw.pyx"],
-    #              include_dirs=[spglibinclude, mklinclude,
-    #                            skwinclude, fftwinclude, numpy.get_include()],
-    #              library_dirs=[spgliblib, fftwlib, mkllib, skwlib],
-    #              libraries=["stdc++", "mkl_rt", "pthread",
-    #                         "m", "dl", "skw", "symspg", "fftw3xc_intel"],
-    #              extra_compile_args=[
-    #                  "-std=c++11"],
-    #              language="c++"),
+    Extension("skw_interface", ["skw_interface/skw.pyx"],
+              include_dirs=[spglibinclude, mklinclude,
+                            skwinclude, fftwinclude, numpy.get_include()],
+              library_dirs=[spgliblib, fftwlib, mkllib, skwlib],
+              libraries=["stdc++", "mkl_rt", "pthread",
+                         "m", "dl", "skw", "symspg", "fftw3xc_intel"],
+              extra_compile_args=[
+                  "-std=c++11"],
+              language="c++"),
     # special include for tetrahedron_method.c
     # (to be fixed in the future) when this is fully separted
     # in spglib, tetrahedron_method is compiled and linked manually

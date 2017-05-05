@@ -142,7 +142,9 @@ def main():
                                              itype_sub="linear")
 
     # maybe the user wants to pre-interpolate?
-    if param.dispersion_interpolate:
+    # but do not to this for tight binding stuff
+    if param.dispersion_interpolate and not \
+       param.dispersion_interpolate_method == "tb":
         logger.info("Pre-interpolating the dispersion data.")
         if bs.gen_velocities and not param.dispersion_velocities_numdiff:
             if lat.regular or param.dispersion_interpolate_method == "skw":

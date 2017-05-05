@@ -1727,13 +1727,7 @@ class Bandstructure():
                 sys.exit(1)
 
         if iksampling is None:
-            # here we also allow the user to specify the step size
-            if np.all(self.param.dispersion_interpolate_sampling) == 0:
-                iksampling = self.lattice.fetch_ksampling_from_stepsize(
-                    self.param.dispersion_interpolate_step_size)
-            else:
-                iksampling = np.array(
-                    self.param.dispersion_interpolate_sampling)
+            iksampling = self.lattice.fetch_iksampling()
 
         # check if iksampling is sensible
         self.lattice.check_sensible_ksampling(iksampling)

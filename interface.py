@@ -53,19 +53,19 @@ def lattice_param_numpy(lattice, location=None, filename=None):
     positions : ndarray
         | Dimension: (N,3)
 
-        The positions of the N atoms in the unitcell in cartesian 
+        The positions of the N atoms in the unitcell in cartesian
         coordinates.
     species : ndarray
         | Dimension: (N)
 
-        Integer atomic numbers of the atomic species in the same 
-        order as positions. Hydrogen starts with 1, while the element X 
+        Integer atomic numbers of the atomic species in the same
+        order as positions. Hydrogen starts with 1, while the element X
         is located at 0. Otherwise it follows the periodic table.
     kmesh : object
         | Dimension: (3)
 
-        A `Kmesh()` obhect for the reciprocal mesh generation 
-        containment. Should include `sampling`, `mesh`, `mesh_ired` 
+        A `Kmesh()` obhect for the reciprocal mesh generation
+        containment. Should include `sampling`, `mesh`, `mesh_ired`
         and other parameters needed for later processing.
 
     Notes
@@ -152,24 +152,24 @@ def lattice_vasp(lattice, location=None, filename=None):
     species : ndarray
         | Dimension: (N)
 
-        Integer atomic numbers of the atomic species in the same 
-        order as positions. Hydrogen starts with 1, while the 
+        Integer atomic numbers of the atomic species in the same
+        order as positions. Hydrogen starts with 1, while the
         element X is located at 0. Otherwise
         it follows the periodic table.
     kmesh : object
         | Dimension: (3)
 
-        A `Kmesh()` object for the reciprocal mesh generation 
-        containment. Should include `sampling`, `mesh`, `mesh_ired` 
+        A `Kmesh()` object for the reciprocal mesh generation
+        containment. Should include `sampling`, `mesh`, `mesh_ired`
         and other parameters needed for later processing.
 
     Notes
     -----
-    Upon writing a custom interface, please make sure that the 
+    Upon writing a custom interface, please make sure that the
     parameters in the YAML parameter files are not overwritten.
 
-    Additional parameters pertaining VASP are stored inside the 
-    `Param()` object with a `vasp` preemble, i.e. 
+    Additional parameters pertaining VASP are stored inside the
+    `Param()` object with a `vasp` preemble, i.e.
     `param.vasp_something`.
 
     """
@@ -286,9 +286,7 @@ def lattice_vasp(lattice, location=None, filename=None):
         kpointsvasp[index] = np.fromstring(kpoint.text, sep=' ')
     # now sort according to k-point sort (z increasing
     # fastests) and store
-    k_sort_index = np.lexsort((kpointsvasp[:, 2],
-                               kpointsvasp[:, 1],
-                               kpointsvasp[:, 0]))
+    k_sort_index = utils.fetch_sorting_indexes(kpointsvasp)
     lattice.kdata.mesh_ired = np.ascontiguousarray(
         kpointsvasp[k_sort_index], dtype="double")
     lattice.kdata.mesh = None
@@ -298,15 +296,17 @@ def lattice_vasp(lattice, location=None, filename=None):
             (len(kpoints_full), 3), dtype='double', order='C')
         for index, kpoint in enumerate(kpoints_full):
             kpointsvasp_full[index] = np.fromstring(kpoint.text, sep=' ')
-        k_sort_index = np.lexsort((kpointsvasp_full[:, 2],
-                                   kpointsvasp_full[:, 1],
-                                   kpointsvasp_full[:, 0]))
+
+        k_sort_index = utils.fetch_sorting_indexes(kpointsvasp_full)
         lattice.kdata.mesh = np.ascontiguousarray(
             kpointsvasp_full[k_sort_index], dtype='double')
 
     # need this later to sort eigenvalues etc. (only store bz
     # if that is present, otherwise ibz)
     lattice.kdata.k_sort_index = k_sort_index
+
+    # VASP grids are borderless
+    lattice.kdata.borderless = True
 
     # no mapping relations read, generate later
     lattice.kdata.mapping_ibz_to_bz = None
@@ -316,21 +316,15 @@ def lattice_vasp(lattice, location=None, filename=None):
 
 def lattice_w90(lattice):
     """
-    Interface used to format the elements needed to generate 
-    the `Lattice()` object if the lattice is generated from 
+    Interface used to format the elements needed to generate
+    the `Lattice()` object if the lattice is generated from
     the Wannier90 win file.
 
     Parameters
     ----------
     lattice : object
-        A `Lattice()` object where we can store additional 
+        A `Lattice()` object where we can store additional
         parameters detected during setup for later access.
-    location : string, optional
-        The location of the Wannier90 file (.win) determining 
-        the celldata.
-    filename : string, optional
-        The filename of the Wannier90 file (.win) determining 
-        the celldata.
 
     Returns
     -------
@@ -341,13 +335,13 @@ def lattice_w90(lattice):
     positions : ndarray
         | Dimension: (N,3)
 
-        The positions of the N atoms in the unitcell in cartesian 
+        The positions of the N atoms in the unitcell in cartesian
         coordinates.
     species : ndarray
         | Dimension: (N)
 
-        Integer atomic numbers of the atomic species in the same 
-        order as positions. Hydrogen starts with 1, while the element 
+        Integer atomic numbers of the atomic species in the same
+        order as positions. Hydrogen starts with 1, while the element
         X is located at 0. Otherwise it follows the periodic table.
     kmesh : object
         A `Kmesh()` object for the reciprocal mesh generation containment.
@@ -379,6 +373,9 @@ def lattice_w90(lattice):
     wdata = wfile.readlines()
     positions = []
     atomtypes = []
+    positions_start = 0
+    positions_end = 0
+    positions_cart = False
     for i, line in enumerate(wdata):
         if "begin unit_cell_cart" in line.lower():
             unitcell = np.array([
@@ -389,8 +386,13 @@ def lattice_w90(lattice):
             sampling = np.array([int(element)
                                  for element in wdata[i].split()[2:6]],
                                 dtype='intc', order='C')
+        if "begin atoms_cart" in line.lower():
+            positions_cart = True
+            positions_start = i + 1
         if "begin atoms_frac" in line.lower():
             positions_start = i + 1
+        if "end atoms_cart" in line.lower():
+            positions_end = i
         if "end atoms_frac" in line.lower():
             positions_end = i
         if "begin kpoints" in line.lower():
@@ -399,7 +401,7 @@ def lattice_w90(lattice):
             kpoints_end = i
 
     numkpoints = np.prod(sampling)
-    kpointswannier = np.zeros((numkpoints, 3), dtype='double', order='C')
+    kpointswannier = np.zeros((numkpoints, 3))
     for i, line in enumerate(wdata[positions_start:positions_end]):
         splitted = line.split()
         positions.append([float(element)
@@ -411,39 +413,29 @@ def lattice_w90(lattice):
 
     for i, line in enumerate(wdata[kpoints_start:kpoints_end]):
         kpointswannier[i] = np.array(
-            [float(element) for element in line.split()],
-            dtype='double', order='C')
+            [float(element) for element in line.split()])
 
-    # now we need to sort, third index runs fastest
-    k_sort_index = np.lexsort((kpointswannier[:, 2],
-                               kpointswannier[:, 1],
-                               kpointswannier[:, 0]))
+    # pull k-points back into zone
+    lattice.pull_points_back_into_zone(kpointswannier)
+
+    # fetch sorting indexes
+    k_sort_index = utils.fetch_sorting_indexes(kpointswannier)
+
+    # sort k-points
     kpointswannier = np.ascontiguousarray(
         kpointswannier[k_sort_index], dtype='double')
 
-    # afaik wannier90 input is always in the [0,1] direct box, while
-    # VASP and we work in the [-0.5,0.5] box (at least for now)
-    # spglib defaults to right shifted grids for even samplings,
-    # so detect evenness
-    ksampling_is_even = [utils.is_even(element) for element in sampling]
-
-    # calculate shift and shift
-    for index in range(3):
-        if not ksampling_is_even[index]:
-            # odd
-            shift = 0.5
-            kpointswannier[:, index] = kpointswannier[:, index] - shift
-        else:
-            # even
-            shift = 0.5 - 1.0 / sampling[index]
-            kpointswannier[:, index] = kpointswannier[:, index] - shift
-
     lattice.unitcell = unitcell
+    # convert positions to direct coordinates
+    if positions_cart:
+        positions = lattice.cart_to_dir(positions, real=True)
     lattice.positions = positions
     lattice.species = species
     lattice.kdata.sampling = sampling
     lattice.kdata.mesh = kpointswannier
     lattice.kdata.k_sort_index = k_sort_index
+    # Assume borderless, need check for this
+    lattice.kdata.borderless = True
     lattice.kdata.mesh_ired = None
     lattice.kdata.mapping_bz_to_ibz = None
     lattice.kdata.mapping_ibz_to_bz = None
@@ -452,7 +444,7 @@ def lattice_w90(lattice):
 
 def bandstructure_param(bs, location=None, filename=None):
     """
-    Sets the bandstructure from the parameters in the 
+    Sets the bandstructure from the parameters in the
     bandstructure configuration file (default bandparam.yml).
     Also load and store the parameters.
 
@@ -534,12 +526,12 @@ def bandstructure_vasp(bs, location=None, filename=None):
     bs : object
         A `Bandstructure()` object.
     location : string, optional
-        The location of the VASP XML file. Defaults 
+        The location of the VASP XML file. Defaults
         to the "input" directory in the current working directory.
     filename : string, optional
         The filename of the VASP XML file to be read.
         Defaults to "vasprun.xml". The bandstructure
-        configuration file have to be named "bandparam.yml" 
+        configuration file have to be named "bandparam.yml"
         in this case.
 
     Returns
@@ -550,8 +542,8 @@ def bandstructure_vasp(bs, location=None, filename=None):
     -----
     This interface read and sets up the bandstructure based
     on a VASP XML file. Currently it does not read the band
-    velocities as VASP does not yet support this feature. 
-    However, work is in progress to enable this. The band 
+    velocities as VASP does not yet support this feature.
+    However, work is in progress to enable this. The band
     velocities have to be generated by an interpolation routine
     later. Flags are automatically set for this. The bandstructure
     configuration file is still read due to the need of the
@@ -1024,11 +1016,11 @@ def bandstructure_numpy(bs, filename, location=None):
     filename : string
         The filename of the NumPy data file to be read.
         The bandstructure
-        configuration file have to be named "bandparam.yml" 
+        configuration file have to be named "bandparam.yml"
         in this case.
     location : string, optional
         The location of the NumPy data
-        file. Defaults to the "input" directory in 
+        file. Defaults to the "input" directory in
         the current working directory.
 
     Returns
@@ -1039,13 +1031,13 @@ def bandstructure_numpy(bs, filename, location=None):
     -----
     This routine read NumPy datafiles containing the
     electron energy dispersions and optionally the band
-    velocities. 
+    velocities.
 
     | The datastructure of the supplied numpy array
     | should be on the following format:
     | [
-    | [kx], [ky], [kz], [e_1], [v_x_1], [v_y_1], [v_z_1], 
-    | [e_2], [v_x_2], [v_y_2], [v_z_2], ... , 
+    | [kx], [ky], [kz], [e_1], [v_x_1], [v_y_1], [v_z_1],
+    | [e_2], [v_x_2], [v_y_2], [v_z_2], ... ,
     | [e_n], [v_x_n], [v_y_n], [v_z_n]
     | ]
 
@@ -1053,7 +1045,7 @@ def bandstructure_numpy(bs, filename, location=None):
     present. Each column of data has the length of the number of
     k-point in the full BZ.
 
-    The bandstructure configuration file is still read due to 
+    The bandstructure configuration file is still read due to
     the need of the scattering properties etc.
 
     This interface is enabled by setting `read` in the general
@@ -1326,8 +1318,8 @@ def bandstructure_w90(bs, location=None, filename=None):
     """
     Sets the bandstructure from a Wannier90 output file
     that is fed into PythTB to reconstruct and (extrapolate
-    and interpolate the bandstructure on as dense grid as 
-    necessary). It also loads and stores the parameters in 
+    and interpolate the bandstructure on as dense grid as
+    necessary). It also loads and stores the parameters in
     the bandstructure configuration file (defaults to bandparam.yml).
 
     Parameters
@@ -1336,12 +1328,12 @@ def bandstructure_w90(bs, location=None, filename=None):
         A `Bandstructure()` object.
     location : string, optional
         The location of the Wannier90 input and output files.
-        Defaults to the "input" directory in the current 
+        Defaults to the "input" directory in the current
         working directory.
     filename : string, optional
-        The prefix of the Wannier90 input and output files 
-        to be read. Defaults to "wannier90" (default for VASP output). 
-        The bandstructure configuration file have to be named 
+        The prefix of the Wannier90 input and output files
+        to be read. Defaults to "wannier90" (default for VASP output).
+        The bandstructure configuration file have to be named
         "bandparam.yml" in this case.
 
     Returns
@@ -1352,12 +1344,12 @@ def bandstructure_w90(bs, location=None, filename=None):
     -----
     This interface load input and output files from a Wannier90
     calculation (which again can be done post-first-principles).
-    This is then fed into PythTB (if present) in order to reconstruct 
+    This is then fed into PythTB (if present) in order to reconstruct
     the electronic structure and interpolate the electron energy
     dispersions on as dense grid as needed. Presently there is no
     way to generate the band velocities so these has to be extracted
     by an interpolation routine later. Flags are automatically set
-    for this. Please consult the manual of 
+    for this. Please consult the manual of
     `PythTB <http://www.physics.rutgers.edu/pythtb/>`_ for how to
     prepare the correct Wannier90 input files and produce the
     necessary output files.
@@ -1391,6 +1383,19 @@ def bandstructure_w90(bs, location=None, filename=None):
         zero_energy=bs.param.dispersion_w90_tb_zero_energy,
         min_hopping_norm=bs.param.dispersion_w90_tb_min_hopping_norm,
         max_distance=bs.param.dispersion_w90_tb_max_distance)
+
+    # do we want the energies on the original grid or a denser one?
+    if (bs.param.dispersion_interpolate and
+            (bs.param.dispersion_interpolate_method == "tb")):
+        logger.info("Detected that the user want extract the energies "
+                    "at a denser grid than what was supplied when "
+                    "constructing the Wannier model. Switching the "
+                    "grid to the target grid.")
+        # fetch denser grid sampling
+        iksampling = bs.lattice.fetch_iksampling()
+        # regenerate grid and store
+        bs.lattice.create_kmesh_spg(iksampling)
+
     kmesh = bs.lattice.kmesh + 0.5
     energies = tb.solve_all(kmesh)
     # now, we do not have the velocities, but let us
@@ -1606,7 +1611,7 @@ def bandstructure_w90(bs, location=None, filename=None):
 
 def read_band_parameters(bs, numbands, location=None,
                          filename=None):
-    """ 
+    """
     Reads and stores the information in the band
     parameters configuration file (bandparam.yml).
 

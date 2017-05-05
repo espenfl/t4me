@@ -263,3 +263,48 @@ def config_logger(filename="/logging.yaml", level=None):
             level = logging.INFO
         logging.info("Setting default logger")
         logging.basicConfig(level=level)
+
+
+def fetch_sorting_indexes(data, order="C"):
+    """
+    Fetch the sorting indexes to sort an array
+    to either column or row order.
+
+    Parameters
+    ----------
+    data : ndarray
+        | Dimension: (N,M)
+
+        The input data array to be sorted.
+
+    order : {"C", "F"}
+
+        The sort order.
+
+    Returns
+    -------
+    sort_index : ndarray
+        | Dimension: (N,M)
+
+        The sorting indexes that can be used to order the array.
+
+    """
+
+    # set logger
+    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger.debug("Running fetch_sorting_indexes.")
+
+    # before sort, round the array to predefined accuracy in
+    # order to avoid scattered values, inform the user
+    logger.debug("Rounding the array before sort.")
+    decimals = int(str(constants.zerocut).split("-")[1].strip("0"))
+    data = np.around(data, decimals=decimals)
+
+    if order == "C":
+        return np.lexsort(np.transpose(data)[::-1])
+    elif order == "F":
+        return np.lexsort(np.transpose(data))
+    else:
+        logger.error("The requested sort order is not supported. "
+                     "Only C or F (Fortran) order is supported. "
+                     "Exiting.")

@@ -58,8 +58,7 @@ class Lattice():
             interface.lattice_vasp(self, location=location,
                                    filename=filename)
         elif self.param.read == "w90":
-            interface.lattice_w90(self, location=location,
-                                  filename=filename)
+            interface.lattice_w90(self)
         else:
             logging.info(
                 "Not setting up the the lattice in a traditional manner.")
@@ -73,6 +72,7 @@ class Lattice():
         self.ksampling = self.kdata.sampling
         self.ibz_weights = self.kdata.ibz_weights
         self.k_sort_index = self.kdata.k_sort_index
+        self.borderless = self.kdata.borderless
 
         # this one do nothing if both BZ, IBZ, mappings and weights are set
         # otherwise, it generates a new grid to set up these parameters
@@ -195,6 +195,10 @@ class Lattice():
                     sys.exit(1)
                 if not np.allclose(kmesh, self.kmesh,
                                    atol=self.param.symprec):
+                    np.set_printoptions(threshold=np.nan)
+                    print kmesh
+                    print self.kmesh
+                    sys.exit(1)
                     logger.error(
                         "The BZ points does not correspond to the BZ "
                         "points generated with spglib within symprec "
@@ -564,7 +568,7 @@ class Lattice():
         ndarray
             | Dimension: (3)
 
-            The lenght of each reciprocal lattice vector in 
+            The lenght of each reciprocal lattice vector in
             inverse AA.
 
         """
@@ -592,11 +596,11 @@ class Lattice():
 
         Notes
         -----
-        Regularly spaced and ordered grids are assumed. Also, the 
-        step size returned is with respect to the reciprocal unit 
-        cells unit vectors. If `direct` is True the step size between 
-        0 and 1 is returned, while for False, this step size is 
-        scaled by the length of the reciprocal unit vectors 
+        Regularly spaced and ordered grids are assumed. Also, the
+        step size returned is with respect to the reciprocal unit
+        cells unit vectors. If `direct` is True the step size between
+        0 and 1 is returned, while for False, this step size is
+        scaled by the length of the reciprocal unit vectors
         in :math:`AA^{-1}`.
 
         """
@@ -978,20 +982,20 @@ class Lattice():
         logger.info("Calling Spglib to set up the grid with a sampling "
                     "sampling of " + str(ksampling[0]) + "x" +
                     str(ksampling[0]) + "x" + str(ksampling[2]) + ".")
-        # the international symbol returned from spglib
-        if self.param.read == "vasp" or borderless:
+        if self.borderless:
+            borderless = True
+        if borderless:
             logger.info(
                 "Running borderless compatible k-point generation etc. "
-                "(VASP, SKW, etc.)")
-            # VASP does not include bz borders in the k-point set
-            # call spglib with symprec 10 times vasp value
+                "(VASP, SKW, W90, etc.)")
+            # the international symbol returned from spglib
             intsym = spglib_interface.get_reciprocal_mesh(
                 ksampling, np.ascontiguousarray(self.unitcell.T),
                 self.positions, self.species, shift, k,
                 spg_mapping, is_time_reversal=False,
                 symprec=self.param.symprec)
         else:
-            # call spglib
+            # the international symbol returned from spglib
             intsym = spglib_interface.get_reciprocal_mesh(
                 ksampling, np.ascontiguousarray(self.unitcell.T),
                 self.positions, self.species, shift, k,
@@ -1002,8 +1006,8 @@ class Lattice():
         # build array for IBZ
         k_ired = k[np.unique(spg_mapping, return_index=True)[1]]
         # sort mesh
-        k_sort_ired = np.lexsort((k_ired[:, 2], k_ired[:, 1], k_ired[:, 0]))
-        k_sort_full = np.lexsort((k[:, 2], k[:, 1], k[:, 0]))
+        k_sort_ired = utils.fetch_sorting_indexes(k_ired)
+        k_sort_full = utils.fetch_sorting_indexes(k)
         kmesh_ired = k_ired[k_sort_ired]
         kmesh_full = k[k_sort_full]
 
@@ -1018,9 +1022,9 @@ class Lattice():
         k_ired = kmesh_full[
             shuffle[np.sort(np.unique(shuffle,
                                       return_index=True)[1])]]
-        k_ired = k_ired[np.lexsort((k_ired[:, 2],
-                                    k_ired[:, 1],
-                                    k_ired[:, 0]))]
+        k_sort_ired = utils.fetch_sorting_indexes(k_ired)
+        k_ired = k_ired[k_sort_ired]
+
         mapping_ibz_to_bz = shuffle[k_sort_full]
         mapping_bz_to_ibz = np.zeros(mapping_ibz_to_bz.size, dtype=np.intc)
         for index, ibz_point in enumerate(np.unique(mapping_ibz_to_bz)):
@@ -1084,3 +1088,58 @@ class Lattice():
             regular = False
 
         return regular
+
+    def pull_points_back_into_zone(self, kpoints):
+        """
+        Pulls all points outside [-0.5,0.5] in direct
+        coordinates back into the BZ.
+
+        Parameters
+        ----------
+        kpoints : ndarray
+            | Dimension: (N, 3)
+
+            The N k-points to be checked and thrown back into
+            the zone. Should be in direct coordinates.
+
+        Returns
+        -------
+        None
+
+        """
+
+        # do positive side
+        kpoints[np.where(kpoints > 0.5)] = \
+            kpoints[np.where(kpoints > 0.5)] - 1.0
+
+        # then negative side
+        kpoints[np.where(kpoints < -0.5)] = \
+            kpoints[np.where(kpoints < -0.5)] + 1.0
+
+    def fetch_iksampling(self):
+        """
+        Fetches the a denser k-point sampling which is
+        for instance used when one would like to interpolate
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        iksampling : ndarray
+            | Dimension: (3)
+
+            The number of requested k-point sampling along each
+            reciprocal unit vector.
+
+        """
+
+        if np.all(self.param.dispersion_interpolate_sampling) == 0:
+            iksampling = self.lattice.fetch_ksampling_from_stepsize(
+                self.param.dispersion_interpolate_step_size)
+        else:
+            iksampling = np.array(
+                self.param.dispersion_interpolate_sampling)
+
+        return iksampling

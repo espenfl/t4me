@@ -19,8 +19,8 @@ localinclude = home + "/local/include"
 
 # Spglib
 # local
-#spgliblib = locallib
-#spglibinclude = localinclude + "/spglib"
+# spgliblib = locallib
+# spglibinclude = localinclude + "/spglib"
 # submodule (recommended)
 spgliblib = "spglib/lib"
 spglibinclude = "spglib/include/spglib"
@@ -58,8 +58,8 @@ cubatureinclude = localinclude + "/cubature"
 
 # Wildmagic
 # local
-#wildmagiclib = locallib
-#wildmagicinclude = localinclude + "/wildmagic"
+# wildmagiclib = locallib
+# wildmagicinclude = localinclude + "/wildmagic"
 # systemwide
 wildmagiclib = "/usr/lib64"
 wildmagicinclude = "/usr/include/WildMagic"
@@ -70,27 +70,27 @@ ext = [
               library_dirs=[gsllib],
               libraries=["gsl", "gslcblas"]),
 
-    #    Extension("einspline", ["einspline_interface/einspline.pyx"],
-    #              include_dirs=[einsplineinclude, np.get_include()],
-    #              library_dirs=[einsplinelib],
-    #              libraries=["einspline"],
-    #              extra_compile_args=["-std=c++11"],
-    #              language="c++"),
+    Extension("einspline", ["einspline_interface/einspline.pyx"],
+              include_dirs=[einsplineinclude, np.get_include()],
+              library_dirs=[einsplinelib],
+              libraries=["einspline"],
+              extra_compile_args=["-std=c++11"],
+              language="c++"),
 
-    #    Extension("wildmagic", ["wildmagic_interface/wildmagic.pyx"],
-    #              include_dirs=[wildmagicinclude, np.get_include()],
-    #              library_dirs=[wildmagiclib],
-    #              libraries=["Wm5Core", "Wm5Mathematics"],
-    #              language="c++"),
+    Extension("wildmagic", ["wildmagic_interface/wildmagic.pyx"],
+              include_dirs=[wildmagicinclude, np.get_include()],
+              library_dirs=[wildmagiclib],
+              libraries=["Wm5Core", "Wm5Mathematics"],
+              language="c++"),
 
-    #    Extension("cubature_wildmagic", ["cubature_wildmagic_interface/cubature_wildmagic.pyx"],
-    #              include_dirs=[cubatureinclude,
-    #                            wildmagicinclude, np.get_include()],
-    #              library_dirs=[cubaturelib, wildmagiclib],
-    #              libraries=["cubature", "Wm5Core", "Wm5Mathematics"],
-    #              extra_compile_args=["-O3", "-w",
-    #                                         "-std=c++11"],
-    #              language="c++"),
+    Extension("cubature_wildmagic", ["cubature_wildmagic_interface/cubature_wildmagic.pyx"],
+              include_dirs=[cubatureinclude,
+                            wildmagicinclude, np.get_include()],
+              library_dirs=[cubaturelib, wildmagiclib],
+              libraries=["cubature", "Wm5Core", "Wm5Mathematics"],
+              extra_compile_args=["-O3", "-w",
+                                  "-std=c++11"],
+              language="c++"),
     Extension("skw_interface", ["skw_interface/skw.pyx"],
               include_dirs=[spglibinclude, mklinclude,
                             skwinclude, fftwinclude, np.get_include()],
@@ -104,8 +104,6 @@ ext = [
     # (to be fixed in the future) when this is fully separted
     # in spglib, tetrahedron_method is compiled and linked manually
     # by the compile script in the base directory
-    # Extension("cython_functions", ["cython_functions.pyx"],
-    #          extra_compile_args=["-ffast-math"]),
     Extension("spglib_interface", ["spglib_interface/spglib.pyx"],
               include_dirs=[spglibinclude,
                             "spglib/src", np.get_include()],
@@ -117,10 +115,6 @@ ext = [
                   "-fno-builtin-realloc -fno-builtin-free"],
               extra_link_args=["-g"],
               language="c++"),
-    #       Extension("prof", ["prof/prof.pyx"],
-    #                 include_dirs=[gptoolsinclude],
-    #                 library_dirs=[gptoolslib],
-    #                 libraries=["profiler", "tcmalloc"]),
 ]
 
 setup(name='T4ME',

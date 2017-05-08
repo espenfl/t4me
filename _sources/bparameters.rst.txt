@@ -52,13 +52,13 @@ Determines how to generate the bands if not read. Relevant only
 if ``read`` is set to `param`. The following options are
 possible:
 
-- `0` spherical bands according to the relation
+- `0` - spherical bands according to the relation
 
   .. :math:`E=\\frac{\\hbar^2k^2}{2m}`
 
   where the effective mass :math:`m` is set by ``effmass``.
 
-- `1` spherical bands pluss a quartic correction according
+- `1` - spherical bands pluss a quartic correction according
   to the relation:
 
   .. :math:`E\\frac{\\hbar^2k^2}{2m}+ak^4`
@@ -66,14 +66,14 @@ possible:
   where the effective mass :math:`m` is set by ``effmass`` and
   the correction factor :math:`a` is set by ``a``.
 
-- `2` Kane types (alpha correction) according to the relation:
+- `2` - Kane types (alpha correction) according to the relation:
 
   .. :math:`E(1+\\alpha)=\\frac{\\hbar^2k^2}{2m}`
 
   where the effective mass :math:`m` is set by ``effmass`` and
   the correction factor :math:`\\alpha` is set by ``a``.
      
-- `3` tight-binding bands if which the relation depends on the
+- `3` - tight-binding bands if which the relation depends on the
   specific model used, but is typically a combination of cosines
   and sines. The tight-binding model is generated in PythTB using
   the additional parameters ``torb``, ``tonsite``,
@@ -131,8 +131,8 @@ Shift the band with 0.0 eV.
 Determines if this is a valence or a conduction band.
 The following options are available:
 
-- `v` valence band
-- `c` conduction band
+- `v` - valence band
+- `c` - conduction band
 
 Example:
 ::
@@ -159,8 +159,8 @@ Do not apply any shift to the current band.
 The spin degeneracy of the current band. The following options
 are available:
 
-- `1` not spin degenerated
-- `2` spin degenerated
+- `1` - not spin degenerated
+- `2` - spin degenerated
 
 Example:
 ::
@@ -179,8 +179,8 @@ the scattering mechanisms are given.
 ``select_scattering``
 ~~~~~~~~~~~~~~~~~~~~~
 Determines which scattering mechnisms to apply for the current
-band. Set element to `1` to include
-scattering, `0` otherwise.
+band. Set element to 1 to include
+scattering, 0 otherwise.
 Currently the following scattering mechanisms have been
 implemented (the number indicate array index, starting at 1):
 

@@ -96,6 +96,7 @@
 <li><a class="reference internal" href="#dispersion-relations">Dispersion relations</a><ul>
 <li><a class="reference internal" href="#dispersion-interpolate"><code class="docutils literal"><span class="pre">dispersion_interpolate</span></code></a></li>
 <li><a class="reference internal" href="#dispersion-interpolate-sampling"><code class="docutils literal"><span class="pre">dispersion_interpolate_sampling</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-interpolate-step-size"><code class="docutils literal"><span class="pre">dispersion_interpolate_step_size</span></code></a></li>
 <li><a class="reference internal" href="#dispersion-interpolate-method"><code class="docutils literal"><span class="pre">dispersion_interpolate_method</span></code></a></li>
 <li><a class="reference internal" href="#dispersion-interpolate-type"><code class="docutils literal"><span class="pre">dispersion_interpolate_type</span></code></a></li>
 <li><a class="reference internal" href="#dispersion-velocities-numdiff"><code class="docutils literal"><span class="pre">dispersion_velocities_numdiff</span></code></a></li>
@@ -103,7 +104,10 @@
 <li><a class="reference internal" href="#dispersion-write-postinter"><code class="docutils literal"><span class="pre">dispersion_write_postinter</span></code></a></li>
 <li><a class="reference internal" href="#dispersion-write-start"><code class="docutils literal"><span class="pre">dispersion_write_start</span></code></a></li>
 <li><a class="reference internal" href="#dispersion-write-end"><code class="docutils literal"><span class="pre">dispersion_write_end</span></code></a></li>
-<li><a class="reference internal" href="#num-kpoints-along-line"><code class="docutils literal"><span class="pre">num_kpoints_along_line</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-num-kpoints-along-line"><code class="docutils literal"><span class="pre">dispersion_num_kpoints_along_line</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-effmass"><code class="docutils literal"><span class="pre">dispersion_effmass</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-effmass-diagonalize"><code class="docutils literal"><span class="pre">dispersion_effmass_diagonalize</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-effmass-transform"><code class="docutils literal"><span class="pre">dispersion_effmass_transform</span></code></a></li>
 <li><a class="reference internal" href="#dispersion-w90-tb-zero-energy"><code class="docutils literal"><span class="pre">dispersion_w90_tb_zero_energy</span></code></a></li>
 <li><a class="reference internal" href="#dispersion-w90-tb-min-hopping-norm"><code class="docutils literal"><span class="pre">dispersion_w90_tb_min_hopping_norm</span></code></a></li>
 <li><a class="reference internal" href="#dispersion-w90-tb-max-distance"><code class="docutils literal"><span class="pre">dispersion_w90_tb_max_distance</span></code></a></li>
@@ -235,86 +239,90 @@
 <li><a class="reference internal" href="#dispersion-relations" id="id10">Dispersion relations</a><ul>
 <li><a class="reference internal" href="#dispersion-interpolate" id="id11"><code class="docutils literal"><span class="pre">dispersion_interpolate</span></code></a></li>
 <li><a class="reference internal" href="#dispersion-interpolate-sampling" id="id12"><code class="docutils literal"><span class="pre">dispersion_interpolate_sampling</span></code></a></li>
-<li><a class="reference internal" href="#dispersion-interpolate-method" id="id13"><code class="docutils literal"><span class="pre">dispersion_interpolate_method</span></code></a></li>
-<li><a class="reference internal" href="#dispersion-interpolate-type" id="id14"><code class="docutils literal"><span class="pre">dispersion_interpolate_type</span></code></a></li>
-<li><a class="reference internal" href="#dispersion-velocities-numdiff" id="id15"><code class="docutils literal"><span class="pre">dispersion_velocities_numdiff</span></code></a></li>
-<li><a class="reference internal" href="#dispersion-write-preinter" id="id16"><code class="docutils literal"><span class="pre">dispersion_write_preinter</span></code></a></li>
-<li><a class="reference internal" href="#dispersion-write-postinter" id="id17"><code class="docutils literal"><span class="pre">dispersion_write_postinter</span></code></a></li>
-<li><a class="reference internal" href="#dispersion-write-start" id="id18"><code class="docutils literal"><span class="pre">dispersion_write_start</span></code></a></li>
-<li><a class="reference internal" href="#dispersion-write-end" id="id19"><code class="docutils literal"><span class="pre">dispersion_write_end</span></code></a></li>
-<li><a class="reference internal" href="#num-kpoints-along-line" id="id20"><code class="docutils literal"><span class="pre">num_kpoints_along_line</span></code></a></li>
-<li><a class="reference internal" href="#dispersion-w90-tb-zero-energy" id="id21"><code class="docutils literal"><span class="pre">dispersion_w90_tb_zero_energy</span></code></a></li>
-<li><a class="reference internal" href="#dispersion-w90-tb-min-hopping-norm" id="id22"><code class="docutils literal"><span class="pre">dispersion_w90_tb_min_hopping_norm</span></code></a></li>
-<li><a class="reference internal" href="#dispersion-w90-tb-max-distance" id="id23"><code class="docutils literal"><span class="pre">dispersion_w90_tb_max_distance</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-interpolate-step-size" id="id13"><code class="docutils literal"><span class="pre">dispersion_interpolate_step_size</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-interpolate-method" id="id14"><code class="docutils literal"><span class="pre">dispersion_interpolate_method</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-interpolate-type" id="id15"><code class="docutils literal"><span class="pre">dispersion_interpolate_type</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-velocities-numdiff" id="id16"><code class="docutils literal"><span class="pre">dispersion_velocities_numdiff</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-write-preinter" id="id17"><code class="docutils literal"><span class="pre">dispersion_write_preinter</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-write-postinter" id="id18"><code class="docutils literal"><span class="pre">dispersion_write_postinter</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-write-start" id="id19"><code class="docutils literal"><span class="pre">dispersion_write_start</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-write-end" id="id20"><code class="docutils literal"><span class="pre">dispersion_write_end</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-num-kpoints-along-line" id="id21"><code class="docutils literal"><span class="pre">dispersion_num_kpoints_along_line</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-effmass" id="id22"><code class="docutils literal"><span class="pre">dispersion_effmass</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-effmass-diagonalize" id="id23"><code class="docutils literal"><span class="pre">dispersion_effmass_diagonalize</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-effmass-transform" id="id24"><code class="docutils literal"><span class="pre">dispersion_effmass_transform</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-w90-tb-zero-energy" id="id25"><code class="docutils literal"><span class="pre">dispersion_w90_tb_zero_energy</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-w90-tb-min-hopping-norm" id="id26"><code class="docutils literal"><span class="pre">dispersion_w90_tb_min_hopping_norm</span></code></a></li>
+<li><a class="reference internal" href="#dispersion-w90-tb-max-distance" id="id27"><code class="docutils literal"><span class="pre">dispersion_w90_tb_max_distance</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#electron-transport" id="id24">Electron transport</a><ul>
-<li><a class="reference internal" href="#transport-calc" id="id25"><code class="docutils literal"><span class="pre">transport_calc</span></code></a></li>
-<li><a class="reference internal" href="#transport-method" id="id26"><code class="docutils literal"><span class="pre">transport_method</span></code></a></li>
-<li><a class="reference internal" href="#transport-integration-method" id="id27"><code class="docutils literal"><span class="pre">transport_integration_method</span></code></a></li>
-<li><a class="reference internal" href="#transport-integration-spectral-smearing" id="id28"><code class="docutils literal"><span class="pre">transport_integration_spectral_smearing</span></code></a></li>
-<li><a class="reference internal" href="#transport-integration-spectral-density" id="id29"><code class="docutils literal"><span class="pre">transport_integration_spectral_density</span></code></a></li>
-<li><a class="reference internal" href="#transport-integration-spectral-energy-cutoff" id="id30"><code class="docutils literal"><span class="pre">transport_integration_spectral_energy_cutoff</span></code></a></li>
-<li><a class="reference internal" href="#transport-interpolate-method" id="id31"><code class="docutils literal"><span class="pre">transport_interpolate_method</span></code></a></li>
-<li><a class="reference internal" href="#transport-interpolate-type" id="id32"><code class="docutils literal"><span class="pre">transport_interpolate_type</span></code></a></li>
-<li><a class="reference internal" href="#transport-chempot-min" id="id33"><code class="docutils literal"><span class="pre">transport_chempot_min</span></code></a></li>
-<li><a class="reference internal" href="#transport-chempot-max" id="id34"><code class="docutils literal"><span class="pre">transport_chempot_max</span></code></a></li>
-<li><a class="reference internal" href="#transport-chempot-samples" id="id35"><code class="docutils literal"><span class="pre">transport_chempot_samples</span></code></a></li>
-<li><a class="reference internal" href="#transport-energycutband" id="id36"><code class="docutils literal"><span class="pre">transport_energycutband</span></code></a></li>
-<li><a class="reference internal" href="#transport-include-bands" id="id37"><code class="docutils literal"><span class="pre">transport_include_bands</span></code></a></li>
-<li><a class="reference internal" href="#transport-use-analytic-scattering" id="id38"><code class="docutils literal"><span class="pre">transport_use_analytic_scattering</span></code></a></li>
-<li><a class="reference internal" href="#transport-use-scattering-ontfly" id="id39"><code class="docutils literal"><span class="pre">transport_use_scattering_ontfly</span></code></a></li>
-<li><a class="reference internal" href="#transport-drop-valence" id="id40"><code class="docutils literal"><span class="pre">transport_drop_valence</span></code></a></li>
-<li><a class="reference internal" href="#transport-drop-conduction" id="id41"><code class="docutils literal"><span class="pre">transport_drop_conduction</span></code></a></li>
-<li><a class="reference internal" href="#transport-isotropic" id="id42"><code class="docutils literal"><span class="pre">transport_isotropic</span></code></a></li>
+<li><a class="reference internal" href="#electron-transport" id="id28">Electron transport</a><ul>
+<li><a class="reference internal" href="#transport-calc" id="id29"><code class="docutils literal"><span class="pre">transport_calc</span></code></a></li>
+<li><a class="reference internal" href="#transport-method" id="id30"><code class="docutils literal"><span class="pre">transport_method</span></code></a></li>
+<li><a class="reference internal" href="#transport-integration-method" id="id31"><code class="docutils literal"><span class="pre">transport_integration_method</span></code></a></li>
+<li><a class="reference internal" href="#transport-integration-spectral-smearing" id="id32"><code class="docutils literal"><span class="pre">transport_integration_spectral_smearing</span></code></a></li>
+<li><a class="reference internal" href="#transport-integration-spectral-density" id="id33"><code class="docutils literal"><span class="pre">transport_integration_spectral_density</span></code></a></li>
+<li><a class="reference internal" href="#transport-integration-spectral-energy-cutoff" id="id34"><code class="docutils literal"><span class="pre">transport_integration_spectral_energy_cutoff</span></code></a></li>
+<li><a class="reference internal" href="#transport-interpolate-method" id="id35"><code class="docutils literal"><span class="pre">transport_interpolate_method</span></code></a></li>
+<li><a class="reference internal" href="#transport-interpolate-type" id="id36"><code class="docutils literal"><span class="pre">transport_interpolate_type</span></code></a></li>
+<li><a class="reference internal" href="#transport-chempot-min" id="id37"><code class="docutils literal"><span class="pre">transport_chempot_min</span></code></a></li>
+<li><a class="reference internal" href="#transport-chempot-max" id="id38"><code class="docutils literal"><span class="pre">transport_chempot_max</span></code></a></li>
+<li><a class="reference internal" href="#transport-chempot-samples" id="id39"><code class="docutils literal"><span class="pre">transport_chempot_samples</span></code></a></li>
+<li><a class="reference internal" href="#transport-energycutband" id="id40"><code class="docutils literal"><span class="pre">transport_energycutband</span></code></a></li>
+<li><a class="reference internal" href="#transport-include-bands" id="id41"><code class="docutils literal"><span class="pre">transport_include_bands</span></code></a></li>
+<li><a class="reference internal" href="#transport-use-analytic-scattering" id="id42"><code class="docutils literal"><span class="pre">transport_use_analytic_scattering</span></code></a></li>
+<li><a class="reference internal" href="#transport-use-scattering-ontfly" id="id43"><code class="docutils literal"><span class="pre">transport_use_scattering_ontfly</span></code></a></li>
+<li><a class="reference internal" href="#transport-drop-valence" id="id44"><code class="docutils literal"><span class="pre">transport_drop_valence</span></code></a></li>
+<li><a class="reference internal" href="#transport-drop-conduction" id="id45"><code class="docutils literal"><span class="pre">transport_drop_conduction</span></code></a></li>
+<li><a class="reference internal" href="#transport-isotropic" id="id46"><code class="docutils literal"><span class="pre">transport_isotropic</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#density-of-states" id="id43">Density of states</a><ul>
-<li><a class="reference internal" href="#dos-calc" id="id44"><code class="docutils literal"><span class="pre">dos_calc</span></code></a></li>
-<li><a class="reference internal" href="#dos-e-min" id="id45"><code class="docutils literal"><span class="pre">dos_e_min</span></code></a></li>
-<li><a class="reference internal" href="#dos-e-max" id="id46"><code class="docutils literal"><span class="pre">dos_e_max</span></code></a></li>
-<li><a class="reference internal" href="#dos-num-samples" id="id47"><code class="docutils literal"><span class="pre">dos_num_samples</span></code></a></li>
-<li><a class="reference internal" href="#dos-smearing" id="id48"><code class="docutils literal"><span class="pre">dos_smearing</span></code></a></li>
-<li><a class="reference internal" href="#dos-interpolate-method" id="id49"><code class="docutils literal"><span class="pre">dos_interpolate_method</span></code></a></li>
-<li><a class="reference internal" href="#dos-interpolate-type" id="id50"><code class="docutils literal"><span class="pre">dos_interpolate_type</span></code></a></li>
-<li><a class="reference internal" href="#dos-integrating-method" id="id51"><code class="docutils literal"><span class="pre">dos_integrating_method</span></code></a></li>
+<li><a class="reference internal" href="#density-of-states" id="id47">Density of states</a><ul>
+<li><a class="reference internal" href="#dos-calc" id="id48"><code class="docutils literal"><span class="pre">dos_calc</span></code></a></li>
+<li><a class="reference internal" href="#dos-e-min" id="id49"><code class="docutils literal"><span class="pre">dos_e_min</span></code></a></li>
+<li><a class="reference internal" href="#dos-e-max" id="id50"><code class="docutils literal"><span class="pre">dos_e_max</span></code></a></li>
+<li><a class="reference internal" href="#dos-num-samples" id="id51"><code class="docutils literal"><span class="pre">dos_num_samples</span></code></a></li>
+<li><a class="reference internal" href="#dos-smearing" id="id52"><code class="docutils literal"><span class="pre">dos_smearing</span></code></a></li>
+<li><a class="reference internal" href="#dos-interpolate-method" id="id53"><code class="docutils literal"><span class="pre">dos_interpolate_method</span></code></a></li>
+<li><a class="reference internal" href="#dos-interpolate-type" id="id54"><code class="docutils literal"><span class="pre">dos_interpolate_type</span></code></a></li>
+<li><a class="reference internal" href="#dos-integrating-method" id="id55"><code class="docutils literal"><span class="pre">dos_integrating_method</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#general-parameters" id="id52">General parameters</a><ul>
-<li><a class="reference internal" href="#temperature-min" id="id53"><code class="docutils literal"><span class="pre">temperature_min</span></code></a></li>
-<li><a class="reference internal" href="#temperature-max" id="id54"><code class="docutils literal"><span class="pre">temperature_max</span></code></a></li>
-<li><a class="reference internal" href="#temperature-steps" id="id55"><code class="docutils literal"><span class="pre">temperature_steps</span></code></a></li>
-<li><a class="reference internal" href="#gamma-center" id="id56"><code class="docutils literal"><span class="pre">gamma_center</span></code></a></li>
-<li><a class="reference internal" href="#maxeint" id="id57"><code class="docutils literal"><span class="pre">maxeint</span></code></a></li>
-<li><a class="reference internal" href="#occ-cutoff" id="id58"><code class="docutils literal"><span class="pre">occ_cutoff</span></code></a></li>
-<li><a class="reference internal" href="#e-fermi-in-gap" id="id59"><code class="docutils literal"><span class="pre">e_fermi_in_gap</span></code></a></li>
-<li><a class="reference internal" href="#e-fermi" id="id60"><code class="docutils literal"><span class="pre">e_fermi</span></code></a></li>
-<li><a class="reference internal" href="#e-vbm" id="id61"><code class="docutils literal"><span class="pre">e_vbm</span></code></a></li>
-<li><a class="reference internal" href="#e-shift" id="id62"><code class="docutils literal"><span class="pre">e_shift</span></code></a></li>
-<li><a class="reference internal" href="#cubature-h" id="id63"><code class="docutils literal"><span class="pre">cubature_h</span></code></a></li>
-<li><a class="reference internal" href="#cubature-max-it" id="id64"><code class="docutils literal"><span class="pre">cubature_max_it</span></code></a></li>
-<li><a class="reference internal" href="#cubature-abs-err" id="id65"><code class="docutils literal"><span class="pre">cubature_abs_err</span></code></a></li>
-<li><a class="reference internal" href="#cubature-rel-err" id="id66"><code class="docutils literal"><span class="pre">cubature_rel_err</span></code></a></li>
-<li><a class="reference internal" href="#skw-expansion-factor" id="id67"><code class="docutils literal"><span class="pre">skw_expansion_factor</span></code></a></li>
-<li><a class="reference internal" href="#carrier-valence-energy" id="id68"><code class="docutils literal"><span class="pre">carrier_valence_energy</span></code></a></li>
-<li><a class="reference internal" href="#carrier-conduction-energy" id="id69"><code class="docutils literal"><span class="pre">carrier_conduction_energy</span></code></a></li>
-<li><a class="reference internal" href="#carrier-dos-analytick" id="id70"><code class="docutils literal"><span class="pre">carrier_dos_analytick</span></code></a></li>
-<li><a class="reference internal" href="#defect-ionization" id="id71"><code class="docutils literal"><span class="pre">defect_ionization</span></code></a></li>
-<li><a class="reference internal" href="#donor-number" id="id72"><code class="docutils literal"><span class="pre">donor_number</span></code></a></li>
-<li><a class="reference internal" href="#donor-degen-fact" id="id73"><code class="docutils literal"><span class="pre">donor_degen_fact</span></code></a></li>
-<li><a class="reference internal" href="#donor-energy" id="id74"><code class="docutils literal"><span class="pre">donor_energy</span></code></a></li>
-<li><a class="reference internal" href="#acceptor-number" id="id75"><code class="docutils literal"><span class="pre">acceptor_number</span></code></a></li>
-<li><a class="reference internal" href="#acceptor-degen-fact" id="id76"><code class="docutils literal"><span class="pre">acceptor_degen_fact</span></code></a></li>
-<li><a class="reference internal" href="#acceptor-energy" id="id77"><code class="docutils literal"><span class="pre">acceptor_energy</span></code></a></li>
-<li><a class="reference internal" href="#read" id="id78"><code class="docutils literal"><span class="pre">read</span></code></a></li>
-<li><a class="reference internal" href="#readfile" id="id79"><code class="docutils literal"><span class="pre">readfile</span></code></a></li>
-<li><a class="reference internal" href="#scissor" id="id80"><code class="docutils literal"><span class="pre">scissor</span></code></a></li>
-<li><a class="reference internal" href="#symprec" id="id81"><code class="docutils literal"><span class="pre">symprec</span></code></a></li>
-<li><a class="reference internal" href="#displaytb" id="id82"><code class="docutils literal"><span class="pre">displaytb</span></code></a></li>
-<li><a class="reference internal" href="#libinfo" id="id83"><code class="docutils literal"><span class="pre">libinfo</span></code></a></li>
-<li><a class="reference internal" href="#onlytotalrate" id="id84"><code class="docutils literal"><span class="pre">onlytotalrate</span></code></a></li>
-<li><a class="reference internal" href="#parallel" id="id85"><code class="docutils literal"><span class="pre">parallel</span></code></a></li>
-<li><a class="reference internal" href="#run-tests" id="id86"><code class="docutils literal"><span class="pre">run_tests</span></code></a></li>
+<li><a class="reference internal" href="#general-parameters" id="id56">General parameters</a><ul>
+<li><a class="reference internal" href="#temperature-min" id="id57"><code class="docutils literal"><span class="pre">temperature_min</span></code></a></li>
+<li><a class="reference internal" href="#temperature-max" id="id58"><code class="docutils literal"><span class="pre">temperature_max</span></code></a></li>
+<li><a class="reference internal" href="#temperature-steps" id="id59"><code class="docutils literal"><span class="pre">temperature_steps</span></code></a></li>
+<li><a class="reference internal" href="#gamma-center" id="id60"><code class="docutils literal"><span class="pre">gamma_center</span></code></a></li>
+<li><a class="reference internal" href="#maxeint" id="id61"><code class="docutils literal"><span class="pre">maxeint</span></code></a></li>
+<li><a class="reference internal" href="#occ-cutoff" id="id62"><code class="docutils literal"><span class="pre">occ_cutoff</span></code></a></li>
+<li><a class="reference internal" href="#e-fermi-in-gap" id="id63"><code class="docutils literal"><span class="pre">e_fermi_in_gap</span></code></a></li>
+<li><a class="reference internal" href="#e-fermi" id="id64"><code class="docutils literal"><span class="pre">e_fermi</span></code></a></li>
+<li><a class="reference internal" href="#e-vbm" id="id65"><code class="docutils literal"><span class="pre">e_vbm</span></code></a></li>
+<li><a class="reference internal" href="#e-shift" id="id66"><code class="docutils literal"><span class="pre">e_shift</span></code></a></li>
+<li><a class="reference internal" href="#cubature-h" id="id67"><code class="docutils literal"><span class="pre">cubature_h</span></code></a></li>
+<li><a class="reference internal" href="#cubature-max-it" id="id68"><code class="docutils literal"><span class="pre">cubature_max_it</span></code></a></li>
+<li><a class="reference internal" href="#cubature-abs-err" id="id69"><code class="docutils literal"><span class="pre">cubature_abs_err</span></code></a></li>
+<li><a class="reference internal" href="#cubature-rel-err" id="id70"><code class="docutils literal"><span class="pre">cubature_rel_err</span></code></a></li>
+<li><a class="reference internal" href="#skw-expansion-factor" id="id71"><code class="docutils literal"><span class="pre">skw_expansion_factor</span></code></a></li>
+<li><a class="reference internal" href="#carrier-valence-energy" id="id72"><code class="docutils literal"><span class="pre">carrier_valence_energy</span></code></a></li>
+<li><a class="reference internal" href="#carrier-conduction-energy" id="id73"><code class="docutils literal"><span class="pre">carrier_conduction_energy</span></code></a></li>
+<li><a class="reference internal" href="#carrier-dos-analytick" id="id74"><code class="docutils literal"><span class="pre">carrier_dos_analytick</span></code></a></li>
+<li><a class="reference internal" href="#defect-ionization" id="id75"><code class="docutils literal"><span class="pre">defect_ionization</span></code></a></li>
+<li><a class="reference internal" href="#donor-number" id="id76"><code class="docutils literal"><span class="pre">donor_number</span></code></a></li>
+<li><a class="reference internal" href="#donor-degen-fact" id="id77"><code class="docutils literal"><span class="pre">donor_degen_fact</span></code></a></li>
+<li><a class="reference internal" href="#donor-energy" id="id78"><code class="docutils literal"><span class="pre">donor_energy</span></code></a></li>
+<li><a class="reference internal" href="#acceptor-number" id="id79"><code class="docutils literal"><span class="pre">acceptor_number</span></code></a></li>
+<li><a class="reference internal" href="#acceptor-degen-fact" id="id80"><code class="docutils literal"><span class="pre">acceptor_degen_fact</span></code></a></li>
+<li><a class="reference internal" href="#acceptor-energy" id="id81"><code class="docutils literal"><span class="pre">acceptor_energy</span></code></a></li>
+<li><a class="reference internal" href="#read" id="id82"><code class="docutils literal"><span class="pre">read</span></code></a></li>
+<li><a class="reference internal" href="#readfile" id="id83"><code class="docutils literal"><span class="pre">readfile</span></code></a></li>
+<li><a class="reference internal" href="#scissor" id="id84"><code class="docutils literal"><span class="pre">scissor</span></code></a></li>
+<li><a class="reference internal" href="#symprec" id="id85"><code class="docutils literal"><span class="pre">symprec</span></code></a></li>
+<li><a class="reference internal" href="#displaytb" id="id86"><code class="docutils literal"><span class="pre">displaytb</span></code></a></li>
+<li><a class="reference internal" href="#libinfo" id="id87"><code class="docutils literal"><span class="pre">libinfo</span></code></a></li>
+<li><a class="reference internal" href="#onlytotalrate" id="id88"><code class="docutils literal"><span class="pre">onlytotalrate</span></code></a></li>
+<li><a class="reference internal" href="#parallel" id="id89"><code class="docutils literal"><span class="pre">parallel</span></code></a></li>
+<li><a class="reference internal" href="#run-tests" id="id90"><code class="docutils literal"><span class="pre">run_tests</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -352,19 +360,56 @@ k-point grid.</p>
 45, 45 and 45 k-points along the unit axis of the supplied
 k-point grid.</p>
 </div>
+<div class="section" id="dispersion-interpolate-step-size">
+<h3><a class="toc-backref" href="#id13"><code class="docutils literal"><span class="pre">dispersion_interpolate_step_size</span></code></a><a class="headerlink" href="#dispersion-interpolate-step-size" title="Permalink to this headline">¶</a></h3>
+<p>The target k-point step size in inverse AA. In order for this
+parameter to work, the user have to set</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dispersion_interpolate_sampling</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dispersion_interpolate_sampling</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Creates a k-point sampling that is at least as dense as to give
+a step size of 0.1 inverse AA between each k-point along each
+reciprocal axis.</p>
+</div>
 <div class="section" id="dispersion-interpolate-method">
-<h3><a class="toc-backref" href="#id13"><code class="docutils literal"><span class="pre">dispersion_interpolate_method</span></code></a><a class="headerlink" href="#dispersion-interpolate-method" title="Permalink to this headline">¶</a></h3>
-<p>Choses which interpolative method to use</p>
+<h3><a class="toc-backref" href="#id14"><code class="docutils literal"><span class="pre">dispersion_interpolate_method</span></code></a><a class="headerlink" href="#dispersion-interpolate-method" title="Permalink to this headline">¶</a></h3>
+<p>Choses which interpolative method to use. The following options
+are currently available:</p>
+<ul class="simple">
+<li><cite>linearnd</cite> - Uses <code class="docutils literal"><span class="pre">LinearNDInterpolator</span></code> in SciPy.</li>
+<li><cite>interpn</cite> - Uses <code class="docutils literal"><span class="pre">interpn</span></code> in Scipy.</li>
+<li><cite>rbf</cite> - Uses the RBF-ML routines of ALGLIB (can also switch to
+the Scipy version, but that is more memory intensive).</li>
+<li><cite>einspline</cite> - Uses Einspline (splines).</li>
+<li><cite>wildmagic</cite> - Uses the GeometricTools (former WildMagic)
+interpolation routines.</li>
+<li><cite>skw</cite> - Uses Fourier interpolation</li>
+<li><cite>tb</cite> - Extracts the energies on a denser grid from a tight-
+binding model</li>
+</ul>
+<p>Tests have shown that the last three methods are quite general
+and, given what they are, quite accurate.</p>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dispersion_interpolate_method</span><span class="p">:</span> <span class="s2">&quot;wildmagic&quot;</span>
 </pre></div>
 </div>
-<p>Will for instance use the Wildmagic library.</p>
+<p>Will for instance use the WildMagic library.</p>
 </div>
 <div class="section" id="dispersion-interpolate-type">
-<h3><a class="toc-backref" href="#id14"><code class="docutils literal"><span class="pre">dispersion_interpolate_type</span></code></a><a class="headerlink" href="#dispersion-interpolate-type" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id15"><code class="docutils literal"><span class="pre">dispersion_interpolate_type</span></code></a><a class="headerlink" href="#dispersion-interpolate-type" title="Permalink to this headline">¶</a></h3>
 <p>Additional selective layer for the method chosen by
-:ref&#8217;<cite>dispersion_interpolate_method</cite>.</p>
+:ref&#8217;<cite>dispersion_interpolate_method</cite>. Currently, the
+following options are availble:</p>
+<ul class="simple">
+<li><cite>nearest</cite> or <cite>linear</cite> - if
+<code class="docutils literal"><span class="pre">dispersion_interpolate_method</span></code> = <cite>linearnd</cite></li>
+<li><cite>trilinear</cite>, <cite>tricubic_exact</cite>, <cite>tricubic_bspline</cite>, <cite>akima</cite>
+- if <code class="docutils literal"><span class="pre">dispersion_interpolate_method</span></code> = <cite>wildmagic</cite></li>
+</ul>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dispersion_interpolate_type</span><span class="p">:</span> <span class="s2">&quot;akima&quot;</span>
 </pre></div>
@@ -372,7 +417,7 @@ k-point grid.</p>
 <p>Uses the Akima interpolation in the WildMagic library.</p>
 </div>
 <div class="section" id="dispersion-velocities-numdiff">
-<h3><a class="toc-backref" href="#id15"><code class="docutils literal"><span class="pre">dispersion_velocities_numdiff</span></code></a><a class="headerlink" href="#dispersion-velocities-numdiff" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id16"><code class="docutils literal"><span class="pre">dispersion_velocities_numdiff</span></code></a><a class="headerlink" href="#dispersion-velocities-numdiff" title="Permalink to this headline">¶</a></h3>
 <p>Use numerical differentiation to calculate the
 velocities if they are not present on entry, or/and
 use numerical differentiation to extract the
@@ -389,7 +434,7 @@ the velocities are present on input or that they are
 genrated by other means.</p>
 </div>
 <div class="section" id="dispersion-write-preinter">
-<h3><a class="toc-backref" href="#id16"><code class="docutils literal"><span class="pre">dispersion_write_preinter</span></code></a><a class="headerlink" href="#dispersion-write-preinter" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id17"><code class="docutils literal"><span class="pre">dispersion_write_preinter</span></code></a><a class="headerlink" href="#dispersion-write-preinter" title="Permalink to this headline">¶</a></h3>
 <p>Selects if a line extraction of the band structure is written to
 the file <code class="file docutils literal"><span class="pre">bands</span></code> before interpolation. If velocities are present
 this is also written to the file <code class="file docutils literal"><span class="pre">velocities</span></code></p>
@@ -400,7 +445,7 @@ this is also written to the file <code class="file docutils literal"><span class
 <p>Writes the extracted band structure values along a line to file(s).</p>
 </div>
 <div class="section" id="dispersion-write-postinter">
-<h3><a class="toc-backref" href="#id17"><code class="docutils literal"><span class="pre">dispersion_write_postinter</span></code></a><a class="headerlink" href="#dispersion-write-postinter" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id18"><code class="docutils literal"><span class="pre">dispersion_write_postinter</span></code></a><a class="headerlink" href="#dispersion-write-postinter" title="Permalink to this headline">¶</a></h3>
 <p>Selects if a line extraction of the band structure is written to
 the file <code class="file docutils literal"><span class="pre">bands_inter</span></code> after interpolation. If velocities
 are present this is also written to the file <code class="file docutils literal"><span class="pre">velocities_inter</span></code></p>
@@ -412,7 +457,7 @@ are present this is also written to the file <code class="file docutils literal"
 to file(s).</p>
 </div>
 <div class="section" id="dispersion-write-start">
-<h3><a class="toc-backref" href="#id18"><code class="docutils literal"><span class="pre">dispersion_write_start</span></code></a><a class="headerlink" href="#dispersion-write-start" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id19"><code class="docutils literal"><span class="pre">dispersion_write_start</span></code></a><a class="headerlink" href="#dispersion-write-start" title="Permalink to this headline">¶</a></h3>
 <p>The start point (in direct coordinates) for the line extraction.</p>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dispersion_write_start</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
@@ -421,24 +466,59 @@ to file(s).</p>
 <p>An example start point, here the Gamma point.</p>
 </div>
 <div class="section" id="dispersion-write-end">
-<h3><a class="toc-backref" href="#id19"><code class="docutils literal"><span class="pre">dispersion_write_end</span></code></a><a class="headerlink" href="#dispersion-write-end" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id20"><code class="docutils literal"><span class="pre">dispersion_write_end</span></code></a><a class="headerlink" href="#dispersion-write-end" title="Permalink to this headline">¶</a></h3>
 <p>The end point (in direct coordinates) for the line extraction.</p>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dispersion_write_end</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="num-kpoints-along-line">
-<h3><a class="toc-backref" href="#id20"><code class="docutils literal"><span class="pre">num_kpoints_along_line</span></code></a><a class="headerlink" href="#num-kpoints-along-line" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="dispersion-num-kpoints-along-line">
+<h3><a class="toc-backref" href="#id21"><code class="docutils literal"><span class="pre">dispersion_num_kpoints_along_line</span></code></a><a class="headerlink" href="#dispersion-num-kpoints-along-line" title="Permalink to this headline">¶</a></h3>
 <p>How many samples to use along the line to be extracted.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">num_kpoints_along_line</span><span class="p">:</span> <span class="mi">20</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dispersion_num_kpoints_along_line</span><span class="p">:</span> <span class="mi">20</span>
 </pre></div>
 </div>
 <p>Here 20 points is used along the line.</p>
 </div>
+<div class="section" id="dispersion-effmass">
+<h3><a class="toc-backref" href="#id22"><code class="docutils literal"><span class="pre">dispersion_effmass</span></code></a><a class="headerlink" href="#dispersion-effmass" title="Permalink to this headline">¶</a></h3>
+<p>Calculate the effective mass tensor along the unit vectors
+of the configured reciprocal cell. The resulting tensor
+is in units of the free electron mass. Currently it is not
+printed out and an error will occur.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dispersion_effmass</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>Do not calculate the effective mass tensor.</p>
+</div>
+<div class="section" id="dispersion-effmass-diagonalize">
+<h3><a class="toc-backref" href="#id23"><code class="docutils literal"><span class="pre">dispersion_effmass_diagonalize</span></code></a><a class="headerlink" href="#dispersion-effmass-diagonalize" title="Permalink to this headline">¶</a></h3>
+<p>Diagonalize the calculated effective mass tensor. Currently
+the diagonal elements and the eigenvectors are not printed
+out and an error will occur.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dispersion_effmass_diagonalize</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>Do not diagonalize the effective mass tensor.</p>
+</div>
+<div class="section" id="dispersion-effmass-transform">
+<h3><a class="toc-backref" href="#id24"><code class="docutils literal"><span class="pre">dispersion_effmass_transform</span></code></a><a class="headerlink" href="#dispersion-effmass-transform" title="Permalink to this headline">¶</a></h3>
+<p>The transformation vectors for the effective mass tensor.
+The elements [0,:] give the first vector, [1,:] the second
+and [2,:] the third. Should be given in direct coordinates.
+If the array is left empty, no transformation is performed.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dispersion_effmass_transform</span><span class="p">:</span> <span class="p">[]</span>
+</pre></div>
+</div>
+<p>Do not transform the effective mass tensor.</p>
+</div>
 <div class="section" id="dispersion-w90-tb-zero-energy">
-<h3><a class="toc-backref" href="#id21"><code class="docutils literal"><span class="pre">dispersion_w90_tb_zero_energy</span></code></a><a class="headerlink" href="#dispersion-w90-tb-zero-energy" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id25"><code class="docutils literal"><span class="pre">dispersion_w90_tb_zero_energy</span></code></a><a class="headerlink" href="#dispersion-w90-tb-zero-energy" title="Permalink to this headline">¶</a></h3>
 <p>Sets the zero energy in the band structure. This parameter is
 passed to <cite>zero_energy</cite> in the <code class="xref py py-func docutils literal"><span class="pre">model()</span></code> function in the <code class="xref py py-class docutils literal"><span class="pre">w90</span></code>
 class in PythTB and is used if the Wannier90 interface of PythTB is to be
@@ -453,7 +533,7 @@ the top of the valence band.</p>
 <p>Sets it to 5.0 eV and this value is then subtracted from the energies.</p>
 </div>
 <div class="section" id="dispersion-w90-tb-min-hopping-norm">
-<h3><a class="toc-backref" href="#id22"><code class="docutils literal"><span class="pre">dispersion_w90_tb_min_hopping_norm</span></code></a><a class="headerlink" href="#dispersion-w90-tb-min-hopping-norm" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id26"><code class="docutils literal"><span class="pre">dispersion_w90_tb_min_hopping_norm</span></code></a><a class="headerlink" href="#dispersion-w90-tb-min-hopping-norm" title="Permalink to this headline">¶</a></h3>
 <p>Hopping terms with a complex norm less than this value will not be included
 in the tight binding model. This parameter is
 passed to <cite>min_hopping_norm</cite> in the <code class="xref py py-func docutils literal"><span class="pre">model()</span></code> function in
@@ -468,7 +548,7 @@ for additional details. In units of eV.</p>
 in the reconstruction of the tight binding model in PythTB.</p>
 </div>
 <div class="section" id="dispersion-w90-tb-max-distance">
-<h3><a class="toc-backref" href="#id23"><code class="docutils literal"><span class="pre">dispersion_w90_tb_max_distance</span></code></a><a class="headerlink" href="#dispersion-w90-tb-max-distance" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id27"><code class="docutils literal"><span class="pre">dispersion_w90_tb_max_distance</span></code></a><a class="headerlink" href="#dispersion-w90-tb-max-distance" title="Permalink to this headline">¶</a></h3>
 <p>Hopping terms between two sites will be ignored if the distance is larger than
 max_distance.
 This parameter is passed to <cite>max_distance</cite> in the <code class="xref py py-func docutils literal"><span class="pre">model()</span></code> function in
@@ -484,11 +564,11 @@ reconstruction of the tight binding model in PythTB.</p>
 </div>
 </div>
 <div class="section" id="electron-transport">
-<h2><a class="toc-backref" href="#id24">Electron transport</a><a class="headerlink" href="#electron-transport" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id28">Electron transport</a><a class="headerlink" href="#electron-transport" title="Permalink to this headline">¶</a></h2>
 <p>The following parameters determines how the transport of electrons
 is to be determined.</p>
 <div class="section" id="transport-calc">
-<h3><a class="toc-backref" href="#id25"><code class="docutils literal"><span class="pre">transport_calc</span></code></a><a class="headerlink" href="#transport-calc" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id29"><code class="docutils literal"><span class="pre">transport_calc</span></code></a><a class="headerlink" href="#transport-calc" title="Permalink to this headline">¶</a></h3>
 <p>Determines if the transport calculations are to executed.</p>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">transport_calc</span><span class="p">:</span> <span class="kc">True</span>
@@ -497,18 +577,18 @@ is to be determined.</p>
 <p>Calculate the transport properties.</p>
 </div>
 <div class="section" id="transport-method">
-<h3><a class="toc-backref" href="#id26"><code class="docutils literal"><span class="pre">transport_method</span></code></a><a class="headerlink" href="#transport-method" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id30"><code class="docutils literal"><span class="pre">transport_method</span></code></a><a class="headerlink" href="#transport-method" title="Permalink to this headline">¶</a></h3>
 <p>Selects which mode to use to calculate the transport properties.
 Currently three different modes are accepted;</p>
 <ul class="simple">
-<li><cite>closed</cite> The integrals are solved using the closed Fermi-Dirac
+<li><cite>closed</cite> - The integrals are solved using the closed Fermi-Dirac
 integrals. Only available if the band structure is generated by
 means of analytic models. Only one scattering mechnism can be used
 for each band in this approach.</li>
-<li><cite>numeric</cite> A numerical integration of the Fermi-Dirac integrals,
+<li><cite>numeric</cite> - A numerical integration of the Fermi-Dirac integrals,
 which allows to concatenate different scattering mechanisms for each
 band.</li>
-<li><cite>numerick</cite> The integrals are solved by integrating over the k-point
+<li><cite>numerick</cite> - The integrals are solved by integrating over the k-point
 grid or by utilizing the spectral function.</li>
 </ul>
 <p>Example:</p>
@@ -519,16 +599,16 @@ grid or by utilizing the spectral function.</li>
 analytical expressions for the Fermi-Dirac integrals.</p>
 </div>
 <div class="section" id="transport-integration-method">
-<h3><a class="toc-backref" href="#id27"><code class="docutils literal"><span class="pre">transport_integration_method</span></code></a><a class="headerlink" href="#transport-integration-method" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id31"><code class="docutils literal"><span class="pre">transport_integration_method</span></code></a><a class="headerlink" href="#transport-integration-method" title="Permalink to this headline">¶</a></h3>
 <p>Selects which method to use for solving the integral over the k-points.
 Only applicable if <code class="docutils literal"><span class="pre">transport_method</span></code> is set to <cite>numerick</cite>.</p>
 <ul class="simple">
-<li><cite>trapz</cite> Use the trapezoidal integration scheme implemented in SciPy</li>
-<li><cite>simps</cite> Use the Simpson integration scheme implemented in SciPy</li>
-<li><cite>romberg</cite> Use the Romberg integration scheme implemented in SciPy</li>
-<li><cite>tetra</cite> Use the linear tetrahedron method</li>
-<li><cite>smeared</cite> Use the weighted sum approach with a smearing factor</li>
-<li><cite>cubature</cite> Use the
+<li><cite>trapz</cite> - Use the trapezoidal integration scheme implemented in SciPy</li>
+<li><cite>simps</cite> - Use the Simpson integration scheme implemented in SciPy</li>
+<li><cite>romberg</cite> - Use the Romberg integration scheme implemented in SciPy</li>
+<li><cite>tetra</cite> - Use the linear tetrahedron method</li>
+<li><cite>smeared</cite> - Use the weighted sum approach with a smearing factor</li>
+<li><cite>cubature</cite> - Use the
 <a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/Cubature">Cubature</a>
 integration library together with one of the interpolation routines
 available in the
@@ -539,7 +619,7 @@ unit cell.</li>
 </ul>
 </div>
 <div class="section" id="transport-integration-spectral-smearing">
-<h3><a class="toc-backref" href="#id28"><code class="docutils literal"><span class="pre">transport_integration_spectral_smearing</span></code></a><a class="headerlink" href="#transport-integration-spectral-smearing" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id32"><code class="docutils literal"><span class="pre">transport_integration_spectral_smearing</span></code></a><a class="headerlink" href="#transport-integration-spectral-smearing" title="Permalink to this headline">¶</a></h3>
 <p>Gaussian smearing factor for the weighted sum approach.
 In units of eV. Only relevant if <code class="docutils literal"><span class="pre">transport_integration_method</span></code>
 is set to <cite>smeared</cite>.</p>
@@ -550,7 +630,7 @@ is set to <cite>smeared</cite>.</p>
 <p>Would set it to 0.1 eV.</p>
 </div>
 <div class="section" id="transport-integration-spectral-density">
-<h3><a class="toc-backref" href="#id29"><code class="docutils literal"><span class="pre">transport_integration_spectral_density</span></code></a><a class="headerlink" href="#transport-integration-spectral-density" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id33"><code class="docutils literal"><span class="pre">transport_integration_spectral_density</span></code></a><a class="headerlink" href="#transport-integration-spectral-density" title="Permalink to this headline">¶</a></h3>
 <p>The sampling density of the spectral function. Only relevant if
 <code class="docutils literal"><span class="pre">transport_integration_method</span></code> is set to <cite>tetra</cite> or <cite>smeared</cite>.</p>
 <p>Example:</p>
@@ -560,7 +640,7 @@ is set to <cite>smeared</cite>.</p>
 <p>An example requesting 1000 samples.</p>
 </div>
 <div class="section" id="transport-integration-spectral-energy-cutoff">
-<h3><a class="toc-backref" href="#id30"><code class="docutils literal"><span class="pre">transport_integration_spectral_energy_cutoff</span></code></a><a class="headerlink" href="#transport-integration-spectral-energy-cutoff" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id34"><code class="docutils literal"><span class="pre">transport_integration_spectral_energy_cutoff</span></code></a><a class="headerlink" href="#transport-integration-spectral-energy-cutoff" title="Permalink to this headline">¶</a></h3>
 <p>Determines the extra padding that is used for the spectral function on
 both sides of the requested chemical potential. If multiple chemical
 potentials are requested, the lowest and the highest value is checked and
@@ -576,7 +656,7 @@ units of eV.</p>
 chemical potential.</p>
 </div>
 <div class="section" id="transport-interpolate-method">
-<h3><a class="toc-backref" href="#id31"><code class="docutils literal"><span class="pre">transport_interpolate_method</span></code></a><a class="headerlink" href="#transport-interpolate-method" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id35"><code class="docutils literal"><span class="pre">transport_interpolate_method</span></code></a><a class="headerlink" href="#transport-interpolate-method" title="Permalink to this headline">¶</a></h3>
 <p>Determines which on-the-fly interpolation method is to be used while
 performing the Cubature integration. Only relevant if
 <code class="docutils literal"><span class="pre">transport_integration_method</span></code> is set to <cite>cubature</cite>. Currently
@@ -592,16 +672,16 @@ Which particular interpolation type to use is set with
 Cubature integration.</p>
 </div>
 <div class="section" id="transport-interpolate-type">
-<h3><a class="toc-backref" href="#id32"><code class="docutils literal"><span class="pre">transport_interpolate_type</span></code></a><a class="headerlink" href="#transport-interpolate-type" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id36"><code class="docutils literal"><span class="pre">transport_interpolate_type</span></code></a><a class="headerlink" href="#transport-interpolate-type" title="Permalink to this headline">¶</a></h3>
 <p>Determines which on-the-fly interpolation type to be used while
 performing the Cubature integration. Only relevant if
 <code class="docutils literal"><span class="pre">transport_integration_method</span></code> is set to <cite>cubature</cite>. Currently
 the following options are available:</p>
 <ul class="simple">
-<li><cite>trilinear</cite> Using trilinear interpolation</li>
-<li><cite>tricubic_exact</cite> Using exact tricubic interpolation</li>
-<li><cite>tricubic_bspline</cite> Using b-splines</li>
-<li><cite>akima</cite> Using Akima interpolation</li>
+<li><cite>trilinear</cite> - Using trilinear interpolation</li>
+<li><cite>tricubic_exact</cite> - Using exact tricubic interpolation</li>
+<li><cite>tricubic_bspline</cite> - Using b-splines</li>
+<li><cite>akima</cite> - Using Akima interpolation</li>
 </ul>
 <p>Consult the documentation at
 <a class="reference external" href="https://www.geometrictools.com/">GeometricTools/WildMagic</a> for
@@ -614,7 +694,7 @@ special spline interpolation with local character.</p>
 <p>Perform on-the-fly Akima interpolation during Cubature integration.</p>
 </div>
 <div class="section" id="transport-chempot-min">
-<h3><a class="toc-backref" href="#id33"><code class="docutils literal"><span class="pre">transport_chempot_min</span></code></a><a class="headerlink" href="#transport-chempot-min" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id37"><code class="docutils literal"><span class="pre">transport_chempot_min</span></code></a><a class="headerlink" href="#transport-chempot-min" title="Permalink to this headline">¶</a></h3>
 <p>The minimum chemical potential requested for which the transport
 coefficients are calculated. In units of eV.</p>
 <p>Example:</p>
@@ -624,7 +704,7 @@ coefficients are calculated. In units of eV.</p>
 <p>Starts the calculation of the transport properties at -1.0 eV.</p>
 </div>
 <div class="section" id="transport-chempot-max">
-<h3><a class="toc-backref" href="#id34"><code class="docutils literal"><span class="pre">transport_chempot_max</span></code></a><a class="headerlink" href="#transport-chempot-max" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id38"><code class="docutils literal"><span class="pre">transport_chempot_max</span></code></a><a class="headerlink" href="#transport-chempot-max" title="Permalink to this headline">¶</a></h3>
 <p>The maximum chemical potential requested for which the transport
 coefficients are calculated. In units of eV.</p>
 <p>Example:</p>
@@ -634,7 +714,7 @@ coefficients are calculated. In units of eV.</p>
 <p>Ends the calculation of the transport properties at 1.0 eV.</p>
 </div>
 <div class="section" id="transport-chempot-samples">
-<h3><a class="toc-backref" href="#id35"><code class="docutils literal"><span class="pre">transport_chempot_samples</span></code></a><a class="headerlink" href="#transport-chempot-samples" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id39"><code class="docutils literal"><span class="pre">transport_chempot_samples</span></code></a><a class="headerlink" href="#transport-chempot-samples" title="Permalink to this headline">¶</a></h3>
 <p>The number of chemical potential samples to use between
 <code class="docutils literal"><span class="pre">transport_chempot_min</span></code> and <code class="docutils literal"><span class="pre">transport_chempot_max</span></code>.</p>
 <p>Example:</p>
@@ -645,7 +725,7 @@ coefficients are calculated. In units of eV.</p>
 <code class="docutils literal"><span class="pre">transport_chempot_min</span></code> and <code class="docutils literal"><span class="pre">transport_chempot_max</span></code>.</p>
 </div>
 <div class="section" id="transport-energycutband">
-<h3><a class="toc-backref" href="#id36"><code class="docutils literal"><span class="pre">transport_energycutband</span></code></a><a class="headerlink" href="#transport-energycutband" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id40"><code class="docutils literal"><span class="pre">transport_energycutband</span></code></a><a class="headerlink" href="#transport-energycutband" title="Permalink to this headline">¶</a></h3>
 <p>Bands that reside <code class="docutils literal"><span class="pre">transport_energycutband</span></code> outside
 the chemical potential is dropped from the calculation of the
 transport coefficients. All k-points
@@ -663,7 +743,7 @@ any k-point with energy in the range [-2.0 eV, 2.0 eV] is not included
 in the calculation of the transport coefficients.</p>
 </div>
 <div class="section" id="transport-include-bands">
-<h3><a class="toc-backref" href="#id37"><code class="docutils literal"><span class="pre">transport_include_bands</span></code></a><a class="headerlink" href="#transport-include-bands" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id41"><code class="docutils literal"><span class="pre">transport_include_bands</span></code></a><a class="headerlink" href="#transport-include-bands" title="Permalink to this headline">¶</a></h3>
 <p>A list containing specific bands on which to calculate the transport
 coefficients. If the list is empty, use all bands within the range set by
 :ref:<code class="docutils literal"><span class="pre">transport_energycutband</span></code>. Band index starts at 1.</p>
@@ -674,7 +754,7 @@ coefficients. If the list is empty, use all bands within the range set by
 <p>Calculate the transport coefficients for band 3, 4 and 10.</p>
 </div>
 <div class="section" id="transport-use-analytic-scattering">
-<h3><a class="toc-backref" href="#id38"><code class="docutils literal"><span class="pre">transport_use_analytic_scattering</span></code></a><a class="headerlink" href="#transport-use-analytic-scattering" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id42"><code class="docutils literal"><span class="pre">transport_use_analytic_scattering</span></code></a><a class="headerlink" href="#transport-use-analytic-scattering" title="Permalink to this headline">¶</a></h3>
 <p>Determines if the analytic spherical scattering models should be used.
 They can be applied also to dispersions which are not spherical, but
 such an application have to be physically justified.</p>
@@ -685,7 +765,7 @@ such an application have to be physically justified.</p>
 <p>Use the density-of-states to set up the scattering mechanisms.</p>
 </div>
 <div class="section" id="transport-use-scattering-ontfly">
-<h3><a class="toc-backref" href="#id39"><code class="docutils literal"><span class="pre">transport_use_scattering_ontfly</span></code></a><a class="headerlink" href="#transport-use-scattering-ontfly" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id43"><code class="docutils literal"><span class="pre">transport_use_scattering_ontfly</span></code></a><a class="headerlink" href="#transport-use-scattering-ontfly" title="Permalink to this headline">¶</a></h3>
 <p>Determines if the scattering values should also be integrated on-the-fly
 when performing Cubature integration. Only relevant if
 <code class="docutils literal"><span class="pre">transport_integration_method</span></code> is set to <cite>cubature</cite>.</p>
@@ -696,7 +776,7 @@ when performing Cubature integration. Only relevant if
 <p>Do not use on-the-fly interpolation of the scattering values.</p>
 </div>
 <div class="section" id="transport-drop-valence">
-<h3><a class="toc-backref" href="#id40"><code class="docutils literal"><span class="pre">transport_drop_valence</span></code></a><a class="headerlink" href="#transport-drop-valence" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id44"><code class="docutils literal"><span class="pre">transport_drop_valence</span></code></a><a class="headerlink" href="#transport-drop-valence" title="Permalink to this headline">¶</a></h3>
 <p>Determines if all valence band should be dropped while reading
 e.g. external data. Currently only works for the VASP interface.</p>
 <p>Example:</p>
@@ -706,7 +786,7 @@ e.g. external data. Currently only works for the VASP interface.</p>
 <p>Do not exclude the valence bands during read-in.</p>
 </div>
 <div class="section" id="transport-drop-conduction">
-<h3><a class="toc-backref" href="#id41"><code class="docutils literal"><span class="pre">transport_drop_conduction</span></code></a><a class="headerlink" href="#transport-drop-conduction" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id45"><code class="docutils literal"><span class="pre">transport_drop_conduction</span></code></a><a class="headerlink" href="#transport-drop-conduction" title="Permalink to this headline">¶</a></h3>
 <p>Determines if all conduction bands should be dropped while reading
 e.g. external data. Currently only works for the VASP interface.</p>
 <p>Example:</p>
@@ -716,7 +796,7 @@ e.g. external data. Currently only works for the VASP interface.</p>
 <p>Do not exclude the conduction bands during read-in.</p>
 </div>
 <div class="section" id="transport-isotropic">
-<h3><a class="toc-backref" href="#id42"><code class="docutils literal"><span class="pre">transport_isotropic</span></code></a><a class="headerlink" href="#transport-isotropic" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id46"><code class="docutils literal"><span class="pre">transport_isotropic</span></code></a><a class="headerlink" href="#transport-isotropic" title="Permalink to this headline">¶</a></h3>
 <p>Only calculate the first element of the transport tensors during
 Cubature integration. Only relevant if <code class="docutils literal"><span class="pre">transport_integration_method</span></code>
 is set to <cite>cubature</cite></p>
@@ -727,11 +807,11 @@ is set to <cite>cubature</cite></p>
 </div>
 </div>
 <div class="section" id="density-of-states">
-<h2><a class="toc-backref" href="#id43">Density of states</a><a class="headerlink" href="#density-of-states" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id47">Density of states</a><a class="headerlink" href="#density-of-states" title="Permalink to this headline">¶</a></h2>
 <p>Here follows input parameters related to the calculation of the
 density of states.</p>
 <div class="section" id="dos-calc">
-<h3><a class="toc-backref" href="#id44"><code class="docutils literal"><span class="pre">dos_calc</span></code></a><a class="headerlink" href="#dos-calc" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id48"><code class="docutils literal"><span class="pre">dos_calc</span></code></a><a class="headerlink" href="#dos-calc" title="Permalink to this headline">¶</a></h3>
 <p>Determines if the user wants to calculate the density of states.
 Even if this flag is set to <cite>False</cite>, the density of states is
 sometimes calculated if needed, e.g. if the density of states
@@ -744,7 +824,7 @@ parameter set to <cite>True</cite> and e.g. <code class="docutils literal"><span
 <p>Do not calculate the density of states.</p>
 </div>
 <div class="section" id="dos-e-min">
-<h3><a class="toc-backref" href="#id45"><code class="docutils literal"><span class="pre">dos_e_min</span></code></a><a class="headerlink" href="#dos-e-min" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id49"><code class="docutils literal"><span class="pre">dos_e_min</span></code></a><a class="headerlink" href="#dos-e-min" title="Permalink to this headline">¶</a></h3>
 <p>The minimum energy to use for the density of states calculation.
 In units of eV. The reference is with respect to the aligned Fermi
 level and consequetive shift that might have been applied. Note
@@ -757,7 +837,7 @@ dependent scattering models in order to cover enough energies.</p>
 <p>Calculate the density of states from -5.0 eV.</p>
 </div>
 <div class="section" id="dos-e-max">
-<h3><a class="toc-backref" href="#id46"><code class="docutils literal"><span class="pre">dos_e_max</span></code></a><a class="headerlink" href="#dos-e-max" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id50"><code class="docutils literal"><span class="pre">dos_e_max</span></code></a><a class="headerlink" href="#dos-e-max" title="Permalink to this headline">¶</a></h3>
 <p>The maximum energy to use for the density of states calculation.
 In units of eV. The reference is with respect to the aligned Fermi
 level and consequetive shift that might have been applied. Note
@@ -770,7 +850,7 @@ dependent scattering models in order to cover enough energies.</p>
 <p>Calculate the density of states to 2.0 eV.</p>
 </div>
 <div class="section" id="dos-num-samples">
-<h3><a class="toc-backref" href="#id47"><code class="docutils literal"><span class="pre">dos_num_samples</span></code></a><a class="headerlink" href="#dos-num-samples" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id51"><code class="docutils literal"><span class="pre">dos_num_samples</span></code></a><a class="headerlink" href="#dos-num-samples" title="Permalink to this headline">¶</a></h3>
 <p>The number of energy samples between <code class="docutils literal"><span class="pre">dos_e_min</span></code> and
 <code class="docutils literal"><span class="pre">dos_e_max</span></code>.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dos_num_samples</span><span class="p">:</span> <span class="mi">1000</span>
@@ -779,7 +859,7 @@ dependent scattering models in order to cover enough energies.</p>
 <p>Use 1000 energy points from <code class="docutils literal"><span class="pre">dos_e_min</span></code> to <code class="docutils literal"><span class="pre">dos_e_max</span></code>.</p>
 </div>
 <div class="section" id="dos-smearing">
-<h3><a class="toc-backref" href="#id48"><code class="docutils literal"><span class="pre">dos_smearing</span></code></a><a class="headerlink" href="#dos-smearing" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id52"><code class="docutils literal"><span class="pre">dos_smearing</span></code></a><a class="headerlink" href="#dos-smearing" title="Permalink to this headline">¶</a></h3>
 <p>Gaussian smearing factor in units of eV. Only relevant if
 <code class="docutils literal"><span class="pre">dos_integrating_method</span></code> is set to <cite>smeared</cite>, <cite>trapz</cite>,
 <cite>simps</cite> or <cite>romb</cite>.</p>
@@ -788,7 +868,7 @@ dependent scattering models in order to cover enough energies.</p>
 </div>
 </div>
 <div class="section" id="dos-interpolate-method">
-<h3><a class="toc-backref" href="#id49"><code class="docutils literal"><span class="pre">dos_interpolate_method</span></code></a><a class="headerlink" href="#dos-interpolate-method" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id53"><code class="docutils literal"><span class="pre">dos_interpolate_method</span></code></a><a class="headerlink" href="#dos-interpolate-method" title="Permalink to this headline">¶</a></h3>
 <p>Similar to the transport integrals it is possible to
 integrate the density of states using Cubature with on the
 fly interpolation through the functions available in
@@ -801,7 +881,7 @@ GeometricTools/WildMagic. Only relevant if
 is set to <cite>cubature</cite>.</p>
 </div>
 <div class="section" id="dos-interpolate-type">
-<h3><a class="toc-backref" href="#id50"><code class="docutils literal"><span class="pre">dos_interpolate_type</span></code></a><a class="headerlink" href="#dos-interpolate-type" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id54"><code class="docutils literal"><span class="pre">dos_interpolate_type</span></code></a><a class="headerlink" href="#dos-interpolate-type" title="Permalink to this headline">¶</a></h3>
 <p>Determines which interpolation type to use if
 <code class="docutils literal"><span class="pre">dos_integrating_method</span></code> is set to <cite>cubature</cite>,
 otherwise not relevant.</p>
@@ -811,15 +891,15 @@ otherwise not relevant.</p>
 <p>Use on the fly Akima interpolation during Cubature integration.</p>
 </div>
 <div class="section" id="dos-integrating-method">
-<h3><a class="toc-backref" href="#id51"><code class="docutils literal"><span class="pre">dos_integrating_method</span></code></a><a class="headerlink" href="#dos-integrating-method" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id55"><code class="docutils literal"><span class="pre">dos_integrating_method</span></code></a><a class="headerlink" href="#dos-integrating-method" title="Permalink to this headline">¶</a></h3>
 <p>Determines which method of integration to use to obtain the
 density of states. The following options are available:</p>
 <ul class="simple">
-<li><cite>trapz</cite> trapezoidal integration</li>
-<li><cite>simps</cite> Simpson integration</li>
-<li><cite>romb</cite> Romberg integration</li>
-<li><cite>tetra</cite> linear tetrahedron method without Blochl corrections</li>
-<li><cite>cubature</cite> Cubature integration with on the fly interpolation</li>
+<li><cite>trapz</cite> - trapezoidal integration</li>
+<li><cite>simps</cite> - Simpson integration</li>
+<li><cite>romb</cite> - Romberg integration</li>
+<li><cite>tetra</cite> - linear tetrahedron method without Blochl corrections</li>
+<li><cite>cubature</cite> - Cubature integration with on the fly interpolation</li>
 </ul>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dos_integrating_method</span><span class="p">:</span> <span class="s2">&quot;trapz&quot;</span>
 </pre></div>
@@ -828,10 +908,10 @@ density of states. The following options are available:</p>
 </div>
 </div>
 <div class="section" id="general-parameters">
-<h2><a class="toc-backref" href="#id52">General parameters</a><a class="headerlink" href="#general-parameters" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id56">General parameters</a><a class="headerlink" href="#general-parameters" title="Permalink to this headline">¶</a></h2>
 <p>Here follows general parameters.</p>
 <div class="section" id="temperature-min">
-<h3><a class="toc-backref" href="#id53"><code class="docutils literal"><span class="pre">temperature_min</span></code></a><a class="headerlink" href="#temperature-min" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id57"><code class="docutils literal"><span class="pre">temperature_min</span></code></a><a class="headerlink" href="#temperature-min" title="Permalink to this headline">¶</a></h3>
 <p>The minimum temperature in K.</p>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">temperature_min</span><span class="p">:</span> <span class="mi">100</span>
@@ -840,7 +920,7 @@ density of states. The following options are available:</p>
 <p>The minimum temperature is set at 100 K.</p>
 </div>
 <div class="section" id="temperature-max">
-<h3><a class="toc-backref" href="#id54"><code class="docutils literal"><span class="pre">temperature_max</span></code></a><a class="headerlink" href="#temperature-max" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id58"><code class="docutils literal"><span class="pre">temperature_max</span></code></a><a class="headerlink" href="#temperature-max" title="Permalink to this headline">¶</a></h3>
 <p>The maximum temperature in K.</p>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">temperature_max</span><span class="p">:</span> <span class="mi">700</span>
@@ -849,7 +929,7 @@ density of states. The following options are available:</p>
 <p>The maximum temperature is set at 700 K.</p>
 </div>
 <div class="section" id="temperature-steps">
-<h3><a class="toc-backref" href="#id55"><code class="docutils literal"><span class="pre">temperature_steps</span></code></a><a class="headerlink" href="#temperature-steps" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id59"><code class="docutils literal"><span class="pre">temperature_steps</span></code></a><a class="headerlink" href="#temperature-steps" title="Permalink to this headline">¶</a></h3>
 <p>The number of temperature steps from <code class="docutils literal"><span class="pre">temperature_min</span></code>
 to <code class="docutils literal"><span class="pre">temperature_max</span></code>.</p>
 <p>Example:</p>
@@ -860,7 +940,7 @@ to <code class="docutils literal"><span class="pre">temperature_max</span></code
 samplings at 100, 200, 300, 400, 500, 600 and 700 K.</p>
 </div>
 <div class="section" id="gamma-center">
-<h3><a class="toc-backref" href="#id56"><code class="docutils literal"><span class="pre">gamma_center</span></code></a><a class="headerlink" href="#gamma-center" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id60"><code class="docutils literal"><span class="pre">gamma_center</span></code></a><a class="headerlink" href="#gamma-center" title="Permalink to this headline">¶</a></h3>
 <p><img class="math" src="_images/math/efdde42c23b9469f63c32687ccf7efbb384158e3.png" alt="\\Gamma"/> centered k-point grids? Anything else is currently
 not supported (or tested).</p>
 <p>Example:</p>
@@ -870,7 +950,7 @@ not supported (or tested).</p>
 <p>Notifies that the k-point grids are <img class="math" src="_images/math/efdde42c23b9469f63c32687ccf7efbb384158e3.png" alt="\\Gamma"/> centered.</p>
 </div>
 <div class="section" id="maxeint">
-<h3><a class="toc-backref" href="#id57"><code class="docutils literal"><span class="pre">maxeint</span></code></a><a class="headerlink" href="#maxeint" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id61"><code class="docutils literal"><span class="pre">maxeint</span></code></a><a class="headerlink" href="#maxeint" title="Permalink to this headline">¶</a></h3>
 <p>The limites of the dimensionless carrier energy <img class="math" src="_images/math/30d7c1ca2bcd6f6baa1d2b28304047f1ca32ef49.png" alt="\\eta"/>
 used for the numerical solution of the Fermi-Dirac integrals.
 Only relevant if <code class="docutils literal"><span class="pre">transport_method</span></code> is set to <cite>numerick</cite>.</p>
@@ -881,7 +961,7 @@ Only relevant if <code class="docutils literal"><span class="pre">transport_meth
 <p>Sets the limits of the Fermi-Dirac integrals to 100 <img class="math" src="_images/math/30d7c1ca2bcd6f6baa1d2b28304047f1ca32ef49.png" alt="\\eta"/>.</p>
 </div>
 <div class="section" id="occ-cutoff">
-<h3><a class="toc-backref" href="#id58"><code class="docutils literal"><span class="pre">occ_cutoff</span></code></a><a class="headerlink" href="#occ-cutoff" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id62"><code class="docutils literal"><span class="pre">occ_cutoff</span></code></a><a class="headerlink" href="#occ-cutoff" title="Permalink to this headline">¶</a></h3>
 <p>The cutoff to use when detecting occupancies. Used for detecting
 the valence band maximum, conduction band minimum and then also for
 the band gap.</p>
@@ -894,7 +974,7 @@ an occupancy less than this will be assumed not occupied and vice
 versa.</p>
 </div>
 <div class="section" id="e-fermi-in-gap">
-<h3><a class="toc-backref" href="#id59"><code class="docutils literal"><span class="pre">e_fermi_in_gap</span></code></a><a class="headerlink" href="#e-fermi-in-gap" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id63"><code class="docutils literal"><span class="pre">e_fermi_in_gap</span></code></a><a class="headerlink" href="#e-fermi-in-gap" title="Permalink to this headline">¶</a></h3>
 <p>Determines if the Fermi level is to be placed in the middle of
 the gap.</p>
 <p>Example:</p>
@@ -904,7 +984,7 @@ the gap.</p>
 <p>Do not place the Fermi level in the middle of the gap.</p>
 </div>
 <div class="section" id="e-fermi">
-<h3><a class="toc-backref" href="#id60"><code class="docutils literal"><span class="pre">e_fermi</span></code></a><a class="headerlink" href="#e-fermi" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id64"><code class="docutils literal"><span class="pre">e_fermi</span></code></a><a class="headerlink" href="#e-fermi" title="Permalink to this headline">¶</a></h3>
 <p>Determine if one should shift the energies to the supplied
 Fermi level (usually read in the interface).</p>
 <p>Example:</p>
@@ -915,7 +995,7 @@ Fermi level (usually read in the interface).</p>
 Fermi level.</p>
 </div>
 <div class="section" id="e-vbm">
-<h3><a class="toc-backref" href="#id61"><code class="docutils literal"><span class="pre">e_vbm</span></code></a><a class="headerlink" href="#e-vbm" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id65"><code class="docutils literal"><span class="pre">e_vbm</span></code></a><a class="headerlink" href="#e-vbm" title="Permalink to this headline">¶</a></h3>
 <p>Determines if to set the Fermi level at the valence band
 maximum.</p>
 <p>Example:</p>
@@ -925,7 +1005,7 @@ maximum.</p>
 <p>Do not set the Fermi level at the top valence band.</p>
 </div>
 <div class="section" id="e-shift">
-<h3><a class="toc-backref" href="#id62"><code class="docutils literal"><span class="pre">e_shift</span></code></a><a class="headerlink" href="#e-shift" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id66"><code class="docutils literal"><span class="pre">e_shift</span></code></a><a class="headerlink" href="#e-shift" title="Permalink to this headline">¶</a></h3>
 <p>After all alignments have been performed, perform
 this additional shift. Units in eV.</p>
 <p>Example:</p>
@@ -935,7 +1015,7 @@ this additional shift. Units in eV.</p>
 <p>Sets the additional energy shift to 0 eV.</p>
 </div>
 <div class="section" id="cubature-h">
-<h3><a class="toc-backref" href="#id63"><code class="docutils literal"><span class="pre">cubature_h</span></code></a><a class="headerlink" href="#cubature-h" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id67"><code class="docutils literal"><span class="pre">cubature_h</span></code></a><a class="headerlink" href="#cubature-h" title="Permalink to this headline">¶</a></h3>
 <p>Determines if to use p- or h-cubature for the Cubature integration.
 Consult the manual at
 <a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/Cubature">Cubature</a>
@@ -947,7 +1027,7 @@ Only relevant if <code class="docutils literal"><span class="pre">transport_inte
 <p>Use p-cubature.</p>
 </div>
 <div class="section" id="cubature-max-it">
-<h3><a class="toc-backref" href="#id64"><code class="docutils literal"><span class="pre">cubature_max_it</span></code></a><a class="headerlink" href="#cubature-max-it" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id68"><code class="docutils literal"><span class="pre">cubature_max_it</span></code></a><a class="headerlink" href="#cubature-max-it" title="Permalink to this headline">¶</a></h3>
 <p>The maximum number of iterations while performing Cubature
 integration.
 Consult the manual at
@@ -961,7 +1041,7 @@ Only relevant if <code class="docutils literal"><span class="pre">transport_inte
 when <code class="docutils literal"><span class="pre">cubature_abs_err</span></code> or <code class="docutils literal"><span class="pre">cubature_rel_err</span></code> is reached)</p>
 </div>
 <div class="section" id="cubature-abs-err">
-<h3><a class="toc-backref" href="#id65"><code class="docutils literal"><span class="pre">cubature_abs_err</span></code></a><a class="headerlink" href="#cubature-abs-err" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id69"><code class="docutils literal"><span class="pre">cubature_abs_err</span></code></a><a class="headerlink" href="#cubature-abs-err" title="Permalink to this headline">¶</a></h3>
 <p>The absolute error when the Cubature integration is truncated.
 Consult the manual at
 <a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/Cubature">Cubature</a>
@@ -974,7 +1054,7 @@ Only relevant if <code class="docutils literal"><span class="pre">transport_inte
 larger than zero, it takes precense.</p>
 </div>
 <div class="section" id="cubature-rel-err">
-<h3><a class="toc-backref" href="#id66"><code class="docutils literal"><span class="pre">cubature_rel_err</span></code></a><a class="headerlink" href="#cubature-rel-err" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id70"><code class="docutils literal"><span class="pre">cubature_rel_err</span></code></a><a class="headerlink" href="#cubature-rel-err" title="Permalink to this headline">¶</a></h3>
 <p>The relative error when the Cubature integration is truncated.
 Consult the manual at
 <a class="reference external" href="http://ab-initio.mit.edu/wiki/index.php/Cubature">Cubature</a>
@@ -991,7 +1071,7 @@ enters in practice an infinite loop. Carefully setting
 <code class="docutils literal"><span class="pre">cubature_max_it</span></code> can alleviate this.</p>
 </div>
 <div class="section" id="skw-expansion-factor">
-<h3><a class="toc-backref" href="#id67"><code class="docutils literal"><span class="pre">skw_expansion_factor</span></code></a><a class="headerlink" href="#skw-expansion-factor" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id71"><code class="docutils literal"><span class="pre">skw_expansion_factor</span></code></a><a class="headerlink" href="#skw-expansion-factor" title="Permalink to this headline">¶</a></h3>
 <p>The expansion factor used in the SKW routine. It is basically
 tells how many unit cells that can be used. Only relevant if
 <code class="docutils literal"><span class="pre">dispersion_interpolate_method</span></code> is set to <cite>skw</cite>.</p>
@@ -1004,7 +1084,7 @@ from this volume, thus removing the points in the far corners of
 this volume in the interpolation procedure.</p>
 </div>
 <div class="section" id="carrier-valence-energy">
-<h3><a class="toc-backref" href="#id68"><code class="docutils literal"><span class="pre">carrier_valence_energy</span></code></a><a class="headerlink" href="#carrier-valence-energy" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id72"><code class="docutils literal"><span class="pre">carrier_valence_energy</span></code></a><a class="headerlink" href="#carrier-valence-energy" title="Permalink to this headline">¶</a></h3>
 <p>The cutoff in which where to interpret the carriers as p-type.
 Used in the calculation of the carrier concentration. Units in
 eV.</p>
@@ -1016,7 +1096,7 @@ eV.</p>
 as p-type.</p>
 </div>
 <div class="section" id="carrier-conduction-energy">
-<h3><a class="toc-backref" href="#id69"><code class="docutils literal"><span class="pre">carrier_conduction_energy</span></code></a><a class="headerlink" href="#carrier-conduction-energy" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id73"><code class="docutils literal"><span class="pre">carrier_conduction_energy</span></code></a><a class="headerlink" href="#carrier-conduction-energy" title="Permalink to this headline">¶</a></h3>
 <p>The cutoff in which where to interpret the carriers as n-type.
 Used in the calculation of the carrier concentration. Units in
 eV.</p>
@@ -1028,7 +1108,7 @@ eV.</p>
 as n-type.</p>
 </div>
 <div class="section" id="carrier-dos-analytick">
-<h3><a class="toc-backref" href="#id70"><code class="docutils literal"><span class="pre">carrier_dos_analytick</span></code></a><a class="headerlink" href="#carrier-dos-analytick" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id74"><code class="docutils literal"><span class="pre">carrier_dos_analytick</span></code></a><a class="headerlink" href="#carrier-dos-analytick" title="Permalink to this headline">¶</a></h3>
 <p>Determines if the carrier concentration should be recaculated after
 being set up with analytical models. Only relevant if the band structure
 is generated from analytical models.</p>
@@ -1040,7 +1120,7 @@ is generated from analytical models.</p>
 concentration.</p>
 </div>
 <div class="section" id="defect-ionization">
-<h3><a class="toc-backref" href="#id71"><code class="docutils literal"><span class="pre">defect_ionization</span></code></a><a class="headerlink" href="#defect-ionization" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id75"><code class="docutils literal"><span class="pre">defect_ionization</span></code></a><a class="headerlink" href="#defect-ionization" title="Permalink to this headline">¶</a></h3>
 <p>Determines if we shoudl use the expressions for the defect ionization
 in order to calculate the p- and n-type carrier concentration.</p>
 <p>Example:</p>
@@ -1051,7 +1131,7 @@ in order to calculate the p- and n-type carrier concentration.</p>
 p- and n-type carrier concentration.</p>
 </div>
 <div class="section" id="donor-number">
-<h3><a class="toc-backref" href="#id72"><code class="docutils literal"><span class="pre">donor_number</span></code></a><a class="headerlink" href="#donor-number" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id76"><code class="docutils literal"><span class="pre">donor_number</span></code></a><a class="headerlink" href="#donor-number" title="Permalink to this headline">¶</a></h3>
 <p>The density of donors in units of <img class="math" src="_images/math/87683669ec5f2e8df145866022b4c2a63b4e9948.png" alt="10^{-21} \mathrm{cm}^{-3}"/>.</p>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">donor_number</span><span class="p">:</span> <span class="mf">0.0</span>
@@ -1060,7 +1140,7 @@ p- and n-type carrier concentration.</p>
 <p>No donors present.</p>
 </div>
 <div class="section" id="donor-degen-fact">
-<h3><a class="toc-backref" href="#id73"><code class="docutils literal"><span class="pre">donor_degen_fact</span></code></a><a class="headerlink" href="#donor-degen-fact" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id77"><code class="docutils literal"><span class="pre">donor_degen_fact</span></code></a><a class="headerlink" href="#donor-degen-fact" title="Permalink to this headline">¶</a></h3>
 <p>The degeneracy factor for the donors.</p>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">donor_degen_fact</span><span class="p">:</span> <span class="mf">0.75</span>
@@ -1069,7 +1149,7 @@ p- and n-type carrier concentration.</p>
 <p>A degeneracy factor of 0.75 is used.</p>
 </div>
 <div class="section" id="donor-energy">
-<h3><a class="toc-backref" href="#id74"><code class="docutils literal"><span class="pre">donor_energy</span></code></a><a class="headerlink" href="#donor-energy" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id78"><code class="docutils literal"><span class="pre">donor_energy</span></code></a><a class="headerlink" href="#donor-energy" title="Permalink to this headline">¶</a></h3>
 <p>The energy of the donor in units of eV. Should be referenced to
 the energy after all adjustments to the Fermi level and additional
 energy shifts have been performed.</p>
@@ -1080,7 +1160,7 @@ energy shifts have been performed.</p>
 <p>The donor energy is 0 eV.</p>
 </div>
 <div class="section" id="acceptor-number">
-<h3><a class="toc-backref" href="#id75"><code class="docutils literal"><span class="pre">acceptor_number</span></code></a><a class="headerlink" href="#acceptor-number" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id79"><code class="docutils literal"><span class="pre">acceptor_number</span></code></a><a class="headerlink" href="#acceptor-number" title="Permalink to this headline">¶</a></h3>
 <p>The density of acceptors in units of <img class="math" src="_images/math/87683669ec5f2e8df145866022b4c2a63b4e9948.png" alt="10^{-21} \mathrm{cm}^{-3}"/>.</p>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">donor_number</span><span class="p">:</span> <span class="mf">0.0</span>
@@ -1089,7 +1169,7 @@ energy shifts have been performed.</p>
 <p>No acceptors present.</p>
 </div>
 <div class="section" id="acceptor-degen-fact">
-<h3><a class="toc-backref" href="#id76"><code class="docutils literal"><span class="pre">acceptor_degen_fact</span></code></a><a class="headerlink" href="#acceptor-degen-fact" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id80"><code class="docutils literal"><span class="pre">acceptor_degen_fact</span></code></a><a class="headerlink" href="#acceptor-degen-fact" title="Permalink to this headline">¶</a></h3>
 <p>The degeneracy factor for the acceptors.</p>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">acceptor_degen_fact</span><span class="p">:</span> <span class="mf">0.75</span>
@@ -1098,7 +1178,7 @@ energy shifts have been performed.</p>
 <p>A degeneracy factor of 0.75 is used.</p>
 </div>
 <div class="section" id="acceptor-energy">
-<h3><a class="toc-backref" href="#id77"><code class="docutils literal"><span class="pre">acceptor_energy</span></code></a><a class="headerlink" href="#acceptor-energy" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id81"><code class="docutils literal"><span class="pre">acceptor_energy</span></code></a><a class="headerlink" href="#acceptor-energy" title="Permalink to this headline">¶</a></h3>
 <p>The energy of the acceptor in units of eV. Should be referenced to
 the energy after all adjustments to the Fermi level and additional
 energy shifts have been performed.</p>
@@ -1109,18 +1189,18 @@ energy shifts have been performed.</p>
 <p>The acceptor energy is 0 eV.</p>
 </div>
 <div class="section" id="read">
-<h3><a class="toc-backref" href="#id78"><code class="docutils literal"><span class="pre">read</span></code></a><a class="headerlink" href="#read" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id82"><code class="docutils literal"><span class="pre">read</span></code></a><a class="headerlink" href="#read" title="Permalink to this headline">¶</a></h3>
 <p>Determine how to set up the band structure and/or how to read data.
 The following options are possible:</p>
 <ul>
-<li><p class="first"><cite>param</cite> The band structure is generated from the parameter files.
+<li><p class="first"><cite>param</cite> - The band structure is generated from the parameter files.
 For all cases the band structure is generated by analytical models.
 If tight-binding parameters are specified the construction of the
 band structure is performed in PythTB and read automatically.
 The parameters pertaining to the construction of the bandstructure
 itself is set in the file <code class="file docutils literal"><span class="pre">bandparam.yml</span></code>.</p>
 </li>
-<li><p class="first"><cite>numpy</cite> Read data from NumPy datafiles without group velocities.</p>
+<li><p class="first"><cite>numpy</cite> - Read data from NumPy datafiles without group velocities.</p>
 <div class="line-block">
 <div class="line">The datastructure of the supplied numpy array</div>
 <div class="line">should be on the following format:</div>
@@ -1133,7 +1213,7 @@ itself is set in the file <code class="file docutils literal"><span class="pre">
 <p>The band parameters still need to be set in <code class="file docutils literal"><span class="pre">bandparam.yml</span></code> as they
 contain necessary information about scattering etc.</p>
 </li>
-<li><p class="first"><cite>numpyv</cite> Read data from NumPy datafiles, including group velocities.</p>
+<li><p class="first"><cite>numpyv</cite> - Read data from NumPy datafiles, including group velocities.</p>
 <div class="line-block">
 <div class="line">The datastructure of the supplied numpy array</div>
 <div class="line">should be on the following format:</div>
@@ -1144,11 +1224,11 @@ contain necessary information about scattering etc.</p>
 <p>The band parameters still need to be set in <code class="file docutils literal"><span class="pre">bandparam.yml</span></code> as they
 contain necessary information about scattering etc.</p>
 </li>
-<li><p class="first"><cite>vasp</cite> Read data from a supplied VASP XML file, typically vasprun.xml.
+<li><p class="first"><cite>vasp</cite> - Read data from a supplied VASP XML file, typically vasprun.xml.
 The band parameters still need to be set in <code class="file docutils literal"><span class="pre">bandparam.yml</span></code> as they
 contain necessary information about scattering etc.</p>
 </li>
-<li><p class="first"><cite>w90</cite> Read Wannier90 output files. PythTB is used as an intermediate step
+<li><p class="first"><cite>w90</cite> - Read Wannier90 output files. PythTB is used as an intermediate step
 to import the Wannier90 data and create the tight-binding model. From this
 we extract the band structure automatically.</p>
 </li>
@@ -1161,15 +1241,15 @@ we extract the band structure automatically.</p>
 <code class="file docutils literal"><span class="pre">bandparam.yml</span></code>.</p>
 </div>
 <div class="section" id="readfile">
-<h3><a class="toc-backref" href="#id79"><code class="docutils literal"><span class="pre">readfile</span></code></a><a class="headerlink" href="#readfile" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id83"><code class="docutils literal"><span class="pre">readfile</span></code></a><a class="headerlink" href="#readfile" title="Permalink to this headline">¶</a></h3>
 <p>The name of the file to be read. Depending on <code class="docutils literal"><span class="pre">read</span></code> it has the
 following behaviour:</p>
 <ul class="simple">
-<li><cite>param</cite> not relevant</li>
-<li><cite>vasp</cite> the name of the VASP XML file, if not set it defaults to <cite>vasprun.xml</cite></li>
-<li><cite>numpy</cite> the name of the NumPy datafile</li>
-<li><cite>numpyv</cite> the name of the NumPy datafile</li>
-<li><cite>w90</cite> the prefix used during the Wannier90 calculations, if not set it
+<li><cite>param</cite> - not relevant</li>
+<li><cite>vasp</cite> - the name of the VASP XML file, if not set it defaults to <cite>vasprun.xml</cite></li>
+<li><cite>numpy</cite> - the name of the NumPy datafile</li>
+<li><cite>numpyv</cite> - the name of the NumPy datafile</li>
+<li><cite>w90</cite> - the prefix used during the Wannier90 calculations, if not set it
 defaults to <cite>wannier90</cite></li>
 </ul>
 <p>Example:</p>
@@ -1179,7 +1259,7 @@ defaults to <cite>wannier90</cite></li>
 <p>Use defaults, e.g. vasprun.xml for VASP.</p>
 </div>
 <div class="section" id="scissor">
-<h3><a class="toc-backref" href="#id80"><code class="docutils literal"><span class="pre">scissor</span></code></a><a class="headerlink" href="#scissor" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id84"><code class="docutils literal"><span class="pre">scissor</span></code></a><a class="headerlink" href="#scissor" title="Permalink to this headline">¶</a></h3>
 <p>Apply a simple scissor operator to increase the band gap.
 Only works of the band gap has been correctly determined.
 In units of eV if not <cite>False</cite>.</p>
@@ -1190,7 +1270,7 @@ In units of eV if not <cite>False</cite>.</p>
 <p>Do not apply a scissor operator.</p>
 </div>
 <div class="section" id="symprec">
-<h3><a class="toc-backref" href="#id81"><code class="docutils literal"><span class="pre">symprec</span></code></a><a class="headerlink" href="#symprec" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id85"><code class="docutils literal"><span class="pre">symprec</span></code></a><a class="headerlink" href="#symprec" title="Permalink to this headline">¶</a></h3>
 <p>The symmetry cutoff parameters. Passed to Spglib. VASP also uses an
 internal symmetry parameter which is called <cite>SYMPREC</cite>. Spglib need to
 reproduce the symmetry that was detected in VASP in order for the
@@ -1204,7 +1284,7 @@ If errors regarding this is invoked, please try to adjust symprec.</p>
 same and symmetry is thus detected.</p>
 </div>
 <div class="section" id="displaytb">
-<h3><a class="toc-backref" href="#id82"><code class="docutils literal"><span class="pre">displaytb</span></code></a><a class="headerlink" href="#displaytb" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id86"><code class="docutils literal"><span class="pre">displaytb</span></code></a><a class="headerlink" href="#displaytb" title="Permalink to this headline">¶</a></h3>
 <p>Determines if the user wants to print the output from PythTB upon
 construction of tight-binding orbitals. Only relevant if
 <code class="docutils literal"><span class="pre">type</span></code> is set to 3 in <code class="file docutils literal"><span class="pre">bandparam.yml</span></code>.</p>
@@ -1216,7 +1296,7 @@ construction of tight-binding orbitals. Only relevant if
 construction.</p>
 </div>
 <div class="section" id="libinfo">
-<h3><a class="toc-backref" href="#id83"><code class="docutils literal"><span class="pre">libinfo</span></code></a><a class="headerlink" href="#libinfo" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id87"><code class="docutils literal"><span class="pre">libinfo</span></code></a><a class="headerlink" href="#libinfo" title="Permalink to this headline">¶</a></h3>
 <p>Determines if printout to stdout is performed in the interfaces
 to the external libraries.</p>
 <p>Example:</p>
@@ -1226,7 +1306,7 @@ to the external libraries.</p>
 <p>Do not print stdout information from the interfaces.</p>
 </div>
 <div class="section" id="onlytotalrate">
-<h3><a class="toc-backref" href="#id84"><code class="docutils literal"><span class="pre">onlytotalrate</span></code></a><a class="headerlink" href="#onlytotalrate" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id88"><code class="docutils literal"><span class="pre">onlytotalrate</span></code></a><a class="headerlink" href="#onlytotalrate" title="Permalink to this headline">¶</a></h3>
 <p>Determines if the users wants to store the relaxation time for each
 scattering mechanism. This is usefull for visualization purposes, but
 is simply very memory demanding. Users should try to leave this to
@@ -1238,7 +1318,7 @@ is simply very memory demanding. Users should try to leave this to
 <p>Only store the total relaxation time.</p>
 </div>
 <div class="section" id="parallel">
-<h3><a class="toc-backref" href="#id85"><code class="docutils literal"><span class="pre">parallel</span></code></a><a class="headerlink" href="#parallel" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id89"><code class="docutils literal"><span class="pre">parallel</span></code></a><a class="headerlink" href="#parallel" title="Permalink to this headline">¶</a></h3>
 <p>Determines if transport and density of states integrals are to be
 performed in parallel (embarrassingly). Currently this is not fully
 implemented, so users should leave this to <cite>False</cite>.</p>
@@ -1249,13 +1329,13 @@ implemented, so users should leave this to <cite>False</cite>.</p>
 <p>Do not use the parallel features.</p>
 </div>
 <div class="section" id="run-tests">
-<h3><a class="toc-backref" href="#id86"><code class="docutils literal"><span class="pre">run_tests</span></code></a><a class="headerlink" href="#run-tests" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id90"><code class="docutils literal"><span class="pre">run_tests</span></code></a><a class="headerlink" href="#run-tests" title="Permalink to this headline">¶</a></h3>
 <p>Determines if the tests are to be run. Several options are available:</p>
 <ul class="simple">
-<li><cite>slow</cite> Run all tests.</li>
-<li><cite>fast</cite> Only run the fast tests.</li>
-<li><cite>True</cite> Same as <cite>fast</cite>.</li>
-<li><cite>False</cite> Do not run any tests.</li>
+<li><cite>slow</cite> - Run all tests.</li>
+<li><cite>fast</cite> - Only run the fast tests.</li>
+<li><cite>True</cite> - Same as <cite>fast</cite>.</li>
+<li><cite>False</cite> - Do not run any tests.</li>
 </ul>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run_tests</span><span class="p">:</span> <span class="kc">False</span>

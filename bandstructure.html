@@ -201,11 +201,6 @@ calculation.</p>
 <p class="first admonition-title">Todo</p>
 <p class="last">Add interfaces to other first principle codes.</p>
 </div>
-<div class="admonition-todo admonition" id="index-2">
-<p class="first admonition-title">Todo</p>
-<p class="last">Add detailed documentation of the YAML configuration
-files.</p>
-</div>
 <dl class="method">
 <dt id="bandstructure.Bandstructure.apply_scissor_operator">
 <code class="descname">apply_scissor_operator</code><span class="sig-paren">(</span><em>energies=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.apply_scissor_operator" title="Permalink to this definition">¶</a></dt>
@@ -369,22 +364,62 @@ points, where N is determined from dos_energies.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="bandstructure.Bandstructure.calc_effective_mass">
+<code class="descname">calc_effective_mass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.calc_effective_mass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the effective mass tensor. Currently the effective
+mass tensor is not diagonalized.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Upon complettion the effective mass is stored in the
+current <cite>Bandstructure()</cite> object.</p>
+<p>Also, the velocities have to be precalculated before
+calling this routine.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="bandstructure.Bandstructure.calc_velocities">
-<code class="descname">calc_velocities</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.calc_velocities" title="Permalink to this definition">¶</a></dt>
+<code class="descname">calc_velocities</code><span class="sig-paren">(</span><em>velocities=None</em>, <em>store=True</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.calc_velocities" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the electron group velocities
 from the electron energy dispersion</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bs</strong> : object, optional</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>velocities</strong> : ndarray, optional</p>
 <blockquote>
-<div><p>A <cite>Bandstructure()</cite> object. Defaults to the
-active object.</p>
+<div><div class="line-block">
+<div class="line">Dimension: (N, M)</div>
+</div>
+<p>Contains the group velocity along a specific direction
+for N bands and M k-points. If supplied the velocities
+of the velocities are calculated, or more specifically
+the inverse effective mass tensor (without prefactor)</p>
+</div></blockquote>
+<p><strong>store</strong> : boolean, optional</p>
+<blockquote>
+<div><p>If True, store the calculated velocities in the
+active <cite>Bandstructure()</cite> object, else return the
+velocity array. Defaults to True.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>velocities</strong> : ndarray, optional</p>
+<blockquote class="last">
+<div><div class="line-block">
+<div class="line">Dimension: (N, 3, M)</div>
+</div>
+<p>The velocities of the velocity. Only returned if
+<cite>store</cite> is set to False.</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -395,7 +430,8 @@ that the velocities can be extracted directly from the
 electron energy dispersion by numerical differentiation.
 Uses the <code class="xref py py-func docutils literal"><span class="pre">gradient()</span></code> from NumPy.</p>
 <p>Overwrites any entry of exising <cite>velocities</cite> in <cite>bs</cite>
-and sets <cite>gen_velocities</cite> to False.</p>
+and sets <cite>gen_velocities</cite> to False if <cite>velocities</cite> is
+not supplied.</p>
 </dd></dl>
 
 <dl class="method">
@@ -991,7 +1027,7 @@ calculated in units of eV.</p>
 <p class="rubric">Notes</p>
 <p>Currently only the parabolic/spherical models are
 implemented.</p>
-<div class="admonition-todo admonition" id="index-3">
+<div class="admonition-todo admonition" id="index-2">
 <p class="first admonition-title">Todo</p>
 <p class="last">Also implement the non-parabolic alpha models</p>
 </div>
@@ -999,7 +1035,7 @@ implemented.</p>
 
 <dl class="method">
 <dt id="bandstructure.Bandstructure.interpolate">
-<code class="descname">interpolate</code><span class="sig-paren">(</span><em>iksampling=None</em>, <em>ienergies=True</em>, <em>ivelocities=False</em>, <em>itype=None</em>, <em>itype_sub=None</em>, <em>kpoint_mesh=None</em>, <em>store_inter=False</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.interpolate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">interpolate</code><span class="sig-paren">(</span><em>iksampling=None</em>, <em>ienergies=True</em>, <em>ivelocities=False</em>, <em>itype=None</em>, <em>itype_sub=None</em>, <em>kpoint_mesh=None</em>, <em>store_inter=False</em>, <em>energies=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.interpolate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Interpolates the energies and velocity dispersion.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1054,7 +1090,8 @@ sets this.</p>
 </div>
 <p>Supplied k - point grid for extraction as an alternative
 to iksampling. Should be supplied in cartesian coordinates
-and should not extend the border of the original grid.</p>
+and should not extend the border of the original grid.
+Usefull for line extraction etc.</p>
 </div></blockquote>
 <p><strong>store_inter</strong> : boolean, optional</p>
 <blockquote>
@@ -1063,26 +1100,36 @@ the supplied object. Also modifies the current <cite>Lattice()</cite> object
 with the new grid etc. if that has been modified.
 Defaults to False.</p>
 </div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ien, ivel1, ivel2, ivel3</strong> : ndarray, ndarray, ndarray, ndarray</p>
+<p><strong>energies</strong> : ndarray, optional</p>
 <blockquote>
 <div><div class="line-block">
-<div class="line">Dimension: (M), (M, 3), (M, 3), (M, 3)</div>
+<div class="line">Dimension: (N,J)</div>
+</div>
+<p>An input array containing the energies (or some other)
+quantity that can fly through with the same structure, e.g.
+the velocities along a certain direction for N bands and J
+k-points.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ien, ivel</strong> : ndarray, ndarray</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Dimension: (N,M), (N,3,M)</div>
 </div>
 <p>The energy dispersions in eV, and group velocities in eVAA
 along indexes each axis of the reciprocal basis are returned
-for M new k - points if velocities is supplied, or if the
-<cite>gen_velocities</cite> tag is set to True in the current
+for N bands and M new k - points if velocities is supplied,
+or if the <cite>gen_velocities</cite> tag is set to True in the current
 <cite>Bandstructure()</cite> object.</p>
 </div></blockquote>
 <p><strong>ien, False, False, False</strong> : ndarray, boolean, boolean, boolean</p>
 <blockquote class="last">
 <div><div class="line-block">
-<div class="line">Dimension: (M)</div>
+<div class="line">Dimension: (N,M)</div>
 </div>
-<p>The energy dispersions in eV for the M new k - points if
-<cite>velocities</cite> is not supplied or <cite>gen_velocities</cite> is
+<p>The energy dispersions in eV for N bands and M new k-points
+if <cite>velocities</cite> is not supplied or <cite>gen_velocities</cite> is
 set to False.</p>
 </div></blockquote>
 </td>
@@ -1570,7 +1617,7 @@ the bandstructure configuration file.</p>
 <p>Consult the documentation for
 <a class="reference external" href="http://www.physics.rutgers.edu/pythtb/">PythTB</a> for how
 to set these parameters.</p>
-<div class="admonition-todo admonition" id="index-4">
+<div class="admonition-todo admonition" id="index-3">
 <p class="first admonition-title">Todo</p>
 <p class="last">Extend the documentation of how to set parameters
 relevant to PythTB.</p>

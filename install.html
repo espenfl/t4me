@@ -142,14 +142,44 @@
   <div class="section" id="installing">
 <h1>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h1>
 <p>Please consult the <code class="file docutils literal"><span class="pre">setup.py</span></code> file for details on
-how to configure the location of the include and libraries.
-Then execute:</p>
+how to configure the location of the include and libraries.</p>
+<p>Only Spglib (in principle the only requirement for minimal
+functionality against calculations based on first-principle
+data) is included as a Git submodule. This can be activated by</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">submodule</span> <span class="n">init</span>
+<span class="n">git</span> <span class="n">submodule</span> <span class="n">update</span>
+</pre></div>
+</div>
+<p>And Spglib can be build with the included <code class="file docutils literal"><span class="pre">build_spglib</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build_spglib</span>
+</pre></div>
+</div>
+<p>It is possible to build Spglib elsewhere, but consult
+<code class="file docutils literal"><span class="pre">build_spglib</span></code> and make sure that the
+<code class="file docutils literal"><span class="pre">tetrahedron_method.h</span></code> is also inside the include
+directory. For instance, if access to Git is difficult one
+should make a <cite>spglib</cite> folder in the main T4ME directory
+and place a recent Spglib version there. This would give the
+same data structure as if using the Git submodule.
+The build script <code class="file docutils literal"><span class="pre">build_spglib</span></code> can then be executed.</p>
+<p>All other libraries need to be built externally and linked in.</p>
+<p>Then execute</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build_ext</span> <span class="o">--</span><span class="n">inplace</span>
 </pre></div>
 </div>
-<p>And you should be able to now execute t4me.py which is
-the main driver routine:</p>
+<p>To build the necessary parts of interfaces used in T4ME. You should
+now be able to now execute t4me.py which is
+the main driver routine</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">t4me</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>This should execute cleanly. However, it might be usefull
+to run T4ME from other locations. In order to for this to
+work, the main directory of T4ME needs to be added to
+your <code class="docutils literal"><span class="pre">PYTHONPATH</span></code> environmental variable. Usually, this can
+be done (in bash) by adding the following to your
+<code class="file docutils literal"><span class="pre">.bashrc</span></code> or <code class="file docutils literal"><span class="pre">.bash_profile</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>export PYTHONPATH=$PYTHONPATH:/home/username/somepath/t4me
 </pre></div>
 </div>
 </div>

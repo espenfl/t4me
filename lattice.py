@@ -168,8 +168,6 @@ class Lattice():
                 kmesh = copy.deepcopy(self.kmesh_ired)
                 self.create_kmesh_spg()
                 np.set_printoptions(threshold=np.nan)
-                # print kmesh
-                # print self.kmesh_ired
                 if kmesh.shape[0] != self.kmesh_ired.shape[0]:
                     logger.error(
                         "The numbers of IBZ points does not correspond "
@@ -196,8 +194,6 @@ class Lattice():
                 if not np.allclose(kmesh, self.kmesh,
                                    atol=self.param.symprec):
                     np.set_printoptions(threshold=np.nan)
-                    print kmesh
-                    print self.kmesh
                     sys.exit(1)
                     logger.error(
                         "The BZ points does not correspond to the BZ "
@@ -539,7 +535,6 @@ class Lattice():
         # convert to int within symprec
         kmesh_int = np.floor(self.kmesh / symprec).astype(int)
 
-        # print kmesh_int
         # check the shape of the uniques
         kmesh_int = np.ascontiguousarray(kmesh_int)
         unique_kmesh = np.unique(kmesh_int.view(

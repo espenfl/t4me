@@ -1,0 +1,8 @@
+# simple build script for SKW.
+
+# default location for the SKW implementation
+cd skw
+make
+make lib
+cd ..
+

@@ -113,6 +113,9 @@ def lattice_param_numpy(lattice, location=None, filename=None):
     lattice.kdata.sampling = np.array(
         data["ksampling"], dtype='intc', order='C')
 
+    # include borders
+    lattice.kdata.borderless = False
+
     # no mesh or mapping relations read, generate later
     lattice.kdata.k_sort_index = None
     lattice.kdata.mapping_ibz_to_bz = None

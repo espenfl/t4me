@@ -1401,7 +1401,6 @@ def bandstructure_w90(bs, location=None, filename=None):
 
     kmesh = bs.lattice.kmesh + 0.5
     energies = tb.solve_all(kmesh)
-    print energies
     # now, we do not have the velocities, but let us
     # not care about that for now (similar to VASP)
     numbands = energies.shape[0]

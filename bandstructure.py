@@ -121,13 +121,16 @@ class Bandstructure():
         # if present).
         # also, if user wants to preinterpolate, wait with velocity
         # extraction
-        if self.param.dispersion_velocities_numdiff and \
-           not param.dispersion_interpolate:
-            if not self.gen_velocities:
-                logger.warning("The velocities already exist. This data will "
-                               "be overwritten. Continuing.")
-            logger.info("Extracting the velocities by finite difference")
-            self.calc_velocities()
+        if self.param.dispersion_velocities_numdiff:
+            # special case for tight-binding extraction
+            if not param.dispersion_interpolate or \
+               param.dispersion_interpolate_method == "tb":
+                if not self.gen_velocities:
+                    logger.warning("The velocities already exist. "
+                                   "This data will be overwritten. "
+                                   "Continuing.")
+                logger.info("Extracting the velocities by finite difference")
+                self.calc_velocities()
 
     def locate_vbm(self, energies, occ):
         """

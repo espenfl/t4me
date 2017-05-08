@@ -62,7 +62,7 @@ dispersion_effmass_transform: []
 # Parameters that are passed to PythTB when reading
 # Wannier90 data. Please consult the PythTB manual
 # for additional details.
-dispersion_w90_tb_zero_energy: 0.0 # eV
+dispersion_w90_tb_zero_energy: 5.64622146 # eV
 dispersion_w90_tb_min_hopping_norm: 0.01 # eV
 dispersion_w90_tb_max_distance: 10 # AA
 
@@ -113,7 +113,7 @@ transport_energycutband: 1.0 # eV
 transport_include_bands: [] # n/a
 # Do you want to use the analytical spherical scattering
 # models?
-transport_use_analytic_scattering: True  # n/a
+transport_use_analytic_scattering: False  # n/a
 # Do you want to calculate the scattering on the fly
 # during integration?
 transport_use_scattering_ontfly: False # n/a

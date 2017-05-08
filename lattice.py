@@ -1136,7 +1136,7 @@ class Lattice():
         """
 
         if np.all(self.param.dispersion_interpolate_sampling) == 0:
-            iksampling = self.lattice.fetch_ksampling_from_stepsize(
+            iksampling = self.fetch_ksampling_from_stepsize(
                 self.param.dispersion_interpolate_step_size)
         else:
             iksampling = np.array(

@@ -1254,6 +1254,27 @@ def interpolate(tr, method="linear"):
     scattering_inv = tr.scattering_inv
     inter_energies = tr.bs.energies
 
+    # We need to make sure that the requested energies are
+    # inside the bounds of the original data set. We do this
+    # simply by padding the smallest and largest values by a
+    # small constant. These values should anyway be far outside
+    # the important energy region anyway.
+    max_inter_energies = np.amax(inter_energies)
+    min_inter_energies = np.amin(inter_energies)
+    # need to check if other values are similar to some constant
+    # first, check largest
+    replace = np.where(inter_energies >
+                       (max_inter_energies - constants.zerocut))
+
+    inter_energies[replace] = inter_energies[replace] - \
+        constants.zerocut
+
+    # then smallest
+    replace = np.where(inter_energies <
+                       (min_inter_energies + constants.zerocut))
+    inter_energies[replace] = inter_energies[replace] + \
+        constants.zerocut
+
     # this is really dirty, but since the number of temperatures
     # and bands is usually pretty limited it was not a top priority to
     # increase the speed of this one, could easily be done

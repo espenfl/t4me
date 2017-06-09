@@ -22,7 +22,7 @@ dispersion_interpolate: True # n/a
 dispersion_interpolate_sampling: [0,0,0] # n/a
 # What is the target k-point step size along each direction
 # in units of inverse AA?
-dispersion_interpolate_step_size: [0.1, 0.1, 0.1]
+dispersion_interpolate_step_size: [0.025, 0.025, 0.025]
 # The expansion factor (number of R vectors in the
 # radius) of the SKW interpolation routine
 skw_expansion_factor: 8 # n/a
@@ -100,12 +100,12 @@ transport_interpolate_method: "wildmagic" # n/a
 # What type of sub method to use?
 transport_interpolate_type: "akima" # n/a
 # The minimum chemical potential:
-transport_chempot_min: -0.4 # eV
+transport_chempot_min: -0.5 # eV
 # The maximum chemical potential:
-transport_chempot_max: 1.0 # eV
+transport_chempot_max: 0.5 # eV
 # The samples between the minimum and maximum of
 # the chemical potential:
-transport_chempot_samples: 100 # n/a
+transport_chempot_samples: 51 # n/a
 # Drop bands in the calculation that lie outside the
 # chemical potential range pluss and minus the following:
 transport_energycutband: 1.0 # eV

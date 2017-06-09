@@ -167,7 +167,6 @@ class Lattice():
                 # have IBZ, generate BZ
                 kmesh = copy.deepcopy(self.kmesh_ired)
                 self.create_kmesh_spg()
-                np.set_printoptions(threshold=np.nan)
                 if kmesh.shape[0] != self.kmesh_ired.shape[0]:
                     logger.error(
                         "The numbers of IBZ points does not correspond "

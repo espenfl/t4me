@@ -847,7 +847,7 @@ void get_reciprocal_mesh_interface(int *mesh, double *lattice,
   
   const unsigned int num_k_points=mesh[0]*mesh[1]*mesh[2]; 
   unsigned int i,j;
-
+  
   // spglib does not use pointers or vectors, so convert 2D vectors to
   // std. c arrays (1d vector is compatible with a 1d array, so leave
   // those intact)

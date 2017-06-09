@@ -27,7 +27,7 @@ dispersion_interpolate_step_size: [0.1, 0.1, 0.1]
 # radius) of the SKW interpolation routine
 skw_expansion_factor: 8 # n/a
 # What interpolation method to use?
-dispersion_interpolate_method: "tb" # n/a
+dispersion_interpolate_method: "wildmagic" # n/a
 # What sub method to use?
 dispersion_interpolate_type: "akima" # n/a
 # Use numerical differentiation to calculate the
@@ -232,13 +232,13 @@ acceptor_degen_fact: 0.25 # #
 # Acceptor energy:
 acceptor_energy: 0.0 # eV
 # Input data and parameter read in. Consult manual.
-read: w90 # n/a
+read: vasp # n/a
 # Filename for the input data etc. Consult manual.
-readfile: "wannier90" # n/a
+readfile: "" # n/a
 # Do you want to use scissor operator?
 scissor: False # eV or n/a
 # What symprec to use?
-symprec: 1.0e-6
+symprec: 1.105e-3
 # Dump tight binding construction data to std out?
 displaytb: False # n/a
 # Print output from libraries bundled with T4ME

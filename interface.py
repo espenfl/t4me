@@ -216,7 +216,7 @@ def lattice_vasp(lattice, location=None, filename=None):
     for index, position in enumerate(positions_entries):
         positions[index] = np.fromstring(position.text, sep=' ')
         species[index] = constants.elements[
-            species_entries[index][0].text.lower()]
+            species_entries[index][0].text.split()[0].lower()]
 
     lattice.unitcell = unitcell
     lattice.positions = positions

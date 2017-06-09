@@ -19,7 +19,7 @@ dispersion_interpolate: True # n/a
 # What is the target k-point sampling? Set to [0,0,0]
 # if you rather want to use
 # dispersion_interpolate_step_size
-dispersion_interpolate_sampling: [45,45,45] # n/a
+dispersion_interpolate_sampling: [0,0,0] # n/a
 # What is the target k-point step size along each direction
 # in units of inverse AA?
 dispersion_interpolate_step_size: [0.1, 0.1, 0.1]
@@ -238,7 +238,7 @@ readfile: "" # n/a
 # Do you want to use scissor operator?
 scissor: False # eV or n/a
 # What symprec to use?
-symprec: 1.105e-3
+symprec: 1.0e-06
 # Dump tight binding construction data to std out?
 displaytb: False # n/a
 # Print output from libraries bundled with T4ME

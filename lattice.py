@@ -335,13 +335,20 @@ class Lattice():
         except AttributeError:
             logger.error("Cannot find ksampling. Exiting.")
             sys.exit(1)
-
+        # when we read in data from VASP etc. for the full grid
+        # (i.e. if KINTER and LVEL is set we really do not need the
+        # mapping between the ibz and bz, in this case do not halt,
+        # in the future modify VASP to also eject the mapping table
+        # to the vasprun.xml file when KINTER and LVEL is set such
+        # that we can reenable this test.)
+        print(self.param.vasp_lvel)
         try:
             self.mapping_bz_to_ibz
             if self.mapping_bz_to_ibz is None:
-                logger.error(
-                    "The entry mapping_bz_to_ibz is still None. Exiting")
-                sys.exit(1)
+                if not self.param.vasp_level:
+                    logger.error(
+                        "The entry mapping_bz_to_ibz is still None. Exiting")
+                    sys.exit(1)
         except AttributeError:
             logger.error("Cannot find mapping_bz_to_ibz. Exiting.")
             sys.exit(1)
@@ -349,9 +356,10 @@ class Lattice():
         try:
             self.mapping_ibz_to_bz
             if self.mapping_ibz_to_bz is None:
-                logger.error(
-                    "The entry mapping_ibz_to_bz is still None. Exiting")
-                sys.exit(1)
+                if not self.param.vasp_lvel:
+                    logger.error(
+                        "The entry mapping_ibz_to_bz is still None. Exiting")
+                    sys.exit(1)
         except AttributeError:
             logger.error("Cannot find mapping_ibz_to_bz. Exiting.")
             sys.exit(1)

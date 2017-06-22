@@ -77,7 +77,8 @@ class Lattice():
         # this one do nothing if both BZ, IBZ, mappings and weights are set
         # otherwise, it generates a new grid to set up these parameters
         # and crashes if it detects discrepancies
-        self.generate_consistent_mesh()
+        if not self.param.work_on_full_grid:
+            self.generate_consistent_mesh()
 
         # calculate unit cell volume
         self.volume = self.calculate_cell_volume(self.unitcell)
@@ -166,7 +167,7 @@ class Lattice():
             if (self.kmesh is None) and (self.kmesh_ired is not None):
                 # have IBZ, generate BZ
                 kmesh = copy.deepcopy(self.kmesh_ired)
-                self.create_kmesh_spg()
+                self.create_kmesh(borderless=True)
                 if kmesh.shape[0] != self.kmesh_ired.shape[0]:
                     logger.error(
                         "The numbers of IBZ points does not correspond "
@@ -184,7 +185,7 @@ class Lattice():
             elif (self.kmesh_ired is None) and (self.kmesh is not None):
                 # have BZ, generate IBZ
                 kmesh = copy.deepcopy(self.kmesh)
-                self.create_kmesh_spg()
+                self.create_kmesh(borderless=True)
                 if kmesh.shape[0] != self.kmesh.shape[0]:
                     logger.error(
                         "The numbers of BZ points does not correspond "
@@ -202,7 +203,7 @@ class Lattice():
                                  "\n BZ internal: " + str(self.kmesh))
                     sys.exit(1)
             elif (self.kmesh is None) and (self.kmesh_ired is None):
-                self.create_kmesh_spg()
+                self.create_kmesh(borderless=True)
 
         # check that we at least have data present for the
         # essentials
@@ -335,44 +336,44 @@ class Lattice():
         except AttributeError:
             logger.error("Cannot find ksampling. Exiting.")
             sys.exit(1)
+
         # when we read in data from VASP etc. for the full grid
         # (i.e. if KINTER and LVEL is set we really do not need the
-        # mapping between the ibz and bz, in this case do not halt,
+        # mapping between the ibz and bz or the weights, in this case 
+        # do not halt,
         # in the future modify VASP to also eject the mapping table
         # to the vasprun.xml file when KINTER and LVEL is set such
         # that we can reenable this test.)
-        print(self.param.vasp_lvel)
-        try:
-            self.mapping_bz_to_ibz
-            if self.mapping_bz_to_ibz is None:
-                if not self.param.vasp_level:
+        if not self.param.vasp_lvel:
+            try:
+                self.mapping_bz_to_ibz
+                if self.mapping_bz_to_ibz is None:
                     logger.error(
                         "The entry mapping_bz_to_ibz is still None. Exiting")
                     sys.exit(1)
-        except AttributeError:
-            logger.error("Cannot find mapping_bz_to_ibz. Exiting.")
-            sys.exit(1)
+            except AttributeError:
+                logger.error("Cannot find mapping_bz_to_ibz. Exiting.")
+                sys.exit(1)
 
-        try:
-            self.mapping_ibz_to_bz
-            if self.mapping_ibz_to_bz is None:
-                if not self.param.vasp_lvel:
+            try:
+                self.mapping_ibz_to_bz
+                if self.mapping_ibz_to_bz is None:
                     logger.error(
                         "The entry mapping_ibz_to_bz is still None. Exiting")
                     sys.exit(1)
-        except AttributeError:
-            logger.error("Cannot find mapping_ibz_to_bz. Exiting.")
-            sys.exit(1)
-
-        try:
-            self.ibz_weights
-            if self.ibz_weights is None:
-                logger.error(
-                    "The entry ibz_weights is still None. Exiting")
+            except AttributeError:
+                logger.error("Cannot find mapping_ibz_to_bz. Exiting.")
                 sys.exit(1)
-        except AttributeError:
-            logger.error("Cannot find ibz_weights. Exiting.")
-            sys.exit(1)
+
+            try:
+                self.ibz_weights
+                if self.ibz_weights is None:
+                    logger.error(
+                        "The entry ibz_weights is still None. Exiting")
+                    sys.exit(1)
+            except AttributeError:
+                logger.error("Cannot find ibz_weights. Exiting.")
+                sys.exit(1)
 
     def fetch_kmesh(self, direct=True, ired=False):
         """
@@ -878,7 +879,7 @@ class Lattice():
             border[2 * i + 1] = np.amax(kmesh[:, i])
         return border
 
-    def create_kmesh_spg(self, ksampling=None,
+    def create_kmesh(self, ksampling=None,
                          shift=np.array([0, 0, 0], dtype='intc'),
                          halfscale=True, borderless=False):
         """
@@ -952,7 +953,7 @@ class Lattice():
 
         # set logger
         logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running create_kmesh_spg.")
+        logger.debug("Running create_kmesh.")
 
         if ksampling is None:
             try:
@@ -978,78 +979,111 @@ class Lattice():
         ksampling = np.ascontiguousarray(ksampling, dtype='intc')
         # same for the number of kpoints
         k = np.zeros((np.prod(ksampling), 3), dtype="intc")
-        # and the mappings
-        spg_mapping = np.zeros(np.prod(ksampling), dtype="intc")
-        logger.info("Calling Spglib to set up the grid with a sampling "
-                    "sampling of " + str(ksampling[0]) + "x" +
-                    str(ksampling[0]) + "x" + str(ksampling[2]) + ".")
-        if self.borderless:
-            borderless = True
-        if borderless:
-            logger.info(
-                "Running borderless compatible k-point generation etc. "
-                "(VASP, SKW, W90, etc.)")
-            # the international symbol returned from spglib
-            intsym = spglib_interface.get_reciprocal_mesh(
-                ksampling, np.ascontiguousarray(self.unitcell.T),
-                self.positions, self.species, shift, k,
-                spg_mapping, is_time_reversal=False,
-                symprec=self.param.symprec)
+        
+        if not self.param.work_on_full_grid:
+            # need the IBZ and the BZ-IBZ mappings
+            # and the mappings
+            spg_mapping = np.zeros(np.prod(ksampling), dtype="intc")
+            logger.info("Calling Spglib to set up the k-point grid with a "
+                        "sampling of " + str(ksampling[0]) + "x" +
+                        str(ksampling[0]) + "x" + str(ksampling[2]) + ".")
+            if self.borderless:
+                borderless = True
+            if borderless:
+                logger.info(
+                    "Running borderless compatible k-point generation etc. "
+                    "(VASP, SKW, W90, etc.)")
+                # the international symbol returned from spglib
+                intsym = spglib_interface.get_reciprocal_mesh(
+                    ksampling, np.ascontiguousarray(self.unitcell.T),
+                    self.positions, self.species, shift, k,
+                    spg_mapping, is_time_reversal=False,
+                    symprec=self.param.symprec)
+            else:
+                # the international symbol returned from spglib
+                intsym = spglib_interface.get_reciprocal_mesh(
+                    ksampling, np.ascontiguousarray(self.unitcell.T),
+                    self.positions, self.species, shift, k,
+                    spg_mapping, is_time_reversal=True,
+                    symprec=self.param.symprec)
+            logger.info("Spglib detected the symmetry " + intsym +
+                        " with symprec set to " + str(self.param.symprec))
+            # build array for IBZ
+            k_ired = k[np.unique(spg_mapping, return_index=True)[1]]
+            # sort mesh
+            k_sort_ired = utils.fetch_sorting_indexes(k_ired)
+            k_sort_full = utils.fetch_sorting_indexes(k)
+            kmesh_ired = k_ired[k_sort_ired]
+            kmesh_full = k[k_sort_full]
+
+            # store original SPGLIB mesh for use later
+            # (e.g. tetrahedron method)
+            self.spg_kmesh = k[k_sort_full]
+
+            shuffle = np.zeros(spg_mapping.shape[0], dtype=np.intc)
+            for index, value in enumerate(spg_mapping):
+                shuffle[index] = np.where(k_sort_full == value)[0][0]
+            # build ired and sort
+            k_ired = kmesh_full[
+                shuffle[np.sort(np.unique(shuffle,
+                                          return_index=True)[1])]]
+            k_sort_ired = utils.fetch_sorting_indexes(k_ired)
+            k_ired = k_ired[k_sort_ired]
+            
+            mapping_ibz_to_bz = shuffle[k_sort_full]
+            mapping_bz_to_ibz = np.zeros(mapping_ibz_to_bz.size, dtype=np.intc)
+            for index, ibz_point in enumerate(np.unique(mapping_ibz_to_bz)):
+                mask = np.in1d(mapping_ibz_to_bz, ibz_point)
+                np.copyto(mapping_bz_to_ibz, index, where=mask)
+
+            # scale the grid from integer to float (consider to postpone this
+            # in the future...e.g. integers are nice because test for uniqueness
+            # is exact etc.)
+            if borderless:
+                scaling = 1.0 / ksampling
+                kmesh_full = kmesh_full * scaling
+                kmesh_ired = kmesh_ired * scaling
+            else:
+                scaling = np.floor(ksampling / 2.0)
+                kmesh_full = kmesh_full / scaling
+                kmesh_ired = kmesh_ired / scaling
+                if halfscale:
+                    kmesh_full = 0.5 * kmesh_full
+                    kmesh_ired = 0.5 * kmesh_ired
+
+            # calculate ibz weights
+            dummy, ibz_weights = np.unique(mapping_bz_to_ibz, 
+                                           return_counts=True)
+
         else:
-            # the international symbol returned from spglib
-            intsym = spglib_interface.get_reciprocal_mesh(
-                ksampling, np.ascontiguousarray(self.unitcell.T),
-                self.positions, self.species, shift, k,
-                spg_mapping, is_time_reversal=True,
-                symprec=self.param.symprec)
-        logger.info("Spglib detected the symmetry " + intsym +
-                    " with symprec set to " + str(self.param.symprec))
-        # build array for IBZ
-        k_ired = k[np.unique(spg_mapping, return_index=True)[1]]
-        # sort mesh
-        k_sort_ired = utils.fetch_sorting_indexes(k_ired)
-        k_sort_full = utils.fetch_sorting_indexes(k)
-        kmesh_ired = k_ired[k_sort_ired]
-        kmesh_full = k[k_sort_full]
-
-        # store original SPGLIB mesh for use later
-        # (e.g. tetrahedron method)
-        self.spg_kmesh = k[k_sort_full]
-
-        shuffle = np.zeros(spg_mapping.shape[0], dtype=np.intc)
-        for index, value in enumerate(spg_mapping):
-            shuffle[index] = np.where(k_sort_full == value)[0][0]
-        # build ired and sort
-        k_ired = kmesh_full[
-            shuffle[np.sort(np.unique(shuffle,
-                                      return_index=True)[1])]]
-        k_sort_ired = utils.fetch_sorting_indexes(k_ired)
-        k_ired = k_ired[k_sort_ired]
-
-        mapping_ibz_to_bz = shuffle[k_sort_full]
-        mapping_bz_to_ibz = np.zeros(mapping_ibz_to_bz.size, dtype=np.intc)
-        for index, ibz_point in enumerate(np.unique(mapping_ibz_to_bz)):
-            mask = np.in1d(mapping_ibz_to_bz, ibz_point)
-            np.copyto(mapping_bz_to_ibz, index, where=mask)
-
-        # scale the grid from integer to float (consider to postpone this
-        # in the future...e.g. integers are nice because test for uniqueness
-        # is exact etc.)
-        if self.param.read == "vasp" or borderless:
-            scaling = 1.0 / ksampling
+            # here we only generate a full grid without fetching the IBZ or
+            # related parameters
+            logger.info("Setting up the full k-point grid with a sampling "
+                        "of " + str(ksampling[0]) + "x" +
+                        str(ksampling[0]) + "x" + str(ksampling[2]) + ". No "
+                        "irreducible grid is determined.")
+            if borderless:
+                scaling = 1.0 / ksampling
+                # in the future this needs to either be left or right adjusted
+                # for non-gamma centered grids (right now this is not supported) 
+                bzlimits = np.floor(ksampling/2.0)
+                k1 = np.linspace(-bzlimits[0],bzlimits[0],num=ksampling[0])
+                k2 = np.linspace(-bzlimits[1],bzlimits[1],num=ksampling[1])
+                k3 = np.linspace(-bzlimits[2],bzlimits[2],num=ksampling[2])
+            else:
+                logging.error("Inclusion of borders for the full grid method is"
+                              "not supported. Exiting.")
+                sys.exit(1)
+            kx, ky, kz = np.array(np.meshgrid(k1,k2,k3, indexing='ij'))
+            kmesh_full = np.array([kx.flatten(),ky.flatten(),kz.flatten()]).T
+            # scale the grid
             kmesh_full = kmesh_full * scaling
-            kmesh_ired = kmesh_ired * scaling
-        else:
-            scaling = np.floor(ksampling / 2.0)
-            kmesh_full = kmesh_full / scaling
-            kmesh_ired = kmesh_ired / scaling
-            if halfscale:
-                kmesh_full = 0.5 * kmesh_full
-                kmesh_ired = 0.5 * kmesh_ired
-
-        # calculate ibz weights
-        dummy, ibz_weights = np.unique(mapping_bz_to_ibz, return_counts=True)
-
+            # set the IBZ and IBZ-BZ mapping to None as we now work on the full
+            # grid
+            kmesh_ired = None
+            mapping_ibz_to_bz = None
+            mapping_bz_to_ibz = None
+            ibz_weights = None
         self.kmesh = kmesh_full
         self.kmesh_ired = kmesh_ired
         self.mapping_ibz_to_bz = np.unique(mapping_ibz_to_bz)

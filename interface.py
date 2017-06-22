@@ -223,7 +223,7 @@ def lattice_vasp(lattice, location=None, filename=None):
     lattice.species = species
 
     # fetch KINTER
-    kinter = 1
+    kinter = 0
     kinter_param = tree.find('.//incar/i[@name="KINTER"]')
     if kinter_param is not None:
         kinter = int(kinter_param.text)
@@ -267,8 +267,8 @@ def lattice_vasp(lattice, location=None, filename=None):
             'kpoints/varray[@name="kpointlist"]/v')
         if lvel:
             kpoints_full = tree.findall(
-                './/kpoints[@comment="interpolated in the full '
-                'bz grid"]/varray[@name="kpointlist"]/v')
+                './/eigenvelocities[@comment="interpolated"]/kpoints/'
+                'varray[@name="kpointlist"]/v')
     else:
         divisions = tree.find(
             './/kpoints[@comment="interpolated"]/generation/'
@@ -278,8 +278,8 @@ def lattice_vasp(lattice, location=None, filename=None):
             'varray[@name="kpointlist"]/v')
         if lvel:
             kpoints_full = tree.findall(
-                './/kpoints[@comment="interpolated in the full '
-                'bz grid"]/varray[@name="kpointlist"]/v')
+                './/eigenvelocities[@comment="interpolated"]/kpoints/'
+                'varray[@name="kpointlist"]/v')
     lattice.kdata.sampling = np.ascontiguousarray(np.fromstring(
         divisions.text, sep=" ", dtype='intc'), dtype='intc')
     # fetch IBZ points
@@ -287,6 +287,9 @@ def lattice_vasp(lattice, location=None, filename=None):
                            dtype='double', order='C')
     for index, kpoint in enumerate(kpoints):
         kpointsvasp[index] = np.fromstring(kpoint.text, sep=' ')
+
+    # pull k-points back into zone
+    lattice.pull_points_back_into_zone(kpointsvasp)
     # now sort according to k-point sort (z increasing
     # fastests) and store
     k_sort_index = utils.fetch_sorting_indexes(kpointsvasp)
@@ -299,7 +302,8 @@ def lattice_vasp(lattice, location=None, filename=None):
             (len(kpoints_full), 3), dtype='double', order='C')
         for index, kpoint in enumerate(kpoints_full):
             kpointsvasp_full[index] = np.fromstring(kpoint.text, sep=' ')
-
+        # pull k-points back into zone
+        lattice.pull_points_back_into_zone(kpointsvasp_full)
         k_sort_index = utils.fetch_sorting_indexes(kpointsvasp_full)
         lattice.kdata.mesh = np.ascontiguousarray(
             kpointsvasp_full[k_sort_index], dtype='double')
@@ -316,6 +320,10 @@ def lattice_vasp(lattice, location=None, filename=None):
     lattice.kdata.mapping_bz_to_ibz = None
     lattice.kdata.ibz_weights = None
 
+    # if LVEL have been set we already have access to the full grid
+    # so set such a parameter
+    if lvel:
+        lattice.param.work_on_full_grid = True
 
 def lattice_w90(lattice):
     """
@@ -614,24 +622,16 @@ def bandstructure_vasp(bs, location=None, filename=None):
 
     # get divisions, IBZ kpoints and location of the eigenvalues and
     # dos
-    if np.abs(kinter) < 2:
-        if lvel:
-            energies_base = tree.find(
-                './/eigenvelocities[@comment="interpolated_bz"]')
-        else:
-            energies_base = tree.find('.//eigenvalues')
-            dos_base = tree.find('.//dos')
+    if lvel:
+        energies_base = tree.find(
+            './/eigenvelocities[@comment="interpolated"]/eigenvalues')
     else:
-        if lvel:
-            energies_base = tree.find(
-                './/eigenvelocities[@comment="interpolated_bz"]')
-        else:
-            energies_base = tree.find(
-                './/eigenvalues[@comment="interpolated"]')
-        if not lwan:
-            dos_base = tree.find('.//dos[@comment="interpolated"]')
-        else:
-            dos_base = tree.find('.//dos')
+        energies_base = tree.find(
+            './/eigenvalues[@comment="interpolated"]')
+    if not lwan:
+        dos_base = tree.find('.//dos[@comment="interpolated"]')
+    else:
+        dos_base = tree.find('.//dos')
 
     # initialize arrays
     # if ISPIN=2, pad energies (num bands=2*NBANDS, set of down, then
@@ -683,7 +683,7 @@ def bandstructure_vasp(bs, location=None, filename=None):
                     velocitiesvasp[energy_index][2][idxk] = data[3]
         # read density of states
         for idx, dos_entry in enumerate(dos):
-            energy_and_dos = np.fromstring(dos_entry.text, sep=' ')
+            energy_and_dos = np.fromstring(dos_entry.text, sep=' ', count=3)
             if ispin > 1:
                 dosvasp[spin][idx][0] = energy_and_dos[0]
                 dosvasp[spin][idx][1] = energy_and_dos[1]
@@ -719,23 +719,6 @@ def bandstructure_vasp(bs, location=None, filename=None):
             ibz_occ = occvasp[band][0:num_ibz_kpoints]
             ibz_occ = ibz_occ[k_sort_index]
             occvasp[band] = ibz_occ[bs.lattice.mapping_bz_to_ibz]
-    bs.vbm_value, bs.vbm_band, bs.vbm_kpoint = bs.locate_vbm(
-        energies=energiesvasp, occ=occvasp)
-    bs.cbm_value, bs.cbm_band, bs.cbm_kpoint = bs.locate_cbm(
-        energies=energiesvasp, occ=occvasp)
-    bs.band_gap, bs.direct = bs.locate_bandgap(
-        energies=energiesvasp, occ=occvasp)
-    if bs.band_gap == 0:
-        if bs.direct:
-            logger.info(
-                "No band gap was detected and it appears as this is "
-                "a metallic system.")
-            bs.metallic = True
-        else:
-            logger.info(
-                "No band gap was detected and it appears as this is "
-                "a semi-metallic system.")
-            bs.metallic = True
 
     # fetch efermi
     if kinter < 2:
@@ -750,13 +733,47 @@ def bandstructure_vasp(bs, location=None, filename=None):
             fermi_energy = float(
                 tree.find('.//calculation/dos/i[@name="efermi"]').text)
 
-    fermi_diff = fermi_energy - bs.vbm_value
-    if (fermi_diff > constants.zerocut):
-        logger.info(
-            "The fermi_energy from VASP differs by the calculate valence "
-            "band maximum by: " + str(fermi_diff))
-    e_adjust = 0.0
+    # if we received data on the full k-point grid we do not yet
+    # have access to the occupancies and it makes no real sense to
+    # try to detect the gap
+    if not lvel:
+        bs.vbm_value, bs.vbm_band, bs.vbm_kpoint = bs.locate_vbm(
+            energies=energiesvasp, occ=occvasp)
+        bs.cbm_value, bs.cbm_band, bs.cbm_kpoint = bs.locate_cbm(
+            energies=energiesvasp, occ=occvasp)
+        bs.band_gap, bs.direct = bs.locate_bandgap(
+            energies=energiesvasp, occ=occvasp)
+    else:
+        bs.band_gap = None
 
+    if bs.band_gap == 0:
+        if bs.direct:
+            logger.info(
+                "No band gap was detected and it appears as this is "
+                "a metallic system.")
+            bs.metallic = True
+        else:
+            logger.info(
+                "No band gap was detected and it appears as this is "
+                "a semi-metallic system.")
+            bs.metallic = True
+
+    # no occupancies, set band gap, vbm/cbm
+    if bs.band_gap == None:
+        logger.info("Occupancies was not available, setting band gap "
+                    "to zero and vbm/cbm to the Fermi level supplied by "
+                    "VASP.")
+        bs.band_gap = 0.0
+        bs.vbm_value = fermi_energy
+        bs.cbm_value = fermi_energy
+    else:
+        fermi_diff = fermi_energy - bs.vbm_value
+        if (fermi_diff > constants.zerocut):
+            logger.info(
+                "The fermi_energy from VASP differs by the calculate valence "
+                "band maximum by: " + str(fermi_diff))
+
+    e_adjust = 0.0
     # full band
     # first check that the user have only set one shift parameter
     bs.check_energyshifts()
@@ -764,7 +781,7 @@ def bandstructure_vasp(bs, location=None, filename=None):
             (not bs.param.transport_drop_conduction)):
         if ((bs.param.e_fermi) and (not bs.param.e_fermi_in_gap)):
             logger.info(
-                "Adjusting Fermi level to efermi in vasprun.xml.")
+                "Adjusting energies to efermi in vasprun.xml.")
             e_adjust = fermi_energy
         elif ((not bs.param.e_fermi) and (bs.param.e_fermi_in_gap)):
             if not bs.metallic:
@@ -804,6 +821,8 @@ def bandstructure_vasp(bs, location=None, filename=None):
             sys.exit(1)
     # adjust energy
     energiesvasp = energiesvasp - e_adjust
+    bs.vbm_value = bs.vbm_value - e_adjust
+    bs.cbm_value = bs.cbm_value - e_adjust
     dosvasp[:, 0] = dosvasp[:, 0] - e_adjust
     # add a small shift out of zero where the energies are truly zero
     energiesvasp[np.abs(energiesvasp) <
@@ -1004,7 +1023,6 @@ def bandstructure_vasp(bs, location=None, filename=None):
             (numbands, 3, bs.lattice.kmesh.shape[0]), dtype=np.double)
     else:
         bs.gen_velocities = False
-
 
 def bandstructure_numpy(bs, filename, location=None):
     """
@@ -1397,7 +1415,7 @@ def bandstructure_w90(bs, location=None, filename=None):
         # fetch denser grid sampling
         iksampling = bs.lattice.fetch_iksampling()
         # regenerate grid and store
-        bs.lattice.create_kmesh_spg(iksampling)
+        bs.lattice.create_kmesh(iksampling, borderless = True)
 
     kmesh = bs.lattice.kmesh + 0.5
     energies = tb.solve_all(kmesh)

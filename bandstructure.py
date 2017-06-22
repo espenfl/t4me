@@ -223,7 +223,7 @@ class Bandstructure():
         cbm_band = occ.shape[0] - int(np.ceil(
             occ[(abs(occ) < self.param.occ_cutoff)].shape[0] /
             numkpoints))
-
+        
         # fetch the kpoint for this band
         cbm_kpoint = np.argmin(energies[cbm_band])
 
@@ -1879,7 +1879,8 @@ class Bandstructure():
                     for i in range(3):
                         kmin_old[i] = np.amin(kmesh[:, i])
                         kmax_old[i] = np.amax(kmesh[:, i])
-                self.lattice.create_kmesh_spg(iksampling)
+                # call spglib to generate grid
+                self.lattice.create_kmesh(iksampling, borderless=True)
                 if not old_scaling_factor:
                     ratio = np.zeros(6)
                     kmesh = self.lattice.fetch_kmesh(direct=True)
@@ -1904,7 +1905,9 @@ class Bandstructure():
                 # dvec to pull it inside the borders
                 dvec = (1 - 1e-6) * dvec
                 self.lattice.kmesh = self.lattice.kmesh * dvec
-                self.lattice.kmesh_ired = self.lattice.kmesh_ired * dvec
+                # sometimes the IBZ grid does not exist
+                if self.lattice.kmesh_ired is not None:
+                    self.lattice.kmesh_ired = self.lattice.kmesh_ired * dvec
                 # use direct for Wildmagic and Einspline, cartesian
                 # for the rest
                 if itype == "wildmagic" or itype == "einspline":
@@ -1918,7 +1921,7 @@ class Bandstructure():
                 new_grid = old_grid
         else:
             new_grid = kpoint_mesh
-
+        
         num_new_kpoints = new_grid.shape[0]
         num_bands = energies.shape[0]
         ien = np.zeros((num_bands, num_new_kpoints), dtype=np.double)
@@ -2422,7 +2425,7 @@ class Bandstructure():
             # the new grid is already in direct coordinates, but need
             # the IBZ grid. SKW creates borderless kpoint meshes
             if itype == "skw":
-                self.lattice.create_kmesh_spg(iksampling, borderless=True)
+                self.lattice.create_kmesh(iksampling, borderless=True)
                 np.seterr(divide='ignore', invalid='ignore')
                 if not np.all(np.nan_to_num((self.lattice.kmesh - new_grid)
                                             / new_grid) < self.param.symprec):
@@ -2590,16 +2593,6 @@ class Bandstructure():
         # volume of the unit cell
         volume = np.linalg.det(self.lattice.unitcell)
 
-        # check if ibz grid is not None
-        if self.lattice.kmesh_ired is None:
-            logger.error("The irreducible grid is not available. "
-                         "This can for instance happen if the user have "
-                         "preinterpolated the grid using a interpolation "
-                         "routine where determining the IBZ is difficult. "
-                         "Exiting.")
-            sys.exit(1)
-        else:
-            num_kpoints_ibz = self.lattice.kmesh_ired.shape[0]
         if integral_method is None:
             integral_method = self.param.dos_integrating_method
         if interpol_method is None:
@@ -2623,6 +2616,18 @@ class Bandstructure():
         dos = np.zeros((num_bands, num_samples), dtype='double')
         int_dos = np.zeros((num_bands, num_samples), dtype='double')
         if integral_method == 'tetra' or integral_method == 'smeared':
+            # these routines only work on the IBZ grid, so
+            # check if ibz grid is not None
+            if self.lattice.kmesh_ired is None:
+                logger.error("The irreducible grid is not available. "
+                             "This can for instance happen if the user have "
+                             "preinterpolated the grid using a interpolation "
+                             "routine where determining the IBZ is difficult. "
+                             "Exiting.")
+                sys.exit(1)
+            else:
+                num_kpoints_ibz = self.lattice.kmesh_ired.shape[0]
+                
             if integral_method == 'tetra':
                 weight_type = 0
                 smearing = 0.0

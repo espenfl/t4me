@@ -19,7 +19,7 @@ dispersion_interpolate: True # n/a
 # What is the target k-point sampling? Set to [0,0,0]
 # if you rather want to use
 # dispersion_interpolate_step_size
-dispersion_interpolate_sampling: [0,0,0] # n/a
+dispersion_interpolate_sampling: [9,9,9] # n/a
 # What is the target k-point step size along each direction
 # in units of inverse AA?
 dispersion_interpolate_step_size: [0.05, 0.05, 0.05]

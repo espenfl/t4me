@@ -251,6 +251,7 @@ def lattice_vasp(lattice, location=None, filename=None):
             lwan = True
     lattice.param.vasp_lwan = lwan
 
+    mapping_bz_to_ibz_vasp = None
     # get divisions, IBZ kpoints and location of the eigenvalues and
     # dos
     if kinter < 2:
@@ -265,10 +266,6 @@ def lattice_vasp(lattice, location=None, filename=None):
             'kpoints/generation/v[@name="divisions"]')
         kpoints = tree.findall(
             'kpoints/varray[@name="kpointlist"]/v')
-        if lvel:
-            kpoints_full = tree.findall(
-                './/eigenvelocities[@comment="interpolated"]/kpoints/'
-                'varray[@name="kpointlist"]/v')
     else:
         divisions = tree.find(
             './/kpoints[@comment="interpolated"]/generation/'
@@ -276,10 +273,14 @@ def lattice_vasp(lattice, location=None, filename=None):
         kpoints = tree.findall(
             './/kpoints[@comment="interpolated"]/'
             'varray[@name="kpointlist"]/v')
-        if lvel:
-            kpoints_full = tree.findall(
-                './/eigenvelocities[@comment="interpolated"]/kpoints/'
-                'varray[@name="kpointlist"]/v')
+    if lvel:
+        kpoints_full = tree.findall(
+            './/eigenvelocities[@comment="interpolated"]/kpoints/'
+            'varray[@name="kpointlist"]/v')
+        mapping_bz_to_ibz = tree.findall(
+            './/eigenvelocities[@comment="interpolated"]/kpoints/'
+            'varray[@name="ibzequiv"]/v')
+
     lattice.kdata.sampling = np.ascontiguousarray(np.fromstring(
         divisions.text, sep=" ", dtype='intc'), dtype='intc')
     # fetch IBZ points
@@ -300,8 +301,12 @@ def lattice_vasp(lattice, location=None, filename=None):
     if lvel:
         kpointsvasp_full = np.zeros(
             (len(kpoints_full), 3), dtype='double', order='C')
+        mapping_bz_to_ibz_vasp = np.zeros(len(kpoints_full), dtype='intc')
         for index, kpoint in enumerate(kpoints_full):
             kpointsvasp_full[index] = np.fromstring(kpoint.text, sep=' ')
+        for index, mapping in enumerate(mapping_bz_to_ibz):
+            mapping_bz_to_ibz_vasp[index] = np.fromstring(
+                mapping.text, sep=' ')
         # pull k-points back into zone
         lattice.pull_points_back_into_zone(kpointsvasp_full)
         k_sort_index = utils.fetch_sorting_indexes(kpointsvasp_full)
@@ -315,15 +320,32 @@ def lattice_vasp(lattice, location=None, filename=None):
     # VASP grids are borderless
     lattice.kdata.borderless = True
 
-    # no mapping relations read, generate later
-    lattice.kdata.mapping_ibz_to_bz = None
-    lattice.kdata.mapping_bz_to_ibz = None
+    # check if bz to ibz mapping is read, if so generate ibz to bz
+    # this is only done if the full grid data is present
+    if mapping_bz_to_ibz_vasp is not None:
+        shuffle = np.zeros(mapping_bz_to_ibz_vasp.shape[0], dtype=np.intc)
+        for index, value in enumerate(mapping_bz_to_ibz_vasp):
+            shuffle[index] = np.where(k_sort_index == value)[0][0]
+
+        mapping_ibz_to_bz_vasp = shuffle[k_sort_index]
+        for index, ibz_point in enumerate(np.unique(mapping_ibz_to_bz_vasp)):
+            mask = np.in1d(mapping_ibz_to_bz_vasp, ibz_point)
+            np.copyto(mapping_bz_to_ibz_vasp, index, where=mask)
+
+        lattice.kdata.mapping_bz_to_ibz = mapping_bz_to_ibz_vasp
+        lattice.kdata.mapping_ibz_to_bz = mapping_ibz_to_bz_vasp
+    else:
+        lattice.kdata.mapping_bz_to_ibz = None
+        lattice.kdata.mapping_ibz_to_bz = None
+
+    # FIX THIS AS WE NOW SIMPLY CAN USE THE MAPPING TO SET THE WEIGHTS
     lattice.kdata.ibz_weights = None
 
     # if LVEL have been set we already have access to the full grid
     # so set such a parameter
     if lvel:
         lattice.param.work_on_full_grid = True
+
 
 def lattice_w90(lattice):
     """
@@ -1024,6 +1046,7 @@ def bandstructure_vasp(bs, location=None, filename=None):
     else:
         bs.gen_velocities = False
 
+
 def bandstructure_numpy(bs, filename, location=None):
     """
     Sets the bandstructure from a NumPy datafile file and
@@ -1415,7 +1438,7 @@ def bandstructure_w90(bs, location=None, filename=None):
         # fetch denser grid sampling
         iksampling = bs.lattice.fetch_iksampling()
         # regenerate grid and store
-        bs.lattice.create_kmesh(iksampling, borderless = True)
+        bs.lattice.create_kmesh(iksampling, borderless=True)
 
     kmesh = bs.lattice.kmesh + 0.5
     energies = tb.solve_all(kmesh)

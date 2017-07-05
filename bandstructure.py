@@ -223,7 +223,7 @@ class Bandstructure():
         cbm_band = occ.shape[0] - int(np.ceil(
             occ[(abs(occ) < self.param.occ_cutoff)].shape[0] /
             numkpoints))
-        
+
         # fetch the kpoint for this band
         cbm_kpoint = np.argmin(energies[cbm_band])
 
@@ -1921,7 +1921,7 @@ class Bandstructure():
                 new_grid = old_grid
         else:
             new_grid = kpoint_mesh
-        
+
         num_new_kpoints = new_grid.shape[0]
         num_bands = energies.shape[0]
         ien = np.zeros((num_bands, num_new_kpoints), dtype=np.double)
@@ -2623,11 +2623,13 @@ class Bandstructure():
                              "This can for instance happen if the user have "
                              "preinterpolated the grid using a interpolation "
                              "routine where determining the IBZ is difficult. "
-                             "Exiting.")
+                             "Or if the user supplies numerical data without "
+                             "mapping tables. Try one of the other "
+                             "integration techniques. Exiting.")
                 sys.exit(1)
             else:
                 num_kpoints_ibz = self.lattice.kmesh_ired.shape[0]
-                
+
             if integral_method == 'tetra':
                 weight_type = 0
                 smearing = 0.0

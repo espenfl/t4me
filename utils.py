@@ -51,7 +51,7 @@ def check_file(filename):
         sys.exit(1)
 
 
-def check_directory(path):
+def create_directory(path):
     """
     Check that the directory exists
 
@@ -73,6 +73,38 @@ def check_directory(path):
             raise
 
 
+def check_directory(path, create=False):
+    """
+    Check that a directory exists.
+
+    Parameters
+    ----------
+    path : string
+        The path to the directory to be checked.
+    create : boolean, optional
+        If set to True create the directory if it
+        does not exist. Defaults to False and in this
+        case an error is printed if the directory is
+        not found.
+
+    Returns
+    -------
+    None
+
+    """
+
+    if not os.path.isdir(path):
+        if not create:
+            # THIS SHOULD AT SOME POINT BE REPLACED WITH
+            # THE PROPER LOCAL LOGGER. AT LEAST A CHECK IF
+            # IT EXISTS.
+            logging.error("The directory " + path +
+                          " does not exist. Exiting.")
+            sys.exit(1)
+        else:
+            create_directory(path)
+
+
 def clean_directory(path):
     """
     Clean a directory.
@@ -87,7 +119,7 @@ def clean_directory(path):
     None
 
     """
-    check_directory(path)
+    check_directory(path, create=True)
     os.system("rm -rf " + path + "/*")
 
 

@@ -339,41 +339,44 @@ class Lattice():
 
         # when we read in data from VASP etc. for the full grid
         # (i.e. if KINTER and LVEL is set we really do not need the
-        # mapping between the ibz and bz or the weights, in this case 
+        # mapping between the ibz and bz or the weights, in this case
         # do not halt,
         # in the future modify VASP to also eject the mapping table
         # to the vasprun.xml file when KINTER and LVEL is set such
         # that we can reenable this test.)
-        if not self.param.vasp_lvel:
-            try:
-                self.mapping_bz_to_ibz
-                if self.mapping_bz_to_ibz is None:
-                    logger.error(
-                        "The entry mapping_bz_to_ibz is still None. Exiting")
+        try:
+            if not self.param.vasp_lvel:
+                try:
+                    self.mapping_bz_to_ibz
+                    if self.mapping_bz_to_ibz is None:
+                        logger.error(
+                            "The entry mapping_bz_to_ibz is still None. Exiting")
+                        sys.exit(1)
+                except AttributeError:
+                    logger.error("Cannot find mapping_bz_to_ibz. Exiting.")
                     sys.exit(1)
-            except AttributeError:
-                logger.error("Cannot find mapping_bz_to_ibz. Exiting.")
-                sys.exit(1)
 
-            try:
-                self.mapping_ibz_to_bz
-                if self.mapping_ibz_to_bz is None:
-                    logger.error(
-                        "The entry mapping_ibz_to_bz is still None. Exiting")
+                try:
+                    self.mapping_ibz_to_bz
+                    if self.mapping_ibz_to_bz is None:
+                        logger.error(
+                            "The entry mapping_ibz_to_bz is still None. Exiting")
+                        sys.exit(1)
+                except AttributeError:
+                    logger.error("Cannot find mapping_ibz_to_bz. Exiting.")
                     sys.exit(1)
-            except AttributeError:
-                logger.error("Cannot find mapping_ibz_to_bz. Exiting.")
-                sys.exit(1)
 
-            try:
-                self.ibz_weights
-                if self.ibz_weights is None:
-                    logger.error(
-                        "The entry ibz_weights is still None. Exiting")
+                try:
+                    self.ibz_weights
+                    if self.ibz_weights is None:
+                        logger.error(
+                            "The entry ibz_weights is still None. Exiting")
+                        sys.exit(1)
+                except AttributeError:
+                    logger.error("Cannot find ibz_weights. Exiting.")
                     sys.exit(1)
-            except AttributeError:
-                logger.error("Cannot find ibz_weights. Exiting.")
-                sys.exit(1)
+        except AttributeError:
+            pass
 
     def fetch_kmesh(self, direct=True, ired=False):
         """
@@ -880,8 +883,8 @@ class Lattice():
         return border
 
     def create_kmesh(self, ksampling=None,
-                         shift=np.array([0, 0, 0], dtype='intc'),
-                         halfscale=True, borderless=False):
+                     shift=np.array([0, 0, 0], dtype='intc'),
+                     halfscale=True, borderless=False):
         """
         Returns the k point mesh.
 
@@ -979,7 +982,7 @@ class Lattice():
         ksampling = np.ascontiguousarray(ksampling, dtype='intc')
         # same for the number of kpoints
         k = np.zeros((np.prod(ksampling), 3), dtype="intc")
-        
+
         if not self.param.work_on_full_grid:
             # need the IBZ and the BZ-IBZ mappings
             # and the mappings
@@ -1029,7 +1032,7 @@ class Lattice():
                                           return_index=True)[1])]]
             k_sort_ired = utils.fetch_sorting_indexes(k_ired)
             k_ired = k_ired[k_sort_ired]
-            
+
             mapping_ibz_to_bz = shuffle[k_sort_full]
             mapping_bz_to_ibz = np.zeros(mapping_ibz_to_bz.size, dtype=np.intc)
             for index, ibz_point in enumerate(np.unique(mapping_ibz_to_bz)):
@@ -1052,7 +1055,7 @@ class Lattice():
                     kmesh_ired = 0.5 * kmesh_ired
 
             # calculate ibz weights
-            dummy, ibz_weights = np.unique(mapping_bz_to_ibz, 
+            dummy, ibz_weights = np.unique(mapping_bz_to_ibz,
                                            return_counts=True)
 
         else:
@@ -1065,17 +1068,18 @@ class Lattice():
             if borderless:
                 scaling = 1.0 / ksampling
                 # in the future this needs to either be left or right adjusted
-                # for non-gamma centered grids (right now this is not supported) 
-                bzlimits = np.floor(ksampling/2.0)
-                k1 = np.linspace(-bzlimits[0],bzlimits[0],num=ksampling[0])
-                k2 = np.linspace(-bzlimits[1],bzlimits[1],num=ksampling[1])
-                k3 = np.linspace(-bzlimits[2],bzlimits[2],num=ksampling[2])
+                # for non-gamma centered grids (right now this is not
+                # supported)
+                bzlimits = np.floor(ksampling / 2.0)
+                k1 = np.linspace(-bzlimits[0], bzlimits[0], num=ksampling[0])
+                k2 = np.linspace(-bzlimits[1], bzlimits[1], num=ksampling[1])
+                k3 = np.linspace(-bzlimits[2], bzlimits[2], num=ksampling[2])
             else:
                 logging.error("Inclusion of borders for the full grid method is"
                               "not supported. Exiting.")
                 sys.exit(1)
-            kx, ky, kz = np.array(np.meshgrid(k1,k2,k3, indexing='ij'))
-            kmesh_full = np.array([kx.flatten(),ky.flatten(),kz.flatten()]).T
+            kx, ky, kz = np.array(np.meshgrid(k1, k2, k3, indexing='ij'))
+            kmesh_full = np.array([kx.flatten(), ky.flatten(), kz.flatten()]).T
             # scale the grid
             kmesh_full = kmesh_full * scaling
             # set the IBZ and IBZ-BZ mapping to None as we now work on the full

@@ -124,6 +124,15 @@ def lattice_param_numpy(lattice, location=None, filename=None):
     lattice.kdata.mesh = None
     lattice.kdata.mesh_ired = None
 
+    # for the analytic models we need to generate the
+    # grid and mapping tables
+    # for NumPy data we assume that the user inputs
+    # the full grid
+    if not lattice.param.read[:5] == "numpy":
+        lattice.param.work_on_full_grid = False
+    else:
+        lattice.param.work_on_full_grid = True
+
 
 def lattice_vasp(lattice, location=None, filename=None):
     """
@@ -345,6 +354,8 @@ def lattice_vasp(lattice, location=None, filename=None):
     # so set such a parameter
     if lvel:
         lattice.param.work_on_full_grid = True
+    else:
+        lattice.param.work_on_full_grid = False
 
 
 def lattice_w90(lattice):
@@ -644,15 +655,17 @@ def bandstructure_vasp(bs, location=None, filename=None):
 
     # get divisions, IBZ kpoints and location of the eigenvalues and
     # dos
-    if lvel:
-        energies_base = tree.find(
-            './/eigenvelocities[@comment="interpolated"]/eigenvalues')
-    else:
-        energies_base = tree.find(
-            './/eigenvalues[@comment="interpolated"]')
-    if not lwan:
+    if kinter > 2:
+        if lvel:
+            energies_base = tree.find(
+                './/eigenvelocities[@comment="interpolated"]/eigenvalues')
+        else:
+            energies_base = tree.find(
+                './/eigenvalues[@comment="interpolated"]')
         dos_base = tree.find('.//dos[@comment="interpolated"]')
     else:
+        energies_base = tree.find(
+            './/eigenvalues')
         dos_base = tree.find('.//dos')
 
     # initialize arrays

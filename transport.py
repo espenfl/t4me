@@ -324,6 +324,14 @@ class Transport(object):
         if self.param.read == "vasp" or self.param.read[:5] == "numpy" \
            or self.param.read == "w90":
             numerick = True
+            # now check if the user have set transport_method to closed
+            # and give warning
+            if self.param.transport_method == "closed":
+                logger.error("The user requests to read numerical data and "
+                             "solve the transport integrals using the closed "
+                             "Fermi-Dirac integrals. This is not possible. "
+                             "User, please make up your mind. Exiting. ")
+                sys.exit(1)
         else:
             # or if any band is generated with a tight binding approach
             if np.any(self.bs.tb_band):

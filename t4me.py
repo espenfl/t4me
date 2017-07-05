@@ -24,6 +24,10 @@ def main():
 
     """
 
+    # first of all, check that the user have made a input
+    # directory
+    utils.check_directory("input")
+
     # check output folder (do this before logger config
     # in case user wants the log for the this job in the output
     # folder) and clean it

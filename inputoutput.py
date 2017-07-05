@@ -17,6 +17,7 @@
 
 #!/usr/local/bin/python
 # python specifics
+import os
 import sys
 import math
 import logging
@@ -185,6 +186,11 @@ def readparam(location=None, filename=None):
     iterable
         An iterable YAML object.
 
+    Notes
+    -----
+    The current working directory is padded in front of
+    any supplied location (or if path is given in the filename).
+
     """
 
     # set logger
@@ -194,9 +200,9 @@ def readparam(location=None, filename=None):
     if filename is None:
         filename = "param.yml"
     if location is not None:
-        filename = location + "/" + filename
+        filename = os.getcwd() + "/" + location + "/" + filename
     else:
-        filename = "input/" + filename
+        filename = os.getcwd() + "/input/" + filename
     try:
         stream = open(filename, "r")
     except IOError:
@@ -227,6 +233,11 @@ def readbandparam(location=None, filename=None):
     iterable
         An iterable YAML object.
 
+    Notes
+    -----
+    The current working directory is padded in front of
+    any supplied location (or if path is given in the filename).
+
     """
 
     # set logger
@@ -236,9 +247,9 @@ def readbandparam(location=None, filename=None):
     if filename is None:
         filename = "bandparam.yml"
     if location is not None:
-        filename = location + "/" + filename
+        filename = os.getcwd() + "/" + location + "/" + filename
     else:
-        filename = "input/" + filename
+        filename = os.getcwd() + "/input/" + filename
     try:
         stream = open(filename, "r")
     except IOError:
@@ -269,6 +280,11 @@ def readcellparam(location=None, filename=None):
     iterable
         An iterable YAML object.
 
+    Notes
+    -----
+    The current working directory is padded in front of
+    any supplied location (or if path is given in the filename).
+
     """
 
     # set logger
@@ -278,9 +294,9 @@ def readcellparam(location=None, filename=None):
     if filename is None:
         filename = "cellparam.yml"
     if location is not None:
-        filename = location + "/" + filename
+        filename = os.getcwd() + "/" + location + "/" + filename
     else:
-        filename = "input/" + filename
+        filename = os.getcwd() + "/input/" + filename
     try:
         stream = open(filename, "r")
     except IOError:

@@ -1204,6 +1204,14 @@ def numerick(tr, chempots, temperatures, bs=None):
     # smeared weights are implemented.
     elif ((tr.param.transport_integration_method == "tetra")
           or (tr.param.transport_integration_method == "smeared")):
+        # this method needs the IBZ. This is not available if we work
+        # on the full grid.
+        if tr.param.work_on_full_grid:
+            logger.error("The tetrahedron and smeared integration method "
+                         "can not work if the IBZ grid is not present. Please "
+                         "choose one of the other integration techniques. "
+                         "Exiting.")
+            sys.exit(1)
         # first check that the scattering array have been set up on
         # the energy grid
         scattering.check_scattering(tr)

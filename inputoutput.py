@@ -1169,6 +1169,11 @@ def dump_density_of_states(bs, dos=None, dos_energies=None, filename="dos"):
 
     if dos is None:
         dos = bs.dos
+    if dos is None:
+        logger.info("No entries for the density of states have been "
+                    "located. If you want to dump the density of states "
+                    "please enable its calculation.")
+        return
     if dos_energies is None:
         dos_energies = bs.dos_energies
 

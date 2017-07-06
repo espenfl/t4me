@@ -911,11 +911,9 @@ class Bandstructure():
         logger = logging.getLogger(sys._getframe().f_code.co_name)
         logger.debug("Running gen_dos.")
 
-        # now check if we have generated a TB band (or more), if so,
-        # do not calculate dos. In the future, calculate dos for
-        # the non-TB bands by analytick formulations and use a
-        # numerical scheme for the TB bands
-        if True in self.tb_band:
+        # check if we have any bands which are not spherical, if
+        # so do not calculate the analytical dos
+        if np.any(self.bandparams[:][0]) != 0:
             return None, None
 
         # also check for any non parabolic character in the band
@@ -942,13 +940,6 @@ class Bandstructure():
         dos = np.zeros((numbands, self.param.dos_num_samples))
         # some tests
         for band in range(numbands):
-            # check spherical effmass for all bands
-            if self.bandparams[band][0] != 0:
-                logger.error("Band number " + str(band + 1) +
-                             " is not parabolic and the user tries to "
-                             "use closed expressions for the density of "
-                             "states calculations. Exiting.")
-                sys.exit(1)
             # use density of states effective mass
             effmass[band] = np.power(np.prod(
                 np.abs(self.effmass[band])), 1.0 / 3.0)
@@ -1103,18 +1094,109 @@ class Bandstructure():
             elif band_function == 2:
                 generate_energy = self.non_parabolic_energy_2
                 generate_velocity = self.non_parabolic_velocity_2
-            else:
+            elif band_function > 4:
                 logging.error("Supplied non_parabolic_function=" +
                               str(band_function) + " does not exist")
                 sys.exit(1)
         # fetch k-point grid in cartersian
         k = self.lattice.fetch_kmesh(direct=False)
-        # first energy
-        energy = generate_energy(k, self.effmass[band], a=self.a[band],
-                                 e0=self.e0[band], kshift=self.kshift[band])
-        # then velocity
-        vx, vy, vz = generate_velocity(k, self.effmass[band], a=self.a[band],
-                                       kshift=self.kshift[band])
+        if not band_function == 4:
+            # first energy
+            energy = generate_energy(k, self.effmass[band], a=self.a[band],
+                                     e0=self.e0[band], kshift=self.kshift[band])
+            # then velocity
+            vx, vy, vz = generate_velocity(k, self.effmass[band], a=self.a[band],
+                                           kshift=self.kshift[band])
+        ##################################################
+        ##################################################
+        # USE THIS SECTION TO MAKE CUSTIMIZED BANDS AND  #
+        # SET THE BAND TYPE TO 4 (NOT DOCUMENTED)        #
+        ##################################################
+        ##################################################
+        # CUSTOM SECTION START                           #
+        ##################################################
+        else:
+            quartic_onset = True
+            if quartic_onset:
+                # quartic band behavior at the onset
+                # first fetch quartic
+                energy_q = self.non_parabolic_energy_1(
+                    k, self.effmass[band], a=self.a[band], e0=self.e0[band],
+                    kshift=self.kshift[band])
+                # then velocity
+                vx_q, vy_q, vz_q = self.non_parabolic_velocity_1(
+                    k, self.effmass[band], a=self.a[band],
+                    kshift=self.kshift[band])
+
+                # then spherical
+                self.a[band] = [0.0, 0.0, 0.0]
+                self.effmass[band] = -2.0
+                self.e0[band] = 0.0
+                energy_p = self.non_parabolic_energy_1(
+                    k, self.effmass[band], a=self.a[band], e0=self.e0[band],
+                    kshift=self.kshift[band])
+                vx_p, vy_p, vz_p = self.non_parabolic_velocity_1(
+                    k, self.effmass[band], a=self.a[band],
+                    kshift=self.kshift[band])
+
+                # given the input
+                # A = -20
+                # eshift of -0.047195 eV
+                # quartic effective mass of 100 and spherical mass of 2.0
+                # calculate length of k-vectors
+                k_length = np.linalg.norm(k, axis=1)
+                quartic_portion = np.where(k_length < 0.220479)
+                energy_p[quartic_portion] = energy_q[quartic_portion]
+                vx_p[quartic_portion] = vx_q[quartic_portion]
+                vy_p[quartic_portion] = vy_q[quartic_portion]
+                vz_p[quartic_portion] = vz_q[quartic_portion]
+
+                # shift back
+                energy = energy_p + 0.047195
+            else:
+                # quartic band behavior deep in band, spherical onset
+                # quartic band behavior at the onset
+                # first fetch quartic
+                energy_q = self.non_parabolic_energy_1(
+                    k, self.effmass[band], a=self.a[band], e0=self.e0[band],
+                    kshift=self.kshift[band])
+                # then velocity
+                vx_q, vy_q, vz_q = self.non_parabolic_velocity_1(
+                    k, self.effmass[band], a=self.a[band],
+                    kshift=self.kshift[band])
+
+                # then spherical
+                self.a[band] = [0.0, 0.0, 0.0]
+                self.effmass[band] = -2.0
+                self.e0[band] = 0.0
+                energy_p = self.non_parabolic_energy_1(
+                    k, self.effmass[band], a=self.a[band], e0=self.e0[band],
+                    kshift=self.kshift[band])
+                vx_p, vy_p, vz_p = self.non_parabolic_velocity_1(
+                    k, self.effmass[band], a=self.a[band],
+                    kshift=self.kshift[band])
+
+                # given the input
+                # A = -20
+                # eshift of -0.047195 eV
+                # quartic effective mass of 100 and spherical mass of 2.0
+                # calculate length of k-vectors
+                k_length = np.linalg.norm(k, axis=1)
+                quartic_portion = np.where(k_length > 0.220479)
+                energy_p[quartic_portion] = energy_q[quartic_portion]
+                vx_p[quartic_portion] = vx_q[quartic_portion]
+                vy_p[quartic_portion] = vy_q[quartic_portion]
+                vz_p[quartic_portion] = vz_q[quartic_portion]
+
+                # shift back
+                energy = energy_p
+            vx = vx_p
+            vy = vy_p
+            vz = vz_p
+        ##################################################
+        # CUSTOM SECTION END                             #
+        ##################################################
+
         # THIS DOES NOT WORK FOR MULTIBAND SCENARIOS, KILL IT
         # ACTUALLY, THIS FOLDING NEEDS TO BE FIXED IN ORDER TO GET THE
         # BAND INDEX FIRST DISABLE UNTIL FIXED!

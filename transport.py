@@ -246,8 +246,9 @@ class Transport(object):
             is used.
         method : {"closed", "numeric", "numerick"}
             If `method` is not supplied is defaults to "numeric" unless
-            bandstructure data is read numerically when it defaults to
-            "numerick".
+            bandstructure data is read numerically or generated (all 
+            cases where the closed Fermi Dirac integrals cannot be
+            used) when it defaults to "numerick".
 
             | "closed" evaluates the closed Fermi integrals where only 
             | one scattering mechanism is possible per band. Only valid
@@ -333,17 +334,19 @@ class Transport(object):
                              "User, please make up your mind. Exiting. ")
                 sys.exit(1)
         else:
-            # or if any band is generated with a tight binding approach
-            if np.any(self.bs.tb_band):
+            # or if any band is generated with band type different from 0
+            if np.any(self.bs.bandparams[:,0] != 0):
                 numerick = True
         # now check if user wants numerick anyway
         if method == "numerick" or self.param.transport_method == "numerick":
             numerick = True
 
         if method != "numerick" and numerick:
-            logger.info("User requested to use '" + method + "' but the "
+            logger.info("User requested to use the method '" + method + "' "
+                        "for integration, but "
                         "at the same time wants to read data from "
-                        "VASP, NumPy, Wannier90 or have generated TB bands "
+                        "VASP, NumPy, Wannier90 or have generated "
+                        "non-parabolic bands."
                         "This is not possible and we now set the method "
                         "to 'numerick'.")
 

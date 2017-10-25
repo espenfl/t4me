@@ -975,7 +975,7 @@ def bandstructure_vasp(bs, location=None, filename=None):
                 emi[band] = banddata["emission"]
                 tau0c[band] = banddata["tau0_c"]
     # now check if analytic scattering is set and print warning
-    # (bands from VASP is seldom spherical)
+    # (bands from VASP is seldom parabolic)
     if bs.param.transport_use_analytic_scattering:
         logger.warning("transport_use_analytic is set, but data from "
                        "VASP is processed. These bands are seldom analytic "
@@ -1296,7 +1296,7 @@ def bandstructure_numpy(bs, filename, location=None):
                 emi[band] = banddata["emission"]
                 tau0c[band] = banddata["tau0_c"]
         # now check if analytic scattering is set and print warning
-        # (bands from numpy is seldom spherical)
+        # (bands from numpy is seldom parabolic)
     if bs.param.transport_use_analytic_scattering:
         logger.warning("transport_use_analytic is set, but data from "
                        "Numpy is processed. These bands are seldom analytic "
@@ -1589,7 +1589,7 @@ def bandstructure_w90(bs, location=None, filename=None):
                 emi[band] = banddata["emission"]
                 tau0c[band] = banddata["tau0_c"]
     # now check if analytic scattering is set and print warning
-    # (bands from w90 is seldom spherical)
+    # (bands from w90 is seldom parabolic)
     if bs.param.transport_use_analytic_scattering:
         logger.warning("transport_use_analytic is set, but data from "
                        "Numpy is processed. These bands are seldom "
@@ -1827,15 +1827,15 @@ def read_band_parameters(bs, numbands, location=None,
         tight_hop.append(banddata["thop"])
         tight_orb.append(banddata["torb"])
         tight_onsite.append(banddata["tonsite"])
-        # if band is non-spherical, print warning
+        # if band is non-parabolic, print warning
         # if transport_use_analytic_scattering is also set
         if (bandparams[band][0] != 0
                 and bs.param.transport_use_analytic_scattering):
             logger.warning(
-                "The supplied band is non-spherical, while "
+                "The supplied band is non-parabolic, while "
                 "transport_use_analytic_scattering is set to True. "
                 "The analytic scattering models are currently only "
-                "valid for spherical bands. Continuing.")
+                "valid for parabolic bands. Continuing.")
     bs.bandparams = bandparams
     bs.effmass = effmass
     bs.q_energy_trans = q_energy_trans

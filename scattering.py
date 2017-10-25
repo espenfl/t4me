@@ -120,7 +120,7 @@ def scattering_dos(tr, dos, energies, select_scattering):
                  This is quite serious, but does not influene the acoustic
                  phonon scattering (taken to be zero in the model implemented
                  here). The current approach if not using the
-                 analytic spherical models is that the transfer energies
+                 analytic parabolic models is that the transfer energies
                  for all scattering mechanisms are summed and the energy
                  of where the relaxation time is evaluated is shifted by
                  this amount during interpolation. The sum approximation
@@ -215,7 +215,7 @@ def scattering_dos(tr, dos, energies, select_scattering):
                     rho = mass density [g/cm^3]
 
                     and DOS in units of 1/(eV AA^3) yields w0
-                    in units of fs as for the spherical case
+                    in units of fs as for the parabolic case
 
                     tau0[0] = pi*D^2/(hbar*v^2*rho)
 
@@ -347,7 +347,7 @@ def scattering_dos(tr, dos, energies, select_scattering):
                    "for the transfer energies. This is quite "
                    "serious, but does not influene the acoustic "
                    "phonon scattering. The current approach if "
-                   "not using the analytic spherical models is "
+                   "not using the analytic parabolic models is "
                    "that the transfer energies for all scattering "
                    "mechanisms are summed and the energy of "
                    "where the relaxation time is evaluated "
@@ -413,11 +413,11 @@ def scattering_dos(tr, dos, energies, select_scattering):
     return scattering_inv, scattering_total_inv, scattering_tau0
 
 
-def scattering_spherical(tr, energies, select_scattering,
+def scattering_parabolic(tr, energies, select_scattering,
                          use_eonk=False):
     """
     Setup scattering mechnisms and store values in the
-    scattering arrays using spherical band dispersions
+    scattering arrays using parabolic band dispersions
     as an approximation.
 
     Parameters
@@ -506,10 +506,10 @@ def scattering_spherical(tr, energies, select_scattering,
     """
     # set logger
     logger = logging.getLogger(sys._getframe().f_code.co_name)
-    logger.debug("Running scattering_spherical.")
+    logger.debug("Running scattering_parabolic.")
     logger.debug(
         "Calculating the scattering properties based on the "
-        "analytic spherical scattering models.")
+        "analytic parabolic scattering models.")
 
     # set temperatures
     temperatures = tr.temperatures
@@ -610,11 +610,11 @@ def scattering_spherical(tr, energies, select_scattering,
         for band in range(num_bands):
             emi = 0.0
             sign = 1.0
-            # check spherical effmass for all bands
+            # check parabolic effmass for all bands
             effmass_vec = tr.bs.effmass[band]
-            if not tr.bs.spherical_effective_mass(effmass_vec):
+            if not tr.bs.parabolic_effective_mass(effmass_vec):
                 logger.error("The setup of scattering mechanisms using "
-                             "spherical models requires a spherical "
+                             "parabolic models requires a parabolic "
                              "effective mass. Exiting.")
                 sys.exit(1)
             effmass = effmass_vec[0]
@@ -625,7 +625,7 @@ def scattering_spherical(tr, energies, select_scattering,
             for scattering_index, scattering_value in \
                     np.ndenumerate(select_scattering[band]):
                 """ This portion sets the scattering array based
-                on the well established spherical scattering models
+                on the well established parabolic scattering models
 
                 tau=tau_0*E^{r-1/2}
 
@@ -1139,7 +1139,7 @@ def find_r_for_closed(tr, band):
 
     # check that only one scattering mech is entered
     if np.sum(tr.bs.select_scattering[band]) > 1:
-        logging.error("Spherical Fermi integral routines are only "
+        logging.error("Parabolic Fermi integral routines are only "
                       "defined for one type of scattering. Typically, "
                       "set one scattering mechnisms to a value (tau0) "
                       "and the other factors to zero. Exiting.")
@@ -1187,7 +1187,7 @@ def combined_scattering(tr, energy, tau0, energy_trans):
 
     where :math:`\\tau=\\tau_0E^{r-1/2}`.
     The array `scattering_tau0_select` determines which
-    scattering to include in the sum. Consult :func:`scattering_spherical`
+    scattering to include in the sum. Consult :func:`scattering_parabolic`
     for additional details. The scattering prefactors
     :math:`\\tau_0` are ordered in a sequence described there.
     The `scattering_tau0_select` follows this sequence and is

@@ -91,7 +91,7 @@ def run_tests(tests="slow"):
 
 class TestTransportIntegralsFast(unittest.TestCase):
 
-    def test_closed_spherical(self):
+    def test_closed_parabolic(self):
         """
         Test the Seebeck and Lorenz coefficient, carrier
         concentration and the small-h Hall factor against
@@ -140,11 +140,11 @@ class TestTransportIntegralsFast(unittest.TestCase):
         # now test (only two decimals)
         self.assertTrue(np.all(difference < 1e-2))
 
-    def test_numeric_spherical_one_band(self):
+    def test_numeric_parabolic_one_band(self):
         """
         Test the numerical solution of the energy
         dependent integral that appear when making then
-        spherical approximation. These integrals are present
+        parabolic approximation. These integrals are present
         at the step before selecting a scattering mechanism and
         as such can introduce the Fermi-Dirac integrals.
         Here one single valence band with the effective mass of
@@ -224,7 +224,7 @@ class TestTransportIntegralsFast(unittest.TestCase):
         self.assertTrue(np.all(
             difference_in_small_hall[:, 0:5, 0, 0] < 1e-6))
 
-    def test_numeric_spherical_multi_band(self):
+    def test_numeric_parabolic_multi_band(self):
         """
         Same as the previous test, but here an additional
         valence band with an effective mass of 0.2 of the free
@@ -298,7 +298,7 @@ class TestTransportIntegralsFast(unittest.TestCase):
         self.assertTrue(np.all(
             difference_in_small_hall[:, 5:9, 0, 0] < 1e-6))
 
-    def test_trapz_spherical_one_band_fast(self):
+    def test_trapz_parabolic_one_band_fast(self):
         """
         Test the direct integrals in reciprocal space against
         the results of the closed Fermi-Dirac integrals
@@ -350,7 +350,7 @@ class TestTransportIntegralsFast(unittest.TestCase):
         self.assertTrue(np.all(
             difference_in_lorenz[:, :, 0, 0] < 1e-3))
 
-    def test_trapz_spherical_one_band_tri_fast(self):
+    def test_trapz_parabolic_one_band_tri_fast(self):
         """
         Test the direct integrals in reciprocal space against
         the results of the closed Fermi-Dirac integrals
@@ -406,7 +406,7 @@ class TestTransportIntegralsFast(unittest.TestCase):
         self.assertTrue(np.all(
             difference_in_lorenz[:, :, 0, 0] < 1e-3))
 
-    def test_trapz_spherical_one_band_numdiff_fast(self):
+    def test_trapz_parabolic_one_band_numdiff_fast(self):
         """
         Test the direct integrals in reciprocal space against
         the results of the closed Fermi-Dirac integrals
@@ -463,7 +463,7 @@ class TestTransportIntegralsFast(unittest.TestCase):
         self.assertTrue(np.all(
             difference_in_lorenz[:, :, 0, 0] < 1e-3))
 
-    def test_trapz_spherical_one_band_tri_numdiff_fast(self):
+    def test_trapz_parabolic_one_band_tri_numdiff_fast(self):
         """
         Test the direct integrals in reciprocal space against
         the results of the closed Fermi-Dirac integrals
@@ -523,7 +523,7 @@ class TestTransportIntegralsFast(unittest.TestCase):
         self.assertTrue(np.all(
             difference_in_lorenz[:, :, 0, 0] < 1e-3))
 
-    def test_trapz_preinter_spherical_one_band_fast(self):
+    def test_trapz_preinter_parabolic_one_band_fast(self):
         """
         Test the direct integrals in reciprocal space against
         the results of the closed Fermi-Dirac integrals
@@ -707,7 +707,7 @@ class TestTransportIntegralsSlow(unittest.TestCase):
         self.assertTrue(np.all(np.abs(
             difference_in_lorenz[:]) < 1e-7))
 
-    def test_trapz_spherical_one_band(self):
+    def test_trapz_parabolic_one_band(self):
         """
         Test the direct integrals in reciprocal space against
         the results of the closed Fermi-Dirac integrals
@@ -796,7 +796,7 @@ class TestTransportIntegralsSlow(unittest.TestCase):
         self.assertTrue(np.all(
             difference_in_lorenz[2, 0, 0, 0] < 1e-5))
 
-    def test_tetra_spherical_one_band(self):
+    def test_tetra_parabolic_one_band(self):
         """
         Test the direct integrals in reciprocal space against
         the results of the closed Fermi-Dirac integrals
@@ -852,7 +852,7 @@ class TestTransportIntegralsSlow(unittest.TestCase):
         self.assertTrue(np.all(
             difference_in_lorenz[:, 0:4, 0, 0] < 1e-2))
 
-    def test_trapz_preinter_spherical_one_band(self):
+    def test_trapz_preinter_parabolic_one_band(self):
         """
         Test the direct integrals in reciprocal space against
         the results of the closed Fermi-Dirac integrals
@@ -929,7 +929,7 @@ class TestTransportIntegralsSlow(unittest.TestCase):
         self.assertTrue(np.all(np.abs(
             difference_in_lorenz[2, :, 0, 0]) < 1e-3))
 
-    def test_cubature_spherical_one_band(self):
+    def test_cubature_parabolic_one_band(self):
         """
         Test the direct integrals in reciprocal space against
         the results of the closed Fermi-Dirac integrals

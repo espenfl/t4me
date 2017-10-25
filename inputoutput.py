@@ -200,7 +200,7 @@ def readparam(location=None, filename=None):
     if filename is None:
         filename = "param.yml"
     if location is not None:
-        filename = os.getcwd() + "/" + location + "/" + filename
+        filename = location + "/" + filename
     else:
         filename = os.getcwd() + "/input/" + filename
     try:
@@ -247,7 +247,7 @@ def readbandparam(location=None, filename=None):
     if filename is None:
         filename = "bandparam.yml"
     if location is not None:
-        filename = os.getcwd() + "/" + location + "/" + filename
+        filename = location + "/" + filename
     else:
         filename = os.getcwd() + "/input/" + filename
     try:
@@ -294,7 +294,7 @@ def readcellparam(location=None, filename=None):
     if filename is None:
         filename = "cellparam.yml"
     if location is not None:
-        filename = os.getcwd() + "/" + location + "/" + filename
+        filename = location + "/" + filename
     else:
         filename = os.getcwd() + "/input/" + filename
     try:

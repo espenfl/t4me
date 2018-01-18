@@ -31,7 +31,7 @@
 # 9-11 - empty slots 
 # 12 - constant (with respect to energy) scattering
 #
-# If one does not use the analytick (spherical)
+# If one does not use the analytic (parabolic)
 # scattering models and instead use the density of
 # states to generate the scattering rate, then only
 # the first four and the last have been implemented
@@ -43,7 +43,7 @@ Band 1:
   #  General parameters                                  #
   # -----------------------------------------------------#
   # Band type to be generated:
-  # 0 for spherical,
+  # 0 for parabolic,
   # 1 for k^4 corrections,
   # 2 for Kane types (alpha correction)
   # 3 for tight binding

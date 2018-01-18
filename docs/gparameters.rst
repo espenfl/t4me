@@ -499,8 +499,8 @@ Calculate the transport coefficients for band 3, 4 and 10.
 
 ``transport_use_analytic_scattering``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Determines if the analytic spherical scattering models should be used.
-They can be applied also to dispersions which are not spherical, but
+Determines if the analytic parabolic scattering models should be used.
+They can be applied also to dispersions which are not parabolic, but
 such an application have to be physically justified.
 
 Example:

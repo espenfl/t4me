@@ -2691,7 +2691,7 @@ void calc_transport_tensors_cubature(int *num_points,
     // analytic scattering models (parabolic bands)
     else if (scattering_type==1) {
       if (info) {
-        std::cout << ", spherical scattering models" << std::endl;
+        std::cout << ", parabolic scattering models" << std::endl;
       }
       double tau0_data[num_scatterings];
       double **tau_energy_trans_data=new double *[num_bands];

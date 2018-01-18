@@ -1,7 +1,7 @@
 Examples
 ========
 
-A spherical band
+A parabolic band
 ----------------
 Here a short example of how to calculate the transport
 coefficients from analytical band generation is presented.
@@ -57,7 +57,7 @@ and ``transport_chempot_max``.
 
    transport_use_analytic_scattering: True
 
-Use spherical and analytic models for the electron scattering.
+Use parabolic and analytic models for the electron scattering.
 
 ::
 
@@ -103,14 +103,14 @@ Only generate one band.
 
    type: 0
    
-Use spherical band generation.
+Use parabolic band generation.
 
 ::
 
    effmass: [-1.0,-1.0,-1.0]
    
 Effective mass in units of the free electron mass.
-For spherical bands, this needs to be equal along each direction.
+For parabolic bands, this needs to be equal along each direction.
 Negative mass gives bands that curve downwards.
 
 ::

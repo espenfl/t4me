@@ -52,13 +52,13 @@ Determines how to generate the bands if not read. Relevant only
 if ``read`` is set to `param`. The following options are
 possible:
 
-- `0` - spherical bands according to the relation
+- `0` - parabolic bands according to the relation
 
   .. :math:`E=\\frac{\\hbar^2k^2}{2m}`
 
   where the effective mass :math:`m` is set by ``effmass``.
 
-- `1` - spherical bands pluss a quartic correction according
+- `1` - parabolic bands pluss a quartic correction according
   to the relation:
 
   .. :math:`E\\frac{\\hbar^2k^2}{2m}+ak^4`
@@ -97,7 +97,7 @@ Example:
 
    effmass: [-1.0,-1.0,-1.0]
 
-Generates band that for the spherical case curves down
+Generates band that for the parabolic case curves down
 with an effective mass along each unit vector of the
 configured recirprocal cell equal to the free electron mass.
 
@@ -195,7 +195,7 @@ implemented (the number indicate array index, starting at 1):
 - 9-11 empty slots
 - 12 constant scattering
 
-If one does not use the analytick (spherical)
+If one does not use the analytic (parabolic)
 scattering models and instead use the density of
 states to generate the scattering rate, then only
 the first four and the last have been implemented
@@ -213,7 +213,7 @@ following band.
 ``explicit_prefact``
 ~~~~~~~~~~~~~~~~~~~~
 Set an explicit prefactor for the relaxation time instead of using
-the prefactor from the density of states or spherical band models.
+the prefactor from the density of states or parabolic band models.
 This behavior is enabled by setting the relevant element to `1`
 for the mechanism where one would like to
 specify an explicit prefact (constant tau0 is not
@@ -223,7 +223,7 @@ temperature variations etc. Thus if the user also perform calculations
 at different temperatures, please consider that the prefactor usually
 change. This option should only be used by experts. If all elements
 in the array is `0`, the scattering models based on density of states
-or spherical bands is used.
+or parabolic bands is used.
 
 Example:
 ::
@@ -238,7 +238,7 @@ The values of the explicit prefactors. Only relevant for the
 entries in ``explicit_prefact`` with a value of `1`.
 Remember that the units of the relaxation time come out as fs,
 including the energy dependency (density of states or
-spherical band). Depending on the model, the prefactor thus
+parabolic band). Depending on the model, the prefactor thus
 have different units. Also consider that the prefactor usually
 has a temperature and effective mass dependence.
 

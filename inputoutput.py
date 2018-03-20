@@ -200,7 +200,7 @@ def readparam(location=None, filename=None):
     if filename is None:
         filename = "param.yml"
     if location is not None:
-        filename = os.getcwd() + "/" + location + "/" + filename
+        filename = location + "/" + filename
     else:
         filename = os.getcwd() + "/input/" + filename
     try:
@@ -247,7 +247,7 @@ def readbandparam(location=None, filename=None):
     if filename is None:
         filename = "bandparam.yml"
     if location is not None:
-        filename = os.getcwd() + "/" + location + "/" + filename
+        filename = location + "/" + filename
     else:
         filename = os.getcwd() + "/input/" + filename
     try:
@@ -294,7 +294,7 @@ def readcellparam(location=None, filename=None):
     if filename is None:
         filename = "cellparam.yml"
     if location is not None:
-        filename = os.getcwd() + "/" + location + "/" + filename
+        filename = location + "/" + filename
     else:
         filename = os.getcwd() + "/input/" + filename
     try:
@@ -384,7 +384,7 @@ def dump_transport_coefficients(tr, filename_tag=""):
     sigma_file.write(
         "#  1. Column: chemical potential in eV                   #\n")
     sigma_file.write(
-        "#  2. Column: eta (not usefull for other than spherical  #\n")
+        "#  2. Column: eta (not usefull for other than parabolic  #\n")
     sigma_file.write(
         "#     bands)                                             #\n")
     sigma_file.write(
@@ -448,7 +448,7 @@ def dump_transport_coefficients(tr, filename_tag=""):
     seebeck_file.write(
         "#  1. Column: chemical potential in eV                   #\n")
     seebeck_file.write(
-        "#  2. Column: eta (not usefull for other than spherical  #\n")
+        "#  2. Column: eta (not usefull for other than parabolic  #\n")
     seebeck_file.write(
         "#     bands)                                             #\n")
     seebeck_file.write(
@@ -512,7 +512,7 @@ def dump_transport_coefficients(tr, filename_tag=""):
     lorenz_file.write(
         "#  1. Column: chemical potential in eV                   #\n")
     lorenz_file.write(
-        "#  2. Column: eta (not usefull for other than spherical  #\n")
+        "#  2. Column: eta (not usefull for other than parabolic  #\n")
     lorenz_file.write(
         "#     bands)                                             #\n")
     lorenz_file.write(
@@ -576,7 +576,7 @@ def dump_transport_coefficients(tr, filename_tag=""):
     kappae_file.write(
         "#  1. Column: chemical potential in eV                   #\n")
     kappae_file.write(
-        "#  2. Column: eta (not usefull for other than spherical  #\n")
+        "#  2. Column: eta (not usefull for other than parabolic  #\n")
     kappae_file.write(
         "#     bands)                                             #\n")
     kappae_file.write(
@@ -640,7 +640,7 @@ def dump_transport_coefficients(tr, filename_tag=""):
     hall_file.write(
         "#  1. Column: chemical potential in eV                   #\n")
     hall_file.write(
-        "#  2. Column: eta (not usefull for other than spherical  #\n")
+        "#  2. Column: eta (not usefull for other than parabolic  #\n")
     hall_file.write(
         "#     bands)                                             #\n")
     hall_file.write(
@@ -704,7 +704,7 @@ def dump_transport_coefficients(tr, filename_tag=""):
     hall_cc_file.write(
         "#  1. Column: chemical potential in eV                   #\n")
     hall_cc_file.write(
-        "#  2. Column: eta (not usefull for other than spherical  #\n")
+        "#  2. Column: eta (not usefull for other than parabolic  #\n")
     hall_cc_file.write(
         "#     bands)                                             #\n")
     hall_cc_file.write(
@@ -768,7 +768,7 @@ def dump_transport_coefficients(tr, filename_tag=""):
     cc_file.write(
         "#  1. Column: chemical potential in eV                   #\n")
     cc_file.write(
-        "#  2. Column: eta (not usefull for other than spherical  #\n")
+        "#  2. Column: eta (not usefull for other than parabolic  #\n")
     cc_file.write(
         "#     bands)                                             #\n")
     cc_file.write(
@@ -814,7 +814,7 @@ def dump_transport_coefficients(tr, filename_tag=""):
     hall_fact_file.write(
         "#  1. Column: chemical potential in eV                   #\n")
     hall_fact_file.write(
-        "#  2. Column: eta (not usefull for other than spherical  #\n")
+        "#  2. Column: eta (not usefull for other than parabolic  #\n")
     hall_fact_file.write(
         "#     bands)                                             #\n")
     hall_fact_file.write(

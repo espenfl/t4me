@@ -108,7 +108,7 @@ transport_chempot_samples: 100 # n/a
 transport_energycutband: 1.0 # eV
 # Include only the following bands in the calculation:
 transport_include_bands: [] # n/a
-# Do you want to use the analytical spherical scattering
+# Do you want to use the analytical parabolic scattering
 # models?
 transport_use_analytic_scattering: True # n/a
 # Do you want to calculate the scattering on the fly

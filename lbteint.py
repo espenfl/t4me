@@ -579,7 +579,7 @@ def integrandpar(eps, transport, w0, eta, beta,
     -----
 
     The total scattering is calculated based on the well 
-    known scattering models for spherical energy dispersions 
+    known scattering models for parabolic energy dispersions 
     :math:`\\tau=\\tau_0\\epsilon^{r-1/2}`, 
     where :math:`r` is the scattering factor.
 
@@ -635,7 +635,7 @@ def integrandpart2(eps, transport, w0, eta, beta,
     Notes
     -----
     The total scattering is calculated based on the well 
-    known scattering models for spherical energy dispersions 
+    known scattering models for parabolic energy dispersions 
     :math:`\\tau=\\tau_0\\epsilon^{r-1/2}`, 
     where :math:`r` is the scattering factor.
     Difference from :func:`integrandpar`: here tau^2 
@@ -697,7 +697,7 @@ def analytic_k_space_integrand(kz, ky, kx, eta, beta, effmass,
 
 def analytic_k_space_energy(kx, ky, kz, effmass, e_shift):
     """
-    Returns the spherical energy dispersion.
+    Returns the parabolic energy dispersion.
 
     Parameters
     ----------
@@ -726,7 +726,7 @@ def analytic_k_space_energy(kx, ky, kz, effmass, e_shift):
     """
 
     # Prefactor of hbar^2/(2m) not included
-    # (beware for non-spherical expressions)
+    # (beware for non-parabolic expressions)
     # Need to shift the energy in order to
     # avoid E=0 for the summation of the 1/E for
     # the scattering. Should not be a problem
@@ -737,7 +737,7 @@ def analytic_k_space_energy(kx, ky, kz, effmass, e_shift):
 
 def analytic_k_space_velocity(kx, ky, kz, effmass, i):
     """
-    Returns the spherical velocity dispersion. 
+    Returns the parabolic velocity dispersion. 
 
     Parameters
     ----------
@@ -770,7 +770,7 @@ def analytic_k_space_velocity(kx, ky, kz, effmass, i):
     """
 
     # Prefactor of hbar/m not included
-    # (beware for non-spherical expressions)
+    # (beware for non-parabolic expressions)
     if i == 0:
         return 2.0 * constants.bandunit * kx / effmass[0]
     if i == 1:

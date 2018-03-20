@@ -90,7 +90,7 @@ class Transport(object):
         See Also
         --------
         scattering.scattering_dos 
-        scattering.scattering_spherical
+        scattering.scattering_parabolic
 
         """
 
@@ -176,7 +176,7 @@ class Transport(object):
         # analytic scattering models
         else:
             logger.info("Setting up the scattering models "
-                        "based on the spherical band models.")
+                        "based on the parabolic band models.")
             if self.param.transport_integration_method == "cubature":
                 # for on the fly interpolation we need a linear
                 # grid for the scattering and that is it
@@ -207,7 +207,7 @@ class Transport(object):
                 use_eonk = True
                 energies = self.bs.energies
             scattering_inv, scattering_total_inv, scattering_tau0 = \
-                scattering.scattering_spherical(self,
+                scattering.scattering_parabolic(self,
                                                 energies,
                                                 select_scattering,
                                                 use_eonk=use_eonk)
@@ -253,16 +253,16 @@ class Transport(object):
             | "closed" evaluates the closed Fermi integrals where only 
             | one scattering mechanism is possible per band. Only valid
             | for systems where one can strictly rely on a parametrized
-            | spherical bandstructure based on effective mass models.
+            | parabolic bandstructure based on effective mass models.
             | Parameters (e.g. effective masses for each band) are set 
             | in the bandstructure configuration file. 
-            | The driver routine is :func:`lbtecoeff.spherical_closed`
+            | The driver routine is :func:`lbtecoeff.parabolic_closed`
 
             | "numeric" similar to "closed, but evaluates the Fermi 
             | integrals in an open form (e.g. it is possible to 
             | concatenate the scattering mechanisms, which is not 
             | possible for the closed Fermi integrals). 
-            | The driver routine is :func:`lbtecoeff.spherical_numeric`
+            | The driver routine is :func:`lbtecoeff.parabolic_numeric`
 
             | "numerick" evaluates the transport integrals more generally
             | as an integral over the k-points. It is less restrictive
@@ -285,8 +285,8 @@ class Transport(object):
 
         See Also
         --------
-        lbtecoeff.spherical_closed
-        lbtecoeff.spherical_numeric 
+        lbtecoeff.parabolic_closed
+        lbtecoeff.parabolic_numeric 
         lbtecoeff.numerick
 
         """
@@ -320,7 +320,7 @@ class Transport(object):
 
         # figure out the current configuration if VASP input, for sure,
         # we do not have analytick models
-        sphericale = False
+        parabolice = False
         numerick = False
         if self.param.read == "vasp" or self.param.read[:5] == "numpy" \
            or self.param.read == "w90":
@@ -378,7 +378,7 @@ class Transport(object):
                 # loop temperature and calculate closed integrals
                 for indexe in range(chempots.shape[0]):
                     sigma_tensor, seebeck_tensor, lorenz_tensor, \
-                        hall_tensor, cc_tensor_n, cc_tensor_p = lbtecoeff.sphericale(self, etas[indexe], temp,
+                        hall_tensor, cc_tensor_n, cc_tensor_p = lbtecoeff.parabolice(self, etas[indexe], temp,
                                                                                      bs, tau0, method)
                     sigma[indext, indexe] = sigma_tensor
                     seebeck[indext, indexe] = seebeck_tensor

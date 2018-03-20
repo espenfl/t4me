@@ -568,7 +568,7 @@ class Bandstructure():
     def non_parabolic_energy_1(self, k, effmass, a, e0=0.0,
                                kshift=[0.0, 0.0, 0.0]):
         """
-        Calculates a spherical energy dispersion, both parabolic
+        Calculates a energy dispersion, both parabolic
         and non-parabolic.
 
         Parameters
@@ -610,7 +610,7 @@ class Bandstructure():
 
         .. math:: E=\\frac{\\hbar^2 k^2}{2m}+ak^4.
 
-        Setting :math:`a` to zero yields a spherical parabolic
+        Setting :math:`a` to zero yields a parabolic
         dispersion.
 
         """
@@ -676,7 +676,7 @@ class Bandstructure():
 
         .. math:: E=\\frac{\\hbar^2 k^2}{2m}+ak^4.
 
-        Setting :math:`a` to zero yields a spherical parabolic dispersion
+        Setting :math:`a` to zero yields a parabolic dispersion
         and thus its group velocity.
 
         .. warning:: The factor :math:`\\hbar^{-1}` is not returned and
@@ -1175,7 +1175,7 @@ class Bandstructure():
 
         Notes
         -----
-        Currently only the parabolic/spherical models are
+        Currently only the parabolic models are
         implemented.
 
         .. todo:: Also implement the non-parabolic alpha models
@@ -1185,7 +1185,7 @@ class Bandstructure():
         logger = logging.getLogger(sys._getframe().f_code.co_name)
         logger.debug("Running gen_dos.")
 
-        # check if we have any bands which are not spherical, if
+        # check if we have any bands which are not parabolic, if
         # so do not calculate the analytical dos
         if np.any(self.bandparams[:][0]) != 0:
             return None, None
@@ -1408,7 +1408,7 @@ class Bandstructure():
                     k, self.effmass[band], a=self.a[band],
                     kshift=self.kshift[band])
 
-                # then spherical
+                # then parabolic
                 self.a[band] = [0.0, 0.0, 0.0]
                 self.effmass[band] = -2.0
                 self.e0[band] = 0.0
@@ -1422,7 +1422,7 @@ class Bandstructure():
                 # given the input
                 # A = -20
                 # eshift of -0.047195 eV
-                # quartic effective mass of 100 and spherical mass of 2.0
+                # quartic effective mass of 100 and parabolic mass of 2.0
                 # calculate length of k-vectors
                 k_length = np.linalg.norm(k, axis=1)
                 quartic_portion = np.where(k_length < 0.220479)
@@ -1434,7 +1434,7 @@ class Bandstructure():
                 # shift back
                 energy = energy_p + 0.047195
             else:
-                # quartic band behavior deep in band, spherical onset
+                # quartic band behavior deep in band, parabolic onset
                 # quartic band behavior at the onset
                 # first fetch quartic
                 energy_q = self.non_parabolic_energy_1(
@@ -1445,7 +1445,7 @@ class Bandstructure():
                     k, self.effmass[band], a=self.a[band],
                     kshift=self.kshift[band])
 
-                # then spherical
+                # then parabolic
                 self.a[band] = [0.0, 0.0, 0.0]
                 self.effmass[band] = -2.0
                 self.e0[band] = 0.0
@@ -1459,7 +1459,7 @@ class Bandstructure():
                 # given the input
                 # A = -20
                 # eshift of -0.047195 eV
-                # quartic effective mass of 100 and spherical mass of 2.0
+                # quartic effective mass of 100 and parabolic mass of 2.0
                 # calculate length of k-vectors
                 k_length = np.linalg.norm(k, axis=1)
                 quartic_portion = np.where(k_length > 0.220479)
@@ -2815,9 +2815,9 @@ class Bandstructure():
             else:
                 return ien, False, new_grid
 
-    def spherical_effective_mass(self, effmass_t):
+    def parabolic_effective_mass(self, effmass_t):
         """
-        Checks if the supplied effective mass array is spherical.
+        Checks if the supplied effective mass array is parabolic.
 
         Parameters
         ----------
@@ -2828,13 +2828,13 @@ class Bandstructure():
         Returns
         -------
         boolean
-            True if spherical tensors, False otherwise.
+            True if parabolic tensors, False otherwise.
 
         """
 
         # set logger
         logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running spherical_effective_mass.")
+        logger.debug("Running parabolic_effective_mass.")
 
         effmass = effmass_t[0]
         if not np.allclose(np.array([effmass, effmass, effmass]),

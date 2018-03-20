@@ -36,8 +36,8 @@ Features
   
   - Generate the band structure from analytic function
     
-    - Spherical bands
-    - Spherical bands pluss a quartic correction
+    - Parabolic bands
+    - Parabolic bands pluss a quartic correction
     - Kane type of bands
     - Tight binding bands
       
@@ -52,7 +52,7 @@ Features
     
 - Scattering properties:
   
-  - Spherical energy dispersion models:
+  - Parabolic energy dispersion models:
     
     - Acoustic phonon scattering from deformations
     - Non-polar optical phonon scattering (not fully tested)

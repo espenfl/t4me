@@ -31,9 +31,9 @@ import utils
 import spglib_interface
 
 
-def sphericale(tr, eta, temperature, bs, tau0, method):
+def parabolice(tr, eta, temperature, bs, tau0, method):
     """
-    This is a wrapper for all the spherical Fermi integrals.
+    This is a wrapper for all the parabolic Fermi integrals.
 
     Parameters
     ----------
@@ -79,22 +79,22 @@ def sphericale(tr, eta, temperature, bs, tau0, method):
     """
     # set logger
     logger = logging.getLogger(sys._getframe().f_code.co_name)
-    logger.debug("Running sphericale.")
-    func = {"closed": spherical_closed, "numeric": spherical_numeric}
+    logger.debug("Running parabolice.")
+    func = {"closed": parabolic_closed, "numeric": parabolic_numeric}
     try:
         func[method]
     except KeyError:
         logging.error("The method: '" + method +
-                      "' does not exist for calculating the spherical Fermi integrals. Please use 'closed' or 'numeric'. Exiting. ")
+                      "' does not exist for calculating the parabolic Fermi integrals. Please use 'closed' or 'numeric'. Exiting. ")
         sys.exit(1)
     sigma, seebeck, lorenz, hall, ccn, ccp = func[method](
         tr, eta, bs, tau0, temperature)
     return sigma, seebeck, lorenz, hall, ccn, ccp
 
 
-def spherical_closed(tr, eta, bs, tau0_t, temperature):
+def parabolic_closed(tr, eta, bs, tau0_t, temperature):
     """
-    This routines calculates the spherical and spherical
+    This routines calculates the parabolic and parabolic
     Fermi integrals for the transport coefficients.
 
     Parameters
@@ -134,7 +134,7 @@ def spherical_closed(tr, eta, bs, tau0_t, temperature):
     Notes
     -----
     The closed equations for the Fermi integrals can easily be
-    developed from the following equaion from :func:`spherical_numeric`
+    developed from the following equaion from :func:`parabolic_numeric`
 
     .. math:: \\Sigma^i_{lm}=-\\frac{4e^2\\sqrt{m}}{3\\sqrt{2}\\pi^2
               \\hbar^3}\\int \\tau(E) E^{3/2}(E-\\mu)^i
@@ -166,7 +166,7 @@ def spherical_closed(tr, eta, bs, tau0_t, temperature):
     .. math:: F_i(E)=\\beta^{-(i+1)}F_i(\\epsilon),
 
     and the :math:`\\Sigma` coefficients can be easily transformed.
-    Please consult :func:`spherical_numeric` for the specific
+    Please consult :func:`parabolic_numeric` for the specific
     transport tensors and units used.
 
     Notes
@@ -180,7 +180,7 @@ def spherical_closed(tr, eta, bs, tau0_t, temperature):
     --------
     setup_scattering()
     find_r_from_tau0()
-    spherical_numeric()
+    parabolic_numeric()
 
     """
 
@@ -195,12 +195,12 @@ def spherical_closed(tr, eta, bs, tau0_t, temperature):
     # loop bands to check initials
     for band in range(numbands):
         band_actual = tr.included_bands[band]
-        # check for spherical effective mass
+        # check for parabolic effective mass
         effmass_vec = bs.effmass[band_actual]
-        if not tr.bs.spherical_effective_mass(effmass_vec):
+        if not tr.bs.parabolic_effective_mass(effmass_vec):
             logger.error("In order to run the closed Fermi-Dirac "
                          "integrals the effective mass needs to be "
-                         "spherical. Exiting.")
+                         "parabolic. Exiting.")
             sys.exit(1)
         # make sure effective mass is positive
         effmass[band] = np.abs(effmass_vec[0])
@@ -359,10 +359,10 @@ def spherical_closed(tr, eta, bs, tau0_t, temperature):
         hall_tensor, cc_tensor_n, cc_tensor_p
 
 
-def spherical_numeric(tr, eta, bs, tau0_t, temperature):
+def parabolic_numeric(tr, eta, bs, tau0_t, temperature):
     """
     The solution of the energy integrals for the BTE RTA
-    for a spherical dispersion.
+    for a parabolic dispersion.
 
     Parameters
     ----------
@@ -398,7 +398,7 @@ def spherical_numeric(tr, eta, bs, tau0_t, temperature):
 
     Notes
     -----
-    This routine is the same as :func:`spherical_closed` except
+    This routine is the same as :func:`parabolic_closed` except
     here we solve the Fermi intergrals numerically. This allows to
     use concatenated scattering mechanisms for each band. Otherwise
     the approximations and requirements are similar. The method
@@ -420,7 +420,7 @@ def spherical_numeric(tr, eta, bs, tau0_t, temperature):
               v_m(E(\\vec{k}))(E(\\vec{k})-\\mu)^i
               \\frac{\\partial f_0}{\\partial E(\\vec{k})} dk.
 
-    For spherical bands :math:`E=\\hbar^2 k^2/2m`. We also use
+    For parabolic bands :math:`E=\\hbar^2 k^2/2m`. We also use
     :math:`E=mv^2/2`. Furthermore we assume that our crystal is
     isotropic and cubic, such that :math:`\\Sigma=\\Sigma_{00}`.
     Then :math:`v_i^2=(v_{xx}+v_{yy}+v_{zz})/3=v^2/3` and the
@@ -434,7 +434,7 @@ def spherical_numeric(tr, eta, bs, tau0_t, temperature):
     have assumed that :math:`\\tau` can be expressed in terms of
     energy instead of the wave vector. A similar procedure can be
     used to obtain energy integrals for other dispersion relations
-    than spherical. As opposed to :func:`spherical_closed` we here
+    than parabolic. As opposed to :func:`parabolic_closed` we here
     want to solve the integrals numerically (in order to be able
     to use composite :math:`\\tau`) and thus want to simplify
     the mathematical operations in the integrands as much
@@ -450,7 +450,7 @@ def spherical_numeric(tr, eta, bs, tau0_t, temperature):
               {1+\\cosh(\\beta(E-\\mu))} dE
 
     Notice now that there is a factor of 1/2 difference in front of
-    these integrals compared to the ones in :func:`spherical_closed`
+    these integrals compared to the ones in :func:`parabolic_closed`
     due to the expansion of the derivative of the Fermi function
     with respect to energy. The factor :math:`s=2` accounts for
     spin degeneracy, otherwise :math:`s=1` and is set to True or False
@@ -591,7 +591,7 @@ def spherical_numeric(tr, eta, bs, tau0_t, temperature):
         | :math::`G = 7.7480917346`
         | The coefficient of the conductance quantum
 
-    .. warning:: ONLY VALID FOR SPHERICAL ENERGY DISPERSIONS
+    .. warning:: ONLY VALID FOR PARABOLIC ENERGY DISPERSIONS
                  AND SCATTERING MODELS
 
     .. todo:: ADD POSIBILITY TO USE DIFFERENT EFFECTIVE MASSES ALONG
@@ -607,7 +607,7 @@ def spherical_numeric(tr, eta, bs, tau0_t, temperature):
     # set logger
     logger = logging.getLogger(sys._getframe().f_code.co_name)
     logger.info("Running numerical calculation of the energy intergrals "
-                "in the spherical approximation to calculate the transport "
+                "in the parabolic approximation to calculate the transport "
                 "coefficients.")
     numbands = tr.included_bands.size
     effmass = np.zeros(numbands)
@@ -619,9 +619,9 @@ def spherical_numeric(tr, eta, bs, tau0_t, temperature):
     # loop bands to check initials
     for band in range(numbands):
         band_actual = tr.included_bands[band]
-        # check for spherical effective mass
+        # check for parabolic effective mass
         effmass_vec = bs.effmass[band_actual]
-        tr.bs.spherical_effective_mass(effmass_vec)
+        tr.bs.parabolic_effective_mass(effmass_vec)
         # and make sure it is positive
         effmass[band] = np.abs(effmass_vec[0])
         w0[band_actual] = w0[band_actual] * \
@@ -718,9 +718,9 @@ def spherical_numeric(tr, eta, bs, tau0_t, temperature):
     cc_total_p = np.sum(cc[ptype_index])
 
     # now set units
-    # units have been set from the spherical_closed expressions
+    # units have been set from the parabolic_closed expressions
     # please notice that since we here use the cosh expression for the
-    # derivative of df/dE the units in spherical_numeric need to be
+    # derivative of df/dE the units in parabolic_numeric need to be
     # a factor of 0.5 lower than the units in front of the Fermi
     # integrals themself. This does not apply for the carrier
     # concentration, since there, only f enters.
@@ -924,7 +924,7 @@ def numerick(tr, chempots, temperatures, bs=None):
                             "not exist. Exiting.")
                         sys.exit(1)
                 else:
-                    # allow user to use on-the-fly interpolation with a spherical
+                    # allow user to use on-the-fly interpolation with a parabolic
                     # input as well
                     scattering_type = 0
                     if tr.scattering_total_inv is not None:

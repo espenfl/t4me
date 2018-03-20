@@ -565,7 +565,7 @@ class Bandstructure():
         self.gen_velocities = True
         return energies, None
 
-    def non_parabolic_energy_1(self, k, effmass, a, e0=0.0,
+    def non_parabolic_energy_1(self, k, effmass, a, scale, e0=0.0,
                                kshift=[0.0, 0.0, 0.0]):
         """
         Calculates a energy dispersion, both parabolic
@@ -587,8 +587,11 @@ class Bandstructure():
         a : ndarray
             | Dimension: (3)
 
-            The non parabolic coefficients in front of the 
-            :math:`k^4` term.
+            The non parabolic coefficients in front of each :math:`k^2` 
+            direction which translates to :math:`a^2k^4` in the one
+            dimensional case.
+        scale : float
+            The scale factor in front of the non-parabolic correction
         e0 : float, optional
             Shift of the energy scale in eV.
         kshift : ndarray, optional
@@ -621,11 +624,11 @@ class Bandstructure():
 
         k = k - kshift
         k2 = k * k
-        k4 = np.power(np.sum(k2, axis=1), 2.0)
+        k4 = np.power(np.sum(a * k2, axis=1), 2.0)
         k2 = np.sum(k2 / effmass, axis=1)
-        return e0 + constants.bandunit * k2 + a[0]*k4
+        return e0 + constants.bandunit * k2 + scale * k4
 
-    def non_parabolic_velocity_1(self, k, effmass, a,
+    def non_parabolic_velocity_1(self, k, effmass, a, scale,
                                  kshift=[0.0, 0.0, 0.0]):
         """
         Calculates the group velocity for the energy dispersion
@@ -651,6 +654,8 @@ class Bandstructure():
             The non parabolic coefficients in front of each :math:`k^2` 
             direction which translates to :math:`a^2k^4` in the one
             dimensional case.
+        scale : float
+            The scale factor in front of the non-parabolic correction
         kshift : ndarray, optional
             | Dimension: (3)
 
@@ -692,14 +697,15 @@ class Bandstructure():
         k2 = k * k
         k2 = np.sum(a * k2, axis=1)
         parabolic = np.divide(2.0 * constants.bandunit, effmass)
-        scaling = (parabolic + 4.0 * np.column_stack((k2, k2, k2))).T
+        scaling = (parabolic + scale * 4.0 * 
+                   np.column_stack((a[0]*k2, a[1]*k2, a[2]*k2))).T
         spreadkz, spreadky, spreadkx = k.T[2], k.T[1], k.T[0]
         vx = np.multiply(scaling[0], spreadkx)
         vy = np.multiply(scaling[1], spreadky)
         vz = np.multiply(scaling[2], spreadkz)
         return vx, vy, vz
 
-    def non_parabolic_energy_3(self, k, effmass, a, e0=0.0,
+    def non_parabolic_energy_3(self, k, effmass, a, scale, e0=0.0,
                                kshift=[0.0, 0.0, 0.0]):
         """
         Calculates a k^2 + k^6 energy dispersion.
@@ -723,6 +729,8 @@ class Bandstructure():
             The non parabolic coefficients in front of each :math:`k^2` 
             direction which translates to :math:`a^4k^8` in the one
             dimensional case.
+        scale : float
+            The scale factor in front of the non-parabolic correction
         e0 : float, optional
             Shift of the energy scale in eV.
         kshift : ndarray, optional
@@ -758,9 +766,9 @@ class Bandstructure():
         ak2 = np.sum(a * k2, axis=1)
         k6 = np.power(ak2, 3.0)
         k2 = np.sum(k2 / effmass, axis=1)
-        return e0 + constants.bandunit * k2 + k6
+        return e0 + constants.bandunit * k2 + scale * k6
 
-    def non_parabolic_velocity_3(self, k, effmass, a,
+    def non_parabolic_velocity_3(self, k, effmass, a, scale,
                                  kshift=[0.0, 0.0, 0.0]):
         """
         Calculates the group velocity for the energy dispersion
@@ -785,6 +793,8 @@ class Bandstructure():
             The non parabolic coefficients in front of each :math:`k^2` 
             direction which translates to :math:`a^4k^8` in the one
             dimensional case. 
+        scale : float
+            The scale factor in front of the non-parabolic correction
         kshift : ndarray, optional
             | Dimension: (3)
 
@@ -825,18 +835,17 @@ class Bandstructure():
         k = k - kshift
         k2 = k * k
         k2 = np.sum(a * k2, axis=1)
-        k4 = k2 * k2
+        k4 = np.power(k2, 2.0)
         parabolic = np.divide(2.0 * constants.bandunit, effmass)
-        scaling = (parabolic + 6.0 * np.column_stack((a[0]*k4, 
-                                                      a[1]*k4, 
-                                                      a[2]*k4))).T
+        scaling = (parabolic + scale * 6.0 * 
+                   np.column_stack((a[0]*k4, a[1]*k4, a[2]*k4))).T
         spreadkz, spreadky, spreadkx = k.T[2], k.T[1], k.T[0]
         vx = np.multiply(scaling[0], spreadkx)
         vy = np.multiply(scaling[1], spreadky)
         vz = np.multiply(scaling[2], spreadkz)
         return vx, vy, vz
 
-    def non_parabolic_energy_4(self, k, effmass, a, e0=0.0,
+    def non_parabolic_energy_4(self, k, effmass, a, scale, e0=0.0,
                                kshift=[0.0, 0.0, 0.0]):
         """
         Calculates a k^2 + k^8 energy dispersion.
@@ -860,6 +869,8 @@ class Bandstructure():
             The non parabolic coefficients in front of each :math:`k^2` 
             direction which translates to :math:`a^4k^8` in the one
             dimensional case.
+        scale : float
+            The scale factor in front of the non-parabolic correction
         e0 : float, optional
             Shift of the energy scale in eV.
         kshift : ndarray, optional
@@ -895,9 +906,9 @@ class Bandstructure():
         ak2 = np.sum(a * k2, axis=1)
         k8 = np.power(ak2, 4.0)
         k2 = np.sum(k2 / effmass, axis=1)
-        return e0 + constants.bandunit * k2 + k8
+        return e0 + constants.bandunit * k2 + scale * k8
 
-    def non_parabolic_velocity_4(self, k, effmass, a,
+    def non_parabolic_velocity_4(self, k, effmass, a, scale,
                                  kshift=[0.0, 0.0, 0.0]):
         """
         Calculates the group velocity for the energy dispersion
@@ -922,6 +933,8 @@ class Bandstructure():
             The non parabolic coefficients in front of each :math:`k^2` 
             direction which translates to :math:`a^4k^8` in the one
             dimensional case.
+        scale : float
+            The scale factor in front of the non-parabolic correction
         kshift : ndarray, optional
             | Dimension: (3)
 
@@ -962,11 +975,10 @@ class Bandstructure():
         k = k - kshift
         k2 = k * k
         k2 = np.sum(a * k2, axis=1)
-        k6 = k2 * k2 * k2
+        k6 = np.power(k2, 3.0)
         parabolic = np.divide(2.0 * constants.bandunit, effmass)
-        scaling = (parabolic + 6.0 * np.column_stack((a[0]*k6, 
-                                                      a[1]*k6, 
-                                                      a[2]*k6))).T
+        scaling = (parabolic + scale * 8.0 * 
+                   np.column_stack((a[0]*k6, a[1]*k6, a[2]*k6))).T
         spreadkz, spreadky, spreadkx = k.T[2], k.T[1], k.T[0]
         vx = np.multiply(scaling[0], spreadkx)
         vy = np.multiply(scaling[1], spreadky)
@@ -1358,7 +1370,10 @@ class Bandstructure():
         band_function = self.bandparams[band][0]
         # set a to zero for parabolic bands
         if band_function == 0:
+            logger.info("Setting the 'a' and 'ascale' factor to zero."
+                        "Continuing.")
             self.a[band] = [0.0, 0.0, 0.0]
+            self.ascale[band] = 0.0
             generate_energy = self.non_parabolic_energy_1
             generate_velocity = self.non_parabolic_velocity_1
         else:
@@ -1376,16 +1391,19 @@ class Bandstructure():
                 generate_velocity = self.non_parabolic_velocity_4                
             elif band_function > 6:
                 logging.error("Supplied non_parabolic_function=" +
-                              str(band_function) + " does not exist")
+                              str(band_function) + " does not exist."
+                              "Exiting.")
                 sys.exit(1)
         # fetch k-point grid in cartersian
         k = self.lattice.fetch_kmesh(direct=False)
         if not band_function == 4:
             # first energy
             energy = generate_energy(k, self.effmass[band], a=self.a[band],
-                                     e0=self.e0[band], kshift=self.kshift[band])
+                                     e0=self.e0[band], scale=self.ascale[band],
+                                     kshift=self.kshift[band])
             # then velocity
             vx, vy, vz = generate_velocity(k, self.effmass[band], a=self.a[band],
+                                           scale = self.ascale[band],
                                            kshift=self.kshift[band])
         ##################################################
         ##################################################

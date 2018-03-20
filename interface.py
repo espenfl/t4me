@@ -1742,6 +1742,7 @@ def read_band_parameters(bs, numbands, location=None,
     bandparams = np.zeros((numbands, 2), dtype=np.int8)
     effmass = np.zeros((numbands, 3))
     a = np.zeros((numbands, 3))
+    ascale = np.zeros(numbands)
     e0 = np.zeros(numbands)
     status = np.empty(numbands, dtype='str')
     kshift = np.zeros((numbands, 3))
@@ -1792,6 +1793,7 @@ def read_band_parameters(bs, numbands, location=None,
             [banddata["type"], banddata["folding"]])
         effmass[band] = np.array(banddata["effmass"])
         a[band] = np.array(banddata["a"])
+        ascale[band] = banddata["ascale"]
         e0[band] = banddata["e0"]
         status[band] = banddata["status"]
         kshift[band] = np.array(banddata["kshift"])
@@ -1857,6 +1859,7 @@ def read_band_parameters(bs, numbands, location=None,
     bs.emi = emi
     bs.f = f
     bs.a = a
+    bs.ascale = ascale
     bs.e0 = e0
     bs.status = status
     bs.kshift = kshift

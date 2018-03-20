@@ -587,7 +587,7 @@ class Bandstructure():
         a : ndarray
             | Dimension: (3)
 
-            The non parabolic coefficients in front of the
+            The non parabolic coefficients in front of the 
             :math:`k^4` term.
         e0 : float, optional
             Shift of the energy scale in eV.
@@ -621,10 +621,9 @@ class Bandstructure():
 
         k = k - kshift
         k2 = k * k
-        k4 = k2 * k2
+        k4 = np.power(np.sum(k2, axis=1), 2.0)
         k2 = np.sum(k2 / effmass, axis=1)
-        k4 = np.sum(k4 * a, axis=1)
-        return e0 + constants.bandunit * k2 + k4
+        return e0 + constants.bandunit * k2 + a[0]*k4
 
     def non_parabolic_velocity_1(self, k, effmass, a,
                                  kshift=[0.0, 0.0, 0.0]):
@@ -649,8 +648,9 @@ class Bandstructure():
         a : ndarray
             | Dimension: (3)
 
-            The non parabolic coefficients in front of the
-            :math:`k^4` term.
+            The non parabolic coefficients in front of each :math:`k^2` 
+            direction which translates to :math:`a^2k^4` in the one
+            dimensional case.
         kshift : ndarray, optional
             | Dimension: (3)
 
@@ -693,6 +693,280 @@ class Bandstructure():
         k2 = np.sum(a * k2, axis=1)
         parabolic = np.divide(2.0 * constants.bandunit, effmass)
         scaling = (parabolic + 4.0 * np.column_stack((k2, k2, k2))).T
+        spreadkz, spreadky, spreadkx = k.T[2], k.T[1], k.T[0]
+        vx = np.multiply(scaling[0], spreadkx)
+        vy = np.multiply(scaling[1], spreadky)
+        vz = np.multiply(scaling[2], spreadkz)
+        return vx, vy, vz
+
+    def non_parabolic_energy_3(self, k, effmass, a, e0=0.0,
+                               kshift=[0.0, 0.0, 0.0]):
+        """
+        Calculates a k^2 + k^6 energy dispersion.
+
+        Parameters
+        ----------
+        k : ndarray
+            | Dimension: (N,3)
+
+            Contains the N k-point coordinates (cartesian) where the
+            dispersion is to be evaluated.
+        effmass : ndarray
+            | Dimension: (3)
+
+            Contains the effective mass along the three k-point
+            directions. Only the diagonal components of the effective
+            mass tensor is used. In units of the free electron mass.
+        a : ndarray
+            | Dimension: (3)
+
+            The non parabolic coefficients in front of each :math:`k^2` 
+            direction which translates to :math:`a^4k^8` in the one
+            dimensional case.
+        e0 : float, optional
+            Shift of the energy scale in eV.
+        kshift : ndarray, optional
+            | Dimension: (3)
+
+            The shift along the respective k-point vectors in
+            cartesian coordinates.
+
+        Returns
+        -------
+        ndarray
+            | Dimension: (N)
+
+            Contains the energy dispersion in eV at each N k-points.
+
+        Notes
+        -----
+        This routines calculates the energy dispersion according to
+
+        .. math:: E=\\frac{\\hbar^2 k^2}{2m}+a^3k^6.
+
+        Setting :math:`a` to zero yields a parabolic
+        dispersion.
+
+        """
+
+        # set logger
+        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger.debug("Running non_parabolic_energy_3.")
+
+        k = k - kshift
+        k2 = k * k
+        ak2 = np.sum(a * k2, axis=1)
+        k6 = np.power(ak2, 3.0)
+        k2 = np.sum(k2 / effmass, axis=1)
+        return e0 + constants.bandunit * k2 + k6
+
+    def non_parabolic_velocity_3(self, k, effmass, a,
+                                 kshift=[0.0, 0.0, 0.0]):
+        """
+        Calculates the group velocity for the energy dispersion
+        generated in :func:`non_parabolic_energy_3`.
+
+        Parameters
+        ----------
+        k : ndarray
+            | Dimension: (N,3)
+
+            Contains the N k-point in cartesian coordinates where
+            the dispersion is to be evaluated.
+        effmass : ndarray
+            | Dimension: (3)
+
+            Contains the effective mass along the three k-point
+            directions. Only the diagonal components of the effective
+            mass tensor is used. In units of the free electron mass.
+        a : ndarray
+            | Dimension: (3)
+
+            The non parabolic coefficients in front of each :math:`k^2` 
+            direction which translates to :math:`a^4k^8` in the one
+            dimensional case. 
+        kshift : ndarray, optional
+            | Dimension: (3)
+
+            The shift along the respective k-point vectors in
+            cartesian coordinates.
+
+        Returns
+        -------
+        vx, vy, vz : ndarray, ndarray, ndarray
+            | Dimension: (N),(N),(N)
+
+            Contains the group velocity at each N k-points
+            for each direction defined by the direction of the k-point
+            unit axis. Units of eVAA.
+
+        Notes
+        -----
+        This routines calculates the group velocity according to
+
+        .. math:: v=\\frac{\\partial E}{\\partial \\vec{k}},
+
+        where
+
+        .. math:: E=\\frac{\\hbar^2 k^2}{2m}+a^3k^6.
+
+        Setting :math:`a` to zero yields a parabolic dispersion
+        and thus its group velocity.
+
+        .. warning:: The factor :math:`\\hbar^{-1}` is not returned and
+        need to be included externally.
+
+        """
+
+        # set logger
+        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger.debug("Running non_parabolic_velocity_3.")
+
+        k = k - kshift
+        k2 = k * k
+        k2 = np.sum(a * k2, axis=1)
+        k4 = k2 * k2
+        parabolic = np.divide(2.0 * constants.bandunit, effmass)
+        scaling = (parabolic + 6.0 * np.column_stack((a[0]*k4, 
+                                                      a[1]*k4, 
+                                                      a[2]*k4))).T
+        spreadkz, spreadky, spreadkx = k.T[2], k.T[1], k.T[0]
+        vx = np.multiply(scaling[0], spreadkx)
+        vy = np.multiply(scaling[1], spreadky)
+        vz = np.multiply(scaling[2], spreadkz)
+        return vx, vy, vz
+
+    def non_parabolic_energy_4(self, k, effmass, a, e0=0.0,
+                               kshift=[0.0, 0.0, 0.0]):
+        """
+        Calculates a k^2 + k^8 energy dispersion.
+
+        Parameters
+        ----------
+        k : ndarray
+            | Dimension: (N,3)
+
+            Contains the N k-point coordinates (cartesian) where the
+            dispersion is to be evaluated.
+        effmass : ndarray
+            | Dimension: (3)
+
+            Contains the effective mass along the three k-point
+            directions. Only the diagonal components of the effective
+            mass tensor is used. In units of the free electron mass.
+        a : ndarray
+            | Dimension: (3)
+
+            The non parabolic coefficients in front of each :math:`k^2` 
+            direction which translates to :math:`a^4k^8` in the one
+            dimensional case.
+        e0 : float, optional
+            Shift of the energy scale in eV.
+        kshift : ndarray, optional
+            | Dimension: (3)
+
+            The shift along the respective k-point vectors in
+            cartesian coordinates.
+
+        Returns
+        -------
+        ndarray
+            | Dimension: (N)
+
+            Contains the energy dispersion in eV at each N k-points.
+
+        Notes
+        -----
+        This routines calculates the energy dispersion according to
+
+        .. math:: E=\\frac{\\hbar^2 k^2}{2m}+a^4k^8.
+
+        Setting :math:`a` to zero yields a parabolic
+        dispersion.
+
+        """
+
+        # set logger
+        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger.debug("Running non_parabolic_energy_4.")
+
+        k = k - kshift
+        k2 = k * k
+        ak2 = np.sum(a * k2, axis=1)
+        k8 = np.power(ak2, 4.0)
+        k2 = np.sum(k2 / effmass, axis=1)
+        return e0 + constants.bandunit * k2 + k8
+
+    def non_parabolic_velocity_4(self, k, effmass, a,
+                                 kshift=[0.0, 0.0, 0.0]):
+        """
+        Calculates the group velocity for the energy dispersion
+        generated in :func:`non_parabolic_energy_4`.
+
+        Parameters
+        ----------
+        k : ndarray
+            | Dimension: (N,3)
+
+            Contains the N k-point in cartesian coordinates where
+            the dispersion is to be evaluated.
+        effmass : ndarray
+            | Dimension: (3)
+
+            Contains the effective mass along the three k-point
+            directions. Only the diagonal components of the effective
+            mass tensor is used. In units of the free electron mass.
+        a : ndarray
+            | Dimension: (3)
+
+            The non parabolic coefficients in front of each :math:`k^2` 
+            direction which translates to :math:`a^4k^8` in the one
+            dimensional case.
+        kshift : ndarray, optional
+            | Dimension: (3)
+
+            The shift along the respective k-point vectors in
+            cartesian coordinates.
+
+        Returns
+        -------
+        vx, vy, vz : ndarray, ndarray, ndarray
+            | Dimension: (N),(N),(N)
+
+            Contains the group velocity at each N k-points
+            for each direction defined by the direction of the k-point
+            unit axis. Units of eVAA.
+
+        Notes
+        -----
+        This routines calculates the group velocity according to
+
+        .. math:: v=\\frac{\\partial E}{\\partial \\vec{k}},
+
+        where
+
+        .. math:: E=\\frac{\\hbar^2 k^2}{2m}+a^4k^8.
+
+        Setting :math:`a` to zero yields a parabolic dispersion
+        and thus its group velocity.
+
+        .. warning:: The factor :math:`\\hbar^{-1}` is not returned and
+        need to be included externally.
+
+        """
+
+        # set logger
+        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger.debug("Running non_parabolic_velocity_4.")
+
+        k = k - kshift
+        k2 = k * k
+        k2 = np.sum(a * k2, axis=1)
+        k6 = k2 * k2 * k2
+        parabolic = np.divide(2.0 * constants.bandunit, effmass)
+        scaling = (parabolic + 6.0 * np.column_stack((a[0]*k6, 
+                                                      a[1]*k6, 
+                                                      a[2]*k6))).T
         spreadkz, spreadky, spreadkx = k.T[2], k.T[1], k.T[0]
         vx = np.multiply(scaling[0], spreadkx)
         vy = np.multiply(scaling[1], spreadky)
@@ -1094,7 +1368,13 @@ class Bandstructure():
             elif band_function == 2:
                 generate_energy = self.non_parabolic_energy_2
                 generate_velocity = self.non_parabolic_velocity_2
-            elif band_function > 4:
+            elif band_function == 5:
+                generate_energy = self.non_parabolic_energy_3
+                generate_velocity = self.non_parabolic_velocity_3                
+            elif band_function == 6:
+                generate_energy = self.non_parabolic_energy_4
+                generate_velocity = self.non_parabolic_velocity_4                
+            elif band_function > 6:
                 logging.error("Supplied non_parabolic_function=" +
                               str(band_function) + " does not exist")
                 sys.exit(1)
@@ -1116,7 +1396,7 @@ class Bandstructure():
         # CUSTOM SECTION START                           #
         ##################################################
         else:
-            quartic_onset = True
+            quartic_onset = False
             if quartic_onset:
                 # quartic band behavior at the onset
                 # first fetch quartic

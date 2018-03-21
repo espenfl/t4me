@@ -985,6 +985,126 @@ class Bandstructure():
         vz = np.multiply(scaling[2], spreadkz)
         return vx, vy, vz
 
+    def non_parabolic_energy_5(self, k, a, scale, e0=0.0,
+                               kshift=[0.0, 0.0, 0.0]):
+        """
+        Calculates a linear energy dispersion.
+
+        Parameters
+        ----------
+        k : ndarray
+            | Dimension: (N,3)
+
+            Contains the N k-point coordinates (cartesian) where the
+            dispersion is to be evaluated.
+        a : ndarray
+            | Dimension: (3)
+
+            The coefficients in front of each :math:`k^2` 
+            direction which translates to :math:`\\sqrt(a)k` in the one
+            dimensional case.
+        scale : float
+            The scale factor in front of the linear expression.
+        e0 : float, optional
+            Shift of the energy scale in eV.
+        kshift : ndarray, optional
+            | Dimension: (3)
+
+            The shift along the respective k-point vectors in
+            cartesian coordinates.
+
+        Returns
+        -------
+        ndarray
+            | Dimension: (N)
+
+            Contains the energy dispersion in eV at each N k-points.
+
+        Notes
+        -----
+        This routines calculates the energy dispersion according to
+        (in one dimension)
+
+        .. math:: E=a\\sqrt(k^2).
+
+        Multiplied by the scale factor in front of this.
+
+        """
+
+        # set logger
+        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger.debug("Running non_parabolic_energy_5.")
+
+        k = k - kshift
+        k2 = k * k
+        k2 = np.sum(a * k2, axis = 1)
+        return e0 + scale * np.sqrt(k2)
+
+    def non_parabolic_velocity_5(self, k, a, scale,
+                                 kshift=[0.0, 0.0, 0.0]):
+        """
+        Calculates the group velocity for the energy dispersion
+        generated in :func:`non_parabolic_energy_5`.
+
+        Parameters
+        ----------
+        k : ndarray
+            | Dimension: (N,3)
+
+            Contains the N k-point in cartesian coordinates where
+            the dispersion is to be evaluated.
+        a : ndarray
+            | Dimension: (3)
+
+            The coefficients in front of each :math:`k^2` 
+            direction which translates to :math:`\\sqrt(a)k` in the one
+            dimensional case.
+        scale : float
+            The scale factor in front of the linear expression.
+        kshift : ndarray, optional
+            | Dimension: (3)
+
+            The shift along the respective k-point vectors in
+            cartesian coordinates.
+
+        Returns
+        -------
+        vx, vy, vz : ndarray, ndarray, ndarray
+            | Dimension: (N),(N),(N)
+
+            Contains the group velocity at each N k-points
+            for each direction defined by the direction of the k-point
+            unit axis. Units of eVAA.
+
+        Notes
+        -----
+        This routines calculates the group velocity according to
+
+        .. math:: v=\\frac{\\partial E}{\\partial \\vec{k}},
+
+        where
+
+        .. math:: E=a\\sqrt(k^2).
+
+        Multiplied by the scale factor in front of this.
+
+        .. warning:: The factor :math:`\\hbar^{-1}` is not returned and
+        need to be included externally.
+
+        """
+
+        # set logger
+        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger.debug("Running non_parabolic_velocity_5.")
+
+        k = k - shift
+        k2 = k * k
+        k2 = np.sum(a * k2, axis = 1)
+        vx = scale * a[0] * k[:,0] / np.sqrt(k2)
+        vy = scale * a[1] * k[:,1] / np.sqrt(k2)
+        vz = scale * a[2] * k[:,2] / np.sqrt(k2)
+        return vx, vy, vz
+    
     def non_parabolic_energy_2(self, k, effmass, a):
         """
         Calculates a non-parabolic energy dispersion.
@@ -1388,9 +1508,12 @@ class Bandstructure():
                 generate_velocity = self.non_parabolic_velocity_3                
             elif band_function == 6:
                 generate_energy = self.non_parabolic_energy_4
-                generate_velocity = self.non_parabolic_velocity_4                
-            elif band_function > 6:
-                logging.error("Supplied non_parabolic_function=" +
+                generate_velocity = self.non_parabolic_velocity_4
+            elif band_function == 7:
+                generate_energy = self.non_parabolic_energy_5
+                generate_velocity = self.non_parabolic_velocity_5                
+            elif band_function > 7:
+                logging.error("Supplied non_parabolic_function = " +
                               str(band_function) + " does not exist."
                               "Exiting.")
                 sys.exit(1)
@@ -1399,7 +1522,7 @@ class Bandstructure():
         if not band_function == 4:
             # first energy
             energy = generate_energy(k, self.effmass[band], a=self.a[band],
-                                     e0=self.e0[band], scale=self.ascale[band],
+                                     scale=self.ascale[band], e0=self.e0[band],
                                      kshift=self.kshift[band])
             # then velocity
             vx, vy, vz = generate_velocity(k, self.effmass[band], a=self.a[band],

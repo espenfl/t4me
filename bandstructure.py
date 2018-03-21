@@ -985,7 +985,7 @@ class Bandstructure():
         vz = np.multiply(scaling[2], spreadkz)
         return vx, vy, vz
 
-    def non_parabolic_energy_5(self, k, a, scale, e0=0.0,
+    def non_parabolic_energy_5(self, k, effmass, a, scale, e0=0.0,
                                kshift=[0.0, 0.0, 0.0]):
         """
         Calculates a linear energy dispersion.
@@ -997,6 +997,10 @@ class Bandstructure():
 
             Contains the N k-point coordinates (cartesian) where the
             dispersion is to be evaluated.
+        effmass : ndarray
+            | Dimension: (3)
+
+            A dummy.
         a : ndarray
             | Dimension: (3)
 
@@ -1040,7 +1044,7 @@ class Bandstructure():
         k2 = np.sum(a * k2, axis = 1)
         return e0 + scale * np.sqrt(k2)
 
-    def non_parabolic_velocity_5(self, k, a, scale,
+    def non_parabolic_velocity_5(self, k, effmass, a, scale,
                                  kshift=[0.0, 0.0, 0.0]):
         """
         Calculates the group velocity for the energy dispersion
@@ -1053,6 +1057,10 @@ class Bandstructure():
 
             Contains the N k-point in cartesian coordinates where
             the dispersion is to be evaluated.
+       effmass : ndarray
+            | Dimension: (3)
+
+            A dummy.
         a : ndarray
             | Dimension: (3)
 
@@ -1521,12 +1529,12 @@ class Bandstructure():
         k = self.lattice.fetch_kmesh(direct=False)
         if not band_function == 4:
             # first energy
-            energy = generate_energy(k, self.effmass[band], a=self.a[band],
-                                     scale=self.ascale[band], e0=self.e0[band],
+            energy = generate_energy(k, self.effmass[band], self.a[band],
+                                     self.ascale[band], e0=self.e0[band],
                                      kshift=self.kshift[band])
             # then velocity
-            vx, vy, vz = generate_velocity(k, self.effmass[band], a=self.a[band],
-                                           scale = self.ascale[band],
+            vx, vy, vz = generate_velocity(k, self.effmass[band], self.a[band],
+                                           self.ascale[band],
                                            kshift=self.kshift[band])
         ##################################################
         ##################################################

@@ -1,8 +1,7 @@
 TARGET = skw
 MKLROOT = /opt/intel/mkl
-SPGLIB = /home/flagre/local
-LIBS = $(SPGLIB)/lib/libsymspg.a $(MKLROOT)/lib/intel64/libfftw3xc_intel.a  -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_lp64.a $(MKLROOT)/lib/intel64/libmkl_core.a $(MKLROOT)/lib/intel64/libmkl_sequential.a -Wl,--end-group -lpthread -lm -ldl
-INCLUDE = -I/home/flagre/local/include/spglib -I$(MKLROOT)/include -I$(MKLROOT)/include/fftw
+LIBS = ../spglib/lib/libsymspg.a $(MKLROOT)/lib/intel64/libfftw3xc_intel.a  -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_lp64.a $(MKLROOT)/lib/intel64/libmkl_core.a $(MKLROOT)/lib/intel64/libmkl_sequential.a -Wl,--end-group -lpthread -lm -ldl
+INCLUDE = -I../spglib/include/spglib -I$(MKLROOT)/include -I$(MKLROOT)/include/fftw
 CC = g++
 CFLAGS = -fPIC -std=c++11
 LD = ar rvs

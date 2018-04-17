@@ -21,7 +21,7 @@ libtoolize
 touch INSTALL NEWS README AUTHORS
 automake -acf
 autoconf
-./configure --prefix=$PWD
+./configure --prefix=$PWD CFLAGS='-O2 -fPIC'
 make
 make install
 

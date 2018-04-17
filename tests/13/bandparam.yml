@@ -54,6 +54,9 @@ Band 1-:
   effmass: [-1.0,-1.0,-1.0]
   # Alpha factor or factor in front of k^4 term
   a: [-100.0,-100.0,-100.0]
+  # Scale and sign of non-parabolic term
+  # (not valid for alpha models)
+  ascale : 1.0
   # Energy shift
   e0: 0.0
   # Valence (v) og conduction (c) band?

@@ -122,7 +122,7 @@ class Transport(object):
                     # transport_energycutband outside the min
                     # and max of the chemical potential
                     if not self.bs.check_dos_energy_range(
-                            self.patrram.ansport_chempot_min -
+                            self.param.transport_chempot_min -
                             self.param.transport_energycutband,
                             self.param.transport_chempot_max +
                             self.param.transport_energycutband):

@@ -621,6 +621,7 @@ class Lattice():
         shiftx = self.ksampling[2] * self.ksampling[1]
         shifty = self.ksampling[2]
         kmesh = self.fetch_kmesh(direct=True)
+
         stepx = kmesh[shiftx, 0] - kmesh[0, 0]
         stepy = kmesh[shifty, 1] - kmesh[0, 1]
         stepz = kmesh[1, 2] - kmesh[0, 2]

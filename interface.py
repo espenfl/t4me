@@ -261,10 +261,18 @@ def lattice_vasp(lattice, location=None, filename=None):
     lattice.param.vasp_lwan = lwan
 
     mapping_bz_to_ibz_vasp = None
+
     # get divisions, IBZ kpoints and location of the eigenvalues and
     # dos
     divisions = tree.find(
         'kpoints/generation/v[@name="divisions"]')
+    lattice.kdata.sampling = np.ascontiguousarray(np.fromstring(
+        divisions.text, sep=" ", dtype='intc'), dtype='intc')
+    if kinter:
+        lattice.kdata.sampling = lattice.kdata.sampling*abs(kinter)
+    else:
+        lattice.kdata.sampling = np.ascontiguousarray(np.fromstring(
+            divisions.text, sep=" ", dtype='intc'), dtype='intc')
     if not lvel:
         kpoints = tree.findall(
             'kpoints/varray[@name="kpointlist"]/v')
@@ -279,8 +287,6 @@ def lattice_vasp(lattice, location=None, filename=None):
             './/eigenvelocities[@comment="interpolated"]/kpoints/'
             'varray[@name="ibzequiv"]/v')
 
-    lattice.kdata.sampling = np.ascontiguousarray(np.fromstring(
-        divisions.text, sep=" ", dtype='intc'), dtype='intc')
     # fetch IBZ points
     kpointsvasp = np.zeros((len(kpoints), 3),
                            dtype='double', order='C')

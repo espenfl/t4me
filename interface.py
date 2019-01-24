@@ -192,10 +192,9 @@ def lattice_vasp(lattice, location=None, filename=None):
 
     if filename is None:
         # check param as well
-        if lattice.param.readfile == "":
+        vasp_filename = lattice.param.readfile
+        if not vasp_filename:
             vasp_filename = "vasprun.xml"
-        else:
-            vasp_filename = lattice.param.readfile
     if location is not None:
         vasp_filename = location + "/" + vasp_filename
     else:
@@ -599,10 +598,9 @@ def bandstructure_vasp(bs, location=None, filename=None):
 
     if filename is None:
         # check param as well
-        if bs.param.readfile == "":
+        vasp_filename = bs.param.readfile
+        if not vasp_filename:
             vasp_filename = "vasprun.xml"
-        else:
-            vasp_filename = bs.param.readfile
     if location is not None:
         vasp_filename = location + "/" + vasp_filename
     else:

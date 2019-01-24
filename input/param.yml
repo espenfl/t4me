@@ -237,7 +237,7 @@ read: vasp # n/a
 readfile: "" # n/a
 # Do you want to use scissor operator?
 scissor: False # eV or n/a
-# What symprec to use?
+# What symprec to use (please note that a decimal is needed for PyYAML support)?
 symprec: 1.0e-06
 # Dump tight binding construction data to std out?
 displaytb: False # n/a

@@ -16,12 +16,12 @@
     along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <Wm5IntpTrilinear3.h>
-#include <Wm5IntpTricubic3.h>
-#include <Wm5IntpAkimaUniform3.h>
-#include <Wm5IntpAkimaUniform1.h>
-#include <Wm5Math.h>
-#include <cubature.h>
+#include <WildMagic5/Wm5IntpTrilinear3.h>
+#include <WildMagic5/Wm5IntpTricubic3.h>
+#include <WildMagic5/Wm5IntpAkimaUniform3.h>
+#include <WildMagic5/Wm5IntpAkimaUniform1.h>
+#include <WildMagic5/Wm5Math.h>
+#include <cubature/cubature.h>
 using namespace Wm5;
 #include <string.h>
 #include <vector>

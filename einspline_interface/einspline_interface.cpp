@@ -18,8 +18,8 @@
 
 #include <iostream>
 #include <string.h>
-#include <bspline.h>
-#include <nubspline.h>
+#include <einspline/bspline.h>
+#include <einspline/nubspline.h>
 
 void einspline_execute_uniform(int *num_points, double *boundaryx, double *boundaryy, double *boundaryz, double *data, double *ix, double *iy, double *iz, int ip, int num_bands, double *idata, double *igradx, double *igrady, double *igradz, int grad, char *bc);
 

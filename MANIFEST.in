@@ -6,3 +6,7 @@ include einspline_interface/*.hpp
 include einspline_interface/einspline.cpp
 include cubature_wildmagic_interface/*.hpp
 include cubature_wildmagic_interface/cubature_wildmagic.cpp
+include wildmagic_interface/*.hpp
+include wildmagic_interface/wildmagic.cpp
+include skw_interface/*.hpp
+include skw_interface/skw.cpp

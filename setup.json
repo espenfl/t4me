@@ -1,6 +1,7 @@
 {
     "author": "Espen Flage-Larsen", 
-    "author_email": "espen.flage-larsen@sintef.no", 
+    "author_email": "espen.flage-larsen@sintef.no",
+    "keywords": "vasp, materials, transport, boltzmann",
     "classifiers": [
         "Development Status :: 3 - Alpha", 
         "Environment :: Plugins", 
@@ -14,11 +15,13 @@
     }, 
     "include_package_data": true, 
     "install_requires": [
-	"numpy"
+	"numpy",
+	"PyYAML"
     ], 
     "license": "GNU GPLv3 License, see LICENSE.txt file.", 
     "name": "T4ME", 
     "scripts": [
+	"scripts/t4me"
     ],
     "setup_requires": [
 	"numpy"

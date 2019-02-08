@@ -244,10 +244,9 @@ def _do_setup(extensions):
 
     with open(SETUP_JSON_PATH, 'r') as info:
         SETUP_KWARGS = json.load(info)
-
+        
     setup(
         packages=find_packages(),
-        keywords='vasp, materials, transport, boltzmann',
         long_description=LONG_DESCRIPTION,
         cmdclass={'build_ext': _T4MEBuildExt, 'sdist': sdist_override},
         ext_modules=ext_modules,
@@ -263,7 +262,7 @@ class sdist_override(_sdist):
             print("You do not have Cython installed and are thus not allowed to issue sdist.")
             sys.exit(1)
         cythonize(['spglib_interface/spglib.pyx', 'gsl_interface/gsl.pyx',
-                   'einspline_interface/einspline.pyx', 'cubature_wildmagic_interface/cubature_wildmagic.pyx', 'wildmagic_interface/wildmagic.pyx'])
+                   'einspline_interface/einspline.pyx', 'cubature_wildmagic_interface/cubature_wildmagic.pyx', 'wildmagic_interface/wildmagic.pyx', 'skw_interface/skw.pyx'])
         _sdist.run(self)
     
 try:
@@ -272,31 +271,3 @@ except BuildFailure:
     print('#' * 75)
     print('Error compiling C extensions, C extensions will not be built.')
     print('#' * 75)
-    
-# # Intel MKL (only needed for the SKW routines)
-# mkllib = "/opt/intel/mkl/lib/intel64"
-# mklinclude = "/opt/intel/mkl/include"
-# fftwlib = mkllib
-# fftwinclude = mklinclude + "/fftw"
-# # Cubature
-# cubaturelib = locallib
-# cubatureinclude = localinclude
-# # Wildmagic/GeometricTools
-# wildmagiclib = locallib
-# wildmagicinclude = localinclude
-# # SKW interpolation
-# skwlib = "skw"
-# skwinclude = "skw"
-
-
-# And then the extension definitions
-# ext = [
-#     # Extension("skw_interface", ["skw_interface/skw.pyx"],
-#     #           include_dirs=[spglibinclude, mklinclude,
-#     #                         skwinclude, fftwinclude, np.get_include()],
-#     #           library_dirs=[spgliblib, fftwlib, mkllib, skwlib],
-#     #           libraries=["stdc++", "mkl_rt", "pthread",
-#     #                      "m", "dl", "skw", "symspg", "fftw3xc_intel"],
-#     #           extra_compile_args=[
-#     #               "-std=c++11"],
-#     #           language="c++"),

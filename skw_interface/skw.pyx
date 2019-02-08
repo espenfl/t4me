@@ -15,6 +15,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
+# distutils: language=c++
+
 import cython
 import sys
 import logging

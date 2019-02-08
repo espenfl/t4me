@@ -63,7 +63,7 @@ cdef extern from "gsl/gsl_sf_fermi_dirac.h":
 
 
 def fermidiracint_m1(double x):
-    print "F_{-1}(x) is not well defined due to the Gamma renormalization is infinite...exiting!"
+    print("F_{-1}(x) is not well defined due to the Gamma renormalization is infinite...exiting!")
     sys.exit(1)
     # return gsl_sf_gamma(x+1)*gsl_sf_fermi_dirac_m1(x)
 

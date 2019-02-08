@@ -15,6 +15,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
+# distutils: language=c++
+
 import cython
 import logging
 import numpy as np
@@ -22,7 +24,7 @@ cimport numpy as np
 from libcpp.vector cimport vector
 from libcpp cimport bool
 
-cdef extern from "spglib_interface.cpp":
+cdef extern from "spglib_interface.hpp":
     void get_reciprocal_mesh_interface(int * mesh,
                                        double * lattice,
                                        double * positions,

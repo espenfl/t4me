@@ -16,15 +16,8 @@
     along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <Wm5IntpTrilinear3.h>
-#include <Wm5IntpTricubic3.h>
-#include <Wm5IntpAkimaUniform3.h>
-#include <Wm5Math.h>
+#include <wildmagic_interface.hpp>
 using namespace Wm5;
-
-void wildmagic_execute_interpolation(int *num_points,double *domainx, double *domainy, double *domainz, double *data_temp, double *ix, double *iy, double *iz, int ip, int num_bands, double *idata,int itype);
-
-void wildmagic_gradient_execute_interpolation(int *num_points,double *domainx, double *domainy, double *domainz, double *data_temp, double *ix, double *iy, double *iz, int ip, int num_bands,double *idata, double *igradx, double *igrady, double *igradz, int itype);
 
 void wildmagic_execute_interpolation(int *num_points,double *domainx, double *domainy, double *domainz, double *data_temp, double *ix, double *iy, double *iz, int ip, int num_bands, double *idata,int itype) {
 

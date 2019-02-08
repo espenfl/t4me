@@ -22,7 +22,7 @@ import numpy as np
 cimport numpy as np
 from libcpp.vector cimport vector
 
-cdef extern from "skw_interface.cpp":
+cdef extern from "skw_interface.hpp":
     int interpolate_skw_interface(double * energies, int num_bands, double * kpoints, int num_kpoints, int * ksampling, double * lattice, double * positions, int * species, int num_atoms, double star_radius_factor, double * ienergies, double * ivelocities, double * ikpoints, int num_ikpoints, int * iksampling)
 
 

@@ -20,6 +20,7 @@
 #include <string.h>
 #include <einspline/bspline.h>
 #include <einspline/nubspline.h>
+#include <einspline_interface.hpp>
 
 void einspline_execute_uniform(int *num_points, double *boundaryx, double *boundaryy, double *boundaryz, double *data, double *ix, double *iy, double *iz, int ip, int num_bands, double *idata, double *igradx, double *igrady, double *igradz, int grad, char *bc);
 

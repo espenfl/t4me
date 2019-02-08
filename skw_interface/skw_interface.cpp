@@ -16,9 +16,7 @@
     along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "skw.h"
-
-int interpolate_skw_interface(double *energies, int num_bands, double *kpoints, int num_kpoints, int *ksampling, double *lattice, double *positions, int *species, int num_atoms, double star_radius_factor, double *ienergies, double *ivelocities, double *ikpoints, int num_ikpoints, int *iksampling);
+#include "skw_interface.hpp"
 
 int interpolate_skw_interface(double *energies, int num_bands, double *kpoints, int num_kpoints, int *ksampling, double *lattice, double *positions, int *species, int num_atoms, double star_radius_factor, double *ienergies, double *ivelocities, double *ikpoints, int num_ikpoints, int *iksampling) {
 

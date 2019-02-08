@@ -17,7 +17,7 @@
 */
 
 #include <math.h>
-#include "skw.h"
+#include "skw.hpp"
 
 /* Dummy main, as we only use this in library mode */
 

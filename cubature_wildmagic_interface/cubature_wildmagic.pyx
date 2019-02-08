@@ -15,6 +15,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
+# distutils: language=c++
+
 import sys
 import cython
 import logging
@@ -23,7 +25,7 @@ cimport numpy as np
 from libcpp cimport bool
 import constants
 
-cdef extern from "cubature_wildmagic_interface.cpp":
+cdef extern from "cubature_wildmagic_interface.hpp":
     void cubature_wildmagic_execute_integration(int * num_points,
                                                 double * domainx,
                                                 double * domainy,

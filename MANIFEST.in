@@ -1,0 +1,8 @@
+include setup.json
+include spglib_interface/*.hpp
+include spglib_interface/spglib.cpp
+include gsl_interface/gsl.c
+include einspline_interface/*.hpp
+include einspline_interface/einspline.cpp
+include cubature_wildmagic_interface/*.hpp
+include cubature_wildmagic_interface/cubature_wildmagic.cpp

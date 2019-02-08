@@ -15,12 +15,14 @@
 #    You should have received a copy of the GNU General Public License
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
+# distutils: language=c++
+
 import cython
 import numpy as np
 cimport numpy as np
 import logging
 
-cdef extern from "einspline_interface.cpp":
+cdef extern from "einspline_interface.hpp":
     void einspline_execute_uniform(int * num_points, double * boundaryx,
                                    double * boundaryy, double * boundaryz, double * data, double * ix,
                                    double * iy, double * iz, int ip, int num_bands, double * idata,

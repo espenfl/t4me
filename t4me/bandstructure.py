@@ -16,7 +16,7 @@
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
 #!/usr/bin/python
-# python specifics
+
 import sys
 import math
 import logging
@@ -24,11 +24,11 @@ import numpy as np
 import xml.etree.cElementTree as ET
 import scipy.interpolate
 import copy
-# locals
-import inputoutput
-import interface
-import utils
-import constants
+
+from . import inputoutput
+from . import interface
+from . import utils
+from . import constants
 import spglib_interface
 
 

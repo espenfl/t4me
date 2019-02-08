@@ -16,7 +16,7 @@
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
 #!/usr/local/bin/python
-# python specifics
+
 import sys
 import os
 import unittest
@@ -26,13 +26,12 @@ import logging
 import types
 import inspect
 
-# locals
-import constants
-import utils
-import bandstructure
-import lattice
-import transport
-import inputoutput
+from . import constants
+from . import utils
+from . import bandstructure
+from . import lattice
+from . import transport
+from . import inputoutput
 
 
 def run_tests(tests="slow"):

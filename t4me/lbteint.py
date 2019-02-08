@@ -16,17 +16,17 @@
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
 #!/usr/bin/python
-# python specifics
+
 import sys
 import math
 import logging
 import numpy as np
 import scipy.integrate
-# locals
-import scattering
-import constants
-import inputoutput
-import utils
+
+from . import scattering
+from . import constants
+from . import inputoutput
+from . import utils
 
 
 def scipy_k_integrals(eta, beta, effmass, e0, i, l, m, method="tplquad"):

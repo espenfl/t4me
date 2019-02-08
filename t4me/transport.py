@@ -16,18 +16,18 @@
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
 #!/usr/bin/python
-# python specifics
+
 import sys
 import math
 import itertools
 import logging
 import numpy as np
 import scipy
-# locals
-import scattering
-import lbtecoeff
-import constants
-import inputoutput
+
+from . import scattering
+from . import lbtecoeff
+from . import constants
+from . import inputoutput
 
 
 class Transport(object):

@@ -16,7 +16,7 @@
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
 #!/usr/local/bin/python
-# python specifics
+
 import os
 import sys
 import math
@@ -24,10 +24,9 @@ import logging
 import numpy as np
 import yaml
 
-# locals
-import constants
-import utils
-import scattering
+from . import constants
+from . import utils
+from . import scattering
 
 # global variables
 pythtb_warning_printed = False
@@ -345,7 +344,7 @@ def dump_transport_coefficients(tr, filename_tag=""):
     # loaded here in order to avoid chained imported with
     # lbtecoeff/inputout for printout messages, this should be fixed
     # in the future as it is ugly
-    import lbtecoeff
+    from . import lbtecoeff
 
     # open files
     sigma_file = file_handler(filename="output/sigma", status="w")

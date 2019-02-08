@@ -16,18 +16,17 @@
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
 #!/usr/bin/python
-# python specifics
+
 import sys
 import math
 import logging
 import numpy as np
 
-# locals
-import lbteint
-import constants
-import inputoutput
-import scattering
-import utils
+from . import lbteint
+from . import constants
+from . import inputoutput
+from . import scattering
+from . import utils
 import spglib_interface
 
 

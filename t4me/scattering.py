@@ -16,14 +16,14 @@
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
 #!/usr/bin/python
-# python specifics
+
 import sys
 import math
 import logging
 import numpy as np
 import scipy
-# locals
-import constants
+
+from . import constants
 
 
 def scattering_dos(tr, dos, energies, select_scattering):

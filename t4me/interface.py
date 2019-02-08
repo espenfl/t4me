@@ -16,16 +16,16 @@
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
 #!/usr/bin/python
-# python specifics
+
 import sys
 import math
 import logging
 import numpy as np
 import xml.etree.cElementTree as ET
-# locals
-import utils
-import inputoutput
-import constants
+
+from . import utils
+from . import inputoutput
+from . import constants
 
 
 def lattice_param_numpy(lattice, location=None, filename=None):

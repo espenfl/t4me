@@ -6,8 +6,8 @@ import logging
 import numpy as np
 
 # locals
-import t4me.utils
-import t4me.constants
+import t4me.utils as utils
+import t4me.constants as constants
 
 
 def main():
@@ -40,10 +40,10 @@ def main():
 
     # these modules are loaded after we configure the logger
     # in case there are problems with third party libraries etc.
-    import t4me.bandstructure
-    import t4me.lattice
-    import t4me.transport
-    import t4me.inputoutput
+    import t4me.bandstructure as bandstructure
+    import t4me.lattice as lattice
+    import t4me.transport as transport
+    import t4me.inputoutput as inputoutput
 
     # dump a startup message
     inputoutput.start_message()
@@ -56,43 +56,43 @@ def main():
 
     # check GSL and load
     try:
-        import gsl
+        import t4me.gsl
     except ImportError:
         inputoutput.gsl_warning()
 
     # check spglib and load
     try:
-        import spglib_interface
+        import t4me.spglib_interface
     except ImportError:
         inputoutput.spglib_error()
 
     # check PythTB and load
     try:
-        import pythtb
+        import t4me.pythtb
     except ImportError:
         inputoutput.pythtb_warning()
 
     # check skw_interface and load
     try:
-        import skw_interface
+        import t4me.skw_interface
     except ImportError:
         inputoutput.skw_warning()
 
     # check wildmagic and load
     try:
-        import wildmagic
+        import t4me.wildmagic
     except ImportError:
         inputoutput.wildmagic_warning()
 
     # check einspline and load
     try:
-        import einspline
+        import t4me.einspline
     except ImportError:
         inputoutput.einspline_warning()
 
     # check cubature_wildmagic and load
     try:
-        import cubature_wildmagic
+        import t4me.cubature_wildmagic
     except ImportError:
         inputoutput.cubature_warning()
 
@@ -109,12 +109,6 @@ def main():
         # the user wants
         inputoutput.mpi4py_message()
         param.parallel = False
-
-    # optional, run tests for functionality
-    if param.run_tests:
-        from t4me import tests
-        tests.run_tests(param.run_tests)
-        sys.exit()
 
     # generate lattice from param and input file
     lat = lattice.Lattice(param)

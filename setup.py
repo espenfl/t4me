@@ -104,16 +104,16 @@ extensions = []
 spglib_libraries = ["tetrahedron", "symspg", "tetrahedron", "stdc++"]
 spglib_include_dirs = [localinclude, "spglib_interface"]
 spglib_library_dirs = [locallib]
-spglib_sources = ["spglib_interface/spglib.cpp"]
+spglib_sources = ["src/t4me/spglib_interface/spglib.cpp"]
 
 if build_extensions:
-    spglib_sources = ["spglib_interface/spglib.pyx",
-                      "spglib_interface/spglib_interface.cpp"]
+    spglib_sources = ["src/t4me/spglib_interface/spglib.pyx",
+                      "src/t4me/spglib_interface/spglib_interface.cpp"]
     
 if _have_extension_support(name="spglib", libraries=spglib_libraries,
                            include_dirs=spglib_include_dirs, library_dirs=spglib_library_dirs):
     spglib_include_dirs.append(np.get_include())
-    extensions.append(Extension("spglib_interface",
+    extensions.append(Extension("t4me.spglib_interface",
                                 include_dirs=spglib_include_dirs,
                                 library_dirs=spglib_library_dirs,
                                 libraries=spglib_libraries,
@@ -121,21 +121,22 @@ if _have_extension_support(name="spglib", libraries=spglib_libraries,
                                 extra_compile_args=[
                                     "-std=c++11", "-w", "-fno-omit-frame-pointer",
                                     "-fno-builtin-malloc -fno-builtin-calloc "
-                                    "-fno-builtin-realloc -fno-builtin-free"]))
+                                    "-fno-builtin-realloc -fno-builtin-free"],
+                                language="c++"))
 
 # GSL (only if you need access to the closed Fermi integrals)
 gsl_libraries = ["gsl", "gslcblas"]
 gsl_include_dirs = [localinclude]
 gsl_library_dirs = [locallib]
-gsl_sources = ["gsl_interface/gsl.c"]
+gsl_sources = ["src/t4me/gsl_interface/gsl.c"]
 
 if build_extensions:
-    gsl_sources = ["gsl_interface/gsl.pyx"]
+    gsl_sources = ["src/t4me/gsl_interface/gsl.pyx"]
 
 if _have_extension_support(name="gsl/gsl_sf_fermi_dirac", libraries=gsl_libraries,
                            include_dirs=gsl_include_dirs, library_dirs=gsl_library_dirs):
     gsl_include_dirs.append(np.get_include())
-    extensions.append(Extension("gsl",
+    extensions.append(Extension("t4me.gsl",
                                 include_dirs=gsl_include_dirs,
                                 library_dirs=gsl_library_dirs,
                                 libraries=gsl_libraries,
@@ -145,47 +146,52 @@ if _have_extension_support(name="gsl/gsl_sf_fermi_dirac", libraries=gsl_librarie
 einspline_libraries = ["einspline"]
 einspline_include_dirs = [localinclude]
 einspline_library_dirs = [locallib]
-einspline_sources = ["einspline_interface/einspline.cpp"]
+einspline_sources = ["src/t4me/einspline_interface/einspline.cpp"]
 
 if build_extensions:
-    einspline_sources = ["einspline_interface/einspline.pyx"]
+    einspline_sources = ["src/t4me/einspline_interface/einspline.pyx",
+                         "src/t4me/einspline_interface/einspline_interface.cpp"]
 
 if _have_extension_support(name="einspline/bspline", libraries=einspline_libraries,
                            include_dirs=einspline_include_dirs, library_dirs=einspline_library_dirs):
     einspline_include_dirs.append(np.get_include())
-    extensions.append(Extension("einspline",
+    extensions.append(Extension("t4me.einspline",
                                 include_dirs=einspline_include_dirs,
                                 library_dirs=einspline_library_dirs,
                                 libraries=einspline_libraries,
                                 sources=einspline_sources,
-                                extra_compile_args=["-std=c++11"]))
+                                extra_compile_args=["-std=c++11"],
+                                language="c++"))
 
 # GeometricTools (we still use the old package called WildMagic5 until the developer is
 # done with the transition)
 geometrictools_libraries = ["Wm5Core", "Wm5Mathematics", "pthread", "stdc++"]
 geometrictools_include_dirs = [localinclude]
 geometrictools_library_dirs = [locallib]
-geometrictools_sources = ["wildmagic_interface/wildmagic.cpp"]
+geometrictools_sources = ["src/t4me/wildmagic_interface/wildmagic.cpp"]
 if build_extensions:
-    geometrictools_sources = ["wildmagic_interface/wildmagic.pyx"]
+    geometrictools_sources = ["src/t4me/wildmagic_interface/wildmagic.pyx",
+                              "src/t4me/wildmagic_interface/wildmagic_interface.cpp"]
 if _have_extension_support(name="WildMagic5/Wm5Math", libraries=geometrictools_libraries,
                            include_dirs=geometrictools_include_dirs, library_dirs=geometrictools_library_dirs):
     geometrictools_include_dirs.append(np.get_include())
-    extensions.append(Extension("wildmagic",
+    extensions.append(Extension("t4me.wildmagic",
                                 include_dirs=geometrictools_include_dirs,
                                 library_dirs=geometrictools_library_dirs,
                                 libraries=geometrictools_libraries,
                                 sources=geometrictools_sources,
-                                extra_compile_args=["-std=c++11"]))
+                                extra_compile_args=["-std=c++11"],
+                                language="c++"))
 
 # GeometricTools and Cubature (offers also cubature integration routines)
 cubature_libraries = ["cubature", "m"]
 cubature_include_dirs = [localinclude]
 cubature_library_dirs = [locallib]
-geometrictools_sources = ["cubature_wildmagic_interface/cubature_wildmagic.cpp"]
+geometrictools_sources = ["src/t4me/cubature_wildmagic_interface/cubature_wildmagic.cpp"]
 
 if build_extensions:
-    geometrictools_sources = ["cubature_wildmagic_interface/cubature_wildmagic.pyx"]
+    geometrictools_sources = ["src/t4me/cubature_wildmagic_interface/cubature_wildmagic_interface.cpp",
+                              "src/t4me/cubature_wildmagic_interface/cubature_wildmagic.pyx"]
 
 if _have_extension_support(name="WildMagic5/Wm5Math", libraries=geometrictools_libraries,
                            include_dirs=geometrictools_include_dirs, library_dirs=geometrictools_library_dirs) and \
@@ -194,31 +200,34 @@ if _have_extension_support(name="WildMagic5/Wm5Math", libraries=geometrictools_l
     geometrictools_include_dirs = cubature_include_dirs + geometrictools_include_dirs
     geometrictools_library_dirs = geometrictools_library_dirs + cubature_library_dirs
     geometrictools_libraries = geometrictools_libraries + cubature_libraries
-    extensions.append(Extension("cubature_wildmagic",
+    extensions.append(Extension("t4me.cubature_wildmagic",
                                 include_dirs=geometrictools_include_dirs,
                                 library_dirs=geometrictools_library_dirs,
                                 libraries=geometrictools_libraries,
                                 sources=geometrictools_sources,
-                                extra_compile_args=["-std=c++11"]))
+                                extra_compile_args=["-std=c++11"],
+                                language="c++"))
     
 # SKW interpolation
 if mklroot is not None:
     skw_libraries = ["stdc++", "mkl_rt", "pthread", "m", "dl", "skw", "symspg", "fftw3xc_intel"],
     skw_include_dirs = [localinclude, mklinclude, fftwinclude, "skw"]
     skw_library_dirs = [locallib, fftwlib, mkllib, "skw"]
-    skw_sources = ["skw_interface/skw.cpp"]
+    skw_sources = ["src/t4me/skw_interface/skw.cpp"]
 
     if build_extensions:
-        skw_sources = ["skw_interface/skw.pyx"]
+        skw_sources = ["src/t4me/skw_interface/skw.pyx",
+                       "src/t4me/skw_interface/skw_interface.cpp"]
         
     if _have_extension_support(name="skw", libraries=skw_libraries,
                                include_dirs=skw_include_dirs, library_dirs=skw_library_dirs):
         skw_include_dirs.append(np.get_include())
-        extensions.append(Extension("skw_interface",
+        extensions.append(Extension("t4me.skw_interface",
                                     include_dirs=skw_include_dirs,
                                     library_dirs=skw_library_dirs,
                                     libraries=skw_libraries,
-                                    sources=skw_sources))
+                                    sources=skw_sources,
+                                    language="c++"))
 else:
     print("No Intel MKL installed. SKW extension will not be installed.")
 
@@ -244,9 +253,9 @@ def _do_setup(extensions):
 
     with open(SETUP_JSON_PATH, 'r') as info:
         SETUP_KWARGS = json.load(info)
-        
+
     setup(
-        packages=find_packages(),
+        packages=find_packages(where="src"),
         long_description=LONG_DESCRIPTION,
         cmdclass={'build_ext': _T4MEBuildExt, 'sdist': sdist_override},
         ext_modules=ext_modules,

@@ -249,5 +249,3 @@ libinfo: False # n/a
 onlytotalrate: True
 # Paralel mode?
 parallel: False
-# Run tests? If so, nothing else is done
-run_tests: slow

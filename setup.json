@@ -11,12 +11,15 @@
         "Topic :: Scientific/Engineering :: Physics"
     ], 
     "description": "T4ME - Transport for Materials.",
+    "package_dir": {"": "src"},
     "extras_require": {
     }, 
     "include_package_data": true, 
     "install_requires": [
 	"numpy",
-	"PyYAML"
+	"PyYAML",
+	"spglib",
+	"scipy"
     ], 
     "license": "GNU GPLv3 License, see LICENSE.txt file.", 
     "name": "T4ME", 

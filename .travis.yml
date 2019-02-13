@@ -1,0 +1,12 @@
+notifacation:
+  email: false
+language: python
+python:
+  - 3.7
+cache: pip
+install:
+  - pip install numpy
+  - pip install .
+  - pip install tox-travis
+env:
+script: tox

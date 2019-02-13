@@ -104,11 +104,12 @@ extensions = []
 spglib_libraries = ["tetrahedron", "symspg", "tetrahedron", "stdc++"]
 spglib_include_dirs = [localinclude, "spglib_interface"]
 spglib_library_dirs = [locallib]
-spglib_sources = ["src/t4me/spglib_interface/spglib.cpp"]
+spglib_sources = ["src/t4me/spglib_interface/spglib_interface.cpp"]
 
 if build_extensions:
-    spglib_sources = ["src/t4me/spglib_interface/spglib.pyx",
-                      "src/t4me/spglib_interface/spglib_interface.cpp"]
+    spglib_sources.append("src/t4me/spglib_interface/spglib.pyx")
+else:
+    spglib_sources.append("src/t4me/spglib_interface/spglib.cpp")
     
 if _have_extension_support(name="spglib", libraries=spglib_libraries,
                            include_dirs=spglib_include_dirs, library_dirs=spglib_library_dirs):
@@ -146,11 +147,12 @@ if _have_extension_support(name="gsl/gsl_sf_fermi_dirac", libraries=gsl_librarie
 einspline_libraries = ["einspline"]
 einspline_include_dirs = [localinclude]
 einspline_library_dirs = [locallib]
-einspline_sources = ["src/t4me/einspline_interface/einspline.cpp"]
+einspline_sources = ["src/t4me/einspline_interface/einspline_interface.cpp"]
 
 if build_extensions:
-    einspline_sources = ["src/t4me/einspline_interface/einspline.pyx",
-                         "src/t4me/einspline_interface/einspline_interface.cpp"]
+    einspline_sources.append("src/t4me/einspline_interface/einspline.pyx")
+else:
+    einspline_sources.append("src/t4me/einspline_interface/einspline.cpp")
 
 if _have_extension_support(name="einspline/bspline", libraries=einspline_libraries,
                            include_dirs=einspline_include_dirs, library_dirs=einspline_library_dirs):
@@ -168,10 +170,12 @@ if _have_extension_support(name="einspline/bspline", libraries=einspline_librari
 geometrictools_libraries = ["Wm5Core", "Wm5Mathematics", "pthread", "stdc++"]
 geometrictools_include_dirs = [localinclude]
 geometrictools_library_dirs = [locallib]
-geometrictools_sources = ["src/t4me/wildmagic_interface/wildmagic.cpp"]
+geometrictools_sources = ["src/t4me/wildmagic_interface/wildmagic_interface.cpp"]
 if build_extensions:
-    geometrictools_sources = ["src/t4me/wildmagic_interface/wildmagic.pyx",
-                              "src/t4me/wildmagic_interface/wildmagic_interface.cpp"]
+    geometrictools_sources.append("src/t4me/wildmagic_interface/wildmagic.pyx")
+else:
+    geometrictools_sources.append("src/t4me/wildmagic_interface/wildmagic.cpp")
+
 if _have_extension_support(name="WildMagic5/Wm5Math", libraries=geometrictools_libraries,
                            include_dirs=geometrictools_include_dirs, library_dirs=geometrictools_library_dirs):
     geometrictools_include_dirs.append(np.get_include())
@@ -187,11 +191,12 @@ if _have_extension_support(name="WildMagic5/Wm5Math", libraries=geometrictools_l
 cubature_libraries = ["cubature", "m"]
 cubature_include_dirs = [localinclude]
 cubature_library_dirs = [locallib]
-geometrictools_sources = ["src/t4me/cubature_wildmagic_interface/cubature_wildmagic.cpp"]
+geometrictools_sources = ["src/t4me/cubature_wildmagic_interface/cubature_wildmagic_interface.cpp"]
 
 if build_extensions:
-    geometrictools_sources = ["src/t4me/cubature_wildmagic_interface/cubature_wildmagic_interface.cpp",
-                              "src/t4me/cubature_wildmagic_interface/cubature_wildmagic.pyx"]
+    geometrictools_sources.append("src/t4me/cubature_wildmagic_interface/cubature_wildmagic.pyx")
+else:
+    geometrictools_sources.append("src/t4me/cubature_wildmagic_interface/cubature_wildmagic.cpp")
 
 if _have_extension_support(name="WildMagic5/Wm5Math", libraries=geometrictools_libraries,
                            include_dirs=geometrictools_include_dirs, library_dirs=geometrictools_library_dirs) and \
@@ -213,11 +218,12 @@ if mklroot is not None:
     skw_libraries = ["stdc++", "mkl_rt", "pthread", "m", "dl", "skw", "symspg", "fftw3xc_intel"],
     skw_include_dirs = [localinclude, mklinclude, fftwinclude, "skw"]
     skw_library_dirs = [locallib, fftwlib, mkllib, "skw"]
-    skw_sources = ["src/t4me/skw_interface/skw.cpp"]
+    skw_sources = ["src/t4me/skw_interface/skw_interface.cpp"]
 
     if build_extensions:
-        skw_sources = ["src/t4me/skw_interface/skw.pyx",
-                       "src/t4me/skw_interface/skw_interface.cpp"]
+        skw_sources.append("src/t4me/skw_interface/skw.pyx")
+    else:
+        skw_sources.append("src/t4me/skw_interface/skw.cpp")
         
     if _have_extension_support(name="skw", libraries=skw_libraries,
                                include_dirs=skw_include_dirs, library_dirs=skw_library_dirs):
@@ -270,8 +276,8 @@ class sdist_override(_sdist):
         except ImportError:
             print("You do not have Cython installed and are thus not allowed to issue sdist.")
             sys.exit(1)
-        cythonize(['spglib_interface/spglib.pyx', 'gsl_interface/gsl.pyx',
-                   'einspline_interface/einspline.pyx', 'cubature_wildmagic_interface/cubature_wildmagic.pyx', 'wildmagic_interface/wildmagic.pyx', 'skw_interface/skw.pyx'])
+        cythonize(['src/t4me/spglib_interface/spglib.pyx', 'src/t4me/gsl_interface/gsl.pyx',
+                   'src/t4me/einspline_interface/einspline.pyx', 'src/t4me/cubature_wildmagic_interface/cubature_wildmagic.pyx', 'src/t4me/wildmagic_interface/wildmagic.pyx', 'src/t4me/skw_interface/skw.pyx'])
         _sdist.run(self)
     
 try:

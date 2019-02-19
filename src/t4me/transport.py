@@ -411,7 +411,7 @@ class Transport():  # pylint: disable=too-many-instance-attributes, too-many-bra
             # check if dos exists
             if ((self.bs.dos_partial is None)
                     or (not self.param.carrier_dos_analytick)):
-                self.bs.calc_density_of_states(spin_degen=True)
+                self.bs.calc_density_of_states()
             # loop temperatures
             for indext, temperature in np.ndenumerate(temperatures):
                 # loop chempots

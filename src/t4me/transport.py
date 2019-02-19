@@ -16,10 +16,11 @@
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
 #!/usr/bin/python
+"""Contains routines to set up the calculation of the charge carrier transport coefficients."""
+
+# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements, too-many-lines, global-statement
 
 import sys
-import math
-import itertools
 import logging
 import numpy as np
 import scipy
@@ -27,11 +28,11 @@ import scipy
 import t4me.scattering as scattering
 import t4me.lbtecoeff as lbtecoeff
 import t4me.constants as constants
-import t4me.inputoutput as inputoutput
 
 
-class Transport(object):
-    """ Involves all transport related routines.
+class Transport():  # pylint: disable=too-many-instance-attributes, too-many-branches
+    """
+    Involves all transport related routines.
 
     Parameters
     ----------
@@ -54,11 +55,19 @@ class Transport(object):
         self.fetch_relevant_bands()
         # on init also setup scattering
         self.setup_scattering()
+        self.sigma = None
+        self.seebeck = None
+        self.lorenz = None
+        self.hall = None
+        self.ccn = None
+        self.ccp = None
 
-    def setup_scattering(self, dos=None, dos_energies=None,
-                         select_scattering=None,
-                         numerick=False):
-        """ Selects which how to set up the carrier scattering.
+    def setup_scattering(self,
+                         dos=None,
+                         dos_energies=None,
+                         select_scattering=None):
+        """
+        Selects which how to set up the carrier scattering.
 
         Parameters
         ----------
@@ -66,13 +75,13 @@ class Transport(object):
             | Dimension: (N,M)
 
             Array containing the partial density of states in units
-            of 1/eV/AA^3, where N is the band index and M is the 
+            of 1/eV/AA^3, where N is the band index and M is the
             energy index.
         dos_energies : ndarray
             | Dimension: (M)
 
             Array containing the energy in eV at M samplings where the
-            density of states is calculated.  
+            density of states is calculated.
         select_scattering : ndarray
             | Dimension: (12)
 
@@ -89,13 +98,13 @@ class Transport(object):
 
         See Also
         --------
-        scattering.scattering_dos 
+        scattering.scattering_dos
         scattering.scattering_parabolic
 
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running setup_scattering.")
 
         if select_scattering is None:
@@ -134,7 +143,10 @@ class Transport(object):
                             spin_degen=True, transport=True)
 
             dos = self.bs.dos_partial
-            energies = self.bs.dos_energies
+            if dos_energies is None:
+                energies = self.bs.dos_energies
+            else:
+                energies = dos_energies
             scattering_inv, scattering_total_inv, scattering_tau0 = \
                 scattering.scattering_dos(self,
                                           dos,
@@ -200,9 +212,7 @@ class Transport(object):
                     emax = self.param.dos_e_max
                 # generate grid of energies, still using
                 # the samples requested for the density of states
-                energies = np.linspace(emin,
-                                       emax,
-                                       self.param.dos_num_samples)
+                energies = np.linspace(emin, emax, self.param.dos_num_samples)
             else:
                 use_eonk = True
                 energies = self.bs.energies
@@ -225,10 +235,14 @@ class Transport(object):
                 # (range of the eigenvalues)
                 scattering.pad_scattering_values(self)
 
-    def calc_transport_tensors(self, bs=None, temperatures=None,
-                               chempots=None, method=None, transport=False):
-        """ Selects which method to use when calculating the transport
-        coefficients
+    def calc_transport_tensors(  # pylint: disable=too-many-locals # noqa: MC0001
+            self,
+            bs=None,
+            temperatures=None,
+            chempots=None,
+            method=None):
+        r"""
+        Selects which method to use when calculating the transport coefficients.
 
         Parameters
         ----------
@@ -246,22 +260,22 @@ class Transport(object):
             is used.
         method : {"closed", "numeric", "numerick"}
             If `method` is not supplied is defaults to "numeric" unless
-            bandstructure data is read numerically or generated (all 
+            bandstructure data is read numerically or generated (all
             cases where the closed Fermi Dirac integrals cannot be
             used) when it defaults to "numerick".
 
-            | "closed" evaluates the closed Fermi integrals where only 
+            | "closed" evaluates the closed Fermi integrals where only
             | one scattering mechanism is possible per band. Only valid
             | for systems where one can strictly rely on a parametrized
             | parabolic bandstructure based on effective mass models.
-            | Parameters (e.g. effective masses for each band) are set 
-            | in the bandstructure configuration file. 
+            | Parameters (e.g. effective masses for each band) are set
+            | in the bandstructure configuration file.
             | The driver routine is :func:`lbtecoeff.parabolic_closed`
 
-            | "numeric" similar to "closed, but evaluates the Fermi 
-            | integrals in an open form (e.g. it is possible to 
-            | concatenate the scattering mechanisms, which is not 
-            | possible for the closed Fermi integrals). 
+            | "numeric" similar to "closed, but evaluates the Fermi
+            | integrals in an open form (e.g. it is possible to
+            | concatenate the scattering mechanisms, which is not
+            | possible for the closed Fermi integrals).
             | The driver routine is :func:`lbtecoeff.parabolic_numeric`
 
             | "numerick" evaluates the transport integrals more generally
@@ -286,13 +300,13 @@ class Transport(object):
         See Also
         --------
         lbtecoeff.parabolic_closed
-        lbtecoeff.parabolic_numeric 
+        lbtecoeff.parabolic_numeric
         lbtecoeff.numerick
 
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running calc_transport_tensors.")
 
         # first check that the scattering properties if now, give user
@@ -320,7 +334,6 @@ class Transport(object):
 
         # figure out the current configuration if VASP input, for sure,
         # we do not have analytick models
-        parabolice = False
         numerick = False
         if self.param.read == "vasp" or self.param.read[:5] == "numpy" \
            or self.param.read == "w90":
@@ -335,20 +348,21 @@ class Transport(object):
                 sys.exit(1)
         else:
             # or if any band is generated with band type different from 0
-            if np.any(self.bs.bandparams[:,0] != 0):
+            if np.any(self.bs.bandparams[:, 0] != 0):
                 numerick = True
         # now check if user wants numerick anyway
         if method == "numerick" or self.param.transport_method == "numerick":
             numerick = True
 
         if method != "numerick" and numerick:
-            logger.info("User requested to use the method '" + method + "' "
-                        "for integration, but "
-                        "at the same time wants to read data from "
-                        "VASP, NumPy, Wannier90 or have generated "
-                        "non-parabolic bands."
-                        "This is not possible and we now set the method "
-                        "to 'numerick'.")
+            logger.info(
+                "User requested to use the method '%s' "
+                "for integration, but "
+                "at the same time wants to read data from "
+                "VASP, NumPy, Wannier90 or have generated "
+                "non-parabolic bands."
+                "This is not possible and we now set the method "
+                "to 'numerick'.", method)
 
         if bs is None:
             bs = self.bs
@@ -356,21 +370,17 @@ class Transport(object):
         # analytick expansions of energy etc.
         if not numerick:
             sigma = np.zeros((temperatures.shape[0], chempots.shape[0], 3, 3))
-            seebeck = np.zeros(
-                (temperatures.shape[0], chempots.shape[0], 3, 3))
+            seebeck = np.zeros((temperatures.shape[0], chempots.shape[0], 3,
+                                3))
             lorenz = np.zeros((temperatures.shape[0], chempots.shape[0], 3, 3))
             hall = np.zeros((temperatures.shape[0], chempots.shape[0], 3, 3))
             ccn = np.zeros((temperatures.shape[0], chempots.shape[0], 3, 3))
             ccp = np.zeros((temperatures.shape[0], chempots.shape[0], 3, 3))
             # set transport tensor scheme for analytick in python
             # which is slow, so we can chose only to calculate certain elements
-            # TODO: incorporate this for all methods
-            tensor = np.array(
-                [[True, True, True], [True, True, True], [True, True, True]])
+            # TODO: incorporate this for all methods pylint: disable=fixme
             # loop temperaturs
             for indext, temp in np.ndenumerate(temperatures):
-                # set beta
-                beta = 1e5 / (constants.kb * temp)
                 # fetch eta for each band
                 etas = self.fetch_etas(chempots, temp).T
                 # fetch tau0 for a given temperature
@@ -392,7 +402,7 @@ class Transport(object):
         else:
             sigma, seebeck, lorenz = lbtecoeff.numerick(
                 self, chempots, temperatures, bs)
-            # TODO: FIX THE HALL TENSOR ASAP (MAYBE ALSO THE NERNST)
+            # TODO: FIX THE HALL TENSOR ASAP (MAYBE ALSO THE NERNST) pylint: disable=fixme
             hall = sigma
             ccn = np.zeros((temperatures.shape[0], chempots.shape[0], 3, 3))
             ccp = np.zeros((temperatures.shape[0], chempots.shape[0], 3, 3))
@@ -401,14 +411,14 @@ class Transport(object):
         if numerick:
             # calculate the carrier concentration
             # check if dos exists
-            if ((self.bs.dos_partial is None) or
-                    (not self.param.carrier_dos_analytick)):
+            if ((self.bs.dos_partial is None)
+                    or (not self.param.carrier_dos_analytick)):
                 self.bs.calc_density_of_states(spin_degen=True)
             # loop temperatures
             for indext, temperature in np.ndenumerate(temperatures):
                 # loop chempots
                 for indexe, chempot in np.ndenumerate(chempots):
-                    ptype, ntype, intr = self.calc_carrier_concentration(
+                    ptype, ntype, _ = self.calc_carrier_concentration(
                         temperature, chempot)
                     ccp[indext, indexe, 0, 0] = ptype
                     ccn[indext, indexe, 0, 0] = ntype
@@ -420,7 +430,8 @@ class Transport(object):
         self.ccp = ccp
 
     def fetch_relevant_bands(self, tr=None):
-        """ Locate bands that will be included in the transport integrals.
+        """
+        Locate bands that will be included in the transport integrals.
 
         Parameters
         ----------
@@ -433,16 +444,16 @@ class Transport(object):
 
         Notes
         -----
-        The included bands are located by considering the input 
-        range of chemical potentials from `transport_chempot_min` 
-        and `transport_chempot_max` padded with the value 
+        The included bands are located by considering the input
+        range of chemical potentials from `transport_chempot_min`
+        and `transport_chempot_max` padded with the value
         `transport_energycutband` on
         each side (see the general configuration file).
 
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running fetch_relevant_bands.")
 
         if tr is None:
@@ -454,20 +465,20 @@ class Transport(object):
 
         # check if user supplied specific bands for calculation and
         # let them know if they have supplied this (easy to make mistakes)
-        if len(param.transport_include_bands) != 0:
+        if param.transport_include_bands:
             # first check that we actually have all the necessary bands
             band_index = np.amax(param.transport_include_bands)
             if band_index > energies.shape[0]:
-                logger.error(
-                    "User requested a band that is not included in "
-                    "the original dataset. Exiting.")
+                logger.error("User requested a band that is not included in "
+                             "the original dataset. Exiting.")
                 sys.exit(1)
             logger.info(
                 "User supplied specific bands so we are only performing "
                 "transport calculation on those.")
             # shift index to zero
             transport_included_bands = [
-                x - 1 for x in param.transport_include_bands]
+                x - 1 for x in param.transport_include_bands
+            ]
 
         else:
             e_min = param.transport_chempot_min - param.transport_energycutband
@@ -486,10 +497,16 @@ class Transport(object):
             tr.included_bands = np.array(
                 transport_included_bands, dtype='intc')
 
-    def calc_carrier_concentration(self, temperature, chempot, dos=None,
-                                   dos_energies=None, band_decomp=False,
-                                   defect_ionization=False):
-        """ Returns the charge carrier concentration.
+    def calc_carrier_concentration(  # pylint: disable=too-many-locals
+            self,
+            temperature,
+            chempot,
+            dos=None,
+            dos_energies=None,
+            band_decomp=False,
+            defect_ionization=False):
+        r"""
+        Returns the charge carrier concentration.
 
         Parameters
         ----------
@@ -513,7 +530,7 @@ class Transport(object):
             Selects if defect ionization compensation should be
             included. The `donor_number`, `donor_energy`,
             `donor_degen_fact`, `acceptor_number`, `acceptor_energy`
-            and `acceptor_degen_fact` need to be set in the 
+            and `acceptor_degen_fact` need to be set in the
             general configuration file.
 
         Returns
@@ -522,7 +539,7 @@ class Transport(object):
             | Dimension: (N)
 
             Contains the n-type carrier concentration for each band
-            index N in units of :math:`10^{21} \mathrm{cm}^{-3}`.  
+            index N in units of :math:`10^{21} \mathrm{cm}^{-3}`.
         p_type : ndarray
             | Dimension: (N)
 
@@ -532,7 +549,7 @@ class Transport(object):
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running calc_carrier_concentration.")
 
         if dos is None:
@@ -540,7 +557,6 @@ class Transport(object):
         if dos_energies is None:
             dos_energies = self.bs.dos_energies
 
-        unitcell = self.lattice.unitcell
         num_bands = self.bs.bandparams.shape[0]
         n_type = np.zeros(num_bands)
         p_type = np.zeros(num_bands)
@@ -557,17 +573,17 @@ class Transport(object):
                 # n-type, use only energies from carrier_conduction_energy
                 # to the end of the array set in param.yml, slice
                 integrand = dos[band][ntype_index] * \
-                    self.fermi_dist(dos_energies_ntype, chempot, beta)
+                    fermi_dist(dos_energies_ntype, chempot, beta)
 
-                n_type[band] = scipy.integrate.trapz(
-                    integrand, dos_energies_ntype)
+                n_type[band] = scipy.integrate.trapz(integrand,
+                                                     dos_energies_ntype)
             # p-type, use only energies from start of array to
             # carrier_valence_energy set in param.yml, slice
             if dos_energies_ptype.size > 0:
                 integrand = dos[band][ptype_index] * \
-                    self.fermi_dist(-dos_energies_ptype, -chempot, beta)
-                p_type[band] = scipy.integrate.trapz(
-                    integrand, dos_energies_ptype)
+                    fermi_dist(-dos_energies_ptype, -chempot, beta)
+                p_type[band] = scipy.integrate.trapz(integrand,
+                                                     dos_energies_ptype)
         # make sure units of carrier concentration is 10^21 cm^-3
         n_type = 1e3 * n_type
         p_type = 1e3 * p_type
@@ -582,17 +598,16 @@ class Transport(object):
             acceptor_energy = self.param.acceptor_energy
             donor_ion_number = donor_ionization(
                 donor_number, donor_energy, donor_degen_fact, chempot, beta)
-            acceptor_ion_number = acceptor_ionization(acceptor_number,
-                                                      acceptor_energy,
-                                                      acceptor_degen_fact,
-                                                      chempot, beta)
+            acceptor_ion_number = acceptor_ionization(
+                acceptor_number, acceptor_energy, acceptor_degen_fact, chempot,
+                beta)
             n_type = 0.5 * (donor_ion_number - acceptor_ion_number) + \
-                np.sqrt(np.pow(0.5 * (donor_ion_number -
-                                      acceptor_ion_number), 2.0)
+                np.sqrt(np.power(0.5 * (donor_ion_number -
+                                        acceptor_ion_number), 2.0)
                         + intrinsic)
             p_type = 0.5 * (acceptor_ion_number - donor_ion_number) + \
-                np.sqrt(np.pow(0.5 * (acceptor_ion_number -
-                                      donor_ion_number), 2.0) +
+                np.sqrt(np.power(0.5 * (acceptor_ion_number -
+                                        donor_ion_number), 2.0) +
                         intrinsic)
         if not band_decomp:
             p_type = p_type.sum(-1)
@@ -600,7 +615,8 @@ class Transport(object):
         return p_type, n_type, np.sqrt(intrinsic)
 
     def fetch_temperatures(self, store=True):
-        """ Set up the temperatures.
+        """
+        Set up the temperatures.
 
         Parameters
         ----------
@@ -619,48 +635,21 @@ class Transport(object):
 
         """
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running fetch_temperatures.")
 
-        temperature = np.linspace(
-            self.param.temperature_min, self.param.temperature_max, self.param.temperature_steps)
+        temperature = np.linspace(self.param.temperature_min,
+                                  self.param.temperature_max,
+                                  self.param.temperature_steps)
         if store:
             self.temperature = temperature
             return temperature
-        else:
-            return temperature
 
-    def fetch_chempot_from_etas(self, temperature, etas):
-        """
-        This routines simply takes the temperature and an array
-        of etas (unitless chemical potentials) and calculates
-        the associated values of the chemical potential
-
-        Parameters
-        ----------
-        temperature : float
-            The temperature in K.
-        etas : ndarray
-            | Dimension: N
-
-            The unitless chemical potential, :math:`\\eta` for N
-            steps.
-
-        Returns
-        -------
-        chempots : ndarray
-            | Dimension: N
-
-            The chemical potentials in units of eV.
-
-        """
-
-        chempots = etas * constants.kb * 1e-5 * temperature
-
-        return chempots
+        return temperature
 
     def fetch_chempots(self, store=True):
-        """ Set up the chemical potential.
+        """
+        Set up the chemical potential.
 
         Parameters
         ----------
@@ -683,7 +672,7 @@ class Transport(object):
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running fetch_chempots.")
 
         chempots = np.linspace(self.param.transport_chempot_min,
@@ -692,18 +681,19 @@ class Transport(object):
         if store:
             self.chempots = chempots
             return chempots
-        else:
-            return chempots
+
+        return chempots
 
     def fetch_etas(self, chempot, temperature):
-        """ Calculate the reduced chemical potential
+        """
+        Calculate the reduced chemical potential
 
         Parameters
         ----------
         chempot : ndarray
             | Dimension: (N)
 
-            Contains N samples of the chemical potential in 
+            Contains N samples of the chemical potential in
             units of eV.
 
         temperature : float
@@ -719,7 +709,7 @@ class Transport(object):
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running fetch_etas.")
 
         # convert to eta, shift and loop
@@ -744,77 +734,110 @@ class Transport(object):
             sys.exit(1)
         return eta
 
-    def donor_ionization(self, number, energy, degen, e_fermi, beta):
-        """ Returns the number of ionized donors.
 
-        Parameters
-        ----------
-        number : float
-            Number of donors.
-        energy : float 
-            The energy in eV where the
-            donor compensation is to be
-            evaluated.
-        degen : float
-            The donor degeneration number.
-        e_fermi : float 
-            The Fermi level in eV. 
-        beta : float The beta (1/kT) factor in eV.
+def fetch_chempot_from_etas(temperature, etas):
+    r"""
+    Calculate the chemical potential from eta and the temperature.
 
-        Returns
-        -------
-        float
-            The donor ionization compensation.
+    Parameters
+    ----------
+    temperature : float
+        The temperature in K.
+    etas : ndarray
+        | Dimension: N
 
-        """
+        The unitless chemical potential, :math:`\\eta` for N
+        steps.
 
-        return number / (1 + np.exp((energy - e_fermi) * beta) / degen)
+    Returns
+    -------
+    chempots : ndarray
+        | Dimension: N
 
-    def acceptor_ionization(self, number, energy, degen, e_fermi, beta):
-        """ Returns the number of ionized acceptors.
+        The chemical potentials in units of eV.
 
-        Parameters
-        ----------
-        number : float
-            Number of acceptors.
-        energy : float 
-            The energy in eV where
-            the acceptor compensation is to be evaluated.
-        degen : float
-            The acceptor degeneration number.
-        e_fermi : float 
-            The Fermi level in eV. 
-        beta : float 
-            The beta (1/kT) factor in eV.
+    """
 
-        Returns
-        -------
-        float
-            The acceptor ionization compensation.
+    chempots = etas * constants.kb * 1e-5 * temperature
 
-        """
+    return chempots
 
-        return number / (1 + np.exp((e_fermi - energy) * beta) / degen)
 
-    def fermi_dist(self, e, e_fermi, beta):
-        """ Returns the Fermi Dirac distribution function (without spin
-        degeneracy).
+def donor_ionization(number, energy, degen, e_fermi, beta):
+    """
+    Returns the number of ionized donors.
 
-        Parameters
-        ----------
-        e : float
-            The energy in eV where the Fermi Dirac distribution is to
-            be evaluated.
-        e_fermi : float 
-            The Fermi level in eV.
-        beta : float 
-            The beta factor (1/kT) in eV.
+    Parameters
+    ----------
+    number : float
+        Number of donors.
+    energy : float
+        The energy in eV where the
+        donor compensation is to be
+        evaluated.
+    degen : float
+        The donor degeneration number.
+    e_fermi : float
+        The Fermi level in eV.
+    beta : float The beta (1/kT) factor in eV.
 
-        Returns
-        -------
-        float
-            The value of the Fermi function (without spin degeneracy).
+    Returns
+    -------
+    float
+        The donor ionization compensation.
 
-        """
+    """
 
-        return 1.0 / (1.0 + np.exp((e - e_fermi) * beta))
+    return number / (1 + np.exp((energy - e_fermi) * beta) / degen)
+
+
+def acceptor_ionization(number, energy, degen, e_fermi, beta):
+    """
+    Returns the number of ionized acceptors.
+
+    Parameters
+    ----------
+    number : float
+        Number of acceptors.
+    energy : float
+        The energy in eV where
+        the acceptor compensation is to be evaluated.
+    degen : float
+        The acceptor degeneration number.
+    e_fermi : float
+        The Fermi level in eV.
+    beta : float
+        The beta (1/kT) factor in eV.
+
+    Returns
+    -------
+    float
+        The acceptor ionization compensation.
+
+    """
+
+    return number / (1 + np.exp((e_fermi - energy) * beta) / degen)
+
+
+def fermi_dist(e, e_fermi, beta):
+    """
+    Returns the Fermi Dirac distribution function (without spin degeneracy).
+
+    Parameters
+    ----------
+    e : float
+        The energy in eV where the Fermi Dirac distribution is to
+        be evaluated.
+    e_fermi : float
+        The Fermi level in eV.
+    beta : float
+        The beta factor (1/kT) in eV.
+
+    Returns
+    -------
+    float
+        The value of the Fermi function (without spin degeneracy).
+
+    """
+
+    return 1.0 / (1.0 + np.exp((e - e_fermi) * beta))

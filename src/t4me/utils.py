@@ -14,18 +14,18 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
+"""Containing utilitary functions for T4ME."""
 
 #!/usr/local/bin/python
 import sys
 import logging
 import logging.config
 import os
-from contextlib import contextmanager
-import time
 import yaml
 import numpy as np
 
-import t4me.constants as constants
+import t4me.constants as constants  #pylint: disable=useless-import-alias
+
 
 def check_file(filename):
     """
@@ -43,11 +43,11 @@ def check_file(filename):
     """
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  #pylint: disable=protected-access
     logger.debug("Running check_file.")
 
     if not os.path.isfile(filename):
-        logger.error(filename + "was not found. Exiting.")
+        logger.error("%s was not found. Exiting.", filename)
         sys.exit(1)
 
 
@@ -93,13 +93,16 @@ def check_directory(path, create=False):
 
     """
 
+    # set logger
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  #pylint: disable=protected-access
+    logger.debug("Running check_file.")
+
     if not os.path.isdir(path):
         if not create:
             # THIS SHOULD AT SOME POINT BE REPLACED WITH
             # THE PROPER LOCAL LOGGER. AT LEAST A CHECK IF
             # IT EXISTS.
-            logging.error("The directory " + path +
-                          " does not exist. Exiting.")
+            logger.error("The directory %s does not exist. Exiting.", path)
             sys.exit(1)
         else:
             create_directory(path)
@@ -179,11 +182,11 @@ def is_power_of_two(number):
         otherwise.
     """
 
-    n = 1
-    while n < number:
-        n <<= 1
+    test_number = 1
+    while test_number < number:
+        test_number <<= 1
 
-    return (n == number)
+    return test_number == number
 
 
 def pull_vecs_inside_boundary(vecs, border, shift=None):
@@ -255,11 +258,11 @@ def invert_matrix(matrix):
     if np.linalg.cond(matrix) < (1.0 / np.finfo(matrix.dtype).eps):
         inv_matrix = np.linalg.inv(matrix)
         return inv_matrix
-    else:
-        # matrix is ill conditioned, e.g. singular and linalg.inv
-        # fails, return matrix with nan instead
-        inv_matrix = np.full_like(matrix, np.nan)
-        return inv_matrix
+    # matrix is ill conditioned, e.g. singular and linalg.inv
+    # fails, return matrix with nan instead
+    inv_matrix = np.full_like(matrix, np.nan)
+
+    return inv_matrix
 
 
 def config_logger(filename="/logging.yaml", level=None):
@@ -287,8 +290,8 @@ def config_logger(filename="/logging.yaml", level=None):
     filename = path_to_script + filename
     if os.path.exists(filename):
         logging.info("Setting logger from logging.yaml")
-        with open(filename, 'rt') as f:
-            config = yaml.load(f.read())
+        with open(filename, 'rt') as file_data:
+            config = yaml.load(file_data.read())
         logging.config.dictConfig(config)
     else:
         if level is None:
@@ -299,8 +302,7 @@ def config_logger(filename="/logging.yaml", level=None):
 
 def fetch_sorting_indexes(data, order="C"):
     """
-    Fetch the sorting indexes to sort an array
-    to either column or row order.
+    Fetch the sorting indexes to sort an array to either column or row order.
 
     Parameters
     ----------
@@ -323,7 +325,7 @@ def fetch_sorting_indexes(data, order="C"):
     """
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  #pylint: disable=protected-access
     logger.debug("Running fetch_sorting_indexes.")
 
     # before sort, round the array to predefined accuracy in
@@ -334,9 +336,9 @@ def fetch_sorting_indexes(data, order="C"):
 
     if order == "C":
         return np.lexsort(np.transpose(data)[::-1])
-    elif order == "F":
+    if order == "F":
         return np.lexsort(np.transpose(data))
-    else:
-        logger.error("The requested sort order is not supported. "
-                     "Only C or F (Fortran) order is supported. "
-                     "Exiting.")
+    logger.error("The requested sort order is not supported. "
+                 "Only C or F (Fortran) order is supported. "
+                 "Exiting.")
+    sys.exit(1)

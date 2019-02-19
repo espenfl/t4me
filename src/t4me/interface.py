@@ -16,23 +16,26 @@
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
 #!/usr/bin/python
+"""Contains routines that interface T4ME, e.g. to the parameter files or to other input files."""
+
+# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements, too-many-lines, global-statement
 
 import sys
-import math
 import logging
-import numpy as np
 import xml.etree.cElementTree as ET
+import numpy as np
 
 import t4me.utils as utils
 import t4me.inputoutput as inputoutput
 import t4me.constants as constants
+from t4me.lattice import pull_points_back_into_zone
 
 
 def lattice_param_numpy(lattice, location=None, filename=None):
-    """
-    Interface used to format the elements needed to generate the
-    `Lattice()` object if the lattice is generated from the celldata
-    YAML file (parameterfile and Numpy intput files).
+    r"""
+    Interface used to format the elements needed to generate the `Lattice()` object.
+
+    Used if the lattice is generated from the celldata YAML file (parameterfile and Numpy intput files).
 
     Parameters
     ----------
@@ -75,19 +78,20 @@ def lattice_param_numpy(lattice, location=None, filename=None):
 
     """
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running lattice_param_numpy.")
 
-    kmesh = lattice.Kmesh()
-
     data = inputoutput.readcellparam(location, filename)
-    unitcell = np.ascontiguousarray(np.vstack(
-        (np.array(data["a"], dtype='double'),
-         np.array(data["b"], dtype='double'),
-         np.array(data["c"], dtype='double'))), dtype='double')
+    unitcell = np.ascontiguousarray(
+        np.vstack((np.array(data["a"], dtype='double'),
+                   np.array(data["b"], dtype='double'),
+                   np.array(data["c"], dtype='double'))),
+        dtype='double')
     atomtypes = data["atomtypes"]
-    species = np.array([constants.elements[atom.lower()]
-                        for atom in atomtypes], dtype='intc', order='C')
+    species = np.array(
+        [constants.elements[atom.lower()] for atom in atomtypes],
+        dtype='intc',
+        order='C')
     if len(species.shape) != 1:
         logger.error(
             "Please enter the atomic numbers as [n1 n2] etc. Exiting.")
@@ -98,9 +102,8 @@ def lattice_param_numpy(lattice, location=None, filename=None):
     lattice.species = species
 
     if len(positions.shape) < 2:
-        logger.error(
-            "Please enter the atomic positions as "
-            "[[x1 y1 z1],[x2,y2,z2]] etc. Exiting.")
+        logger.error("Please enter the atomic positions as "
+                     "[[x1 y1 z1],[x2,y2,z2]] etc. Exiting.")
         sys.exit(1)
     direct_positions = data["direct"]
     # if positions is given in direct coordinates, convert to cartesian
@@ -134,11 +137,11 @@ def lattice_param_numpy(lattice, location=None, filename=None):
         lattice.param.work_on_full_grid = True
 
 
-def lattice_vasp(lattice, location=None, filename=None):
-    """
-    Interface used to format the elements needed to generate the
-    `Lattice()` object if the lattice is generated from the VASP
-    XML file.
+def lattice_vasp(lattice, location=None, filename=None):  # pylint: disable=too-many-locals # noqa: MC0001
+    r"""
+    Interface used to format the elements needed to generate the `Lattice()` object.
+
+    Used if the lattice is generated from the VASP XML file.
 
     Parameters
     ----------
@@ -187,7 +190,7 @@ def lattice_vasp(lattice, location=None, filename=None):
     """
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running lattice_vasp.")
 
     if filename is None:
@@ -206,25 +209,24 @@ def lattice_vasp(lattice, location=None, filename=None):
         tree.find('.//parameters/separator[@name="symmetry"]/'
                   'i[@name="SYMPREC"]').text)
     # fetch cell
-    unitcell_vectors = tree.findall(
-        './/structure[@name="finalpos"]/crystal/'
-        'varray[@name="basis"]/v')
+    unitcell_vectors = tree.findall('.//structure[@name="finalpos"]/crystal/'
+                                    'varray[@name="basis"]/v')
     unitcell = np.zeros((3, 3))
     for index, unitcell_vector in enumerate(unitcell_vectors):
         unitcell[index] = np.fromstring(unitcell_vector.text, sep=' ')
     # fetch positions
-    positions_entries = tree.findall(
-        './/structure[@name="finalpos"]/'
-        'varray[@name="positions"]/v')
+    positions_entries = tree.findall('.//structure[@name="finalpos"]/'
+                                     'varray[@name="positions"]/v')
     positions = np.zeros((len(positions_entries), 3),
-                         dtype='double', order='C')
+                         dtype='double',
+                         order='C')
     species_entries = tree.findall('.//atominfo/'
                                    'array[@name="atoms"]/set/rc')
     species = np.zeros(len(positions_entries), dtype='intc', order='C')
     for index, position in enumerate(positions_entries):
         positions[index] = np.fromstring(position.text, sep=' ')
-        species[index] = constants.elements[
-            species_entries[index][0].text.split()[0].lower()]
+        species[index] = constants.elements[species_entries[index]
+                                            [0].text.split()[0].lower()]
 
     lattice.unitcell = unitcell
     lattice.positions = positions
@@ -263,22 +265,19 @@ def lattice_vasp(lattice, location=None, filename=None):
 
     # get divisions, IBZ kpoints and location of the eigenvalues and
     # dos
-    divisions = tree.find(
-        'kpoints/generation/v[@name="divisions"]')
-    lattice.kdata.sampling = np.ascontiguousarray(np.fromstring(
-        divisions.text, sep=" ", dtype='intc'), dtype='intc')
+    divisions = tree.find('kpoints/generation/v[@name="divisions"]')
+    lattice.kdata.sampling = np.ascontiguousarray(
+        np.fromstring(divisions.text, sep=" ", dtype='intc'), dtype='intc')
     if kinter:
-        lattice.kdata.sampling = lattice.kdata.sampling*abs(kinter)
+        lattice.kdata.sampling = lattice.kdata.sampling * abs(kinter)
     else:
-        lattice.kdata.sampling = np.ascontiguousarray(np.fromstring(
-            divisions.text, sep=" ", dtype='intc'), dtype='intc')
+        lattice.kdata.sampling = np.ascontiguousarray(
+            np.fromstring(divisions.text, sep=" ", dtype='intc'), dtype='intc')
     if not lvel:
-        kpoints = tree.findall(
-            'kpoints/varray[@name="kpointlist"]/v')
+        kpoints = tree.findall('kpoints/varray[@name="kpointlist"]/v')
     else:
-        kpoints = tree.findall(
-            './/kpoints[@comment="interpolated"]/'
-            'varray[@name="kpointlist"]/v')
+        kpoints = tree.findall('.//kpoints[@comment="interpolated"]/'
+                               'varray[@name="kpointlist"]/v')
         kpoints_full = tree.findall(
             './/eigenvelocities[@comment="interpolated"]/kpoints/'
             'varray[@name="kpointlist"]/v')
@@ -287,13 +286,12 @@ def lattice_vasp(lattice, location=None, filename=None):
             'varray[@name="ibzequiv"]/v')
 
     # fetch IBZ points
-    kpointsvasp = np.zeros((len(kpoints), 3),
-                           dtype='double', order='C')
+    kpointsvasp = np.zeros((len(kpoints), 3), dtype='double', order='C')
     for index, kpoint in enumerate(kpoints):
         kpointsvasp[index] = np.fromstring(kpoint.text, sep=' ')
 
     # pull k-points back into zone
-    lattice.pull_points_back_into_zone(kpointsvasp)
+    pull_points_back_into_zone(kpointsvasp)
     # now sort according to k-point sort (z increasing
     # fastests) and store
     k_sort_index = utils.fetch_sorting_indexes(kpointsvasp)
@@ -302,8 +300,9 @@ def lattice_vasp(lattice, location=None, filename=None):
     lattice.kdata.mesh = None
     # then also full BZ (for e.g. velocities)
     if lvel:
-        kpointsvasp_full = np.zeros(
-            (len(kpoints_full), 3), dtype='double', order='C')
+        kpointsvasp_full = np.zeros((len(kpoints_full), 3),
+                                    dtype='double',
+                                    order='C')
         mapping_bz_to_ibz_vasp = np.zeros(len(kpoints_full), dtype='intc')
         for index, kpoint in enumerate(kpoints_full):
             kpointsvasp_full[index] = np.fromstring(kpoint.text, sep=' ')
@@ -311,7 +310,7 @@ def lattice_vasp(lattice, location=None, filename=None):
             mapping_bz_to_ibz_vasp[index] = np.fromstring(
                 mapping.text, sep=' ')
         # pull k-points back into zone
-        lattice.pull_points_back_into_zone(kpointsvasp_full)
+        pull_points_back_into_zone(kpointsvasp_full)
         k_sort_index = utils.fetch_sorting_indexes(kpointsvasp_full)
         lattice.kdata.mesh = np.ascontiguousarray(
             kpointsvasp_full[k_sort_index], dtype='double')
@@ -346,17 +345,14 @@ def lattice_vasp(lattice, location=None, filename=None):
 
     # if LVEL have been set we already have access to the full grid
     # so set such a parameter
-    if lvel:
-        lattice.param.work_on_full_grid = True
-    else:
-        lattice.param.work_on_full_grid = False
+    lattice.param.work_on_full_grid = bool(lvel)
 
 
-def lattice_w90(lattice):
-    """
-    Interface used to format the elements needed to generate
-    the `Lattice()` object if the lattice is generated from
-    the Wannier90 win file.
+def lattice_w90(lattice):  # pylint: disable=too-many-locals, too-many-branches
+    r"""
+    Interface used to format the elements needed to generate the `Lattice()` object.
+
+    Used if the lattice is generated from the Wannier90 win file.
 
     Parameters
     ----------
@@ -396,7 +392,7 @@ def lattice_w90(lattice):
 
     """
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running lattice_w90.")
 
     # check filename
@@ -416,14 +412,15 @@ def lattice_w90(lattice):
     positions_cart = False
     for i, line in enumerate(wdata):
         if "begin unit_cell_cart" in line.lower():
-            unitcell = np.array([
-                [float(entry) for entry in element.split()]
-                for element in wdata[i + 1:i + 4]],
-                dtype='double', order='C')
+            unitcell = np.array([[float(entry) for entry in element.split()]
+                                 for element in wdata[i + 1:i + 4]],
+                                dtype='double',
+                                order='C')
         if "mp_grid" in line.lower():
-            sampling = np.array([int(element)
-                                 for element in wdata[i].split()[2:6]],
-                                dtype='intc', order='C')
+            sampling = np.array(
+                [int(element) for element in wdata[i].split()[2:6]],
+                dtype='intc',
+                order='C')
         if "begin atoms_cart" in line.lower():
             positions_cart = True
             positions_start = i + 1
@@ -442,19 +439,20 @@ def lattice_w90(lattice):
     kpointswannier = np.zeros((numkpoints, 3))
     for i, line in enumerate(wdata[positions_start:positions_end]):
         splitted = line.split()
-        positions.append([float(element)
-                          for element in splitted[1:4]])
+        positions.append([float(element) for element in splitted[1:4]])
         atomtypes.append(splitted[0])
     positions = np.array(positions, dtype='double', order='C')
-    species = np.array([constants.elements[atom.lower()]
-                        for atom in atomtypes], dtype='intc', order='C')
+    species = np.array(
+        [constants.elements[atom.lower()] for atom in atomtypes],
+        dtype='intc',
+        order='C')
 
     for i, line in enumerate(wdata[kpoints_start:kpoints_end]):
         kpointswannier[i] = np.array(
             [float(element) for element in line.split()])
 
     # pull k-points back into zone
-    lattice.pull_points_back_into_zone(kpointswannier)
+    pull_points_back_into_zone(kpointswannier)
 
     # fetch sorting indexes
     k_sort_index = utils.fetch_sorting_indexes(kpointswannier)
@@ -482,9 +480,9 @@ def lattice_w90(lattice):
 
 def bandstructure_param(bs, location=None, filename=None):
     """
-    Sets the bandstructure from the parameters in the
-    bandstructure configuration file (default bandparam.yml).
-    Also load and store the parameters.
+    Sets the bandstructure from the parameters in the bandstructure configuration file (default bandparam.yml).
+
+    Also loads and stores the parameters.
 
     Parameters
     ----------
@@ -511,7 +509,7 @@ def bandstructure_param(bs, location=None, filename=None):
     """
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running bandstructure_param.")
 
     # read the band parameter file
@@ -522,8 +520,7 @@ def bandstructure_param(bs, location=None, filename=None):
     # what about energy shifts? if the user set any of the
     # parameters relevant for the Fermi level, give warning
     # and continue
-    if (bs.param.e_fermi or bs.param.e_fermi_in_gap
-            or bs.param.e_vbm):
+    if (bs.param.e_fermi or bs.param.e_fermi_in_gap or bs.param.e_vbm):
         logger.info("User have set 'e_fermi' and/or 'e_fermi_in_gap' "
                     "and/or 'e_vbm' to True, but this options are "
                     "not supported for the parametric band "
@@ -553,11 +550,11 @@ def bandstructure_param(bs, location=None, filename=None):
     bs.direct = None
 
 
-def bandstructure_vasp(bs, location=None, filename=None):
+def bandstructure_vasp(bs, location=None, filename=None):  # pylint: disable=too-many-locals # noqa: MC0001
     """
-    Sets the bandstructure from a VASP XML file and
-    loads and stores the parameters in the bandstructure
-    configuration file (defaults to bandparam.yml).
+    Sets the bandstructure from a VASP XML file.
+
+    Loads and stores the parameters in the bandstructure configuration file (defaults to bandparam.yml).
 
     Parameters
     ----------
@@ -593,7 +590,7 @@ def bandstructure_vasp(bs, location=None, filename=None):
     """
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running bandstructure_vasp.")
 
     if filename is None:
@@ -608,16 +605,11 @@ def bandstructure_vasp(bs, location=None, filename=None):
     utils.check_file(vasp_filename)
     tree = ET.ElementTree(file=vasp_filename)
 
-    # fetch nelect
-    nelect = int(float(tree.find(
-        './/parameters/separator[@name="electronic"]/'
-        'i[@name="NELECT"]').text))
-
     # fetch ispin
-    ispin = int(tree.find(
-        './/parameters/separator[@name="electronic"]/'
-        'separator[@name="electronic spin"]/'
-        'i[@name="ISPIN"]').text)
+    ispin = int(
+        tree.find('.//parameters/separator[@name="electronic"]/'
+                  'separator[@name="electronic spin"]/'
+                  'i[@name="ISPIN"]').text)
 
     # if ISPIN = 2 quit (not sufficiently tested)
     if ispin == 2:
@@ -631,10 +623,9 @@ def bandstructure_vasp(bs, location=None, filename=None):
 
     # check first if list generated k-points, then break
     if tree.find('.//kpoints/generation[@param="listgenerated"]'):
-        logger.error(
-            "The supplied vasprun.xml contain list generated k-point "
-            "sets. Please rerun VASP using a dense converged IBZ or "
-            "with KINTER/LVEL. Exiting.")
+        logger.error("The supplied vasprun.xml contain list generated k-point "
+                     "sets. Please rerun VASP using a dense converged IBZ or "
+                     "with KINTER/LVEL. Exiting.")
         sys.exit(1)
 
     # fetch KINTER
@@ -657,17 +648,16 @@ def bandstructure_vasp(bs, location=None, filename=None):
                 './/eigenvalues[@comment="interpolated"]')
         dos_base = tree.find('.//dos[@comment="interpolated"]')
     else:
-        energies_base = tree.find(
-            './/eigenvalues')
+        energies_base = tree.find('.//eigenvalues')
         dos_base = tree.find('.//dos')
 
     # initialize arrays
     # if ISPIN=2, pad energies (num bands=2*NBANDS, set of down, then
     # set of up)
     numkpoints = bs.lattice.kmesh.shape[0]
-    numbands = int(tree.find(
-        './/parameters/separator[@name="electronic"]/'
-        'i[@name="NBANDS"]').text)
+    numbands = int(
+        tree.find('.//parameters/separator[@name="electronic"]/'
+                  'i[@name="NBANDS"]').text)
     if ispin > 1:
         energiesvasp = np.zeros((2 * numbands, numkpoints))
         if lvel:
@@ -688,15 +678,14 @@ def bandstructure_vasp(bs, location=None, filename=None):
         bs.spin_degen = np.full(numbands, 2, dtype="intc")
     # now read energies and/or velocities
     for spin in range(1, ispin + 1):
-        energies = energies_base.findall(
-            'array/set/set[@comment="spin ' + str(spin) + '"]/set')
-        dos = dos_base.findall('total/array/set/set[@comment="spin '
-                               + str(spin) + '"]/r')
+        energies = energies_base.findall('array/set/set[@comment="spin ' +
+                                         str(spin) + '"]/set')
+        dos = dos_base.findall('total/array/set/set[@comment="spin ' +
+                               str(spin) + '"]/r')
         # read energies and/or velocities
         for idxk, kpoint in enumerate(energies):
             for idxe, data_per_k in enumerate(kpoint):
-                data = np.fromstring(
-                    data_per_k.text, sep=' ')
+                data = np.fromstring(data_per_k.text, sep=' ')
                 # set index to account for padded values if ISPIN=2
                 energy_index = (spin - 1) * numbands + idxe
                 energiesvasp[energy_index][idxk] = data[0]
@@ -726,12 +715,9 @@ def bandstructure_vasp(bs, location=None, filename=None):
             # if lvel, we have the full BZ dataset, also for the
             # energies
             energiesvasp[band] = energiesvasp[band][k_sort_index]
-            velocitiesvasp[band][0] = velocitiesvasp[
-                band][0][k_sort_index]
-            velocitiesvasp[band][1] = velocitiesvasp[
-                band][1][k_sort_index]
-            velocitiesvasp[band][2] = velocitiesvasp[
-                band][2][k_sort_index]
+            velocitiesvasp[band][0] = velocitiesvasp[band][0][k_sort_index]
+            velocitiesvasp[band][1] = velocitiesvasp[band][1][k_sort_index]
+            velocitiesvasp[band][2] = velocitiesvasp[band][2][k_sort_index]
             occvasp[band] = occvasp[band][k_sort_index]
         else:
             # else, only set energies, as we know we do not have the
@@ -741,8 +727,7 @@ def bandstructure_vasp(bs, location=None, filename=None):
             ibz_energies = energiesvasp[band][0:num_ibz_kpoints]
             ibz_energies = ibz_energies[k_sort_index]
             # then lay out full bz
-            energiesvasp[band] = ibz_energies[
-                bs.lattice.mapping_bz_to_ibz]
+            energiesvasp[band] = ibz_energies[bs.lattice.mapping_bz_to_ibz]
             # then occupancies
             ibz_occ = occvasp[band][0:num_ibz_kpoints]
             ibz_occ = ibz_occ[k_sort_index]
@@ -776,18 +761,16 @@ def bandstructure_vasp(bs, location=None, filename=None):
 
     if bs.band_gap == 0:
         if bs.direct:
-            logger.info(
-                "No band gap was detected and it appears as this is "
-                "a metallic system.")
+            logger.info("No band gap was detected and it appears as this is "
+                        "a metallic system.")
             bs.metallic = True
         else:
-            logger.info(
-                "No band gap was detected and it appears as this is "
-                "a semi-metallic system.")
+            logger.info("No band gap was detected and it appears as this is "
+                        "a semi-metallic system.")
             bs.metallic = True
 
     # no occupancies, set band gap, vbm/cbm
-    if bs.band_gap == None:
+    if bs.band_gap is None:
         logger.info("Occupancies was not available, setting band gap "
                     "to zero and vbm/cbm to the Fermi level supplied by "
                     "VASP.")
@@ -796,20 +779,19 @@ def bandstructure_vasp(bs, location=None, filename=None):
         bs.cbm_value = fermi_energy
     else:
         fermi_diff = fermi_energy - bs.vbm_value
-        if (fermi_diff > constants.zerocut):
+        if fermi_diff > constants.zerocut:
             logger.info(
                 "The fermi_energy from VASP differs by the calculate valence "
-                "band maximum by: " + str(fermi_diff))
+                "band maximum by: %s", str(fermi_diff))
 
     e_adjust = 0.0
     # full band
     # first check that the user have only set one shift parameter
     bs.check_energyshifts()
-    if ((not bs.param.transport_drop_valence) and
-            (not bs.param.transport_drop_conduction)):
+    if ((not bs.param.transport_drop_valence)
+            and (not bs.param.transport_drop_conduction)):
         if ((bs.param.e_fermi) and (not bs.param.e_fermi_in_gap)):
-            logger.info(
-                "Adjusting energies to efermi in vasprun.xml.")
+            logger.info("Adjusting energies to efermi in vasprun.xml.")
             e_adjust = fermi_energy
         elif ((not bs.param.e_fermi) and (bs.param.e_fermi_in_gap)):
             if not bs.metallic:
@@ -822,8 +804,7 @@ def bandstructure_vasp(bs, location=None, filename=None):
                     "manually or use default. Exiting.")
                 sys.exit(1)
         else:
-            logger.info(
-                "Shifting the energies by e_shift.")
+            logger.info("Shifting the energies by e_shift.")
             e_adjust = bs.param.e_shift
     else:
         if not bs.metallic:
@@ -831,15 +812,12 @@ def bandstructure_vasp(bs, location=None, filename=None):
                 logger.info(
                     "Dropping valence band and setting the Fermi level "
                     "to the conduction band minimum.")
-                energiesvasp = np.delete(
-                    energiesvasp, bs.vbm_band, axis=0)
+                energiesvasp = np.delete(energiesvasp, bs.vbm_band, axis=0)
                 e_adjust = bs.cbm_value
             else:
-                logger.info(
-                    "Dropping conduction band and setting the Fermi "
-                    "level to the valence band maximum.")
-                energiesvasp = np.delete(
-                    energiesvasp, bs.cbm_band, axis=0)
+                logger.info("Dropping conduction band and setting the Fermi "
+                            "level to the valence band maximum.")
+                energiesvasp = np.delete(energiesvasp, bs.cbm_band, axis=0)
                 e_adjust = bs.vbm_value
         else:
             logger.error(
@@ -853,12 +831,10 @@ def bandstructure_vasp(bs, location=None, filename=None):
     bs.cbm_value = bs.cbm_value - e_adjust
     dosvasp[:, 0] = dosvasp[:, 0] - e_adjust
     # add a small shift out of zero where the energies are truly zero
-    energiesvasp[np.abs(energiesvasp) <
-                 constants.zerocut] = constants.zerocut
+    energiesvasp[np.abs(energiesvasp) < constants.zerocut] = constants.zerocut
 
     # bandparams contain scattering properties etc.
-    data = inputoutput.readbandparam(
-        location, filename)
+    data = inputoutput.readbandparam(location, filename)
     bandparams = np.zeros((numbands, 2), dtype=np.int8)
     effmass = np.zeros((numbands, 3))
     select_scattering = np.zeros((numbands, 12), dtype='intc')
@@ -1047,17 +1023,17 @@ def bandstructure_vasp(bs, location=None, filename=None):
     if bs.velocities is None:
         bs.gen_velocities = True
         # also generate velocity arrays
-        bs.velocities = np.zeros(
-            (numbands, 3, bs.lattice.kmesh.shape[0]), dtype=np.double)
+        bs.velocities = np.zeros((numbands, 3, bs.lattice.kmesh.shape[0]),
+                                 dtype=np.double)
     else:
         bs.gen_velocities = False
 
 
-def bandstructure_numpy(bs, filename, location=None):
+def bandstructure_numpy(bs, filename, location=None):  # pylint: disable=too-many-locals # noqa: MC0001
     """
-    Sets the bandstructure from a NumPy datafile file and
-    loads and stores the parameters in the bandstructure
-    configuration file (defaults to bandparam.yml).
+    Sets the bandstructure from a NumPy datafile file.
+
+    Loads and stores the parameters in the bandstructure configuration file (defaults to bandparam.yml).
 
     Parameters
     ----------
@@ -1106,15 +1082,14 @@ def bandstructure_numpy(bs, filename, location=None):
     """
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running bandstructure_numpy.")
 
     if filename is None:
         # check param file
         if bs.param.readfile == "":
-            logger.error(
-                "User have to specificy readfile in order to read "
-                "Numpy data files. Exiting.")
+            logger.error("User have to specificy readfile in order to read "
+                         "Numpy data files. Exiting.")
             sys.exit(1)
         else:
             numpy_filename = "input/" + bs.param.readfile
@@ -1124,7 +1099,7 @@ def bandstructure_numpy(bs, filename, location=None):
         else:
             numpy_filename = "input/" + filename
     data = np.load(numpy_filename)
-    # overwrite the ksampling and unit vectors that is calculated based
+    # overwrite the ksampling and unit vectors that are calculated based
     # on the YAML parameter file for celldata
     ksampling = np.zeros(3, dtype="intc")
     for i in range(3):
@@ -1133,12 +1108,13 @@ def bandstructure_numpy(bs, filename, location=None):
     for i in range(3):
         bs.lattice.ksampling[i] = data.shape[i + 1]
 
+    numbands = data.shape[0] - 3
     # set flag to generate velocities later
     if bs.param.read != "numpyv":
         bs.gen_velocities = True
         # also generate velocity arrays
-        bs.velocities = np.zeros(
-            (numbands, 3, bs.lattice.kmesh.shape[0]), dtype=np.double)
+        bs.velocities = np.zeros((numbands, 3, bs.lattice.kmesh.shape[0]),
+                                 dtype=np.double)
         numbands = data.shape[0] - 3
         # silly but this is going to be reworked anyway, should use
         # broadcasting
@@ -1146,7 +1122,7 @@ def bandstructure_numpy(bs, filename, location=None):
             bs.energies[band] = data[3 + band].flatten()
     else:
         bs.gen_velocities = False
-        numbands = (data.shape[0] - 3) / 4
+        numbands = numbands / 4
     numkpoints = np.prod(bs.lattice.ksampling)
     bs.energies = np.zeros((numbands, numkpoints))
     bs.velocities = np.zeros((numbands, 3, numkpoints))
@@ -1160,8 +1136,8 @@ def bandstructure_numpy(bs, filename, location=None):
         bs.energies[band] = data[3 + band].flatten()
         if bs.param.read == "numpyv":
             for x in range(3):
-                bs.velocities[band][x] = data[
-                    3 + band + (x + 1) * numbands].flatten()
+                bs.velocities[band][x] = data[3 + band +
+                                              (x + 1) * numbands].flatten()
 
     # what about energy shifts? if the user set any of the parameters
     # relevant for the Fermi level, give warning and continue
@@ -1176,8 +1152,7 @@ def bandstructure_numpy(bs, filename, location=None):
 
     spin_degen = np.zeros(numbands, dtype="intc")
     # bandparams contain scattering properties etc.
-    data = inputoutput.readbandparam(
-        location, filename="bandparam.yml")
+    data = inputoutput.readbandparam(location, filename="bandparam.yml")
     bandparams = np.zeros((numbands, 2), dtype=np.int8)
     effmass = np.zeros((numbands, 3))
     select_scattering = np.zeros((numbands, 12), dtype='intc')
@@ -1364,10 +1339,11 @@ def bandstructure_numpy(bs, filename, location=None):
     bs.direct = None
 
 
-def bandstructure_w90(bs, location=None, filename=None):
+def bandstructure_w90(bs, location=None, filename=None):  # pylint: disable=too-many-locals, too-many-branches
     """
-    Sets the bandstructure from a Wannier90 output file
-    that is fed into PythTB to reconstruct and (extrapolate
+    Sets the bandstructure from a Wannier90 output file.
+
+    This is fed into PythTB to reconstruct and (extrapolate
     and interpolate the bandstructure on as dense grid as
     necessary). It also loads and stores the parameters in
     the bandstructure configuration file (defaults to bandparam.yml).
@@ -1413,10 +1389,10 @@ def bandstructure_w90(bs, location=None, filename=None):
 
     """
     # lazy import of PythTB (optional)
-    import pythtb
+    import pythtb  # pylint: disable=import-error
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running bandstructure_w90.")
 
     if filename is None:
@@ -1435,8 +1411,8 @@ def bandstructure_w90(bs, location=None, filename=None):
         max_distance=bs.param.dispersion_w90_tb_max_distance)
 
     # do we want the energies on the original grid or a denser one?
-    if (bs.param.dispersion_interpolate and
-            (bs.param.dispersion_interpolate_method == "tb")):
+    if (bs.param.dispersion_interpolate
+            and (bs.param.dispersion_interpolate_method == "tb")):
         logger.info("Detected that the user want extract the energies "
                     "at a denser grid than what was supplied when "
                     "constructing the Wannier model. Switching the "
@@ -1469,8 +1445,7 @@ def bandstructure_w90(bs, location=None, filename=None):
     # now read the bandparam file
     spin_degen = np.zeros(numbands, dtype="intc")
     # bandparams contain scattering properties etc.
-    data = inputoutput.readbandparam(
-        location, filename="bandparam.yml")
+    data = inputoutput.readbandparam(location, filename="bandparam.yml")
     bandparams = np.zeros((numbands, 2), dtype=np.int8)
     effmass = np.zeros((numbands, 3))
     select_scattering = np.zeros((numbands, 12), dtype='intc')
@@ -1659,11 +1634,9 @@ def bandstructure_w90(bs, location=None, filename=None):
     bs.direct = None
 
 
-def read_band_parameters(bs, numbands, location=None,
-                         filename=None):
+def read_band_parameters(bs, numbands, location=None, filename=None):  # pylint: disable=too-many-locals
     """
-    Reads and stores the information in the band
-    parameters configuration file (bandparam.yml).
+    Reads and stores the information in the band parameters configuration file (bandparam.yml).
 
     Parameters
     ----------
@@ -1693,7 +1666,7 @@ def read_band_parameters(bs, numbands, location=None,
     """
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running read_band_parameters.")
 
     # read band parameter file
@@ -1712,19 +1685,18 @@ def read_band_parameters(bs, numbands, location=None,
         try:
             bandparamdata = data["Band " + str(bandparam + 1)]
         except KeyError:
-            logger.error(
-                "The Band X segments in bandparam.yml is not to spec "
-                "or you have not specified the right read flag in "
-                "param.yml. Maybe you are switching to/from a read "
-                "from external data and param reading and forgot to "
-                " also modify bandparams.yml? Exiting.")
+            logger.error("The Band X segments in bandparam.yml is not to spec "
+                         "or you have not specified the right read flag in "
+                         "param.yml. Maybe you are switching to/from a read "
+                         "from external data and param reading and forgot to "
+                         " also modify bandparams.yml? Exiting.")
             sys.exit(1)
         # check for tight binding entries
         if bandparamdata["type"] == 3:
             numtbbands = len(bandparamdata["torb"])
             if numtbbands == 0:
                 numtbbands = bs.lattice.positions.shape[0]
-            for tbband in range(numtbbands):
+            for _ in range(numtbbands):
                 bandparam_for_band.append(bandparam)
             numbands = numbands + numtbbands
         else:
@@ -1772,26 +1744,22 @@ def read_band_parameters(bs, numbands, location=None,
     tight_adj_onsite = []
     for band in range(numbands):
         try:
-            banddata = data[
-                "Band " + str(bandparam_for_band[band] + 1)]
+            banddata = data["Band " + str(bandparam_for_band[band] + 1)]
         except KeyError:
-            logger.error(
-                "The Band X segments in bandparam.yml is not to spec "
-                "or you have not specified the right read flag in "
-                "param.yml. Maybe you are switching to/from a read "
-                "from external data and param reading and forgot to "
-                " also modify bandparams.yml? Exiting.")
+            logger.error("The Band X segments in bandparam.yml is not to spec "
+                         "or you have not specified the right read flag in "
+                         "param.yml. Maybe you are switching to/from a read "
+                         "from external data and param reading and forgot to "
+                         " also modify bandparams.yml? Exiting.")
             sys.exit(1)
-        bandparams[band] = np.array(
-            [banddata["type"], banddata["folding"]])
+        bandparams[band] = np.array([banddata["type"], banddata["folding"]])
         effmass[band] = np.array(banddata["effmass"])
         a[band] = np.array(banddata["a"])
         ascale[band] = banddata["ascale"]
         e0[band] = banddata["e0"]
         status[band] = banddata["status"]
         kshift[band] = np.array(banddata["kshift"])
-        select_scattering[band] = np.array(
-            banddata["select_scattering"])
+        select_scattering[band] = np.array(banddata["select_scattering"])
         explicit_prefact[band] = np.array(banddata["explicit_prefact"])
         explicit_prefact_values[band] = np.array(
             banddata["explicit_prefact_values"])
@@ -1826,11 +1794,10 @@ def read_band_parameters(bs, numbands, location=None,
         # if transport_use_analytic_scattering is also set
         if (bandparams[band][0] != 0
                 and bs.param.transport_use_analytic_scattering):
-            logger.warning(
-                "The supplied band is non-parabolic, while "
-                "transport_use_analytic_scattering is set to True. "
-                "The analytic scattering models are currently only "
-                "valid for parabolic bands. Continuing.")
+            logger.warning("The supplied band is non-parabolic, while "
+                           "transport_use_analytic_scattering is set to True. "
+                           "The analytic scattering models are currently only "
+                           "valid for parabolic bands. Continuing.")
     bs.bandparams = bandparams
     bs.effmass = effmass
     bs.q_energy_trans = q_energy_trans

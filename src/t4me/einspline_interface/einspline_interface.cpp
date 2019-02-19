@@ -19,7 +19,7 @@
 #include "einspline_interface.hpp"
 
 void einspline_execute_uniform(int *num_points, double *boundaryx, double *boundaryy, double *boundaryz, double *data, double *ix, double *iy, double *iz, int ip, int num_bands, double *idata, double *igradx, double *igrady, double *igradz, int grad, char *bc) {
-  
+
   // grid for computation (single uniform)
   Ugrid x_grid;
   Ugrid y_grid;
@@ -63,7 +63,7 @@ void einspline_execute_uniform(int *num_points, double *boundaryx, double *bound
   BCtype_d zBC = {boundary,boundary,0.0,0.0};
 
   int num_kpoints = num_points[0] * num_points[1] * num_points[2];
-  
+
   // create the bspline object
   if (grad==0) {
     for (int band=0;band<num_bands;band++) {
@@ -76,7 +76,7 @@ void einspline_execute_uniform(int *num_points, double *boundaryx, double *bound
 	eval_UBspline_3d_d(spline_3d, ix[i], iy[i], iz[i], &value);
       	// print this line if we encounter NaN values
 	if (std::isnan(value)) {
-	  std::cout << "element " << i << " contains a NaN, coordinate: " << ix[i] << ' ' << 
+	  std::cout << "element " << i << " contains a NaN, coordinate: " << ix[i] << ' ' <<
 	    iy[i] << ' ' << iz[i] << std::endl;
 	}
 	idata[band*ip+i]=value;
@@ -98,23 +98,23 @@ void einspline_execute_uniform(int *num_points, double *boundaryx, double *bound
 	eval_UBspline_3d_d_vg(spline_3d, ix[i], iy[i], iz[i], &value, grad);
 	// print this line if we encounter NaN values
 	if (std::isnan(value)) {
-	  std::cout << "element " << i << " contains a NaN, coordinate: " << ix[i] << ' ' << 
+	  std::cout << "element " << i << " contains a NaN, coordinate: " << ix[i] << ' ' <<
 	    iy[i] << ' ' << iz[i] << std::endl;
 	}
 	idata[band*ip+i]=value;
 	if (std::isnan(grad[0])) {
-	  std::cout << "element grad[0]" << i << " contains a NaN, coordinate: " << ix[i] << ' ' << 
-	    iy[i] << ' ' << iz[i] << std::endl;	  
+	  std::cout << "element grad[0]" << i << " contains a NaN, coordinate: " << ix[i] << ' ' <<
+	    iy[i] << ' ' << iz[i] << std::endl;
 	}
 	igradx[band*ip+i]=grad[0];
 	if (std::isnan(grad[1])) {
-	  std::cout << "element grad[1]" << i << " contains a NaN, coordinate: " << ix[i] << ' ' << 
-	    iy[i] << ' ' << iz[i] << std::endl;	  
+	  std::cout << "element grad[1]" << i << " contains a NaN, coordinate: " << ix[i] << ' ' <<
+	    iy[i] << ' ' << iz[i] << std::endl;
 	}
 	igrady[band*ip+i]=grad[1];
 	if (std::isnan(grad[2])) {
-	  std::cout << "element grad[2]" << i << " contains a NaN, coordinate: " << ix[i] << ' ' << 
-	    iy[i] << ' ' << iz[i] << std::endl;	  
+	  std::cout << "element grad[2]" << i << " contains a NaN, coordinate: " << ix[i] << ' ' <<
+	    iy[i] << ' ' << iz[i] << std::endl;
 	}
 	igradz[band*ip+i]=grad[2];
       }
@@ -122,19 +122,19 @@ void einspline_execute_uniform(int *num_points, double *boundaryx, double *bound
       destroy_Bspline(spline_3d);
     }
     delete [] grad;
-  } 
+  }
 }
 
 void einspline_execute_nonuniform(int *num_points, double *gridx, double *gridy, double *gridz, double *data, double *ix, double *iy, double *iz, int ip, int num_bands, double *idata, double *igradx, double *igrady, double *igradz, int grad, char *bc) {
 
   // grid for computation (single uniform)
-  NUgrid *x_grid = create_general_grid (gridx, 
+  NUgrid *x_grid = create_general_grid (gridx,
                                         num_points[0]);
-  NUgrid *y_grid = create_general_grid (gridy, 
+  NUgrid *y_grid = create_general_grid (gridy,
                                         num_points[1]);
-  NUgrid *z_grid = create_general_grid (gridz, 
+  NUgrid *z_grid = create_general_grid (gridz,
                                         num_points[2]);
-  
+
   bc_code boundary=NATURAL;
 
   if (strcmp(bc,"PERIODIC")==0) {
@@ -162,9 +162,9 @@ void einspline_execute_nonuniform(int *num_points, double *gridx, double *gridy,
   BCtype_d xBC = {boundary,boundary,0.0,0.0};
   BCtype_d yBC = {boundary,boundary,0.0,0.0};
   BCtype_d zBC = {boundary,boundary,0.0,0.0};
-  
+
   int num_kpoints = num_points[0];
-  
+
   // create the bspline object
   if (grad==0) {
     for (int band=0;band<num_bands;band++) {
@@ -177,7 +177,7 @@ void einspline_execute_nonuniform(int *num_points, double *gridx, double *gridy,
 	eval_NUBspline_3d_d(spline_3d, ix[i], iy[i], iz[i], &value);
       	// print this line if we encounter NaN values
 	if (std::isnan(value)) {
-	  std::cout << "element " << i << " contains a NaN, coordinate: " << ix[i] << ' ' << 
+	  std::cout << "element " << i << " contains a NaN, coordinate: " << ix[i] << ' ' <<
 	    iy[i] << ' ' << iz[i] << std::endl;
 	}
 	idata[band*ip+i]=value;
@@ -199,23 +199,23 @@ void einspline_execute_nonuniform(int *num_points, double *gridx, double *gridy,
 	eval_NUBspline_3d_d_vg(spline_3d, ix[i], iy[i], iz[i], &value, grad);
 	// print this line if we encounter NaN values
 	if (std::isnan(value)) {
-	  std::cout << "element " << i << " contains a NaN, coordinate: " << ix[i] << ' ' << 
+	  std::cout << "element " << i << " contains a NaN, coordinate: " << ix[i] << ' ' <<
 	    iy[i] << ' ' << iz[i] << std::endl;
 	}
 	idata[band*ip+i]=value;
 	if (std::isnan(grad[0])) {
-	  std::cout << "element grad[0]" << i << " contains a NaN, coordinate: " << ix[i] << ' ' << 
-	    iy[i] << ' ' << iz[i] << std::endl;	  
+	  std::cout << "element grad[0]" << i << " contains a NaN, coordinate: " << ix[i] << ' ' <<
+	    iy[i] << ' ' << iz[i] << std::endl;
 	}
 	igradx[band*ip+i]=grad[0];
 	if (std::isnan(grad[1])) {
-	  std::cout << "element grad[1]" << i << " contains a NaN, coordinate: " << ix[i] << ' ' << 
-	    iy[i] << ' ' << iz[i] << std::endl;	  
+	  std::cout << "element grad[1]" << i << " contains a NaN, coordinate: " << ix[i] << ' ' <<
+	    iy[i] << ' ' << iz[i] << std::endl;
 	}
 	igrady[band*ip+i]=grad[1];
 	if (std::isnan(grad[2])) {
-	  std::cout << "element grad[2]" << i << " contains a NaN, coordinate: " << ix[i] << ' ' << 
-	    iy[i] << ' ' << iz[i] << std::endl;	  
+	  std::cout << "element grad[2]" << i << " contains a NaN, coordinate: " << ix[i] << ' ' <<
+	    iy[i] << ' ' << iz[i] << std::endl;
 	}
 	igradz[band*ip+i]=grad[2];
       }

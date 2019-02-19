@@ -1,4 +1,7 @@
 #!/usr/bin/python
+"""Contains some information needed by timing function."""
+# pylint: disable=invalid-name
+
 import pstats
 p = pstats.Stats('timings')
 # keys available for sort stats

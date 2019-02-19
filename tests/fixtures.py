@@ -5,6 +5,7 @@ import t4me.inputoutput as inputoutput
 import t4me.lattice as lattice
 import t4me.bandstructure as bandstructure
 
+
 @pytest.fixture
 def read_and_setup_bs(request):
     """
@@ -26,11 +27,9 @@ def read_and_setup_bs(request):
     location = os.path.dirname(__file__) + \
         "/test_data/" + str(request.param)
     # read parameters, generate lattice and bands
-    param = inputoutput.Param(inputoutput.readparam(
-        location=location))
+    param = inputoutput.Param(inputoutput.readparam(location=location))
     lat = lattice.Lattice(param, location=location)
-    bs = bandstructure.Bandstructure(lat, param,
-                                     location=location)
+    bs = bandstructure.Bandstructure(lat, param, location=location)
     return bs
 
 
@@ -45,7 +44,7 @@ def may_data():
     Parameters
     ----------
     None
-    
+
     Returns
     -------
     data : ndarray
@@ -73,21 +72,17 @@ def may_data():
 
     """
     data = np.zeros((11, 5))
-    
+
     # unitless eta values (chempot/k_bT)
     # data[:, 0] = [-3, -2, -1, 0, 1, 2, 3, 4, 6, 8, 10]
     # data[:, 0] = [-10, -8, -6, -4, -3, -2, -1, 0, 1, 2, 3]
     data[:, 0] = [3, 2, 1, 0, -1, -2, -3, -4, -6, -8, -10]
     # Seebeck coefficient in microV/K
-    data[:, 1] = [432.97, 350.24, 272.50, 204.50,
-                  150.88, 112.39, 86.09, 68.22, 46.95, 35.40, 28.35]
+    data[:, 1] = [432.97, 350.24, 272.50, 204.50, 150.88, 112.39, 86.09, 68.22, 46.95, 35.40, 28.35]
     # Lorenz coefficient in 10^-8 V^2/K^2
-    data[:, 2] = [1.49, 1.51, 1.54, 1.61,
-                  1.72, 1.86, 1.99, 2.09, 2.24, 2.32, 2.36]
+    data[:, 2] = [1.49, 1.51, 1.54, 1.61, 1.72, 1.86, 1.99, 2.09, 2.24, 2.32, 2.36]
     # carrier concentration in 10^21 cm^-3
-    data[:, 3] = [0.00123, 0.00324, 0.0082, 0.0192, 0.0395,
-                  0.0709, 0.1126, 0.1634, 0.2872, 0.4355, 0.6044]
+    data[:, 3] = [0.00123, 0.00324, 0.0082, 0.0192, 0.0395, 0.0709, 0.1126, 0.1634, 0.2872, 0.4355, 0.6044]
     # unitless hall coefficient
-    data[:, 4] = [1.17, 1.17, 1.16, 1.13,
-                  1.11, 1.08, 1.05, 1.04, 1.02, 1.01, 1.01]
+    data[:, 4] = [1.17, 1.17, 1.16, 1.13, 1.11, 1.08, 1.05, 1.04, 1.02, 1.01, 1.01]
     return data

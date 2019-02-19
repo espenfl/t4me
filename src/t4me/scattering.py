@@ -16,9 +16,11 @@
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
 #!/usr/bin/python
+"""Contains routines to set up the scattering of the charge carriers."""
+
+# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements, too-many-lines, global-statement, too-many-nested-blocks
 
 import sys
-import math
 import logging
 import numpy as np
 import scipy
@@ -26,10 +28,11 @@ import scipy
 import t4me.constants as constants
 
 
-def scattering_dos(tr, dos, energies, select_scattering):
+def scattering_dos(tr, dos, energies, select_scattering):  # pylint: disable=too-many-locals, too-many-branches # noqa: MC0001
     """
-    Setup scattering mechnisms and store values in the
-    scattering arrays using the density of states data
+    Setup scattering mechnisms.
+
+    Store values in the scattering arrays using the density of states data
     as the energy dependency.
 
     Parameters
@@ -134,11 +137,10 @@ def scattering_dos(tr, dos, energies, select_scattering):
 
     """
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running scattering_dos.")
-    logger.debug(
-        "Calculating the scattering properties based on the "
-        "models of the density of states.")
+    logger.debug("Calculating the scattering properties based on the "
+                 "models of the density of states.")
 
     # set temperature
     temperatures = tr.temperatures
@@ -147,12 +149,10 @@ def scattering_dos(tr, dos, energies, select_scattering):
     num_bands = tr.bs.energies.shape[0]
     num_energy_steps = energies.shape[0]
     temperature_steps = temperatures.shape[0]
-    prefactor_scattering = np.zeros(
-        (temperature_steps, num_bands, num_scatterings))
-    energy_correction_prefactor = np.zeros((num_bands, num_scatterings))
-    energy_r_correction = np.zeros((num_bands, num_scatterings))
-    scattering = np.zeros((temperature_steps, num_bands,
-                           num_energy_steps, num_scatterings))
+    prefactor_scattering = np.zeros((temperature_steps, num_bands,
+                                     num_scatterings))
+    scattering = np.zeros((temperature_steps, num_bands, num_energy_steps,
+                           num_scatterings))
     inc_in_total = np.zeros((num_bands, num_scatterings), dtype=bool)
     tr.tau_energy_trans = np.zeros((num_bands, num_scatterings))
     # prepare stuff that does not depend on temperature
@@ -166,8 +166,7 @@ def scattering_dos(tr, dos, energies, select_scattering):
         constants.kb / (constants.hbar * constants.jtoev)
     scaling[1, 0] = 1e2 * constants.pi / (2.0 * constants.jtoev)
     scaling[1, 1] = 1e-4 * constants.hbar
-    scaling[2, 0] = 1e5 * constants.pi / (constants.hbar *
-                                          constants.jtoev)
+    scaling[2, 0] = 1e5 * constants.pi / (constants.hbar * constants.jtoev)
     scaling[2, 1] = 1e2 * constants.pi / (2.0 * constants.jtoev)
     scaling[3, 0] = 2 * constants.pi
     # check that we do not loop over several temperatures
@@ -184,46 +183,41 @@ def scattering_dos(tr, dos, energies, select_scattering):
     # build prefix array
     # loop temperature
     for tempi, tempv in np.ndenumerate(temperatures):
-        betainv = constants.kb * tempv
         # loop scattering mechanisms
         for band in range(num_bands):
             emi = 0.0
             sign = 1.0
             # fetch which scattering processes set for total sum
             inc_in_total[band] = tr.bs.select_scattering[band]
-            for scattering_index, scattering_value in \
+            for scattering_index, _ in \
                     np.ndenumerate(select_scattering[band]):
-                """ This portion sets the scattering array based
-                on the more general density of states models.
 
-                tau=tau_0/DOS(E+E_trans),
+                # This portion sets the scattering array based
+                # on the more general density of states models.
 
-                where E_trans is some transfer energy.
+                # tau=tau_0/DOS(E+E_trans),
 
-                However, in this routine we use the inverse values
-                (scattering rates), w (propto DOS(E))
+                # where E_trans is some transfer energy.
 
-                """
-
+                # However, in this routine we use the inverse values
+                # (scattering rates), w (propto DOS(E))
                 if scattering_index[0] == 0:
-                    """ Elastic acoustic phonon scattering
+                    # Elastic acoustic phonon scattering
 
-                    w0[0] = pi*k*T*D_a^2/(hbar*v^2*rho)
+                    # w0[0] = pi*k*T*D_a^2/(hbar*v^2*rho)
 
-                    D_a = acoustic deformation potential [eV]
-                    v = speed of sound [m/s]
-                    rho = mass density [g/cm^3]
+                    # D_a = acoustic deformation potential [eV]
+                    # v = speed of sound [m/s]
+                    # rho = mass density [g/cm^3]
 
-                    and DOS in units of 1/(eV AA^3) yields w0
-                    in units of fs as for the parabolic case
+                    # and DOS in units of 1/(eV AA^3) yields w0
+                    # in units of fs as for the parabolic case
 
-                    tau0[0] = pi*D^2/(hbar*v^2*rho)
+                    # tau0[0] = pi*D^2/(hbar*v^2*rho)
 
-                    units are the same, but the kT factor is added
-                    on the fly to account for temperature
-                    dependent data arrays
-
-                    """
+                    # units are the same, but the kT factor is added
+                    # on the fly to account for temperature
+                    # dependent data arrays
                     if tr.bs.explicit_prefact[band][0]:
                         prefactor_scattering[tempi,
                                              band,
@@ -241,17 +235,15 @@ def scattering_dos(tr, dos, energies, select_scattering):
                                                              2.0) / rho
 
                 elif scattering_index[0] == 1:
-                    """ Nonpolar optical phonon scattering
+                    # Nonpolar optical phonon scattering
 
-                    w0[1]=pi*D_o^2*(n_op+1/2-/+1/2)/(2*rho*omega_op)
+                    # w0[1]=pi*D_o^2*(n_op+1/2-/+1/2)/(2*rho*omega_op)
 
-                    D_o = non-polar optical deformation potential [eV/AA]
-                    n_op = optical phonon occupation number
-                    rho = mass density [g/cm^3]
-                    omega_op = optical phonon angular frequency
-                    (often Einstein) [THz]
-
-                    """
+                    # D_o = non-polar optical deformation potential [eV/AA]
+                    # n_op = optical phonon occupation number
+                    # rho = mass density [g/cm^3]
+                    # omega_op = optical phonon angular frequency
+                    # (often Einstein) [THz]
                     if tr.bs.explicit_prefact[band][1]:
                         prefactor_scattering[tempi,
                                              band,
@@ -274,20 +266,18 @@ def scattering_dos(tr, dos, energies, select_scattering):
                             (n + 1.0 * emi) / (rho * omega)
 
                 elif scattering_index[0] == 2:
-                    """ Intervalley phonon scattering
+                    # Intervalley phonon scattering
 
-                    w0[2]=pi*D_vv'^2*(n_vv'+1/2-/+1/2)/(2*rho*omega_vv')
+                    # w0[2]=pi*D_vv'^2*(n_vv'+1/2-/+1/2)/(2*rho*omega_vv')
 
-                    D_vv'=sqrt(|D_a*q_vv'|^2+D_o^2)
+                    # D_vv'=sqrt(|D_a*q_vv'|^2+D_o^2)
 
-                    D_a = acoustic deformation potential [eV]
-                    D_o = non-polar optical deformation potential [eV/AA]
-                    n_vv' = intervalley phonon occupation number
-                    rho = mass density [g/cm^3]
-                    omega_vv' = intervalley transition phonon angular
-                                frequency [THz]
-
-                    """
+                    # D_a = acoustic deformation potential [eV]
+                    # D_o = non-polar optical deformation potential [eV/AA]
+                    # n_vv' = intervalley phonon occupation number
+                    # rho = mass density [g/cm^3]
+                    # omega_vv' = intervalley transition phonon angular
+                    #             frequency [THz]
                     if tr.bs.explicit_prefact[band][2]:
                         prefactor_scattering[tempi,
                                              band,
@@ -302,8 +292,8 @@ def scattering_dos(tr, dos, energies, select_scattering):
                         omega = tr.bs.omegavv[band]
                         if tr.bs.emi[band]:
                             emi = 1.0
-                        dvv = np.sqrt(np.power(
-                            scaling[2, 0] * da * q_length, 2.0) +
+                        dvv = np.sqrt(
+                            np.power(scaling[2, 0] * da * q_length, 2.0) +
                             np.power(scaling[2, 1] * do, 2.0))
                         prefactor_scattering[
                             tempi, band, scattering_index] = \
@@ -311,14 +301,12 @@ def scattering_dos(tr, dos, energies, select_scattering):
                             (n + 1.0 * emi) / (rho * omega)
 
                 elif scattering_index[0] == 3:
-                    """ Polar optical phonon scattering
+                    # Polar optical phonon scattering
 
-                    w0[3]=2*pi*e^2*F^2*(n_op+1/2-/+1/2/hbar
+                    # w0[3]=2*pi*e^2*F^2*(n_op+1/2-/+1/2/hbar
 
-                    F = Frohlich expression [?]
-                    n_op = optical phonon occupation number
-
-                    """
+                    # F = Frohlich expression [?]
+                    # n_op = optical phonon occupation number
                     if tr.bs.explicit_prefact[band][3]:
                         prefactor_scattering[tempi,
                                              band,
@@ -330,7 +318,8 @@ def scattering_dos(tr, dos, energies, select_scattering):
                         n = tr.bs.no[band]
                         # NO OMEGA YET, COMES FROM THE FROHLICH ++
                         tr.tau_energy_trans[
-                            band, scattering_index] = sign * scaling[1, 1] * omega
+                            band,
+                            scattering_index] = sign * scaling[1, 1] * omega
                         if tr.bs.emi[band]:
                             emi = 1.0
                         prefactor_scattering[
@@ -401,8 +390,8 @@ def scattering_dos(tr, dos, energies, select_scattering):
     scattering_inv = np.nan_to_num(scattering_inv)
     scattering_total_inv = np.nan_to_num(scattering_total_inv)
     # tau0 for use in the closed Fermi integrals
-    prefactor_scattering[prefactor_scattering <
-                         constants.zero] = constants.zero
+    prefactor_scattering[
+        prefactor_scattering < constants.zero] = constants.zero
     scattering_tau0 = np.nan_to_num(1.0 / prefactor_scattering)
     # now make sure the non selected scattering mechanisms
     # contain very large value (so
@@ -412,11 +401,11 @@ def scattering_dos(tr, dos, energies, select_scattering):
     return scattering_inv, scattering_total_inv, scattering_tau0
 
 
-def scattering_parabolic(tr, energies, select_scattering,
-                         use_eonk=False):
+def scattering_parabolic(tr, energies, select_scattering, use_eonk=False):  # pylint: disable=too-many-locals # noqa: MC0001
     """
-    Setup scattering mechnisms and store values in the
-    scattering arrays using parabolic band dispersions
+    Setup scattering mechnisms.
+
+    Store values in the scattering arrays using parabolic band dispersions
     as an approximation.
 
     Parameters
@@ -504,11 +493,10 @@ def scattering_parabolic(tr, energies, select_scattering,
 
     """
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running scattering_parabolic.")
-    logger.debug(
-        "Calculating the scattering properties based on the "
-        "analytic parabolic scattering models.")
+    logger.debug("Calculating the scattering properties based on the "
+                 "analytic parabolic scattering models.")
 
     # set temperatures
     temperatures = tr.temperatures
@@ -524,12 +512,12 @@ def scattering_parabolic(tr, energies, select_scattering,
         num_energy_steps = tr.bs.energies.shape[1]
     factor = np.zeros((num_bands, num_scatterings))
     temperature_steps = temperatures.shape[0]
-    prefactor_scattering = np.zeros(
-        (temperature_steps, num_bands, num_scatterings))
+    prefactor_scattering = np.zeros((temperature_steps, num_bands,
+                                     num_scatterings))
     energy_correction_prefactor = np.zeros((num_bands, num_scatterings))
     energy_r_correction = np.zeros((num_bands, num_scatterings))
-    scattering = np.zeros((temperature_steps, num_bands,
-                           num_energy_steps, num_scatterings))
+    scattering = np.zeros((temperature_steps, num_bands, num_energy_steps,
+                           num_scatterings))
     inc_in_total = np.zeros((num_bands, num_scatterings), dtype=bool)
     tr.tau_energy_trans = np.zeros((num_bands, num_scatterings))
     # prepare stuff that does not depend on temperature
@@ -604,7 +592,6 @@ def scattering_parabolic(tr, energies, select_scattering,
     # build prefix array
     # loop temperature
     for tempi, tempv in np.ndenumerate(temperatures):
-        betainv = constants.kb * tempv
         # loop scattering mechanisms
         for band in range(num_bands):
             emi = 0.0
@@ -621,38 +608,34 @@ def scattering_parabolic(tr, energies, select_scattering,
             effmass = abs(effmass)
             # fetch which scattering processes set for total sum
             inc_in_total[band] = tr.bs.select_scattering[band]
-            for scattering_index, scattering_value in \
+            for scattering_index, _ in \
                     np.ndenumerate(select_scattering[band]):
-                """ This portion sets the scattering array based
-                on the well established parabolic scattering models
+                # This portion sets the scattering array based
+                # on the well established parabolic scattering models
 
-                tau=tau_0*E^{r-1/2}
+                # tau=tau_0*E^{r-1/2}
 
-                However, in this routine we use the inverse values
-                (scattering rates), w and invert at the end
-
-                """
+                # However, in this routine we use the inverse values
+                # (scattering rates), w and invert at the end
                 if scattering_index[0] == 0:
-                    """ Elastic acoustic phonon scattering
+                    # Elastic acoustic phonon scattering
 
-                    r = 0
+                    # r = 0
 
-                    w0=(sqrt(2)*m^3/2*k*T*D^2)/(pi*hbar^4*rho*v^2)
+                    # w0=(sqrt(2)*m^3/2*k*T*D^2)/(pi*hbar^4*rho*v^2)
 
-                    (with spin degen included)
+                    # (with spin degen included)
 
-                    energy dep = E^1/2
+                    # energy dep = E^1/2
 
-                    m = effective mass [kg]
-                    D = acoustic deformation potential [eV]
-                    v = speed of sound [m/s]
-                    rho = mass density [g/cm^3]
+                    # m = effective mass [kg]
+                    # D = acoustic deformation potential [eV]
+                    # v = speed of sound [m/s]
+                    # rho = mass density [g/cm^3]
 
-                    BOTH ABSORPTION AND EMMISION
+                    # BOTH ABSORPTION AND EMMISION
 
-                    ONLY ELASTIC, e.g. hbar q v << kT
-
-                    """
+                    # ONLY ELASTIC, e.g. hbar q v << kT
                     if tr.bs.explicit_prefact[band][0]:
                         prefactor_scattering[tempi,
                                              band,
@@ -671,25 +654,23 @@ def scattering_parabolic(tr, energies, select_scattering,
                             factor[band, scattering_index] * tempv
 
                 if scattering_index[0] == 1:
-                    """ Nonpolar optical scattering
+                    # Nonpolar optical scattering
 
-                    r = 0
+                    # r = 0
 
-                    w0=(m^3/2*D_o^2)/(sqrt(2)*pi*hbar^3*rho*omega_op)
-                         *(n_op+1/2-/+1/2)
+                    # w0=(m^3/2*D_o^2)/(sqrt(2)*pi*hbar^3*rho*omega_op)
+                    #      *(n_op+1/2-/+1/2)
 
-                    energy dep = (E +/- hbar*omega_op)^1/2
+                    # energy dep = (E +/- hbar*omega_op)^1/2
 
-                    m = effective mass, units of m_e
-                    D = non-polar optical deformation potential [eV/AA]
-                    n_op = optical phonon occupation number
-                    rho = mass density [g/cm^3]
-                    omega_op = optical phonon angular frequency
-                               (often Einstein) [THz]
+                    # m = effective mass, units of m_e
+                    # D = non-polar optical deformation potential [eV/AA]
+                    # n_op = optical phonon occupation number
+                    # rho = mass density [g/cm^3]
+                    # omega_op = optical phonon angular frequency
+                    #            (often Einstein) [THz]
 
-                    NO EMMISION IF E<hbar omega
-
-                    """
+                    # NO EMMISION IF E<hbar omega
                     if tr.bs.explicit_prefact[band][1]:
                         prefactor_scattering[tempi,
                                              band,
@@ -705,8 +686,7 @@ def scattering_parabolic(tr, energies, select_scattering,
                                 emi = 1.0
                                 sign = -1.0
                             temp = sign * scaling[1, 1] * omega
-                            energy_r_correction[
-                                band, scattering_index] = temp
+                            energy_r_correction[band, scattering_index] = temp
                             # set the transfer energy (used sometimes when
                             # integrating the explicit tau)
                             tr.tau_energy_trans[
@@ -720,34 +700,32 @@ def scattering_parabolic(tr, energies, select_scattering,
                             factor[band, scattering_index]
 
                 if scattering_index[0] == 2:
-                    """ Intervalley phonon scattering
+                    # Intervalley phonon scattering
 
-                    r = 0
+                    # r = 0
 
-                    w0=m^3/2*D_vv'^2*Z_f)/(sqrt(2)*pi*hbar^3*rho*omega_vv')
-                         *(n_vv'+1/2-/+1/2)
+                    # w0=m^3/2*D_vv'^2*Z_f)/(sqrt(2)*pi*hbar^3*rho*omega_vv')
+                    #      *(n_vv'+1/2-/+1/2)
 
-                    energy dep = (E +/- hbar*omega_vv' - dE_vv')^1/2
+                    # energy dep = (E +/- hbar*omega_vv' - dE_vv')^1/2
 
-                    m = effective mass, units of m_e
-                    Z_f = numer of possible final states (final degeneracy)
-                    D_vv'=sqrt(|D_a*q_vv'|^2+D_o^2)
-                    D_a = acoustic deformation potential [eV]
-                    D_o = non-polar optical deformation potential [eV/AA]
-                    n_vv' = intervalley phonon occupation number
-                    rho = mass density [g/cm^3]
-                    omega_vv' = intervalley transition phonon angular
-                                frequency [THz]
+                    # m = effective mass, units of m_e
+                    # Z_f = numer of possible final states (final degeneracy)
+                    # D_vv'=sqrt(|D_a*q_vv'|^2+D_o^2)
+                    # D_a = acoustic deformation potential [eV]
+                    # D_o = non-polar optical deformation potential [eV/AA]
+                    # n_vv' = intervalley phonon occupation number
+                    # rho = mass density [g/cm^3]
+                    # omega_vv' = intervalley transition phonon angular
+                    #             frequency [THz]
 
-                    NO ABSORPTION OR EMMISION IF E < hbar omega - etrans
-                    (i=initial, f=final)
+                    # NO ABSORPTION OR EMMISION IF E < hbar omega - etrans
+                    # (i=initial, f=final)
 
-                    where
+                    # where
 
-                    etrans = energy difference between the bottoms of the
-                             final and initial valley [eV]
-
-                    """
+                    # etrans = energy difference between the bottoms of the
+                    #          final and initial valley [eV]
                     if tr.bs.explicit_prefact[band][2]:
                         prefactor_scattering[tempi,
                                              band,
@@ -766,9 +744,10 @@ def scattering_parabolic(tr, energies, select_scattering,
                             if tr.bs.emi[band]:
                                 emi = 1.0
                                 sign = -1.0
-                            # TODO: generalize D_a*q to vector form
-                            dvv = np.sqrt(np.power(da * q_length, 2.0) +
-                                          np.power(do, 2.0))
+                            # TODO: generalize D_a*q to vector form pylint: disable=fixme
+                            dvv = np.sqrt(
+                                np.power(da * q_length, 2.0) +
+                                np.power(do, 2.0))
                             temp = sign * scaling[2, 1] * omega - etrans
                             energy_r_correction[band, scattering_index] = temp
                             # set the transfer energy (used sometimes when
@@ -782,28 +761,26 @@ def scattering_parabolic(tr, energies, select_scattering,
                             factor[band, scattering_index]
 
                 if scattering_index[0] == 3:
-                    """ Polar optical phonon scattering
+                    # Polar optical phonon scattering
 
-                    r = 1, with corrections (not a simple energy relation)
+                    # r = 1, with corrections (not a simple energy relation)
 
-                    w0 = (sqrt(m)*e^2*omega)*(1/eps(inf)-1/eps(0))*
-                         (n+1/2-/+1/2)/(4*pi*hbar*sqrt(2))
+                    # w0 = (sqrt(m)*e^2*omega)*(1/eps(inf)-1/eps(0))*
+                    #      (n+1/2-/+1/2)/(4*pi*hbar*sqrt(2))
 
-                    energy dep = E^-1/2 * ln(sqrt(E)+sqrt(E +/- hbar omega)/
-                                 |sqrt(E)-sqrt(E +/- hbar omega)|)
+                    # energy dep = E^-1/2 * ln(sqrt(E)+sqrt(E +/- hbar omega)/
+                    #              |sqrt(E)-sqrt(E +/- hbar omega)|)
 
-                    m = effective mass, units of m_e
-                    omega = optical phonon angular frequency [THz]
-                    eps(inf) = electronic permitivity, units of vacuum
-                               permitivity
-                    eps = ionic permitivity, units of vacuum permitivity
-                    n = optical phonon occupation number
+                    # m = effective mass, units of m_e
+                    # omega = optical phonon angular frequency [THz]
+                    # eps(inf) = electronic permitivity, units of vacuum
+                    #            permitivity
+                    # eps = ionic permitivity, units of vacuum permitivity
+                    # n = optical phonon occupation number
 
-                    ONLY VALID IF E > hbar omega (assume elastic process)
+                    # ONLY VALID IF E > hbar omega (assume elastic process)
 
-                    ALSO, NEGLECTED SCREENING (ONLY VALID FOR HIGHLY DOPED)
-
-                    """
+                    # ALSO, NEGLECTED SCREENING (ONLY VALID FOR HIGHLY DOPED)
                     if tr.bs.explicit_prefact[band][3]:
                         prefactor_scattering[tempi,
                                              band,
@@ -832,28 +809,26 @@ def scattering_parabolic(tr, energies, select_scattering,
                             factor[band, scattering_index]
 
                 if scattering_index[0] == 4:
-                    """ Piezoelectric acoustic phonon scattering
+                    # Piezoelectric acoustic phonon scattering
 
-                    r = 1, with corrections (not a simple energy relation)
+                    # r = 1, with corrections (not a simple energy relation)
 
-                    w0 = ((p^2*sqrt(m)*e^2*k*T)/ \
-                          (sqrt(8)*pi*eps^2*hbar^2*rho*v^2))
+                    # w0 = ((p^2*sqrt(m)*e^2*k*T)/ \
+                    #       (sqrt(8)*pi*eps^2*hbar^2*rho*v^2))
 
-                    energy dep = E^-1/2 * [ln(1+4E/E_0)-1/(1+E_0/4E)]
+                    # energy dep = E^-1/2 * [ln(1+4E/E_0)-1/(1+E_0/4E)]
 
-                    where E_0 = hbar^2 isl^2 / 2 m
+                    # where E_0 = hbar^2 isl^2 / 2 m
 
-                    m = effective mass, unitless units of m_e
-                    p = piezoelectric constant [C/m^2]
-                    T = temperature [K]
-                    eps = electronic dielectric constant [F/m]
-                    rho = mass density [g/cm^3]
-                    v = speed of sound [m/s]
-                    isl = inverse screening length [AA^-1]
+                    # m = effective mass, unitless units of m_e
+                    # p = piezoelectric constant [C/m^2]
+                    # T = temperature [K]
+                    # eps = electronic dielectric constant [F/m]
+                    # rho = mass density [g/cm^3]
+                    # v = speed of sound [m/s]
+                    # isl = inverse screening length [AA^-1]
 
-                    INCLUDES BOTH ABSORPTION AND EMMISION
-
-                    """
+                    # INCLUDES BOTH ABSORPTION AND EMMISION
                     if tr.bs.explicit_prefact[band][4]:
                         prefactor_scattering[tempi,
                                              band,
@@ -882,23 +857,21 @@ def scattering_parabolic(tr, energies, select_scattering,
                             factor[band, scattering_index] * tempv
 
                 if scattering_index[0] == 5:
-                    """ Ionized impurity scattering (BH)
+                    # Ionized impurity scattering (BH)
 
-                    r = 2, with corrections (not a simple energy relation)
+                    # r = 2, with corrections (not a simple energy relation)
 
-                    w0 = Z^2*e^4*n_i/(32*pi*sqrt(2*m)*eps^2)
+                    # w0 = Z^2*e^4*n_i/(32*pi*sqrt(2*m)*eps^2)
 
-                    energy dep = E^-3/2 * (ln(1+gamma)-gamma/(1+gamma))
+                    # energy dep = E^-3/2 * (ln(1+gamma)-gamma/(1+gamma))
 
-                    m = effective mass, units of m_e
-                    Z = number of charge units (of e) of the impurity
-                    n_i = ionized impurity density [10^21 cm^-3]
-                    eps = electronic dielectric constant [in units of epsilon_0]
-                    gamma = 4E/E_0
-                    E_0 = hbar^2 isli^2/2m
-                    isli = inverse screening length in AA^-1
-
-                    """
+                    # m = effective mass, units of m_e
+                    # Z = number of charge units (of e) of the impurity
+                    # n_i = ionized impurity density [10^21 cm^-3]
+                    # eps = electronic dielectric constant [in units of epsilon_0]
+                    # gamma = 4E/E_0
+                    # E_0 = hbar^2 isli^2/2m
+                    # isli = inverse screening length in AA^-1
                     if tr.bs.explicit_prefact[band][5]:
                         prefactor_scattering[tempi,
                                              band,
@@ -910,34 +883,32 @@ def scattering_parabolic(tr, energies, select_scattering,
                             n_i = tr.bs.ni[band]
                             eps = tr.bs.eps[band]
                             isli = tr.bs.isli[band]
-                            e_0 = scaling[5, 1] * np.power(isl, 2.0) / effmass
+                            e_0 = scaling[5, 1] * np.power(isli, 2.0) / effmass
                             denom = np.power(eps, 2.0) * np.sqrt(effmass)
                             if denom < constants.zero:
                                 denom = constants.zero
                                 factor[band, scattering_index] = \
                                     scaling[5, 0] * \
                                     np.power(z, 2.0) * n_i / denom
-                            energy_correction_prefactor[
-                                band, scattering_index] = e_0
+                            energy_correction_prefactor[band,
+                                                        scattering_index] = e_0
                         prefactor_scattering[tempi, band, scattering_index] = \
                             factor[band, scattering_index]
 
                 if scattering_index[0] == 6:
-                    """ Ionized impurity scattering (CW)
+                    # Ionized impurity scattering (CW)
 
-                    r = 2, with corrections (not a simple energy relation)
+                    # r = 2, with corrections (not a simple energy relation)
 
-                    w0 = e^4*n_i/(32*pi*sqrt(2m)*eps^2)
+                    # w0 = e^4*n_i/(32*pi*sqrt(2m)*eps^2)
 
-                    energy dep = E^-3/2 * ln(1+gamma)
+                    # energy dep = E^-3/2 * ln(1+gamma)
 
-                    m = effective mass, units of m_e
-                    n_i = ionized impurity density [10^21 cm^-3]
-                    eps = electronic dielectric constant [in units of epsilon_0]
-                    gamma = (8pi b epsilon E/e^2)^2
-                    b = (3/4pi n_i)^1/3
-
-                    """
+                    # m = effective mass, units of m_e
+                    # n_i = ionized impurity density [10^21 cm^-3]
+                    # eps = electronic dielectric constant [in units of epsilon_0]
+                    # gamma = (8pi b epsilon E/e^2)^2
+                    # b = (3/4pi n_i)^1/3
                     if tr.bs.explicit_prefact[band][6]:
                         prefactor_scattering[tempi,
                                              band,
@@ -948,8 +919,8 @@ def scattering_parabolic(tr, energies, select_scattering,
                             z = tr.bs.z[band]
                             n_i = tr.bs.ni[band]
                             eps = tr.bs.eps[band]
-                            b = np.power(4 * constants.pi *
-                                         n_i / 3.0, -1.0 / 3.0)
+                            b = np.power(  # pylint: disable=assignment-from-no-return
+                                4 * constants.pi * n_i / 3.0, -1.0 / 3.0)
                             factor[band, scattering_index] = scaling[
                                 6, 0] * n_i / np.sqrt(effmass)
                             energy_correction_prefactor[band, scattering_index] = \
@@ -958,23 +929,21 @@ def scattering_parabolic(tr, energies, select_scattering,
                             factor[band, scattering_index]
 
                 if scattering_index[0] == 7:
-                    """ Alloy scattering
+                    # Alloy scattering
 
-                    r = 0
+                    # r = 0
 
-                    w0 = sqrt(2) * V * m^3/2 V_diff^2 x(1-x) / (hbar^4)
+                    # w0 = sqrt(2) * V * m^3/2 V_diff^2 x(1-x) / (hbar^4)
 
-                    energy dep = E^-1/2
+                    # energy dep = E^-1/2
 
-                    m = effective mass, units of m_e
-                    V = volume of unit cell in AA^3
-                    V_diff = difference between the two species atomic
-                             potential in eV
-                    x = the fraction (of e.g. the compound A_xB_(1-x)C)
+                    # m = effective mass, units of m_e
+                    # V = volume of unit cell in AA^3
+                    # V_diff = difference between the two species atomic
+                    #          potential in eV
+                    # x = the fraction (of e.g. the compound A_xB_(1-x)C)
 
-                    NEUTRAL MODEL, OTHERWISE USE IONIZED IMPURITY
-
-                    """
+                    # NEUTRAL MODEL, OTHERWISE USE IONIZED IMPURITY
                     if tr.bs.explicit_prefact[band][7]:
                         prefactor_scattering[tempi,
                                              band,
@@ -1000,17 +969,17 @@ def scattering_parabolic(tr, energies, select_scattering,
     if not use_eonk:
         # use supplied energy grid
         with np.errstate(divide='ignore'):
-            power_energy = np.power(np.abs(energies[np.newaxis, :, np.newaxis] +
-                                           energy_r_correction[:, np.newaxis, :]),
-                                    r_factor_includinghalf[np.newaxis,
-                                                           np.newaxis, :])
+            power_energy = np.power(  # pylint: disable=assignment-from-no-return
+                np.abs(energies[np.newaxis, :, np.newaxis] +
+                       energy_r_correction[:, np.newaxis, :]),
+                r_factor_includinghalf[np.newaxis, np.newaxis, :])
     else:
         # use energies that lies on the k-point grid
         with np.errstate(divide='ignore'):
-            power_energy = np.power(np.abs(energies[:, :, np.newaxis] +
-                                           energy_r_correction[:, np.newaxis, :]),
-                                    r_factor_includinghalf[np.newaxis,
-                                                           np.newaxis, :])
+            power_energy = np.power(  # pylint: disable=assignment-from-no-return
+                np.abs(energies[:, :, np.newaxis] +
+                       energy_r_correction[:, np.newaxis, :]),
+                r_factor_includinghalf[np.newaxis, np.newaxis, :])
 
     # in the following we apply energy corrections
     # remove nan values (force to zero)
@@ -1020,22 +989,23 @@ def scattering_parabolic(tr, energies, select_scattering,
         scattering[:, :, :, 0:num_scatterings - 2] = \
             power_energy[np.newaxis, :, :, 0:num_scatterings - 2] * \
             prefactor_scattering[:, :, np.newaxis, 0:num_scatterings - 2]
-    # TODO: HERE WE SHOULD HAVE A REMOVE NAN AND NUM AGAIN?
+    # TODO: HERE WE SHOULD HAVE A REMOVE NAN AND NUM AGAIN? pylint: disable=fixme
 
     # calculate correction factor for tau[3] (polar optical) and add
-    e_dep = np.sqrt(np.abs(energies[np.newaxis, :]) +
-                    energy_correction_prefactor[:, np.newaxis, 3])
+    e_dep = np.sqrt(
+        np.abs(energies[np.newaxis, :]) +
+        energy_correction_prefactor[:, np.newaxis, 3])
     # remove nan values (force to zero)
     e_dep = np.nan_to_num(e_dep)
     denom = np.abs(np.sqrt(np.abs(energies[np.newaxis, :])) - e_dep)
     denom[denom < constants.zero] = constants.zero
     with np.errstate(divide='ignore'):
-        e_cor_fact = np.log((np.sqrt(np.abs(energies[np.newaxis, :])) +
-                             e_dep) / denom)
+        e_cor_fact = np.log(  # pylint: disable=assignment-from-no-return
+            (np.sqrt(np.abs(energies[np.newaxis, :])) + e_dep) / denom)
     # remove inf values (force to the largest supported value)
     e_cor_fact = np.nan_to_num(e_cor_fact)
-    scattering[:, :, :, 3] = scattering[
-        :, :, :, 3] * e_cor_fact[np.newaxis, :, :]
+    scattering[:, :, :, 3] = scattering[:, :, :, 3] * e_cor_fact[np.
+                                                                 newaxis, :, :]
 
     # calculate correction factor for tau[4] (piezoelectric) and add
     denom = energy_correction_prefactor[:, np.newaxis, 4]
@@ -1048,8 +1018,8 @@ def scattering_parabolic(tr, energies, select_scattering,
     # remove nan values (force to zero)
     # ignore overflow
     with np.errstate(over="ignore"):
-        scattering[:, :, :, 4] = scattering[
-            :, :, :, 4] * e_cor_fact[np.newaxis, :, :]
+        scattering[:, :, :,
+                   4] = scattering[:, :, :, 4] * e_cor_fact[np.newaxis, :, :]
 
     # calculate the correction factor for tau[5] (BH ionized imp) and add
     # (very similar to piezoelectric, but we assume we can have different
@@ -1061,8 +1031,8 @@ def scattering_parabolic(tr, energies, select_scattering,
     # remove inf values (force to the largest supported value)
     e_dep = np.nan_to_num(e_dep)
     e_cor_fact = np.log(1 + e_dep) - e_dep / (e_dep + 1)
-    scattering[:, :, :, 5] = scattering[
-        :, :, :, 5] * e_cor_fact[np.newaxis, :, :]
+    scattering[:, :, :, 5] = scattering[:, :, :, 5] * e_cor_fact[np.
+                                                                 newaxis, :, :]
 
     # calculate the correction factor for tau[6] (CW ionized imp) and add
     # (very similar to BH, but different correction factor)
@@ -1070,9 +1040,9 @@ def scattering_parabolic(tr, energies, select_scattering,
         energy_correction_prefactor[:, np.newaxis, 6]
     # remove inf values (force to the largest supported value)
     e_dep = np.nan_to_num(e_dep)
-    e_cor_fact = np.log(1 + e_dep)
-    scattering[:, :, :, 6] = scattering[
-        :, :, :, 6] * e_cor_fact[np.newaxis, :, :]
+    e_cor_fact = np.log(1 + e_dep)  # pylint: disable=assignment-from-no-return
+    scattering[:, :, :, 6] = scattering[:, :, :, 6] * e_cor_fact[np.
+                                                                 newaxis, :, :]
 
     # now add the constant scattering part given in fs units (so invert)
     prefactor_scattering[:, :, num_scatterings -
@@ -1100,8 +1070,8 @@ def scattering_parabolic(tr, energies, select_scattering,
     scattering = np.nan_to_num(scattering)
     scattering_total_inv = np.nan_to_num(scattering_total_inv)
     # tau0 for use in the closed Fermi integrals
-    prefactor_scattering[prefactor_scattering <
-                         constants.zero] = constants.zero
+    prefactor_scattering[
+        prefactor_scattering < constants.zero] = constants.zero
     scattering_tau0 = np.nan_to_num(1.0 / prefactor_scattering)
     # now make sure the non selected scattering mechanisms contain very
     # large value (so that the scattering rate W=0)
@@ -1133,7 +1103,7 @@ def find_r_for_closed(tr, band):
     """
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running find_r_for_closed.")
 
     # check that only one scattering mech is entered
@@ -1148,7 +1118,7 @@ def find_r_for_closed(tr, band):
 
 
 def combined_scattering(tr, energy, tau0, energy_trans):
-    """
+    r"""
     Calculates the total relaxation time.
 
     Parameters
@@ -1195,17 +1165,17 @@ def combined_scattering(tr, energy, tau0, energy_trans):
     """
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running combined_scattering.")
 
-    tau_decomp = (tau0 *
-                  np.power(energy + energy_trans, 0.5 -
-                           tr.scattering_r_factor))[tr.scattering_tau0_select]
+    tau_decomp = (
+        tau0 * np.power(energy + energy_trans, 0.5 - tr.scattering_r_factor)
+    )[tr.scattering_tau0_select]
     tau_decomp = np.nan_to_num(tau_decomp)
     return np.nan_to_num(1.0 / np.sum(tau_decomp))
 
 
-def interpolate(tr, method="linear"):
+def interpolate(tr, method="linear"):  # pylint: disable=too-many-locals
     """
     Interpolates the scattering array on all available energies.
 
@@ -1223,7 +1193,7 @@ def interpolate(tr, method="linear"):
     -------
     None
 
-    See also
+    See Also
     --------
     scipy.interpolate.interp1d
 
@@ -1235,7 +1205,7 @@ def interpolate(tr, method="linear"):
     """
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running interpolate.")
 
     logger.info("Interpolating the scattering values on the energygrid "
@@ -1243,9 +1213,8 @@ def interpolate(tr, method="linear"):
 
     # check the validity of the method parameter
     if method not in constants.interp1d_methods:
-        logger.error(
-            "The 'method' parameter passed is not a present "
-            "option for your interp1d version. Exiting")
+        logger.error("The 'method' parameter passed is not a present "
+                     "option for your interp1d version. Exiting")
         sys.exit(1)
 
     energies = tr.scattering_energies
@@ -1262,15 +1231,15 @@ def interpolate(tr, method="linear"):
     min_inter_energies = np.amin(inter_energies)
     # need to check if other values are similar to some constant
     # first, check largest
-    replace = np.where(inter_energies >
-                       (max_inter_energies - constants.zerocut))
+    replace = np.where(
+        inter_energies > (max_inter_energies - constants.zerocut))
 
     inter_energies[replace] = inter_energies[replace] - \
         constants.zerocut
 
     # then smallest
-    replace = np.where(inter_energies <
-                       (min_inter_energies + constants.zerocut))
+    replace = np.where(
+        inter_energies < (min_inter_energies + constants.zerocut))
     inter_energies[replace] = inter_energies[replace] + \
         constants.zerocut
 
@@ -1282,19 +1251,19 @@ def interpolate(tr, method="linear"):
     num_bands = scattering_total_inv.shape[1]
     num_energies = inter_energies.shape[1]
     num_scatterings = scattering_inv.shape[3]
-    scattering_total_inv_inter = np.zeros(
-        (num_temp_steps, num_bands, num_energies))
+    scattering_total_inv_inter = np.zeros((num_temp_steps, num_bands,
+                                           num_energies))
     if not tr.param.onlytotalrate:
-        scattering_inv_inter = np.zeros(
-            (num_temp_steps, num_bands, num_energies, num_scatterings))
+        scattering_inv_inter = np.zeros((num_temp_steps, num_bands,
+                                         num_energies, num_scatterings))
     for temp in range(num_temp_steps):
         for band in range(num_bands):
             # do the interpolation of the total first
             inter_total_inv = \
                 scipy.interpolate.interp1d(energies,
                                            scattering_total_inv[temp, band])
-            scattering_total_inv_inter[
-                temp, band] = inter_total_inv(inter_energies[band])
+            scattering_total_inv_inter[temp, band] = inter_total_inv(
+                inter_energies[band])
 
             if not tr.param.onlytotalrate:
                 # and then the decomposed, but only for the selected mechanisms
@@ -1366,36 +1335,29 @@ def pad_scattering_values(tr):
         ebelow = scattering_emin - emin
         numsteps_below = int(np.ceil(ebelow / estep))
         emin = scattering_emin - numsteps_below * estep
-        energies = np.pad(energies,
-                          (numsteps_below, 0),
-                          'linear_ramp',
-                          end_values=(emin, 0))
+        energies = np.pad(
+            energies, (numsteps_below, 0), 'linear_ramp', end_values=(emin, 0))
         # now pad scattering arrays with endvalues below
-        scattering_inv = np.pad(scattering_inv,
-                                ((0, 0), (0, 0),
-                                 (numsteps_below, 0), (0, 0)),
+        scattering_inv = np.pad(scattering_inv, ((0, 0), (0, 0),
+                                                 (numsteps_below, 0), (0, 0)),
                                 'edge')
         scattering_total_inv = np.pad(scattering_total_inv,
                                       ((0, 0), (0, 0),
-                                       (numsteps_below, 0)),
-                                      'edge')
+                                       (numsteps_below, 0)), 'edge')
     if emax > scattering_emax:
         # fetch missing interval above and pad with linear
         # tramp
         eabove = emax - scattering_emax
         numsteps_above = int(np.ceil(eabove / estep))
-        energies = np.pad(energies,
-                          (0, numsteps_above),
-                          'linear_ramp', end_values=(0, emax))
+        energies = np.pad(
+            energies, (0, numsteps_above), 'linear_ramp', end_values=(0, emax))
         # now pad scattering arrays with endvalues above
-        scattering_inv = np.pad(scattering_inv,
-                                ((0, 0), (0, 0),
-                                 (0, numsteps_above), (0, 0)),
+        scattering_inv = np.pad(scattering_inv, ((0, 0), (0, 0),
+                                                 (0, numsteps_above), (0, 0)),
                                 'edge')
         scattering_total_inv = np.pad(scattering_total_inv,
                                       ((0, 0), (0, 0),
-                                       (0, numsteps_above)),
-                                      'edge')
+                                       (0, numsteps_above)), 'edge')
     tr.scattering_inv = scattering_inv
     tr.scattering_total_inv = scattering_total_inv
     tr.scattering_energies = energies
@@ -1403,8 +1365,9 @@ def pad_scattering_values(tr):
 
 def check_scattering(tr):
     """
-    Checks the scattering arrays and that they are dimensionalized
-    to the energy values stored in the current `Bandstructure()`
+    Checks the scattering arrays.
+
+    Also that they are dimensionalized to the energy values stored in the current `Bandstructure()`
     object.
 
     Parameters
@@ -1419,7 +1382,7 @@ def check_scattering(tr):
     """
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running check_scattering.")
 
     try:

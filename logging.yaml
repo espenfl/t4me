@@ -24,20 +24,20 @@ formatters:
     format: "%(asctime)s %(message)s\n"
   detailed:
     format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s\n"
-    
+
 handlers:
   console:
     class: logging.StreamHandler
-    level: ERROR 
+    level: ERROR
     formatter: detailed
     stream: ext://sys.stdout
   file:
     class: logging.FileHandler
-    level: INFO 
-    mode: w 
-    formatter: simple 
+    level: INFO
+    mode: w
+    formatter: simple
     filename: output/info.log
-    
+
 loggers:
   tests:
     level: DEBUG

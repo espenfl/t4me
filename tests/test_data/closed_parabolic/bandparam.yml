@@ -28,7 +28,7 @@
 # 6 - ionized impurity scattering (Brooks-Herring)
 # 7 - ionized impority scattering (Conwell-Weiskopf)
 # 8 - alloy scattering
-# 9-11 - empty slots 
+# 9-11 - empty slots
 # 12 - constant (with respect to energy) scattering
 #
 # If one does not use the analytic (parabolic)
@@ -56,7 +56,7 @@ Band 1:
   a: [-100.0,-100.0,-100.0]
   # Scale and sign of non-parabolic term
   # (not valid for alpha models)
-  ascale : 1.0    
+  ascale : 1.0
   # Energy shift
   e0: 0.0
   # Valence (v) og conduction (c) band?
@@ -156,7 +156,7 @@ Band 1:
   #  (consult PythTB manual for additional details)      #
   #  (only enabled if type is set to 3)                  #
   # -----------------------------------------------------#
-  # the direct coordinate of each tight binding orbital 
+  # the direct coordinate of each tight binding orbital
   torb: []
   # the onsite energies for each orbital
   tonsite: [0.0] # eV

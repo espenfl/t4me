@@ -1,17 +1,22 @@
+exclude: '^(docs/)|(tests)'
 repos:
 - repo: git://github.com/pre-commit/mirrors-yapf
-  rev: v0.23.0
+  rev: v0.26.0
   hooks:
   - id: yapf
     language: system
-    exclude: '^(doc/source/conf.py)'
 
-- repo: git://github.com/guykisel/prospector-mirror
-  sha: b27f281eb9398fc8504415d7fbdabf119ea8c5e1
+- repo: git://github.com/PyCQA/prospector
+  rev: 1.1.6.2
   hooks:
   - id: prospector
     language: system
-    exclude: '^(test/)|(aiida-vasp/utils/)|(examples/)|(conftest.py)|(doc/source/conf.py)|(tests_pytest/*)'
+
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.1.0
+  hooks:
+  - id: trailing-whitespace
+    args: [--markdown-linebreak-ext=md]
 
 - repo: local
   hooks:
@@ -21,8 +26,8 @@ repos:
     files: .travis.yml
     language: ruby
     additional_dependencies: ['travis']
-#  - id: version-updater
-##    name: version
-#    language: system
-#    entry: python ops/update_version.py
-#    always_run: true
+ - id: version-updater
+   name: version
+   language: system
+   entry: python ops/update_version.py
+   always_run: true

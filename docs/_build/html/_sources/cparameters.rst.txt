@@ -5,7 +5,7 @@ Unit cell input parameters
 
 .. contents::
    :depth: 2
-   :local: 
+   :local:
 
 Notes about format
 ------------------
@@ -14,7 +14,7 @@ Please inspect the sample file :file:`input/cellparam.yml`.
 Even though many parameters have default values if not
 specified the user should always run the calculations with
 fully specified input files for consistency and reproducibility.
-      
+
 The unit cell
 -------------
 
@@ -49,7 +49,7 @@ coordinates.
 
 Example:
 ::
-   
+
    direct: True
 
 The atomic positions are given in direct coordinates
@@ -61,7 +61,7 @@ coordinates depending on the parameter ``direct``.
 
 Example:
 ::
-   
+
    pos: [[0.0,0.0,0.0]]
 
 One atom centered at origo.

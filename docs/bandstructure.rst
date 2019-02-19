@@ -6,7 +6,7 @@ and calculation of bandstructure related properties. This
 also include for instance the calculation of the
 density of states.
 
-.. automodule:: bandstructure 
+.. automodule:: bandstructure
     :members:
     :undoc-members:
     :show-inheritance:

@@ -13,7 +13,7 @@ extern "C" {
 }
 
 namespace constants {
-	const double TWOPI = 2*std::acos(-1); 
+	const double TWOPI = 2*std::acos(-1);
 	const double ZERO = 1e-10;
 	const double TOL = 1e-4;
 	const double SYMPREC = 1e-4;
@@ -43,9 +43,9 @@ namespace constants {
 #define DEBUG_DUMP_H(x)
 #endif
 
-#ifdef DEBUG_SYMOPS 
+#ifdef DEBUG_SYMOPS
 #define DEBUG_DUMP_SYMOPS(x) x
-#else 
+#else
 #define DEBUG_DUMP_SYMOPS(x)
 #endif
 
@@ -87,7 +87,7 @@ void generate_energies_diff(std::vector<std::vector<double> > &, std::vector<dou
 
 int generate_lambdas(std::vector<std::vector<double> > &, std::vector<double> &, std::vector<double> &);
 
-void generate_epsilons(std::vector<std::vector<double> > &, std::vector<std::vector<double> > &, std::vector<std::vector<double> > &, std::vector<double> &, std::vector<std::vector<double> > &); 
+void generate_epsilons(std::vector<std::vector<double> > &, std::vector<std::vector<double> > &, std::vector<std::vector<double> > &, std::vector<double> &, std::vector<std::vector<double> > &);
 
 void check_interpolated_energies(std::vector<std::vector<double> > &, std::vector<std::vector<double> > &, std::vector<std::vector<double> > &);
 

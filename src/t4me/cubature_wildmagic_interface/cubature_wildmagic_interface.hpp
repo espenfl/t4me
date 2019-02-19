@@ -32,10 +32,10 @@ class Timer {
 public:
   Timer() : beg_(clock_::now()) {}
   void reset() { beg_ = clock_::now(); }
-  double elapsed() const { 
+  double elapsed() const {
     return std::chrono::duration_cast<second_>
       (clock_::now() - beg_).count(); }
-  
+
 private:
   typedef std::chrono::high_resolution_clock clock_;
   typedef std::chrono::duration<double, std::ratio<1> > second_;
@@ -108,215 +108,215 @@ struct f_tdf_params_deriv_const_scatter {
 };
 
 void cubature_wildmagic_execute_integration(int *num_points,
-					    double *domainx, 
-					    double *domainy, 
-					    double *domainz, 
-					    double *data, 
-					    double &value, 
+					    double *domainx,
+					    double *domainy,
+					    double *domainz,
+					    double *data,
+					    double &value,
 					    double &error,
 					    int itype);
 
 void calc_transport_tensors_cubature(int *num_points,
-				     double *domainx, 
-				     double *domainy, 
-				     double *domainz, 
-				     double *energy, int num_bands, 
-				     double *velocity, double *tau, 
+				     double *domainx,
+				     double *domainy,
+				     double *domainz,
+				     double *energy, int num_bands,
+				     double *velocity, double *tau,
 				     double *energy_samples,
 				     int *spin_degen,
-				     int num_scatterings, 
-				     int num_energy_samples, 
-				     double *tau_energy_trans, 
-				     double *chempot, int num_chempot, 
-				     double *temperatures, 
+				     int num_scatterings,
+				     int num_energy_samples,
+				     double *tau_energy_trans,
+				     double *chempot, int num_chempot,
+				     double *temperatures,
 				     int num_temps,
-				     int num_kpoints_ibz, 
+				     int num_kpoints_ibz,
 				     int *k_sampling,
 				     double *rec_basis,
-				     int tensor_type, 
-				     int interpol_type, 
-				     int integral_type, 
-				     int max_it, double abs_err, 
+				     int tensor_type,
+				     int interpol_type,
+				     int integral_type,
+				     int max_it, double abs_err,
 				     double rel_err,
                                      int iso,
                                      int info,
-				     double *cond, 
-				     double *seebeck, 
-				     double *lorenz, 
-				     int gen_velocities, 
+				     double *cond,
+				     double *seebeck,
+				     double *lorenz,
+				     int gen_velocities,
 				     int scattering_type);
 
-void calc_total_dos(double *dos_decomp, int num_decomps, 
+void calc_total_dos(double *dos_decomp, int num_decomps,
 		    int num_energy_samples,double *dos);
 
 void calc_dos_cubature(int *num_points,
-		       double *domainx, double *domainy, 
-		       double *domainz, 
-		       double *energies, double *energy_samples, 
+		       double *domainx, double *domainy,
+		       double *domainz,
+		       double *energies, double *energy_samples,
 		       int *spin_degen,
 		       int num_energy_samples, int num_bands,
-		       double sigma, int interpol_type, 
+		       double sigma, int interpol_type,
 		       int smear_then_interpolate,
                        double volume, double volume_bz,
-		       unsigned max_it, double abs_err, 
+		       unsigned max_it, double abs_err,
 		       double rel_err, int integral_type,
                        int info,
 		       double *dos, double *int_dos);
 
-int hcubature(unsigned, integrand, void *,unsigned, const double *, 
+int hcubature(unsigned, integrand, void *,unsigned, const double *,
 	      const double *, size_t, double, double, error_norm,
 	      double *, double *);
 
-int f_tdf_0_trilinear(unsigned,const double *, void *, 
+int f_tdf_0_trilinear(unsigned,const double *, void *,
 		  unsigned, double *);
 
-int f_tdf_1_trilinear(unsigned,const double *, void *, 
+int f_tdf_1_trilinear(unsigned,const double *, void *,
 		  unsigned, double *);
 
-int f_tdf_2_trilinear(unsigned,const double *, void *, 
+int f_tdf_2_trilinear(unsigned,const double *, void *,
 		  unsigned, double *);
 
-int f_tdf_0_trilinear_num_scatter(unsigned,const double *, void *, 
+int f_tdf_0_trilinear_num_scatter(unsigned,const double *, void *,
 			      unsigned, double *);
 
-int f_tdf_1_trilinear_num_scatter(unsigned,const double *, void *, 
+int f_tdf_1_trilinear_num_scatter(unsigned,const double *, void *,
 			      unsigned, double *);
 
-int f_tdf_2_trilinear_num_scatter(unsigned,const double *, void *, 
+int f_tdf_2_trilinear_num_scatter(unsigned,const double *, void *,
 			      unsigned, double *);
 
-int f_tdf_0_trilinear_deriv(unsigned,const double *, void *, 
+int f_tdf_0_trilinear_deriv(unsigned,const double *, void *,
 			unsigned, double *);
 
-int f_tdf_1_trilinear_deriv(unsigned,const double *, void *, 
+int f_tdf_1_trilinear_deriv(unsigned,const double *, void *,
 			unsigned, double *);
 
-int f_tdf_2_trilinear_deriv(unsigned,const double *, void *, 
+int f_tdf_2_trilinear_deriv(unsigned,const double *, void *,
 			unsigned, double *);
 
-int f_tdf_0_trilinear_deriv_num_scatter(unsigned,const double *, void *, 
+int f_tdf_0_trilinear_deriv_num_scatter(unsigned,const double *, void *,
 				    unsigned, double *);
 
-int f_tdf_1_trilinear_deriv_num_scatter(unsigned,const double *, void *, 
+int f_tdf_1_trilinear_deriv_num_scatter(unsigned,const double *, void *,
 				    unsigned, double *);
 
-int f_tdf_2_trilinear_deriv_num_scatter(unsigned,const double *, void *, 
+int f_tdf_2_trilinear_deriv_num_scatter(unsigned,const double *, void *,
 				    unsigned, double *);
 
-int f_tdf_0_trilinear_deriv_const_scatter(unsigned,const double *, 
+int f_tdf_0_trilinear_deriv_const_scatter(unsigned,const double *,
 				      void *, unsigned, double *);
 
-int f_tdf_1_trilinear_deriv_const_scatter(unsigned,const double *, 
+int f_tdf_1_trilinear_deriv_const_scatter(unsigned,const double *,
 				      void *, unsigned, double *);
 
-int f_tdf_2_trilinear_deriv_const_scatter(unsigned,const double *, 
+int f_tdf_2_trilinear_deriv_const_scatter(unsigned,const double *,
 				      void *, unsigned, double *);
- 
-int f_tdf_0_tricubic(unsigned,const double *, void *, 
+
+int f_tdf_0_tricubic(unsigned,const double *, void *,
 		  unsigned, double *);
 
-int f_tdf_1_tricubic(unsigned,const double *, void *, 
+int f_tdf_1_tricubic(unsigned,const double *, void *,
 		  unsigned, double *);
 
-int f_tdf_2_tricubic(unsigned,const double *, void *, 
+int f_tdf_2_tricubic(unsigned,const double *, void *,
 		  unsigned, double *);
 
-int f_tdf_0_tricubic_num_scatter(unsigned,const double *, void *, 
+int f_tdf_0_tricubic_num_scatter(unsigned,const double *, void *,
 			      unsigned, double *);
 
-int f_tdf_1_tricubic_num_scatter(unsigned,const double *, void *, 
+int f_tdf_1_tricubic_num_scatter(unsigned,const double *, void *,
 			      unsigned, double *);
 
-int f_tdf_2_tricubic_num_scatter(unsigned,const double *, void *, 
+int f_tdf_2_tricubic_num_scatter(unsigned,const double *, void *,
 			      unsigned, double *);
 
-int f_tdf_0_tricubic_deriv(unsigned,const double *, void *, 
+int f_tdf_0_tricubic_deriv(unsigned,const double *, void *,
 			unsigned, double *);
 
-int f_tdf_1_tricubic_deriv(unsigned,const double *, void *, 
+int f_tdf_1_tricubic_deriv(unsigned,const double *, void *,
 			unsigned, double *);
 
-int f_tdf_2_tricubic_deriv(unsigned,const double *, void *, 
+int f_tdf_2_tricubic_deriv(unsigned,const double *, void *,
 			unsigned, double *);
 
-int f_tdf_0_tricubic_deriv_num_scatter(unsigned,const double *, void *, 
+int f_tdf_0_tricubic_deriv_num_scatter(unsigned,const double *, void *,
 				    unsigned, double *);
 
-int f_tdf_1_tricubic_deriv_num_scatter(unsigned,const double *, void *, 
+int f_tdf_1_tricubic_deriv_num_scatter(unsigned,const double *, void *,
 				    unsigned, double *);
 
-int f_tdf_2_tricubic_deriv_num_scatter(unsigned,const double *, void *, 
+int f_tdf_2_tricubic_deriv_num_scatter(unsigned,const double *, void *,
 				    unsigned, double *);
 
-int f_tdf_0_tricubic_deriv_const_scatter(unsigned,const double *, 
+int f_tdf_0_tricubic_deriv_const_scatter(unsigned,const double *,
 				      void *, unsigned, double *);
 
-int f_tdf_1_tricubic_deriv_const_scatter(unsigned,const double *, 
+int f_tdf_1_tricubic_deriv_const_scatter(unsigned,const double *,
 				      void *, unsigned, double *);
 
-int f_tdf_2_tricubic_deriv_const_scatter(unsigned,const double *, 
+int f_tdf_2_tricubic_deriv_const_scatter(unsigned,const double *,
 				      void *, unsigned, double *);
 
-int f_tdf_0_akima(unsigned,const double *, void *, 
+int f_tdf_0_akima(unsigned,const double *, void *,
 		  unsigned, double *);
 
-int f_tdf_1_akima(unsigned,const double *, void *, 
+int f_tdf_1_akima(unsigned,const double *, void *,
 		  unsigned, double *);
 
-int f_tdf_2_akima(unsigned,const double *, void *, 
+int f_tdf_2_akima(unsigned,const double *, void *,
 		  unsigned, double *);
 
-int f_tdf_0_akima_num_scatter(unsigned,const double *, void *, 
+int f_tdf_0_akima_num_scatter(unsigned,const double *, void *,
 			      unsigned, double *);
 
-int f_tdf_1_akima_num_scatter(unsigned,const double *, void *, 
+int f_tdf_1_akima_num_scatter(unsigned,const double *, void *,
 			      unsigned, double *);
 
-int f_tdf_2_akima_num_scatter(unsigned,const double *, void *, 
+int f_tdf_2_akima_num_scatter(unsigned,const double *, void *,
 			      unsigned, double *);
 
-int f_tdf_0_akima_deriv(unsigned,const double *, void *, 
+int f_tdf_0_akima_deriv(unsigned,const double *, void *,
 			unsigned, double *);
 
-int f_tdf_1_akima_deriv(unsigned,const double *, void *, 
+int f_tdf_1_akima_deriv(unsigned,const double *, void *,
 			unsigned, double *);
 
-int f_tdf_2_akima_deriv(unsigned,const double *, void *, 
+int f_tdf_2_akima_deriv(unsigned,const double *, void *,
 			unsigned, double *);
 
-int f_tdf_0_akima_deriv_num_scatter(unsigned,const double *, void *, 
+int f_tdf_0_akima_deriv_num_scatter(unsigned,const double *, void *,
 				    unsigned, double *);
 
-int f_tdf_1_akima_deriv_num_scatter(unsigned,const double *, void *, 
+int f_tdf_1_akima_deriv_num_scatter(unsigned,const double *, void *,
 				    unsigned, double *);
 
-int f_tdf_2_akima_deriv_num_scatter(unsigned,const double *, void *, 
+int f_tdf_2_akima_deriv_num_scatter(unsigned,const double *, void *,
 				    unsigned, double *);
 
-int f_tdf_0_akima_deriv_const_scatter(unsigned,const double *, 
+int f_tdf_0_akima_deriv_const_scatter(unsigned,const double *,
 				      void *, unsigned, double *);
 
-int f_tdf_1_akima_deriv_const_scatter(unsigned,const double *, 
+int f_tdf_1_akima_deriv_const_scatter(unsigned,const double *,
 				      void *, unsigned, double *);
 
-int f_tdf_2_akima_deriv_const_scatter(unsigned,const double *, 
+int f_tdf_2_akima_deriv_const_scatter(unsigned,const double *,
 				      void *, unsigned, double *);
 
 int f_akima(unsigned,const double *, void *, unsigned, double *);
 
-int f_akima_gaussian(unsigned,const double *, void *, 
+int f_akima_gaussian(unsigned,const double *, void *,
 		     unsigned, double *);
 
-int f_tricubic(unsigned,const double *, void *, 
+int f_tricubic(unsigned,const double *, void *,
 	       unsigned, double *);
 
-int f_tricubic_gaussian(unsigned,const double *, void *, 
+int f_tricubic_gaussian(unsigned,const double *, void *,
 			unsigned, double *);
 
-int f_trilinear(unsigned,const double *, void *, 
+int f_trilinear(unsigned,const double *, void *,
 		unsigned, double *);
 
-int f_trilinear_gaussian(unsigned,const double *, void *, 
+int f_trilinear_gaussian(unsigned,const double *, void *,
 			 unsigned, double *);
 
 int gaussian(int, int, int, double *, double *, double, double);
@@ -324,7 +324,7 @@ int gaussian(int, int, int, double *, double *, double, double);
 double fetch_combined_scattering_parabolic(double, double *,
 					   double *);
 
-double generate_scattering_array(double *, int, double *, double **, 
+double generate_scattering_array(double *, int, double *, double **,
 				 int, double *, double *);
 
 void multiply_3x3_matrix(std::vector<std::vector<double> >

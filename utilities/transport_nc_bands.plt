@@ -1,21 +1,21 @@
 set output "transport_nc_bands.eps"
-set encoding iso_8859_1 
+set encoding iso_8859_1
 # letter is 21.59 x 27.94 cm
 # a4 is 21 x 29.7 cm
 # general format is 1 cm for bottom and top, 0.25 at the
 # top and 0.75 at the bottom, then divide spacing
 # on as many figures as is needed, i.e. 2.2 cm high each
 set terminal postscript eps enhanced color size 5cm,5.4cm
-set style line 10 lc rgb "#000000" lt -1 lw 1 
+set style line 10 lc rgb "#000000" lt -1 lw 1
 set style line 1 lc rgb "#000000" lt -1 lw 2
 set style line 2 lc rgb "#0000FF" lt -1 lw 2
-set style line 3 lc rgb "#228B22" lt -1 lw 2 
+set style line 3 lc rgb "#228B22" lt -1 lw 2
 set style line 4 lc rgb "#8A2BE2" lt -1 lw 2
 set style line 5 lc rgb "#0000FF" lt 0 lw 4
 set style line 6 lc rgb "#228B22" lt 0 lw 4
 set style line 7 lc rgb "#8A2BE2" lt 0 lw 4
 set tics scale 1
-set border ls 10 
+set border ls 10
 set xtics font ",12" offset 0, -0.5
 set ytics font ",12"
 set format x "%1.1f"

@@ -27,10 +27,10 @@ int main(int argc, const char* argv[]) {
 
 /* Fetches the symmetry operations using spglib
 
-   Since spglib has a static C interface, we need to copy the 
+   Since spglib has a static C interface, we need to copy the
    lattice and positions array from STL vectors to C arrays before
    calling the spglib routines
-  
+
  */
 
 void fetch_sym_ops(std::vector<std::vector<double> > &lattice, std::vector<std::vector<double> > &positions, std::vector<int> &species, std::vector<std::vector<std::vector<int> > > &sym_ops) {
@@ -42,7 +42,7 @@ void fetch_sym_ops(std::vector<std::vector<double> > &lattice, std::vector<std::
   double lattice_temp[3][3];
   char symbol[11];
   double positions_temp[num_atoms][3];
-  // copy lattice and positions 
+  // copy lattice and positions
   // (transpose the lattice) due to the C character of spglib
   for (int i=0;i<3;i++) {
     for (int j=0;j<3;j++) {
@@ -82,13 +82,13 @@ void fetch_sym_ops(std::vector<std::vector<double> > &lattice, std::vector<std::
    of a set of linear equations.
 
    In this context the lattice vectors are used to interpolate the band dispersion by using
-   a plane wave expansion of these lattice vectors and the kpoints. 
+   a plane wave expansion of these lattice vectors and the kpoints.
    This interpolation scheme is often termed Fourier interpolation, star interpolation etc.
    We use the translation symmetry to our advantage. In addition the point symmetry is used
    to exclude symmetry equivalent generated lattice vectors.
 
    REF: Pickett et al. PRB 38, 2721 (1988) and similar references
-   
+
    Assume the plane wave expansion (or "star function" as it is frequently called)
 
    S_m(\vec{k})=\sum_J exp(i(J\vec{R}_m)\cdot\vec{k})/m,
@@ -97,7 +97,7 @@ void fetch_sym_ops(std::vector<std::vector<double> > &lattice, std::vector<std::
 
    \vec{R}_m=h\vec{a}+k\vec{b}+l\vec{c},
 
-   where h, k and l is a combination of integers (for a given m) and \vec{a}, \vec{b} and 
+   where h, k and l is a combination of integers (for a given m) and \vec{a}, \vec{b} and
    \vec{c} is the lattice vectors of the unit cell (in this case).
 
    By using the plane wave expansion we can expand the dispersion relations as
@@ -110,21 +110,21 @@ void fetch_sym_ops(std::vector<std::vector<double> > &lattice, std::vector<std::
 
    This relation needs to be minimized. A natural choice is to minimize a roughness. This is
    introduced though the roughness function (after the reference above, other choices are possible)
-   
+
    R_o=(1/N)\sum_k(C_0\epsilon(\vec{k})+C_1|\nabla \epsilon(\vec{k})|^2+C_2|\nabla^2 \epsilon(\vec{k})|^2+...)
 
    R_o=\sum_{m=1}^M |\epsilon_m|^2 \rho(R_m),
 
    where N is the number of k points in the BZ. R_m is the length of the lattice vector \vec{R}_m.
    C_i are some user adjustable constants to be determined.
-   
+
    From the reference above, better fit is obtained by dropping the m=1 terms.
 
    Minimizing the roughness function R_o by a Lagrange multiplier \lambda yields the following
    sets of linear equations
 
    1. \epsilon_m*\rho_m=\sum_i^N\lambda_iS_m(\vec{k}_i) for m>1 and
-   
+
    2. 0=\sum_{i=1}^N\lambda_i together with the constraint of
 
    3. \epsilon(\vec{k})=\epsilon'(\vec{k}) (more a demand), where \epsilon is the input dispersion
@@ -133,24 +133,24 @@ void fetch_sym_ops(std::vector<std::vector<double> > &lattice, std::vector<std::
    any of the input k points) we get
 
    \delta \epsilon_j=\epsilon(\vec{k}_j)-\epsilon(\vec{k}_N)=\sum_{i=1}^{N-1} H_{ji}\lambda_i*,
-   
+
    where
 
    H_{ji}=\sum_{m=2}^M (S_m(\vec{k}_j)-S_m(\vec{k}_N))(S_m*(\vec{k}_i)-S_m*(\vec{k}_N))/\rho_m
 
-   Before solving these equations, the R_m grid need to be determined. The choice of R_m is fully up to the user. 
+   Before solving these equations, the R_m grid need to be determined. The choice of R_m is fully up to the user.
    Here we force the point group operations on R_m in order to avoid symmetry equivalent points. We span the hkl
    integers as a ellipsoid determined by the length of the lattice vectors.
    EFL: THIS DOES NOT WORK FOR E.G. VERY DISTORTED STRUCTURES. REVERT TO SPHERE?
 
    When the R_m grid is determined, S can be genrated, H can be laid out and we can solve the
-   linear equations to obtain the \lambda_i above. When this is done, we have the following 
+   linear equations to obtain the \lambda_i above. When this is done, we have the following
    equations to determined the energy at the m points.
 
    \epsilon_m=\sum_{i=1}^{N-1}\lambda_i*(S_m*(\vec{k}_i)-S_m*(\vec{k}_N))/\rho_m, for m>1
 
    and
-   
+
    \epsilon_1=\epsilon(\vec{k}_N)-\sum_{m=2}^{M}\epsilon_m S_m(\vec{k}_N)
 
    The symmetry tag (set to 0) turn of exclusion of symmetry points (e.g. if we want to run
@@ -175,7 +175,7 @@ void generate_lat_vec(std::vector<std::vector<double> > &lattice, std::vector<st
   // calculate length of the lattice vectors
   for (int dir=0;dir<3;dir++) {
     lattice_vector_length[dir]=length_of_vector_d(lattice[dir]);
-  }  
+  }
   // locate the longest lattice vector and set the steps
   int longest_r_index=std::distance(std::begin(lattice_vector_length), std::max_element(lattice_vector_length.begin(), lattice_vector_length.end()));
   int k_points_long_r=floor(ksampling[longest_r_index]/2.0);
@@ -223,7 +223,7 @@ void generate_lat_vec(std::vector<std::vector<double> > &lattice, std::vector<st
 	multiply_vector_matrix_3x3_d(lattice_transposed,ttemp_vector,temp_vector);
 	// if inside radius, else, skip point
 	double radius=length_of_vector_d(temp_vector);
-	if (radius < outer_radius) {  
+	if (radius < outer_radius) {
 	  r_tmp.push_back(std::vector<int>(3));
 	  r_tmp[index][0]=i;
 	  r_tmp[index][1]=j;
@@ -233,7 +233,7 @@ void generate_lat_vec(std::vector<std::vector<double> > &lattice, std::vector<st
 	  index++;
 	}
       }
-    } 
+    }
   }
   INFO_DUMP(std::cout << "SKW: total number of points remaining after radius cutout: " << index << std::endl);
 
@@ -254,7 +254,7 @@ void generate_lat_vec(std::vector<std::vector<double> > &lattice, std::vector<st
       // routines to check all lattice vectors spanned by point operations
       sym_vectors.clear();
       locate_symmetry_vectors(r_tmp[r_index[i]],sym_ops,sym_vectors);
-      // compare all symmetrized lattice vectors to the storred lattice 
+      // compare all symmetrized lattice vectors to the storred lattice
       // vectors
       for (int j=0;j<r.size() && add_vector;j++) {
 	for (int k=0;k<sym_vectors.size();k++) {
@@ -275,7 +275,7 @@ void generate_lat_vec(std::vector<std::vector<double> > &lattice, std::vector<st
       INFO_DUMP(std::cout << "SKW: storing lattice vector: " << std::setw(2) << r_tmp[r_index[i]][0] << ' ' << std::setw(2) << r_tmp[r_index[i]][1] << ' ' << std::setw(2) << r_tmp[r_index[i]][2] << ", of length=" << r_length[r_index[i]] << std::endl);
     }
   }
-  INFO_DUMP(std::cout << "SKW: total number of points remaining after symmetrization: " << r.size() << std::endl); 
+  INFO_DUMP(std::cout << "SKW: total number of points remaining after symmetrization: " << r.size() << std::endl);
 
   // now build jagged array for R vectors including symmetrization
   for (int latvec=0;latvec<r.size();latvec++) {
@@ -283,9 +283,9 @@ void generate_lat_vec(std::vector<std::vector<double> > &lattice, std::vector<st
     locate_symmetry_vectors(r[latvec],sym_ops,sym_vectors);
     r_sym_span.push_back(sym_vectors);
   }
-  
+
   INFO_DUMP(std::cout << "SKW: using a star radius factor of: " << star_radius_factor << " a total number of " << r.size() << " kpoints are going to be generated times symmetry equivalent vectors, in total " << index << " laid out in a radius. For reference, "  << num_kpoints << " kpoints were supplied." << std::endl);
-  
+
 }
 
 // generate rho
@@ -293,7 +293,7 @@ void generate_rho(std::vector<std::vector<int> > &r, std::vector<double> &r_leng
   // set default c if not provided
   if (c.empty()) {
     set_c(c);
-  }	
+  }
   // set rho[0] to a large numnber
   rho.push_back(1e12);
   // loop all lattice vectors
@@ -306,7 +306,7 @@ void generate_rho(std::vector<std::vector<int> > &r, std::vector<double> &r_leng
 }
 
 void set_c(std::vector<double> &c) {
-  // current default is 
+  // current default is
   // c_0=0.0;
   // c_1=0.75;
   // c_2=0.75;
@@ -362,7 +362,7 @@ void generate_h_and_ssr(std::vector<std::vector<double> > &s, std::vector<double
     for (int i=0;i<num_kpoints;i++) {
       s2[latvec][i]=s1[i][latvec]/rho[latvec];
       //std::cout << "s2: " << latvec << ' ' << i << ' ' << s2[latvec][i] << std::endl;
-    } 
+    }
   }
   // use LAPACK dgemm
   char trans='N';
@@ -379,9 +379,9 @@ void generate_h_and_ssr(std::vector<std::vector<double> > &s, std::vector<double
   */
 
   /* THIS SETS UP H WITH SIMPLE LOOPS. TOO EASY/SLOW?
-     
+
      USING LAST POINT AS REFERENCE, GENERALIZE TO USE OTHER POINTS?
-     
+
    */
   // set start of latvec, SKW recommends start_latvec=1, e.g. drop R_0.
 
@@ -389,15 +389,15 @@ void generate_h_and_ssr(std::vector<std::vector<double> > &s, std::vector<double
   for (int latvec=0;latvec<s.size();latvec++) {
     for (int i=0;i<num_kpoints-1;i++) {
       s1[latvec][i]=s[latvec][i]-s[latvec][num_kpoints-1];
-      DEBUG_DUMP_H(std::cout << "S1, latvec: " << latvec << ", kpoints: " << i << ", values: " << s1[latvec][i] << std::endl); 
+      DEBUG_DUMP_H(std::cout << "S1, latvec: " << latvec << ", kpoints: " << i << ", values: " << s1[latvec][i] << std::endl);
     }
   }
   // now do second S difference (transpose, cycle index)
   for (int i=0;i<num_kpoints-1;i++) {
     for (int latvec=0;latvec<s.size();latvec++) {
       s2[i][latvec]=s1[latvec][i]/rho[latvec];
-      DEBUG_DUMP_H(std::cout << "S2 (conj of S1), latvec: " << latvec << ", kpoints: " << i << ", values: " << s2[i][latvec] << std::endl);  
-    } 
+      DEBUG_DUMP_H(std::cout << "S2 (conj of S1), latvec: " << latvec << ", kpoints: " << i << ", values: " << s2[i][latvec] << std::endl);
+    }
   }
   // generate H matrix
   for (int j=0;j<num_kpoints-1;j++) {
@@ -519,7 +519,7 @@ void interpolate(std::vector<std::vector<double> > &epsilons, std::vector<std::v
       }
       if (r[latvec][symop][2] > n2_max) {
 	n2_max=r[latvec][symop][2];
-      }      
+      }
     }
   }
   // assume symmetric layout around zero, add zero
@@ -532,7 +532,7 @@ void interpolate(std::vector<std::vector<double> > &epsilons, std::vector<std::v
   kpoints.resize(n,std::vector<double> (3));
   energies.resize(num_bands,std::vector<double> (n));
   velocities.resize(num_bands, std::vector<std::vector<double> > (3, std::vector<double> (n)));
-  
+
   // allocate some FFTW arrays
   fftw_complex *in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex)*n);
   fftw_complex *out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex)*n);
@@ -583,7 +583,7 @@ void interpolate(std::vector<std::vector<double> > &epsilons, std::vector<std::v
       }
       fftw_plan p = fftw_plan_dft_3d(n0,n1,n2,in,out,FFTW_BACKWARD,FFTW_ESTIMATE);
       fftw_execute(p);
-      
+
       int starti=ceil((double)n0/2);
       int startj=ceil((double)n1/2);
       int startk=ceil((double)n2/2);
@@ -634,7 +634,7 @@ void interpolate(std::vector<std::vector<double> > &epsilons, std::vector<std::v
   }
   fftw_free(in);
   fftw_free(out);
-  
+
   // store ksamplings and return
   ksampling[0]=n0;
   ksampling[1]=n1;
@@ -647,7 +647,7 @@ void locate_symmetry_vectors(std::vector<int> &vec, std::vector<std::vector<std:
   sym_vectors.push_back(vec);
   DEBUG_DUMP_SYMOPS(std::cout << __FUNCTION__ << ": checking lattice vector " << vec[0] << " " << vec[1] << " " << vec[2] << " for symmetry, applying " << sym_ops.size() << " operations" << std::endl);
   for (int sym=0;sym<sym_ops.size();sym++) {
-    std::vector<int> sym_vector(3,0);    
+    std::vector<int> sym_vector(3,0);
     multiply_vector_matrix_3x3_i(sym_ops[sym],vec,sym_vector);
     // loop previous vectors and check if it exists
     int num_sym_vectors=sym_vectors.size();
@@ -759,5 +759,5 @@ void de_flatten_nxn_matrix(std::vector<double> &matrix_flat, std::vector<std::ve
 	matrix[i][j]=matrix_flat[j*matrix.size()+i];
       }
     }
-  } 
+  }
 }

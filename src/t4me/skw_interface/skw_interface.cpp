@@ -56,7 +56,7 @@ int interpolate_skw_interface(double *energies, int num_bands, double *kpoints, 
       positions_temp[atom][dir]=*((double *)positions + atom*3 + dir);
     }
   }
-  
+
   // now fetch the point group operations
   // sym_ops holds the point group operations returned by spglib
   std::vector<std::vector<std::vector<int> > > sym_ops;
@@ -65,7 +65,7 @@ int interpolate_skw_interface(double *energies, int num_bands, double *kpoints, 
   // generate lattice vectors r
   // holds the minimum set of r (maximum symmetry)
   std::vector<std::vector<int> > r;
-  // holds the unique r folded out by the point group operations 
+  // holds the unique r folded out by the point group operations
   std::vector<std::vector<std::vector<int> > > r_sym_span;
   // holds the lenght of the r vectors (for the r vector)
   std::vector<double> rl;
@@ -89,14 +89,14 @@ int interpolate_skw_interface(double *energies, int num_bands, double *kpoints, 
   // equation solver below (stored in the lambda array)
   std::vector<double> lambda;
   generate_energies_diff(energies_temp,lambda);
-  
+
   // generate the lambda solutions
   int info=generate_lambdas(energies_temp,h,lambda);
   if (info) {
     // serious error during the generation of lambdas (LAPACK/BLAS)
     return 1;
   }
-  
+
   // generate the epsilon coefficients
   std::vector<std::vector<double> > epsilons;
   generate_epsilons(energies_temp,s,ssr,lambda,epsilons);
@@ -112,7 +112,7 @@ int interpolate_skw_interface(double *energies, int num_bands, double *kpoints, 
   std::vector<std::vector<double> > ikpoints_temp;
   std::vector<int> iksampling_temp(3);
   interpolate(epsilons,r_sym_span,lattice_temp,ienergies_temp,ivelocities_temp,ikpoints_temp,iksampling_temp);
-  
+
   // copy content from the vector STL in order to pass data back to python
   // first the energies
   num_ikpoints=ikpoints_temp.size();
@@ -139,7 +139,7 @@ int interpolate_skw_interface(double *energies, int num_bands, double *kpoints, 
   for (int dir=0;dir<3;dir++) {
     iksampling[dir]=iksampling_temp[dir];
   }
-  
+
   return 0;
-  
+
 }

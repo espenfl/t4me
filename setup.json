@@ -1,34 +1,34 @@
 {
-    "author": "Espen Flage-Larsen", 
+    "author": "Espen Flage-Larsen",
     "author_email": "espen.flage-larsen@sintef.no",
     "keywords": "vasp, materials, transport, boltzmann",
     "classifiers": [
-        "Development Status :: 3 - Alpha", 
-        "Environment :: Plugins", 
+        "Development Status :: 3 - Alpha",
+        "Environment :: Plugins",
         "Intended Audience :: Science/Research",
-        "License :: OSI Approved :: MIT License", 
-        "Programming Language :: Python :: 2.7", 
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 2.7",
         "Topic :: Scientific/Engineering :: Physics"
-    ], 
+    ],
     "description": "T4ME - Transport for Materials.",
     "package_dir": {"": "src"},
     "extras_require": {
-    }, 
-    "include_package_data": true, 
+    },
+    "include_package_data": true,
     "install_requires": [
 	"numpy",
 	"PyYAML",
 	"spglib",
 	"scipy"
-    ], 
-    "license": "GNU GPLv3 License, see LICENSE.txt file.", 
-    "name": "T4ME", 
+    ],
+    "license": "GNU GPLv3 License, see LICENSE.txt file.",
+    "name": "T4ME",
     "scripts": [
 	"scripts/t4me"
     ],
     "setup_requires": [
 	"numpy"
-    ], 
-    "url": "https://github.com/espenfl/t4me", 
-    "version": "1.1"
+    ],
+    "url": "https://github.com/espenfl/t4me",
+    "version": "1.0.0"
 }

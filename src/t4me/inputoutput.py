@@ -16,17 +16,17 @@
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
 #!/usr/local/bin/python
+"""Contains various input and output routines for T4ME."""
+
+# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements, too-many-lines, global-statement
 
 import os
 import sys
-import math
 import logging
 import numpy as np
 import yaml
 
 import t4me.constants as constants
-import t4me.utils as utils
-import t4me.scattering as scattering
 
 # global variables
 pythtb_warning_printed = False
@@ -41,8 +41,9 @@ mpi4py_message_printed = False
 
 
 def spglib_error():
+    """An error for missing Spglib interface."""
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.error("Could not locate the Spglib interface. Please "
                  "run 'python setup.py build_ext --inplace before "
                  "continuing. Exiting.")
@@ -51,18 +52,21 @@ def spglib_error():
 
 # warnings
 
+
 def gsl_warning():
+    """An error for missing GNU GSL interface."""
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.warning("Could not locate the GSL interface. Please "
                    "do not use this functionality. Continuing.")
 
 
 def alglib_warning():
+    """An error for missing Alglib."""
     global alglib_warning_printed
     if not alglib_warning_printed:
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.warning("Could not load the Alglib package. Using "
                        "the Rbf function in SciPy instead. "
                        "This is extremely memory consuming, please "
@@ -73,10 +77,11 @@ def alglib_warning():
 
 
 def pythtb_warning():
+    """An error for missing PythTB."""
     global pythtb_warning_printed
     if not pythtb_warning_printed:
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.warning("Could not locate PythTB. PythTB calls will "
                        "give errors. Please do not set type: 3 in "
                        "bandparams.yml to generating TB bands "
@@ -85,10 +90,11 @@ def pythtb_warning():
 
 
 def skw_warning():
+    """An error for missing SKW."""
     global skw_warning_printed
     if not skw_warning_printed:
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.warning("Could not locate the SKW interpolation interface. "
                        "Make sure you do not call any of its functions as "
                        "this will yield errors. Continuing.")
@@ -96,10 +102,11 @@ def skw_warning():
 
 
 def wildmagic_warning():
+    """An error for a missing GeometricTools interface."""
     global wildmagic_warning_printed
     if not wildmagic_warning_printed:
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.warning("Could not locate the WildMagic interpolation "
                        "interface. Make sure you do not call any of its "
                        "functions as this will yield errors. Continuing.")
@@ -107,10 +114,11 @@ def wildmagic_warning():
 
 
 def cubature_warning():
+    """An error for a missing Cubature-GeometricTools interface."""
     global cubature_warning_printed
     if not cubature_warning_printed:
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.warning("Could not locate the Cubature-WildMagic "
                        "interface. Make sure you do not call any of its "
                        "functions as this will yield errors. Continuing.")
@@ -118,27 +126,18 @@ def cubature_warning():
 
 
 def einspline_warning():
+    """An error for a missing Einspline interface"""
     global einspline_warning_printed
     if not einspline_warning_printed:
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.warning("Could not locate the Einspline interpolation "
                        "interface. Make sure you do not call any of its "
                        "functions as this will yield errors. Continuing.")
         einspline_warning_printed = True
 
 
-def mpi4py_message():
-    global mpi4py_message_printed
-    if not mpi4py_message_printed:
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.warning("Could not locate the mpi4py module. Continuing "
-                       "without MPI support.")
-        mpi4py_message_printed = True
-
-
-class Param(object):
+class Param():  # pylint: disable=too-few-public-methods
     """
     YAML reader for the input paramters.
 
@@ -161,8 +160,7 @@ class Param(object):
     def _wrap(self, value):
         if isinstance(value, (tuple, list, set, frozenset)):
             return type(value)([self._wrap(v) for v in value])
-        else:
-            return Param(value) if isinstance(value, dict) else value
+        return Param(value) if isinstance(value, dict) else value
 
 
 def readparam(location=None, filename=None):
@@ -193,7 +191,7 @@ def readparam(location=None, filename=None):
     """
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running readparam.")
 
     if filename is None:
@@ -205,16 +203,14 @@ def readparam(location=None, filename=None):
     try:
         stream = open(filename, "r")
     except IOError:
-        logger.error("Can not open the " + filename +
-                     " file. Exiting.")
+        logger.error("Can not open %s. Exiting.", filename)
         sys.exit(1)
     return yaml.safe_load(stream)
 
 
 def readbandparam(location=None, filename=None):
     """
-    Load the parameters in the bandstructure
-    configuration file.
+    Load the parameters in the bandstructure configuration file.
 
     Parameters
     ----------
@@ -240,7 +236,7 @@ def readbandparam(location=None, filename=None):
     """
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running readbandparam.")
 
     if filename is None:
@@ -252,16 +248,14 @@ def readbandparam(location=None, filename=None):
     try:
         stream = open(filename, "r")
     except IOError:
-        logger.error("Can not open the " + filename +
-                     " file. Exiting.")
+        logger.error("Can not open %s. Exiting.", filename)
         sys.exit(1)
     return yaml.safe_load(stream)
 
 
 def readcellparam(location=None, filename=None):
     """
-    Load the parameters in the cell
-    configuration file.
+    Load the parameters in the cell configuration file.
 
     Parameters
     ----------
@@ -287,7 +281,7 @@ def readcellparam(location=None, filename=None):
     """
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running readcellparam.")
 
     if filename is None:
@@ -299,14 +293,13 @@ def readcellparam(location=None, filename=None):
     try:
         stream = open(filename, "r")
     except IOError:
-        logger.error("Can not open the " + filename +
-                     " file. Exiting.")
+        logger.error("Can not open %s. Exiting.", filename)
         sys.exit(1)
     return yaml.safe_load(stream)
 
 
-def dump_transport_coefficients(tr, filename_tag=""):
-    """
+def dump_transport_coefficients(tr, filename_tag=None):  # pylint: disable=too-many-locals
+    r"""
     Writes the transport coefficients to files
 
     Parameters
@@ -344,7 +337,10 @@ def dump_transport_coefficients(tr, filename_tag=""):
     # loaded here in order to avoid chained imported with
     # lbtecoeff/inputout for printout messages, this should be fixed
     # in the future as it is ugly
-    from . import lbtecoeff
+    import t4me.lbtecoeff as lbtecoeff
+
+    if filename_tag is None:
+        filename_tag = ""
 
     # open files
     sigma_file = file_handler(filename="output/sigma", status="w")
@@ -854,8 +850,8 @@ def dump_transport_coefficients(tr, filename_tag=""):
         "##########################################################\n")
 
     # extract the Hall carrier concentration
-    # TODO: NEED TO IMPLEMENT THIS FOR ALL METHODS
-    if not (tr.param.transport_method == "numerick"):
+    # TODO: NEED TO IMPLEMENT THIS FOR ALL METHODS pylint: disable=fixme
+    if not tr.param.transport_method == "numerick":
         hall_cc = lbtecoeff.calculate_hall_carrier_concentration(tr.hall)
         # extract the Hall factor
         hall_factorn = lbtecoeff.calculate_hall_factor(tr.ccn, hall_cc)
@@ -882,118 +878,85 @@ def dump_transport_coefficients(tr, filename_tag=""):
             # in the Lorenz
             kappae = np.dot(tr.lorenz[t, e], tr.sigma[t, e]) * temp * 1e-8
             eta = 1e5 * chempot / (constants.kb * temp)
-            sigma_file.write(
-                "{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                "{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                "{:>16.8e}{:>16.8e}{:>16.8e}\n".format(
-                    chempot, eta,
-                    tr.ccn[t, e, 0, 0], tr.ccp[t, e, 0, 0],
-                    tr.sigma[t, e, 0, 0], tr.sigma[t, e, 1, 1],
-                    tr.sigma[t, e, 2, 2], tr.sigma[t, e, 0, 1],
-                    tr.sigma[t, e, 0, 2], tr.sigma[t, e, 1, 0],
-                    tr.sigma[t, e, 1, 2], tr.sigma[t, e, 2, 0],
-                    tr.sigma[t, e, 2, 1]))
-            seebeck_file.write("{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                               "{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                               "{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                               "{:>16.8e}\n".format(
-                                   chempot, eta,
-                                   tr.ccn[t, e, 0, 0], tr.ccp[t, e, 0, 0],
-                                   tr.seebeck[t, e, 0, 0],
-                                   tr.seebeck[t, e, 1, 1],
-                                   tr.seebeck[t, e, 2, 2],
-                                   tr.seebeck[t, e, 0, 1],
-                                   tr.seebeck[t, e, 0, 2],
-                                   tr.seebeck[t, e, 1, 0],
-                                   tr.seebeck[t, e, 1, 2],
-                                   tr.seebeck[t, e, 2, 0],
-                                   tr.seebeck[t, e, 2, 1]))
-            lorenz_file.write("{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                              "{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                              "{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                              "{:>16.8e}\n".format(
-                                  chempot, eta,
-                                  tr.ccn[t, e, 0, 0], tr.ccp[t, e, 0, 0],
-                                  tr.lorenz[t, e, 0, 0],
-                                  tr.lorenz[t, e, 1, 1],
-                                  tr.lorenz[t, e, 2, 2],
-                                  tr.lorenz[t, e, 0, 1],
-                                  tr.lorenz[t, e, 0, 2],
-                                  tr.lorenz[t, e, 1, 0],
-                                  tr.lorenz[t, e, 1, 2],
-                                  tr.lorenz[t, e, 2, 0],
-                                  tr.lorenz[t, e, 2, 1]))
-            kappae_file.write("{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                              "{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                              "{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                              "{:>16.8e}\n".format(
-                                  chempot, eta,
-                                  tr.ccn[t, e, 0, 0], tr.ccp[t, e, 0, 0],
-                                  kappae[0, 0],
-                                  kappae[1, 1],
-                                  kappae[2, 2],
-                                  kappae[0, 1],
-                                  kappae[0, 2],
-                                  kappae[1, 0],
-                                  kappae[1, 2],
-                                  kappae[2, 0],
-                                  kappae[2, 1]))
-            hall_file.write("{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                            "{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                            "{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                            "{:>16.8e}\n".format(
-                                chempot, eta,
-                                tr.ccn[t, e, 0, 0], tr.ccp[t, e, 0, 0],
-                                tr.hall[t, e, 0, 0],
-                                tr.hall[t, e, 1, 1],
-                                tr.hall[t, e, 2, 2],
-                                tr.hall[t, e, 0, 1],
-                                tr.hall[t, e, 0, 2],
-                                tr.hall[t, e, 1, 0],
-                                tr.hall[t, e, 1, 2],
-                                tr.hall[t, e, 2, 0],
-                                tr.hall[t, e, 2, 1]))
-            hall_cc_file.write("{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                               "{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                               "{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                               "{:>16.8e}\n".format(
-                                   chempot, eta,
-                                   tr.ccn[t, e, 0, 0], tr.ccp[t, e, 0, 0],
-                                   hall_cc[t, e, 0, 0],
-                                   hall_cc[t, e, 1, 1],
-                                   hall_cc[t, e, 2, 2],
-                                   hall_cc[t, e, 0, 1],
-                                   hall_cc[t, e, 0, 2],
-                                   hall_cc[t, e, 1, 0],
-                                   hall_cc[t, e, 1, 2],
-                                   hall_cc[t, e, 2, 0],
-                                   hall_cc[t, e, 2, 1]))
-            cc_file.write("{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}\n".format(
+            sigma_file.write("{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                             "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                             "{:>17.8e}{:>17.8e}{:>17.8e}\n".format(
+                                 chempot, eta, tr.ccn[t, e, 0, 0],
+                                 tr.ccp[t, e, 0, 0], tr.sigma[t, e, 0, 0],
+                                 tr.sigma[t, e, 1, 1], tr.sigma[t, e, 2, 2],
+                                 tr.sigma[t, e, 0, 1], tr.sigma[t, e, 0, 2],
+                                 tr.sigma[t, e, 1, 0], tr.sigma[t, e, 1, 2],
+                                 tr.sigma[t, e, 2, 0], tr.sigma[t, e, 2, 1]))
+            seebeck_file.write(
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}\n".format(
+                    chempot, eta, tr.ccn[t, e, 0, 0], tr.ccp[t, e, 0, 0],
+                    tr.seebeck[t, e, 0, 0], tr.seebeck[t, e, 1, 1],
+                    tr.seebeck[t, e, 2, 2], tr.seebeck[t, e, 0, 1],
+                    tr.seebeck[t, e, 0, 2], tr.seebeck[t, e, 1, 0],
+                    tr.seebeck[t, e, 1, 2], tr.seebeck[t, e, 2, 0],
+                    tr.seebeck[t, e, 2, 1]))
+            lorenz_file.write(
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}\n".format(
+                    chempot, eta, tr.ccn[t, e, 0, 0], tr.ccp[t, e, 0, 0],
+                    tr.lorenz[t, e, 0, 0], tr.lorenz[t, e, 1, 1],
+                    tr.lorenz[t, e, 2, 2], tr.lorenz[t, e, 0, 1],
+                    tr.lorenz[t, e, 0, 2], tr.lorenz[t, e, 1, 0],
+                    tr.lorenz[t, e, 1, 2], tr.lorenz[t, e, 2, 0],
+                    tr.lorenz[t, e, 2, 1]))
+            kappae_file.write(
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}\n".format(chempot, eta, tr.ccn[t, e, 0, 0],
+                                     tr.ccp[t, e, 0, 0], kappae[0, 0],
+                                     kappae[1, 1], kappae[2, 2], kappae[0, 1],
+                                     kappae[0, 2], kappae[1, 0], kappae[1, 2],
+                                     kappae[2, 0], kappae[2, 1]))
+            hall_file.write(
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}\n".format(chempot, eta, tr.ccn[t, e, 0, 0],
+                                     tr.ccp[t, e, 0, 0], tr.hall[t, e, 0, 0],
+                                     tr.hall[t, e, 1, 1], tr.hall[t, e, 2, 2],
+                                     tr.hall[t, e, 0, 1], tr.hall[t, e, 0, 2],
+                                     tr.hall[t, e, 1, 0], tr.hall[t, e, 1, 2],
+                                     tr.hall[t, e, 2, 0], tr.hall[t, e, 2, 1]))
+            hall_cc_file.write(
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}\n".format(chempot, eta, tr.ccn[t, e, 0, 0],
+                                     tr.ccp[t, e, 0, 0], hall_cc[t, e, 0, 0],
+                                     hall_cc[t, e, 1, 1], hall_cc[t, e, 2, 2],
+                                     hall_cc[t, e, 0, 1], hall_cc[t, e, 0, 2],
+                                     hall_cc[t, e, 1, 0], hall_cc[t, e, 1, 2],
+                                     hall_cc[t, e, 2, 0], hall_cc[t, e, 2, 1]))
+            cc_file.write("{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}\n".format(
                 chempot, eta, tr.ccn[t, e, 0, 0], tr.ccp[t, e, 0, 0]))
-            hall_fact_file.write("{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                                 "{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                                 "{:>16.8e}{:>16.8e}{:>16.8e}{:>16.8e}"
-                                 "{:>16.8e}\n".format(
-                                     chempot, eta,
-                                     tr.ccn[t, e, 0, 0], tr.ccp[t, e, 0, 0],
-                                     hall_factorn[t, e, 0, 0],
-                                     hall_factorn[t, e, 1, 1],
-                                     hall_factorn[t, e, 2, 2],
-                                     hall_factorn[t, e, 0, 1],
-                                     hall_factorn[t, e, 0, 2],
-                                     hall_factorn[t, e, 1, 0],
-                                     hall_factorn[t, e, 1, 2],
-                                     hall_factorn[t, e, 2, 0],
-                                     hall_factorn[t, e, 2, 1],
-                                     hall_factorp[t, e, 0, 0],
-                                     hall_factorp[t, e, 1, 1],
-                                     hall_factorp[t, e, 2, 2],
-                                     hall_factorp[t, e, 0, 1],
-                                     hall_factorp[t, e, 0, 2],
-                                     hall_factorp[t, e, 1, 0],
-                                     hall_factorp[t, e, 1, 2],
-                                     hall_factorp[t, e, 2, 0],
-                                     hall_factorp[t, e, 2, 1]))
+            hall_fact_file.write(
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                "{:>17.8e}{:>17.8e}\n".format(
+                    chempot, eta, tr.ccn[t, e, 0, 0], tr.ccp[t, e, 0, 0],
+                    hall_factorn[t, e, 0, 0], hall_factorn[t, e, 1, 1],
+                    hall_factorn[t, e, 2, 2], hall_factorn[t, e, 0, 1],
+                    hall_factorn[t, e, 0, 2], hall_factorn[t, e, 1, 0],
+                    hall_factorn[t, e, 1, 2], hall_factorn[t, e, 2, 0],
+                    hall_factorn[t, e, 2, 1], hall_factorp[t, e, 0, 0],
+                    hall_factorp[t, e, 1, 1], hall_factorp[t, e, 2, 2],
+                    hall_factorp[t, e, 0, 1], hall_factorp[t, e, 0, 2],
+                    hall_factorp[t, e, 1, 0], hall_factorp[t, e, 1, 2],
+                    hall_factorp[t, e, 2, 0], hall_factorp[t, e, 2, 1]))
 
         # two clear lines between blocks
         sigma_file.write("\n\n")
@@ -1006,17 +969,17 @@ def dump_transport_coefficients(tr, filename_tag=""):
         hall_fact_file.write("\n\n")
 
     # close files
-    file_handler(file_handler=sigma_file)
-    file_handler(file_handler=seebeck_file)
-    file_handler(file_handler=lorenz_file)
-    file_handler(file_handler=kappae_file)
-    file_handler(file_handler=hall_file)
-    file_handler(file_handler=hall_cc_file)
-    file_handler(file_handler=cc_file)
-    file_handler(file_handler=hall_fact_file)
+    file_handler(handler=sigma_file)
+    file_handler(handler=seebeck_file)
+    file_handler(handler=lorenz_file)
+    file_handler(handler=kappae_file)
+    file_handler(handler=hall_file)
+    file_handler(handler=hall_cc_file)
+    file_handler(handler=cc_file)
+    file_handler(handler=hall_fact_file)
 
 
-def dump_relaxation_time(tr, filename=None):
+def dump_relaxation_time(tr, filename=None):  # pylint: disable=too-many-branches
     """
     Writes the relaxation time to file.
 
@@ -1043,7 +1006,7 @@ def dump_relaxation_time(tr, filename=None):
     """
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running dump_relaxation_time.")
 
     if filename is None:
@@ -1061,7 +1024,7 @@ def dump_relaxation_time(tr, filename=None):
     noband_dep = True
     if len(tr.scattering_energies.shape) > 1:
         noband_dep = False
-    if precalc_scattering:
+    if precalc_scattering:  # pylint: disable=too-many-nested-blocks
         for band in range(tr.scattering_total_inv[0].shape[0]):
             filename_band = filename + "_band_" + str(band + 1)
             # open
@@ -1097,9 +1060,11 @@ def dump_relaxation_time(tr, filename=None):
                 "#     rule in fs                                         #\n")
             if not tr.param.onlytotalrate:
                 scattering_file.write(
-                    "#  3-14. Column: relaxation time in fs for each          #\n")
+                    "#  3-14. Column: relaxation time in fs for each          #\n"
+                )
                 scattering_file.write(
-                    "#        mechanism defined in the band parameter file    #\n")
+                    "#        mechanism defined in the band parameter file    #\n"
+                )
             scattering_file.write(
                 "#                                                        #\n")
             scattering_file.write(
@@ -1116,16 +1081,13 @@ def dump_relaxation_time(tr, filename=None):
             for temp in range(tr.scattering_total_inv.shape[0]):
                 for energy in range(scattering_energies.shape[0]):
                     scattering_file.write(
-                        str(scattering_energies[energy]) +
-                        " " +
+                        str(scattering_energies[energy]) + " " +
                         str(tr.scattering_total_inv[temp, band, energy]))
                     if not tr.param.onlytotalrate:
                         for scatter in range(tr.scattering_inv.shape[3]):
-                            scattering_file.write(" " +
-                                                  str(tr.scattering_inv[temp,
-                                                                        band,
-                                                                        energy,
-                                                                        scatter]))
+                            scattering_file.write(" " + str(
+                                tr.scattering_inv[temp, band, energy, scatter])
+                                                  )
                     scattering_file.write("\n")
                 # write two blank lines in order to block on temperature
                 scattering_file.write("\n\n")
@@ -1163,7 +1125,7 @@ def dump_density_of_states(bs, dos=None, dos_energies=None, filename="dos"):
     """
 
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running dump_density_of_states.")
 
     if dos is None:
@@ -1178,8 +1140,7 @@ def dump_density_of_states(bs, dos=None, dos_energies=None, filename="dos"):
 
     # concatenate density of states for all bands, expand later and include
     # decomposed dos
-    dos_file = file_handler(
-        "output/" + filename, status='w')
+    dos_file = file_handler("output/" + filename, status='w')
     dos_file.write(
         "##########################################################\n")
     dos_file.write(
@@ -1221,12 +1182,16 @@ def dump_density_of_states(bs, dos=None, dos_energies=None, filename="dos"):
     file_handler(filename, dos_file)
 
 
-def dump_bandstruct_line(bs, kstart, kend, filename="band",
-                         datatype="e", k_direct=True, itype=None,
+def dump_bandstruct_line(bs,
+                         kstart,
+                         kend,
+                         filename="band",
+                         datatype="e",
+                         k_direct=True,
+                         itype=None,
                          itype_sub=None):
     """
-    Writes the energy or velocity dispersions extracted along a line
-    to a file.
+    Writes the energy or velocity dispersions extracted along a line to a file.
 
     Parameters
     ----------
@@ -1272,7 +1237,7 @@ def dump_bandstruct_line(bs, kstart, kend, filename="band",
 
     """
     # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running dump_bandstruct_line.")
 
     # kstart and kend supplied in cartesian (next routine expects direct),
@@ -1289,8 +1254,7 @@ def dump_bandstruct_line(bs, kstart, kend, filename="band",
         e, kpts = bs.fetch_energies_along_line(
             ks, ke, itype=itype, itype_sub=itype_sub)
         kpoint_length = np.linalg.norm(kpts - kpts[0], axis=1)
-        bands_file = file_handler(
-            "output/" + filename, status='w')
+        bands_file = file_handler("output/" + filename, status='w')
         bands_file.write(
             "##########################################################\n")
         bands_file.write(
@@ -1350,8 +1314,7 @@ def dump_bandstruct_line(bs, kstart, kend, filename="band",
         vel, kpts = bs.fetch_velocities_along_line(
             ks, ke, itype=itype, itype_sub=itype_sub)
         kpoint_length = np.linalg.norm(kpts - kpts[0], axis=1)
-        bands_file = file_handler(
-            "output/" + filename, status='w')
+        bands_file = file_handler("output/" + filename, status='w')
         bands_file.write(
             "##########################################################\n")
         bands_file.write(
@@ -1399,23 +1362,21 @@ def dump_bandstruct_line(bs, kstart, kend, filename="band",
         bands_file.write("{:<7s}".format("Dist."))
         for band in range(vel.shape[0]):
             for i in range(3):
-                bands_file.write("{:>16s}".format(
-                    "dE_{" + str(band + 1) + "}(k)/dk_" + str(i + 1)))
+                bands_file.write("{:>16s}".format("dE_{" + str(band + 1) +
+                                                  "}(k)/dk_" + str(i + 1)))
         bands_file.write("\n")
         for kpoint in range(kpts.shape[0]):
             bands_file.write("{:>7.4f}".format(kpoint_length[kpoint]))
             for band in range(vel.shape[0]):
-                bands_file.write(" " + "{:>16.4e}".format(vel[band, 0,
-                                                              kpoint]) +
-                                 " " + "{:>16.4e}".format(vel[band, 1,
-                                                              kpoint]) +
-                                 " " + "{:>16.4e}".format(vel[band, 2,
-                                                              kpoint]))
+                bands_file.write(
+                    " " + "{:>16.4e}".format(vel[band, 0, kpoint]) + " " +
+                    "{:>16.4e}".format(vel[band, 1, kpoint]) + " " +
+                    "{:>16.4e}".format(vel[band, 2, kpoint]))
             bands_file.write("\n")
         file_handler(filename, bands_file)
 
 
-def file_handler(filename="", file_handler=None, status=None):
+def file_handler(filename="", handler=None, status=None):
     """
     Open and close files
 
@@ -1423,7 +1384,7 @@ def file_handler(filename="", file_handler=None, status=None):
     ----------
     filename : string
         Filename to be handled
-    file_handler : object, optional
+    handler : object, optional
         A file object. If provided, this routine closes the file
     status : {"w", "r", "a"}
         The status, e.g. write, read, append etc.
@@ -1435,20 +1396,21 @@ def file_handler(filename="", file_handler=None, status=None):
 
     """
     # get logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
 
     if status is None:
         if file_handler is None:
             logger.error("Could not close an empty file handler. Exiting.")
             sys.exit(1)
-        file_handler.close()
-    else:
-        try:
-            file_handler = open(filename, status)
-            return file_handler
-        except:
-            logger.error("Could not open " + filename + ". Exiting.")
-            sys.exit(1)
+        handler.close()
+        return None
+
+    try:
+        handler = open(filename, status)
+        return handler
+    except IOError:
+        logger.error("Could not open %s. Exiting.", filename)
+        sys.exit(1)
 
 
 def start_message():
@@ -1466,23 +1428,24 @@ def start_message():
     """
 
     # get logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
 
     # dump logo
-    logger.info("Starting T4ME. "
-                + constants.logo + "\n"
-                "T4ME - Transport for Materials\n"
-                "Version: " + constants.version + "\n"
-                "License: GNU GPL v3\n"
-                "Documentation: https://espenfl.github.io/t4me \n"
-                "Git repo: git@github.com:espenfl/t4me.git\n"
-                "Developed by: Espen Flage-Larsen\n"
-                "Contact: espen.flage-larsen@sintef.no\n"
-                "Additional contributions or extensions of the code\n"
-                "are welcome and greatly appreciated. Please contact\n"
-                "the developer to coordinate.\n"
-                "\n\n"
-                "////   Starting calculations according to set configuration.   ////\n")
+    logger.info(
+        "Starting T4ME. %s\n"
+        "T4ME - Transport for Materials\n"
+        "Version: %s\n"
+        "License: GNU GPL v3\n"
+        "Documentation: https://espenfl.github.io/t4me \n"
+        "Git repo: git@github.com:espenfl/t4me.git\n"
+        "Developed by: Espen Flage-Larsen\n"
+        "Contact: espen.flage-larsen@sintef.no\n"
+        "Additional contributions or extensions of the code\n"
+        "are welcome and greatly appreciated. Please contact\n"
+        "the developer to coordinate.\n"
+        "\n\n"
+        "////   Starting calculations according to set configuration.   ////\n",
+        constants.logo, constants.version)
 
 
 def end_message():
@@ -1500,8 +1463,10 @@ def end_message():
     """
 
     # get logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
 
     # dump logo
-    logger.info("Calculations finished.\n"
-                "\n\n////   End of calculations                                     ////\n")
+    logger.info(
+        "Calculations finished.\n"
+        "\n\n////   End of calculations                                     ////\n"
+    )

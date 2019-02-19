@@ -16,26 +16,28 @@
 #    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
 
 #!/usr/bin/python
+"""Contains routines to set up the bandstructure."""
+
+# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements
+# pylint: disable=too-many-lines, assignment-from-no-return, unsubscriptable-object, unsupported-assignment-operation, c-extension-no-member
 
 import sys
-import math
 import logging
-import numpy as np
-import xml.etree.cElementTree as ET
-import scipy.interpolate
 import copy
+import numpy as np
+import scipy.interpolate
 
 import t4me.inputoutput as inputoutput
 import t4me.interface as interface
 import t4me.utils as utils
 import t4me.constants as constants
 import t4me.spglib_interface as spglib_interface
+from t4me.lattice import check_sensible_ksampling
 
 
-class Bandstructure():
+class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many-public-methods
     """
-    Handles the read in, generation and storrage of the
-    bandstructure and its relevant parameters.
+    Handles the read in, generation and storrage of the bandstructure and its relevant parameters.
 
     Parameters
     ----------
@@ -85,24 +87,48 @@ class Bandstructure():
 
     def __init__(self, lattice, param, location=None, filename=None):
         # configure logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
+        self.energies = None
+        self.velocities = None
+        self.dos = None
+        self.dos_partial = None
+        self.dos_energies = None
         self.lattice = lattice
         self.param = param
+        self.occ = None
+        self.cbm_band = None
+        self.metallic = None
+        self.bandparams = None
+        self.tight_hop = None
+        self.tight_orb = None
+        self.tight_onsite = None
+        self.tight_adj_onsite = None
+        self.gen_velocities = False
+        self.spin_degen = None
+        self.status = None
+        self.e0 = None
+        self.effmass = None
+        self.effmass_eigenval = None
+        self.effmass_eigenvec = None
+        self.effmass_tensor = None
+        self.a = None
+        self.ascale = None
+        self.kshift = None
+        self.scale = None
         if self.param.read == "param":
-            interface.bandstructure_param(self, location=location,
-                                          filename=filename)
+            interface.bandstructure_param(
+                self, location=location, filename=filename)
         elif self.param.read == "vasp":
-            interface.bandstructure_vasp(self, location=location,
-                                         filename=filename)
-        elif ((self.param.read == "numpy")
-              or (self.param.read == "numpyv")):
-            interface.bandstructure_numpy(self, location=location,
-                                          filename=filename)
-        elif (self.param.read == "w90"):
-            interface.bandstructure_w90(self, location=location,
-                                        filename=filename)
+            interface.bandstructure_vasp(
+                self, location=location, filename=filename)
+        elif ((self.param.read == "numpy") or (self.param.read == "numpyv")):
+            interface.bandstructure_numpy(
+                self, location=location, filename=filename)
+        elif self.param.read == "w90":
+            interface.bandstructure_w90(
+                self, location=location, filename=filename)
         else:
-            logging.error(
+            logger.error(
                 "The supplied read parameter in general configuration "
                 "file is not recognized. Exiting.")
             sys.exit(1)
@@ -158,7 +184,7 @@ class Bandstructure():
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running locate_vbm.")
 
         if energies is None:
@@ -166,13 +192,19 @@ class Bandstructure():
 
         if occ is None:
             occ = self.occ
+            if occ is None:
+                logger.error(
+                    "Occupancies are needed to calculate the valence band maximum. Exiting."
+                )
+                sys.exit(1)
 
         # fetch the band index for the vbm
         numkpoints = energies[0].shape[0]
         # ceil in case of partly occupied band (although then things
         # start to get messy)
-        vbm_band = int(np.ceil(
-            occ[(abs(occ) > self.param.occ_cutoff)].shape[0] / numkpoints)) - 1
+        vbm_band = int(
+            np.ceil(occ[
+                (abs(occ) > self.param.occ_cutoff)].shape[0] / numkpoints)) - 1
 
         # fetch the kpoint for this band
         vbm_kpoint = np.argmax(energies[vbm_band])
@@ -207,7 +239,7 @@ class Bandstructure():
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running locate_cbm.")
 
         if energies is None:
@@ -215,14 +247,19 @@ class Bandstructure():
 
         if occ is None:
             occ = self.occ
+            if occ is None:
+                logger.error(
+                    "Occupancies are needed to calculate the valence band maximum. Exiting."
+                )
+                sys.exit(1)
 
         # fetch the band index for the cbm
         numkpoints = energies[0].shape[0]
         # ceil in case of partly occupied band (although then things
         # start to get messy)
-        cbm_band = occ.shape[0] - int(np.ceil(
-            occ[(abs(occ) < self.param.occ_cutoff)].shape[0] /
-            numkpoints))
+        cbm_band = occ.shape[0] - int(
+            np.ceil(
+                occ[(abs(occ) < self.param.occ_cutoff)].shape[0] / numkpoints))
 
         # fetch the kpoint for this band
         cbm_kpoint = np.argmin(energies[cbm_band])
@@ -256,15 +293,13 @@ class Bandstructure():
             The band gap in eV.
         """
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running locate_vbm_and_bandgap.")
 
         # fetch valence band maximum
-        vbm_energy, vbm_band, vbm_kpoint = self.locate_vbm(
-            energies=energies, occ=occ)
+        vbm_energy, _, vbm_kpoint = self.locate_vbm(energies=energies, occ=occ)
         # fetch conduction band minimum
-        cbm_energy, cbm_band, cbm_kpoint = self.locate_cbm(
-            energies=energies, occ=occ)
+        cbm_energy, _, cbm_kpoint = self.locate_cbm(energies=energies, occ=occ)
 
         # now we need to calculate the band gap
         band_gap = cbm_energy - vbm_energy
@@ -280,8 +315,7 @@ class Bandstructure():
 
     def apply_scissor_operator(self, energies=None):
         """
-        Apply scissor operator to blue or redshift the conduction band
-        energies.
+        Apply scissor operator to blue or redshift the conduction band energies.
 
         Parameters
         ----------
@@ -307,7 +341,7 @@ class Bandstructure():
 
         """
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running apply_scissor_operator.")
 
         if energies is None:
@@ -318,25 +352,22 @@ class Bandstructure():
                          "not found while trying to apply scissor "
                          "operator. Are you sure the dataset you "
                          "supplied contained enough detail to calculate "
-                         "the valence band maximu, conduction band "
+                         "the valence band maximum, conduction band "
                          "minimum and band gap? Exiting.")
             sys.exit(1)
 
         if self.param.scissor:
             if self.metallic:
-                logger.error(
-                    "User requests to apply scissor operator to a "
-                    "metallic system. Exiting.")
-            logger.info(
-                "Applying scissor operator and lifting the conduction "
-                "bands")
-            energies[self.cbm_band:] = energies[
-                self.cbm_band:] + self.param.scissor
+                logger.error("User requests to apply scissor operator to a "
+                             "metallic system. Exiting.")
+            logger.info("Applying scissor operator and lifting the conduction "
+                        "bands")
+            energies[self.
+                     cbm_band:] = energies[self.cbm_band:] + self.param.scissor
 
     def check_dos_energy_range(self, remin, remax):
         """
-        Check that the energy grid of the density of states covers
-        the range of the supplied paramters.
+        Check that the energy grid of the density of states covers the range of the supplied paramters.
 
         Parameters
         ----------
@@ -353,7 +384,7 @@ class Bandstructure():
 
         """
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running check_dos_energy_range.")
 
         within = True
@@ -366,14 +397,14 @@ class Bandstructure():
         if self.dos_energies is None:
             return False
 
-        if (remin < self.dos_energies[0]):
+        if remin < self.dos_energies[0]:
             logger.info("The lower limit on the energy of the sampled "
                         "density of states is not 'transport_energycutband' "
                         "away from the minimum of the requested chemical "
                         "potential.")
             within = False
 
-        if (remax < self.dos_energies[self.dos_energies.shape[0] - 1]):
+        if remax < self.dos_energies[self.dos_energies.shape[0] - 1]:
             logger.info("The high limit on the energy of the sampled "
                         "density of states is not 'transport_energycutband' "
                         "away from the maximum of the requested chemical "
@@ -384,8 +415,7 @@ class Bandstructure():
 
     def check_energyshifts(self):
         """
-        Check the energy shift parameters in the parameter file for
-        consistency.
+        Check the energy shift parameters in the parameter file for consistency.
 
         Parameters
         ----------
@@ -397,10 +427,10 @@ class Bandstructure():
 
         """
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running apply_scissor_operator.")
 
-        if (self.param.e_fermi_in_gap and
+        if (self.param.e_fermi_in_gap and # pylint: disable=too-many-boolean-expressions
                 self.param.e_fermi and
                 self.param.e_vbm) or \
                 (self.param.e_fermi_in_gap and
@@ -412,15 +442,14 @@ class Bandstructure():
                          "parameter. Exiting.")
             sys.exit(1)
 
-    def check_velocities(self, cutoff):
+    def check_velocities(self, cutoff=None):
         """
-        Check that there exists realistic values for the band
-        velocities.
+        Check that there exists realistic values for the band velocities.
 
         Parameters
         ----------
-        cutoff : float
-            Cutoff value for the test in eVAA units.
+        cutoff : float, optional
+            Cutoff value for the test in eVAA units. Defaults to 0.01.
 
         Returns
         -------
@@ -429,18 +458,21 @@ class Bandstructure():
 
         """
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running check_velocities.")
 
+        if cutoff is None:
+            cutoff = 0.01
+
         if (np.abs(self.velocities) < cutoff).all():
-            logger.info("All band velocities are less than " +
-                        str(cutoff) + ". Continuing.")
+            logger.info("All band velocities are less than %s. Continuing.",
+                        str(cutoff))
             return False
 
         return True
 
     def locate_band_gap(self):
-        """"
+        """
         Calculate the band gap.
 
         Parameters
@@ -455,20 +487,19 @@ class Bandstructure():
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running locate_band_gap.")
 
         # loop bands
         band_gap = np.inf
         if self.bandparams.shape[0] < 2:
-            logging.info(
-                "Requesting band gap for one band system. Setting "
-                "band gap to infinity and Fermi level to zero.")
+            logger.info("Requesting band gap for one band system. Setting "
+                        "band gap to infinity and Fermi level to zero.")
             band_gap = np.inf
         for band in range(self.bandparams.shape[0]):
             # locate minimum value in all bands
-            conduction = self.energies[band][
-                np.where(self.energies[band] > constants.zerocut)]
+            conduction = self.energies[band][np.where(
+                self.energies[band] > constants.zerocut)]
             if conduction.shape[0] > 0:
                 band_min = np.amin(self.energies[band][np.where(
                     self.energies[band] > constants.zerocut)])
@@ -476,11 +507,9 @@ class Bandstructure():
                     band_gap = band_min
         return band_gap
 
-    def tight_binding_energies(self, bandparam, location=None,
-                               filename=None):
+    def tight_binding_energies(self, bandparam):
         """
-        This routine sets up the interface to PythTB and execute
-        the tight binding extractions.
+        Sets up the interface to PythTB and execute the tight binding extractions.
 
         Parameters
         ----------
@@ -509,19 +538,29 @@ class Bandstructure():
                   relevant to PythTB.
 
         """
-        # lazy import of PythTB
-        import pythtb
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running tight_binding_energies.")
+
+        # lazy import of PythTB
+        try:
+            import pythtb
+        except ImportError:
+            logger.error(
+                "Could not import the PythTB module. Please make sure it is installed. Exiting."
+            )
+            sys.exit(1)
 
         hop = self.tight_hop[bandparam]
         orb = self.tight_orb[bandparam]
         onsite = self.tight_onsite[bandparam]
         adjust_onsite = self.tight_adj_onsite[bandparam]
-        lat = [self.lattice.unitcell[0].tolist(), self.lattice.unitcell[
-            1].tolist(), self.lattice.unitcell[2].tolist()]
+        lat = [
+            self.lattice.unitcell[0].tolist(),
+            self.lattice.unitcell[1].tolist(),
+            self.lattice.unitcell[2].tolist()
+        ]
         # if orb is an empty list, set default to
         # atomic centered orbitals
         if not orb:
@@ -538,12 +577,11 @@ class Bandstructure():
         energies = tb.solve_all(kmesh)
         e_shape = energies.shape
         if e_shape[0] != len(orb):
-            logger.error(
-                "The number of bands returned from the solve_all "
-                "function in PythTB does not match the number "
-                "of entries of torb. Exiting.")
+            logger.error("The number of bands returned from the solve_all "
+                         "function in PythTB does not match the number "
+                         "of entries of torb. Exiting.")
             sys.exit(1)
-        velocities = np.zeros((e_shape[0], 3, e_shape[1]))
+
         # loop bands
         for band in range(e_shape[0]):
             if adjust_onsite:
@@ -559,735 +597,11 @@ class Bandstructure():
 
             # then make sure no values are truly zero (cause later
             # problems in scattering routines etc.)
-            energies[band][np.abs(energies[band]) <
-                           constants.zerocut] = constants.zerocut
+            energies[band][
+                np.abs(energies[band]) < constants.zerocut] = constants.zerocut
         # PythTB does not return velocities
         self.gen_velocities = True
         return energies, None
-
-    def non_parabolic_energy_1(self, k, effmass, a, scale, e0=0.0,
-                               kshift=[0.0, 0.0, 0.0]):
-        """
-        Calculates a energy dispersion, both parabolic
-        and non-parabolic.
-
-        Parameters
-        ----------
-        k : ndarray
-            | Dimension: (N,3)
-
-            Contains the N k-point coordinates (cartesian) where the
-            dispersion is to be evaluated.
-        effmass : ndarray
-            | Dimension: (3)
-
-            Contains the effective mass along the three k-point
-            directions. Only the diagonal components of the effective
-            mass tensor is used. In units of the free electron mass.
-        a : ndarray
-            | Dimension: (3)
-
-            The non parabolic coefficients in front of each :math:`k^2` 
-            direction which translates to :math:`a^2k^4` in the one
-            dimensional case.
-        scale : float
-            The scale factor in front of the non-parabolic correction
-        e0 : float, optional
-            Shift of the energy scale in eV.
-        kshift : ndarray, optional
-            | Dimension: (3)
-
-            The shift along the respective k-point vectors in
-            cartesian coordinates.
-
-        Returns
-        -------
-        ndarray
-            | Dimension: (N)
-
-            Contains the energy dispersion in eV at each N k-points.
-
-        Notes
-        -----
-        This routines calculates the energy dispersion according to
-
-        .. math:: E=\\frac{\\hbar^2 k^2}{2m}+ak^4.
-
-        Setting :math:`a` to zero yields a parabolic
-        dispersion.
-
-        """
-
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running non_parabolic_energy_1.")
-
-        k = k - kshift
-        k2 = k * k
-        k4 = np.power(np.sum(a * k2, axis=1), 2.0)
-        k2 = np.sum(k2 / effmass, axis=1)
-        return e0 + constants.bandunit * k2 + scale * k4
-
-    def non_parabolic_velocity_1(self, k, effmass, a, scale,
-                                 kshift=[0.0, 0.0, 0.0]):
-        """
-        Calculates the group velocity for the energy dispersion
-        generated in :func:`non_parabolic_energy_1`, both parabolic
-        and non-parabolic.
-
-        Parameters
-        ----------
-        k : ndarray
-            | Dimension: (N,3)
-
-            Contains the N k-point in cartesian coordinates where
-            the dispersion is to be evaluated.
-        effmass : ndarray
-            | Dimension: (3)
-
-            Contains the effective mass along the three k-point
-            directions. Only the diagonal components of the effective
-            mass tensor is used. In units of the free electron mass.
-        a : ndarray
-            | Dimension: (3)
-
-            The non parabolic coefficients in front of each :math:`k^2` 
-            direction which translates to :math:`a^2k^4` in the one
-            dimensional case.
-        scale : float
-            The scale factor in front of the non-parabolic correction
-        kshift : ndarray, optional
-            | Dimension: (3)
-
-            The shift along the respective k-point vectors in
-            cartesian coordinates.
-
-        Returns
-        -------
-        vx, vy, vz : ndarray, ndarray, ndarray
-            | Dimension: (N),(N),(N)
-
-            Contains the group velocity at each N k-points
-            for each direction defined by the direction of the k-point
-            unit axis. Units of eVAA.
-
-        Notes
-        -----
-        This routines calculates the group velocity according to
-
-        .. math:: v=\\frac{\\partial E}{\\partial \\vec{k}},
-
-        where
-
-        .. math:: E=\\frac{\\hbar^2 k^2}{2m}+ak^4.
-
-        Setting :math:`a` to zero yields a parabolic dispersion
-        and thus its group velocity.
-
-        .. warning:: The factor :math:`\\hbar^{-1}` is not returned and
-        need to be included externally.
-
-        """
-
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running non_parabolic_velocity_1.")
-
-        k = k - kshift
-        k2 = k * k
-        k2 = np.sum(a * k2, axis=1)
-        parabolic = np.divide(2.0 * constants.bandunit, effmass)
-        scaling = (parabolic + scale * 4.0 * 
-                   np.column_stack((a[0]*k2, a[1]*k2, a[2]*k2))).T
-        spreadkz, spreadky, spreadkx = k.T[2], k.T[1], k.T[0]
-        vx = np.multiply(scaling[0], spreadkx)
-        vy = np.multiply(scaling[1], spreadky)
-        vz = np.multiply(scaling[2], spreadkz)
-        return vx, vy, vz
-
-    def non_parabolic_energy_3(self, k, effmass, a, scale, e0=0.0,
-                               kshift=[0.0, 0.0, 0.0]):
-        """
-        Calculates a k^2 + k^6 energy dispersion.
-
-        Parameters
-        ----------
-        k : ndarray
-            | Dimension: (N,3)
-
-            Contains the N k-point coordinates (cartesian) where the
-            dispersion is to be evaluated.
-        effmass : ndarray
-            | Dimension: (3)
-
-            Contains the effective mass along the three k-point
-            directions. Only the diagonal components of the effective
-            mass tensor is used. In units of the free electron mass.
-        a : ndarray
-            | Dimension: (3)
-
-            The non parabolic coefficients in front of each :math:`k^2` 
-            direction which translates to :math:`a^4k^8` in the one
-            dimensional case.
-        scale : float
-            The scale factor in front of the non-parabolic correction
-        e0 : float, optional
-            Shift of the energy scale in eV.
-        kshift : ndarray, optional
-            | Dimension: (3)
-
-            The shift along the respective k-point vectors in
-            cartesian coordinates.
-
-        Returns
-        -------
-        ndarray
-            | Dimension: (N)
-
-            Contains the energy dispersion in eV at each N k-points.
-
-        Notes
-        -----
-        This routines calculates the energy dispersion according to
-
-        .. math:: E=\\frac{\\hbar^2 k^2}{2m}+a^3k^6.
-
-        Setting :math:`a` to zero yields a parabolic
-        dispersion.
-
-        """
-
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running non_parabolic_energy_3.")
-
-        k = k - kshift
-        k2 = k * k
-        ak2 = np.sum(a * k2, axis=1)
-        k6 = np.power(ak2, 3.0)
-        k2 = np.sum(k2 / effmass, axis=1)
-        return e0 + constants.bandunit * k2 + scale * k6
-
-    def non_parabolic_velocity_3(self, k, effmass, a, scale,
-                                 kshift=[0.0, 0.0, 0.0]):
-        """
-        Calculates the group velocity for the energy dispersion
-        generated in :func:`non_parabolic_energy_3`.
-
-        Parameters
-        ----------
-        k : ndarray
-            | Dimension: (N,3)
-
-            Contains the N k-point in cartesian coordinates where
-            the dispersion is to be evaluated.
-        effmass : ndarray
-            | Dimension: (3)
-
-            Contains the effective mass along the three k-point
-            directions. Only the diagonal components of the effective
-            mass tensor is used. In units of the free electron mass.
-        a : ndarray
-            | Dimension: (3)
-
-            The non parabolic coefficients in front of each :math:`k^2` 
-            direction which translates to :math:`a^4k^8` in the one
-            dimensional case. 
-        scale : float
-            The scale factor in front of the non-parabolic correction
-        kshift : ndarray, optional
-            | Dimension: (3)
-
-            The shift along the respective k-point vectors in
-            cartesian coordinates.
-
-        Returns
-        -------
-        vx, vy, vz : ndarray, ndarray, ndarray
-            | Dimension: (N),(N),(N)
-
-            Contains the group velocity at each N k-points
-            for each direction defined by the direction of the k-point
-            unit axis. Units of eVAA.
-
-        Notes
-        -----
-        This routines calculates the group velocity according to
-
-        .. math:: v=\\frac{\\partial E}{\\partial \\vec{k}},
-
-        where
-
-        .. math:: E=\\frac{\\hbar^2 k^2}{2m}+a^3k^6.
-
-        Setting :math:`a` to zero yields a parabolic dispersion
-        and thus its group velocity.
-
-        .. warning:: The factor :math:`\\hbar^{-1}` is not returned and
-        need to be included externally.
-
-        """
-
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running non_parabolic_velocity_3.")
-
-        k = k - kshift
-        k2 = k * k
-        k2 = np.sum(a * k2, axis=1)
-        k4 = np.power(k2, 2.0)
-        parabolic = np.divide(2.0 * constants.bandunit, effmass)
-        scaling = (parabolic + scale * 6.0 * 
-                   np.column_stack((a[0]*k4, a[1]*k4, a[2]*k4))).T
-        spreadkz, spreadky, spreadkx = k.T[2], k.T[1], k.T[0]
-        vx = np.multiply(scaling[0], spreadkx)
-        vy = np.multiply(scaling[1], spreadky)
-        vz = np.multiply(scaling[2], spreadkz)
-        return vx, vy, vz
-
-    def non_parabolic_energy_4(self, k, effmass, a, scale, e0=0.0,
-                               kshift=[0.0, 0.0, 0.0]):
-        """
-        Calculates a k^2 + k^8 energy dispersion.
-
-        Parameters
-        ----------
-        k : ndarray
-            | Dimension: (N,3)
-
-            Contains the N k-point coordinates (cartesian) where the
-            dispersion is to be evaluated.
-        effmass : ndarray
-            | Dimension: (3)
-
-            Contains the effective mass along the three k-point
-            directions. Only the diagonal components of the effective
-            mass tensor is used. In units of the free electron mass.
-        a : ndarray
-            | Dimension: (3)
-
-            The non parabolic coefficients in front of each :math:`k^2` 
-            direction which translates to :math:`a^4k^8` in the one
-            dimensional case.
-        scale : float
-            The scale factor in front of the non-parabolic correction
-        e0 : float, optional
-            Shift of the energy scale in eV.
-        kshift : ndarray, optional
-            | Dimension: (3)
-
-            The shift along the respective k-point vectors in
-            cartesian coordinates.
-
-        Returns
-        -------
-        ndarray
-            | Dimension: (N)
-
-            Contains the energy dispersion in eV at each N k-points.
-
-        Notes
-        -----
-        This routines calculates the energy dispersion according to
-
-        .. math:: E=\\frac{\\hbar^2 k^2}{2m}+a^4k^8.
-
-        Setting :math:`a` to zero yields a parabolic
-        dispersion.
-
-        """
-
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running non_parabolic_energy_4.")
-
-        k = k - kshift
-        k2 = k * k
-        ak2 = np.sum(a * k2, axis=1)
-        k8 = np.power(ak2, 4.0)
-        k2 = np.sum(k2 / effmass, axis=1)
-        return e0 + constants.bandunit * k2 + scale * k8
-
-    def non_parabolic_velocity_4(self, k, effmass, a, scale,
-                                 kshift=[0.0, 0.0, 0.0]):
-        """
-        Calculates the group velocity for the energy dispersion
-        generated in :func:`non_parabolic_energy_4`.
-
-        Parameters
-        ----------
-        k : ndarray
-            | Dimension: (N,3)
-
-            Contains the N k-point in cartesian coordinates where
-            the dispersion is to be evaluated.
-        effmass : ndarray
-            | Dimension: (3)
-
-            Contains the effective mass along the three k-point
-            directions. Only the diagonal components of the effective
-            mass tensor is used. In units of the free electron mass.
-        a : ndarray
-            | Dimension: (3)
-
-            The non parabolic coefficients in front of each :math:`k^2` 
-            direction which translates to :math:`a^4k^8` in the one
-            dimensional case.
-        scale : float
-            The scale factor in front of the non-parabolic correction
-        kshift : ndarray, optional
-            | Dimension: (3)
-
-            The shift along the respective k-point vectors in
-            cartesian coordinates.
-
-        Returns
-        -------
-        vx, vy, vz : ndarray, ndarray, ndarray
-            | Dimension: (N),(N),(N)
-
-            Contains the group velocity at each N k-points
-            for each direction defined by the direction of the k-point
-            unit axis. Units of eVAA.
-
-        Notes
-        -----
-        This routines calculates the group velocity according to
-
-        .. math:: v=\\frac{\\partial E}{\\partial \\vec{k}},
-
-        where
-
-        .. math:: E=\\frac{\\hbar^2 k^2}{2m}+a^4k^8.
-
-        Setting :math:`a` to zero yields a parabolic dispersion
-        and thus its group velocity.
-
-        .. warning:: The factor :math:`\\hbar^{-1}` is not returned and
-        need to be included externally.
-
-        """
-
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running non_parabolic_velocity_4.")
-
-        k = k - kshift
-        k2 = k * k
-        k2 = np.sum(a * k2, axis=1)
-        k6 = np.power(k2, 3.0)
-        parabolic = np.divide(2.0 * constants.bandunit, effmass)
-        scaling = (parabolic + scale * 8.0 * 
-                   np.column_stack((a[0]*k6, a[1]*k6, a[2]*k6))).T
-        spreadkz, spreadky, spreadkx = k.T[2], k.T[1], k.T[0]
-        vx = np.multiply(scaling[0], spreadkx)
-        vy = np.multiply(scaling[1], spreadky)
-        vz = np.multiply(scaling[2], spreadkz)
-        return vx, vy, vz
-
-    def non_parabolic_energy_5(self, k, effmass, a, scale, e0=0.0,
-                               kshift=[0.0, 0.0, 0.0]):
-        """
-        Calculates a linear energy dispersion.
-
-        Parameters
-        ----------
-        k : ndarray
-            | Dimension: (N,3)
-
-            Contains the N k-point coordinates (cartesian) where the
-            dispersion is to be evaluated.
-        effmass : ndarray
-            | Dimension: (3)
-
-            A dummy.
-        a : ndarray
-            | Dimension: (3)
-
-            The coefficients in front of each :math:`k^2` 
-            direction which translates to :math:`\\sqrt(a)k` in the one
-            dimensional case.
-        scale : float
-            The scale factor in front of the linear expression.
-        e0 : float, optional
-            Shift of the energy scale in eV.
-        kshift : ndarray, optional
-            | Dimension: (3)
-
-            The shift along the respective k-point vectors in
-            cartesian coordinates.
-
-        Returns
-        -------
-        ndarray
-            | Dimension: (N)
-
-            Contains the energy dispersion in eV at each N k-points.
-
-        Notes
-        -----
-        This routines calculates the energy dispersion according to
-        (in one dimension)
-
-        .. math:: E=a\\sqrt(k^2).
-
-        Multiplied by the scale factor in front of this.
-
-        """
-
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running non_parabolic_energy_5.")
-
-        k = k - kshift
-        k2 = k * k
-        k2 = np.sum(a * k2, axis = 1)
-        return e0 + scale * np.sqrt(k2)
-
-    def non_parabolic_velocity_5(self, k, effmass, a, scale,
-                                 kshift=[0.0, 0.0, 0.0]):
-        """
-        Calculates the group velocity for the energy dispersion
-        generated in :func:`non_parabolic_energy_5`.
-
-        Parameters
-        ----------
-        k : ndarray
-            | Dimension: (N,3)
-
-            Contains the N k-point in cartesian coordinates where
-            the dispersion is to be evaluated.
-       effmass : ndarray
-            | Dimension: (3)
-
-            A dummy.
-        a : ndarray
-            | Dimension: (3)
-
-            The coefficients in front of each :math:`k^2` 
-            direction which translates to :math:`\\sqrt(a)k` in the one
-            dimensional case.
-        scale : float
-            The scale factor in front of the linear expression.
-        kshift : ndarray, optional
-            | Dimension: (3)
-
-            The shift along the respective k-point vectors in
-            cartesian coordinates.
-
-        Returns
-        -------
-        vx, vy, vz : ndarray, ndarray, ndarray
-            | Dimension: (N),(N),(N)
-
-            Contains the group velocity at each N k-points
-            for each direction defined by the direction of the k-point
-            unit axis. Units of eVAA.
-
-        Notes
-        -----
-        This routines calculates the group velocity according to
-
-        .. math:: v=\\frac{\\partial E}{\\partial \\vec{k}},
-
-        where
-
-        .. math:: E=a\\sqrt(k^2).
-
-        Multiplied by the scale factor in front of this.
-
-        .. warning:: The factor :math:`\\hbar^{-1}` is not returned and
-        need to be included externally.
-
-        """
-
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running non_parabolic_velocity_5.")
-
-        k = k - shift
-        k2 = k * k
-        k2 = np.sum(a * k2, axis = 1)
-        vx = scale * a[0] * k[:,0] / np.sqrt(k2)
-        vy = scale * a[1] * k[:,1] / np.sqrt(k2)
-        vz = scale * a[2] * k[:,2] / np.sqrt(k2)
-        return vx, vy, vz
-    
-    def non_parabolic_energy_2(self, k, effmass, a):
-        """
-        Calculates a non-parabolic energy dispersion.
-
-        Parameters
-        ----------
-        k : ndarray
-            | Dimension: (N,3)
-
-            Contains the N k-point cartesian coordinates where the
-            dispersion is to be evaluated.
-        effmass : float
-            The effective mass in units of the free electron mass.
-        a : float
-            The :math:`\\alpha` factor.
-
-        Returns
-        -------
-        ndarray
-            | Dimension: (N)
-
-            Contains the energy in eV at each N k-points for each
-            direction defined by the direction of the k-point unit axis.
-
-        Notes
-        -----
-        This routine calculates the energy dispersion according to
-
-        .. math:: E(1+\\alpha E)=\\frac{\\hbar^2k^2}{2m},
-
-        where :math:`\\alpha` is a parameter that adjust the
-        non-parabolicity
-
-        Note that if :math:`m` is negative (valence bands), the square
-        root is undefined for :math:`k^2>=m/(2\\alpha \\hbar)`, which is
-        a rather limited k-space volume. Consider (either :math:`m` or
-        :math:`\\alpha` negative).
-
-        .. math:: m=m_e, \\alpha=1.0 (E_g=1.0 \\mathrm{eV})
-                  \\rightarrow |\\vec{k}| \\geq 0.26 \\mathrm{AA^{-1}}
-
-        .. math:: m=0.1m_e, \\alpha=1.0 \\rightarrow |\\vec{k}|
-                  \\geq 0.081 \\mathrm{AA^{-1}}
-
-        .. math:: m=10m_e, \\alpha=1.0 \\rightarrow |\\vec{k}|
-                  \\geq 0.81 \\mathrm{AA^{-1}}
-
-        .. math:: m=m_e, \\alpha=10.0 (E_g=0.1 \\mathrm{eV})
-                  \\rightarrow |\\vec{k}| \\geq 0.81 \\mathrm{AA^{-1}}
-
-        .. math:: m=m_e, \\alpha=0.1 (E_g=10 \\mathrm{eV})
-                  \\rightarrow |\\vec{k}| \\geq 0.081 \\mathrm{AA^{-1}}
-
-        For a simple cell of 10 :math:`\\mathrm{AA}`, the BZ border is
-        typically at 0.31 :math:`\\mathrm{AA^{-1}}` and for a smaller
-        cell, e.g. 3.1 :math:`\\mathrm{AA}`, the BZ border is here
-        at 1.0 :math:`\\mathrm{AA^{-1}}`.
-
-        .. warning:: In order to be able to use all values of
-                     :math:`a`, we return a linear :math:`E(\\vec{k})`
-                     in the undefined region (the last defined value
-                     of :math:`E(\\vec{k})` is used). This is highly
-                     unphysical, so we print a warning to notice the user
-
-        """
-
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running non_parabolic_energy_2.")
-
-        if (effmass < 0 and a > 0) or (effmass > 0 and a < 0):
-            k2 = np.sum(k * k, axis=1)
-            last_valid_k2 = -effmass / \
-                (4 * a * constants.bandunit) - constants.zerocut
-            last_valid_energy = (
-                -1.0 + np.sqrt(1 + 4 * a *
-                               (constants.bandunit * last_valid_k2 /
-                                effmass))) / (2 * a)
-            logging.warning("The product of the effective mass "
-                            "and non parabolic correction factor "
-                            "is negative. The Kane model is thus "
-                            "only defined for a restricted k-vector set. "
-                            "Returning a linear E(k)=E in the undefined "
-                            "region, where the linear E is the last "
-                            "allowed value. USER BEWARE THAT THE "
-                            "TRANSPORT INTEGRALS COULD PICK UP THIS "
-                            "DISCONTINUITY. Last valid energy for "
-                            "the Kane model is " +
-                            str(last_valid_energy) +
-                            " eV. Remember no band folding is performed.")
-            energy = constants.bandunit * k2 / effmass
-            # need to loop manually to fill the array outside the
-            # valid range
-            for i in range(k2.shape[0]):
-                if k2[i] < last_valid_k2:
-                    energy[i] = (-1.0 + np.sqrt(1 + 4 *
-                                                a * energy[i])) / (2 * a)
-                else:
-                    energy[i] = last_valid_energy
-            return energy
-        else:
-            e_parabolic = constants.bandunit * \
-                np.sum(k * k, axis=1) / effmass
-            return (-1.0 + np.sqrt(1 + 4 * a * e_parabolic)) / (2 * a)
-
-    def non_parabolic_velocity_2(self, k, effmass, a):
-        """
-        Calculates the group velocity for the energy dispersion
-        generated in :func:`non_parabolic_energy_2`, both parabolic
-        and non-parabolic.
-
-        Parameters
-        ----------
-        k : ndarray
-            | Dimension: (N,3)
-
-            Contains the N k-point in cartesian coordinates where
-            the dispersion is to be evaluated.
-        effmass : float
-            The effective mass in units of the free electron mass.
-        a : ndarray
-            | Dimension: (3)
-
-            The :math:`\\alpha` factor.
-
-        Returns
-        -------
-        vx, vy, vz : ndarray, ndarray, ndarray
-            | Dimension: (N), (N), (N)
-
-            The group velocity along each axis in the reciprocal
-            unit cell. In units of eVAA.
-
-        Notes
-        -----
-        Consult comments in :func:`non_parabolic_energy_1`
-
-        .. warning:: The factor :math:`\\hbar^{-1}` is not returned
-                     and need to be included externally.
-
-        """
-
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running non_parabolic_velocity_2.")
-
-        spreadkz, spreadky, spreadkx = k.T[2], k.T[1], k.T[0]
-        # check validity
-        if (effmass < 0 and a > 0) or (effmass > 0 and a < 0):
-            k2 = np.sum(k * k, axis=1)
-            last_valid_k2 = -effmass / \
-                (4 * a * constants.bandunit)
-            energy = constants.bandunit * k2 / effmass
-            last_valid_energy = (-1.0 + np.sqrt(1 + 4 * a *
-                                                (constants.bandunit *
-                                                 last_valid_k2 /
-                                                 effmass))) / (2 * a)
-            # need to loop manually to fill the array outside the
-            # valid range
-            for i in range(k2.shape[0]):
-                if k2[i] < last_valid_k2:
-                    energy[i] = (-1.0 + np.sqrt(1 + 4 *
-                                                a * energy[i])) / (2 * a)
-                else:
-                    energy[i] = last_valid_energy
-        else:
-            e_parabolic = constants.bandunit * \
-                np.sum(k * k, axis=1) / effmass
-            energy = (-1.0 + np.sqrt(1 + 4 * a * e_parabolic)) / (2 * a)
-        scaling = 2.0 * constants.bandunit / (effmass *
-                                              (1 + 2 * a * energy))
-        vx = np.multiply(scaling, spreadkx)
-        vy = np.multiply(scaling, spreadky)
-        vz = np.multiply(scaling, spreadkz)
-        return vx, vy, vz
 
     def gen_dos(self):
         """
@@ -1322,7 +636,7 @@ class Bandstructure():
 
         """
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running gen_dos.")
 
         # check if we have any bands which are not parabolic, if
@@ -1348,15 +662,14 @@ class Bandstructure():
         e0 = self.e0
         effmass = np.zeros(numbands)
         # use e_max for the dos limit
-        dos_energies = np.linspace(self.param.dos_e_min,
-                                   self.param.dos_e_max,
+        dos_energies = np.linspace(self.param.dos_e_min, self.param.dos_e_max,
                                    self.param.dos_num_samples)
         dos = np.zeros((numbands, self.param.dos_num_samples))
         # some tests
         for band in range(numbands):
             # use density of states effective mass
-            effmass[band] = np.power(np.prod(
-                np.abs(self.effmass[band])), 1.0 / 3.0)
+            effmass[band] = np.power(
+                np.prod(np.abs(self.effmass[band])), 1.0 / 3.0)
             energy_shift = dos_energies - e0[band]
             status = self.status[band]
             # conduction
@@ -1379,7 +692,7 @@ class Bandstructure():
         return dos, dos_energies
 
     def gen_bands(self):
-        """
+        r"""
         Generates the set of energy and velocity dispersions.
 
         Parameters
@@ -1407,12 +720,12 @@ class Bandstructure():
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running gen_bands.")
 
         # check if vasp is read, if so, only return
         if self.param.read == "vasp":
-            return
+            return None, None, None
         numbands = self.bandparams.shape[0]
         numkpoints = self.lattice.kmesh.shape[0]
         energies = np.zeros((numbands, numkpoints))
@@ -1448,16 +761,15 @@ class Bandstructure():
             if band_gap != np.inf:
                 self.param.e_fermi = self.locate_band_gap() / 2.0
             else:
-                logger.info(
-                    "User wanted to place Fermi level in the middle "
-                    "of the gap, but no gap was found. Setting Fermi "
-                    "level to 0.0 eV. Continuing.")
+                logger.info("User wanted to place Fermi level in the middle "
+                            "of the gap, but no gap was found. Setting Fermi "
+                            "level to 0.0 eV. Continuing.")
                 self.param.e_fermi = 0.0
         # return data
         return energies, velocities, tb_band
 
-    def gen_analytic_band(self, band):
-        """
+    def gen_analytic_band(self, band):  # pylint: disable=too-many-locals
+        r"""
         Generate an analytical energy and velocity dispersion.
 
         Parameters
@@ -1481,19 +793,9 @@ class Bandstructure():
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running gen_analytick_band.")
 
-        # locate BZ border
-        kdirmax = np.amax(self.lattice.kmesh, axis=0)
-        kdirborder = np.array([[kdirmax[0], 0.0, 0.0],
-                               [0.0, kdirmax[1], 0.0],
-                               [0.0, 0.0, kdirmax[2]],
-                               [kdirmax[0], kdirmax[1], 0.0],
-                               [kdirmax[0], 0.0, kdirmax[2]],
-                               [0.0, kdirmax[1], kdirmax[2]],
-                               [kdirmax[0], kdirmax[1], kdirmax[2]]])
-        kcartborder = self.lattice.dir_to_cart(kdirborder)
         # set generator functions
         band_function = self.bandparams[band][0]
         # set a to zero for parabolic bands
@@ -1502,40 +804,47 @@ class Bandstructure():
                         "Continuing.")
             self.a[band] = [0.0, 0.0, 0.0]
             self.ascale[band] = 0.0
-            generate_energy = self.non_parabolic_energy_1
-            generate_velocity = self.non_parabolic_velocity_1
+            generate_energy = non_parabolic_energy_1
+            generate_velocity = non_parabolic_velocity_1
         else:
             if band_function == 1:
-                generate_energy = self.non_parabolic_energy_1
-                generate_velocity = self.non_parabolic_velocity_1
+                generate_energy = non_parabolic_energy_1
+                generate_velocity = non_parabolic_velocity_1
             elif band_function == 2:
-                generate_energy = self.non_parabolic_energy_2
-                generate_velocity = self.non_parabolic_velocity_2
+                generate_energy = non_parabolic_energy_2
+                generate_velocity = non_parabolic_velocity_2
             elif band_function == 5:
-                generate_energy = self.non_parabolic_energy_3
-                generate_velocity = self.non_parabolic_velocity_3                
+                generate_energy = non_parabolic_energy_3
+                generate_velocity = non_parabolic_velocity_3
             elif band_function == 6:
-                generate_energy = self.non_parabolic_energy_4
-                generate_velocity = self.non_parabolic_velocity_4
+                generate_energy = non_parabolic_energy_4
+                generate_velocity = non_parabolic_velocity_4
             elif band_function == 7:
-                generate_energy = self.non_parabolic_energy_5
-                generate_velocity = self.non_parabolic_velocity_5                
+                generate_energy = non_parabolic_energy_5
+                generate_velocity = non_parabolic_velocity_5
             elif band_function > 7:
-                logging.error("Supplied non_parabolic_function = " +
-                              str(band_function) + " does not exist."
-                              "Exiting.")
+                logger.error(
+                    "Supplied non_parabolic_function = %s does not exist."
+                    "Exiting.", str(band_function))
                 sys.exit(1)
         # fetch k-point grid in cartersian
         k = self.lattice.fetch_kmesh(direct=False)
         if not band_function == 4:
             # first energy
-            energy = generate_energy(k, self.effmass[band], self.a[band],
-                                     self.ascale[band], e0=self.e0[band],
-                                     kshift=self.kshift[band])
+            energy = generate_energy(
+                k,
+                self.effmass[band],
+                self.a[band],
+                self.ascale[band],
+                e0=self.e0[band],
+                kshift=self.kshift[band])
             # then velocity
-            vx, vy, vz = generate_velocity(k, self.effmass[band], self.a[band],
-                                           self.ascale[band],
-                                           kshift=self.kshift[band])
+            vx, vy, vz = generate_velocity(
+                k,
+                self.effmass[band],
+                self.a[band],
+                self.ascale[band],
+                kshift=self.kshift[band])
         ##################################################
         ##################################################
         # USE THIS SECTION TO MAKE CUSTIMIZED BANDS AND  #
@@ -1549,23 +858,37 @@ class Bandstructure():
             if quartic_onset:
                 # quartic band behavior at the onset
                 # first fetch quartic
-                energy_q = self.non_parabolic_energy_1(
-                    k, self.effmass[band], a=self.a[band], e0=self.e0[band],
+                energy_q = non_parabolic_energy_1(
+                    k,
+                    self.effmass[band],
+                    self.a[band],
+                    self.ascale[band],
+                    e0=self.e0[band],
                     kshift=self.kshift[band])
                 # then velocity
-                vx_q, vy_q, vz_q = self.non_parabolic_velocity_1(
-                    k, self.effmass[band], a=self.a[band],
+                vx_q, vy_q, vz_q = non_parabolic_velocity_1(
+                    k,
+                    self.effmass[band],
+                    self.a[band],
+                    self.ascale[band],
                     kshift=self.kshift[band])
 
                 # then parabolic
                 self.a[band] = [0.0, 0.0, 0.0]
                 self.effmass[band] = -2.0
                 self.e0[band] = 0.0
-                energy_p = self.non_parabolic_energy_1(
-                    k, self.effmass[band], a=self.a[band], e0=self.e0[band],
+                energy_p = non_parabolic_energy_1(
+                    k,
+                    self.effmass[band],
+                    self.a[band],
+                    self.ascale[band],
+                    e0=self.e0[band],
                     kshift=self.kshift[band])
-                vx_p, vy_p, vz_p = self.non_parabolic_velocity_1(
-                    k, self.effmass[band], a=self.a[band],
+                vx_p, vy_p, vz_p = non_parabolic_velocity_1(
+                    k,
+                    self.effmass[band],
+                    self.a[band],
+                    self.ascale[band],
                     kshift=self.kshift[band])
 
                 # given the input
@@ -1586,23 +909,37 @@ class Bandstructure():
                 # quartic band behavior deep in band, parabolic onset
                 # quartic band behavior at the onset
                 # first fetch quartic
-                energy_q = self.non_parabolic_energy_1(
-                    k, self.effmass[band], a=self.a[band], e0=self.e0[band],
+                energy_q = non_parabolic_energy_1(
+                    k,
+                    self.effmass[band],
+                    self.a[band],
+                    self.ascale[band],
+                    e0=self.e0[band],
                     kshift=self.kshift[band])
                 # then velocity
-                vx_q, vy_q, vz_q = self.non_parabolic_velocity_1(
-                    k, self.effmass[band], a=self.a[band],
+                vx_q, vy_q, vz_q = non_parabolic_velocity_1(
+                    k,
+                    self.effmass[band],
+                    self.a[band],
+                    self.ascale[band],
                     kshift=self.kshift[band])
 
                 # then parabolic
                 self.a[band] = [0.0, 0.0, 0.0]
                 self.effmass[band] = -2.0
                 self.e0[band] = 0.0
-                energy_p = self.non_parabolic_energy_1(
-                    k, self.effmass[band], a=self.a[band], e0=self.e0[band],
+                energy_p = non_parabolic_energy_1(
+                    k,
+                    self.effmass[band],
+                    self.a[band],
+                    self.ascale[band],
+                    e0=self.e0[band],
                     kshift=self.kshift[band])
-                vx_p, vy_p, vz_p = self.non_parabolic_velocity_1(
-                    k, self.effmass[band], a=self.a[band],
+                vx_p, vy_p, vz_p = non_parabolic_velocity_1(
+                    k,
+                    self.effmass[band],
+                    self.a[band],
+                    self.ascale[band],
                     kshift=self.kshift[band])
 
                 # given the input
@@ -1630,19 +967,20 @@ class Bandstructure():
         # ACTUALLY, THIS FOLDING NEEDS TO BE FIXED IN ORDER TO GET THE
         # BAND INDEX FIRST DISABLE UNTIL FIXED!
         if self.bandparams[band][1] != 0:
-            logging.error(
-                "Band folding does not currently work due to band "
-                "ordering. Exiting.")
+            logger.error("Band folding does not currently work due to band "
+                         "ordering. Exiting.")
             sys.exit(1)
 
         velocity = vx, vy, vz
         return np.array(energy), np.array(velocity)
 
-    def fetch_velocities_along_line(self, kstart, kend, itype=None,
+    def fetch_velocities_along_line(self,
+                                    kstart,
+                                    kend,
+                                    itype=None,
                                     itype_sub=None):
-        """
-        Calculate the velocity dispersion along a line in
-        reciprocal space.
+        r"""
+        Calculate the velocity dispersion along a line in reciprocal space.
 
         Parameters
         ----------
@@ -1703,26 +1041,30 @@ class Bandstructure():
 
         """
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.info("Running fetch_velocities_along_line.")
 
         # now make sure the supplied points does not extend outside the
         # grid
         bz_border = self.lattice.fetch_bz_border(direct=True)
-        utils.pull_vecs_inside_boundary(
-            (kstart, kend), bz_border, constants.zerocut)
+        utils.pull_vecs_inside_boundary((kstart, kend), bz_border,
+                                        constants.zerocut)
 
         kpts = self.lattice.fetch_kpoints_along_line(
-            kstart, kend, self.param.dispersion_num_kpoints_along_line,
+            kstart,
+            kend,
+            self.param.dispersion_num_kpoints_along_line,
             direct=False)
         velocities = self.fetch_velocities_at_kpoints(
             kpts, itype=itype, itype_sub=itype_sub)
 
         return velocities, kpts
 
-    def fetch_velocities_at_kpoints(self, kpoint_mesh, itype=None,
+    def fetch_velocities_at_kpoints(self,
+                                    kpoint_mesh,
+                                    itype=None,
                                     itype_sub=None):
-        """
+        r"""
         Calculate the velocity dispersions at specific k - points.
 
         Parameters
@@ -1774,16 +1116,22 @@ class Bandstructure():
 
         """
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running fetch_velocities_at_kpoints.")
 
         dummy, velocities, dummy = self.interpolate(
-            kpoint_mesh=kpoint_mesh, itype=itype,
-            itype_sub=itype_sub, ivelocities=True)
+            kpoint_mesh=kpoint_mesh,
+            itype=itype,
+            itype_sub=itype_sub,
+            ivelocities=True)
         return velocities
 
-    def fetch_energies_along_line(self, kstart, kend, samplings=None,
-                                  itype=None, itype_sub=None):
+    def fetch_energies_along_line(self,
+                                  kstart,
+                                  kend,
+                                  samplings=None,
+                                  itype=None,
+                                  itype_sub=None):
         """
         Calculate the energy dispersions along specific k - points.
 
@@ -1849,28 +1197,31 @@ class Bandstructure():
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.info("Running fetch_energies_along_line.")
 
         # now make sure the supplied points does not extend outside the
         # grid
         bz_border = self.lattice.fetch_bz_border(direct=True)
-        utils.pull_vecs_inside_boundary(
-            (kstart, kend), bz_border, constants.zerocut)
+        utils.pull_vecs_inside_boundary((kstart, kend), bz_border,
+                                        constants.zerocut)
+
+        if samplings is None:
+            samplings = self.param.dispersion_num_kpoints_along_line
 
         kpts = self.lattice.fetch_kpoints_along_line(
-            kstart, kend, self.param.dispersion_num_kpoints_along_line,
-            direct=False)
+            kstart, kend, samplings, direct=False)
         energies = self.fetch_energies_at_kpoints(
             kpoint_mesh=kpts, itype=itype, itype_sub=itype_sub)
 
         return energies, kpts
 
-    def fetch_energies_at_kpoints(self, kpoint_mesh, itype=None,
+    def fetch_energies_at_kpoints(self,
+                                  kpoint_mesh,
+                                  itype=None,
                                   itype_sub=None):
         """
-        Calculate the energy dispersions at specific
-        k - points by interpolation.
+        Calculate the energy dispersions at specific k - points by interpolation.
 
         Parameters
         ----------
@@ -1919,19 +1270,17 @@ class Bandstructure():
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running fetch_energies_at_kpoints.")
 
         # fetch points
-        energies, dummy, dummy = self.interpolate(kpoint_mesh=kpoint_mesh,
-                                                  itype=itype,
-                                                  itype_sub=itype_sub)
+        energies, dummy, dummy = self.interpolate(
+            kpoint_mesh=kpoint_mesh, itype=itype, itype_sub=itype_sub)
         return energies
 
     def calc_effective_mass(self):
         """
-        Calculates the effective mass tensor. Currently the effective
-        mass tensor is not diagonalized.
+        Calculates the effective mass tensor. Currently the effective mass tensor is not diagonalized.
 
         Parameters
         ----------
@@ -1952,7 +1301,7 @@ class Bandstructure():
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running calc_effective_mass.")
 
         # check if the velocities exists
@@ -2026,8 +1375,7 @@ class Bandstructure():
 
     def calc_velocities(self, velocities=None, store=True):
         """
-        Calculate the electron group velocities
-        from the electron energy dispersion
+        Calculate the electron group velocities from the electron energy dispersion
 
         Parameters
         ----------
@@ -2065,7 +1413,7 @@ class Bandstructure():
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running calc_velocities.")
 
         if velocities is None:
@@ -2087,27 +1435,20 @@ class Bandstructure():
 
         # fetch velocities
         # reshape
-        e_or_v_shaped = np.reshape(e_or_v,
-                                   (num_bands,
-                                    ksampling[0],
-                                    ksampling[1],
-                                    ksampling[2]), order='C')
+        e_or_v_shaped = np.reshape(
+            e_or_v, (num_bands, ksampling[0], ksampling[1], ksampling[2]),
+            order='C')
         # call gradient from NumPy to obtain the gradients and
         # pass spacings (grid is seldom cubic with spacing of 1.0)
         # also, make sure we do nothing to the band axis
-        vx, vy, vz = np.gradient(e_or_v_shaped,
-                                 dx, dy, dz, axis=(1, 2, 3))
+        vx, vy, vz = np.gradient(e_or_v_shaped, dx, dy, dz, axis=(1, 2, 3))
 
         # flatten and store
-        velocities = np.array([np.reshape(vx, (num_bands,
-                                               num_kpoints),
-                                          order='C'),
-                               np.reshape(vy, (num_bands,
-                                               num_kpoints),
-                                          order='C'),
-                               np.reshape(vz, (num_bands,
-                                               num_kpoints),
-                                          order='C')])
+        velocities = np.array([
+            np.reshape(vx, (num_bands, num_kpoints), order='C'),
+            np.reshape(vy, (num_bands, num_kpoints), order='C'),
+            np.reshape(vz, (num_bands, num_kpoints), order='C')
+        ])
 
         # need band first, then direction, then k-points
         velocities = np.swapaxes(velocities, 0, 1)
@@ -2119,15 +1460,22 @@ class Bandstructure():
 
             # set velocities in current object
             self.velocities = velocities
-        else:
-            # return the velocities of the velocities
-            # for a specific direction
-            return velocities
+            return None
 
-    def interpolate(self, iksampling=None, ienergies=True,
-                    ivelocities=False, itype=None, itype_sub=None,
-                    kpoint_mesh=None, store_inter=False,
-                    energies=None):
+        # return the velocities of the velocities
+        # for a specific direction
+        return velocities
+
+    def interpolate(  # pylint: disable=too-many-locals # noqa: MC0001
+            self,
+            iksampling=None,
+            ienergies=True,
+            ivelocities=False,
+            itype=None,
+            itype_sub=None,
+            kpoint_mesh=None,
+            store_inter=False,
+            energies=None):
         """
         Interpolates the energies and velocity dispersion.
 
@@ -2212,7 +1560,7 @@ class Bandstructure():
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running interpolate.")
 
         # this flag determines if we want to run the
@@ -2226,9 +1574,8 @@ class Bandstructure():
                 try:
                     energies = self.energies
                 except AttributeError:
-                    logger.error(
-                        "The energies is not stored in the current "
-                        "Bandstructure() object. Exiting.")
+                    logger.error("The energies is not stored in the current "
+                                 "Bandstructure() object. Exiting.")
                     sys.exit(1)
 
         if ivelocities:
@@ -2244,7 +1591,7 @@ class Bandstructure():
             iksampling = self.lattice.fetch_iksampling()
 
         # check if iksampling is sensible
-        self.lattice.check_sensible_ksampling(iksampling)
+        check_sensible_ksampling(iksampling)
 
         # set interpolate method from param file, if not supplied
         # also demand that is itype or itype_sub is supplied, the other
@@ -2255,19 +1602,18 @@ class Bandstructure():
             itype_sub = self.param.dispersion_interpolate_type
         else:
             if itype in needs_sub and itype_sub is None:
-                logger.error(
-                    "If supplying itype, also supply the relevant "
-                    "itype_sub flag and vice versa. Exiting.")
+                logger.error("If supplying itype, also supply the relevant "
+                             "itype_sub flag and vice versa. Exiting.")
                 sys.exit(1)
             if itype is None:
-                logger.error(
-                    "The itype parameter is not given upon calling "
-                    "the interpolation routine. Exiting.")
+                logger.error("The itype parameter is not given upon calling "
+                             "the interpolation routine. Exiting.")
                 sys.exit(1)
 
         # now check for valid itype, itype_sub is done later
-        possible_itypes = {"linearnd", "interpn",
-                           "rbf", "einspline", "wildmagic", "skw"}
+        possible_itypes = {
+            "linearnd", "interpn", "rbf", "einspline", "wildmagic", "skw"
+        }
         if itype not in possible_itypes:
             logger.error(
                 "The specified itype (or dispersion_interpolate_method "
@@ -2277,8 +1623,7 @@ class Bandstructure():
 
         gen_velocities = self.gen_velocities
         if gen_velocities and ivelocities:
-            if not ((itype == "einspline") or (itype == "wildmagic")
-                    or (itype == "skw")):
+            if itype not in ("einspline", "wildmagic", "skw"):
                 logger.error("Gradient extraction for the band "
                              "velocities are only supported for the "
                              "einspline/wildmagic_akima/"
@@ -2304,8 +1649,8 @@ class Bandstructure():
                         "routine. Laying out the full BZ before continuing "
                         "with the interpolation routines")
                     energies = energies[:, self.lattice.mapping_bz_to_ibz]
-                    velocities = velocities[
-                        :, :, self.lattice.mapping_bz_to_ibz]
+                    velocities = velocities[:, :, self.lattice.
+                                            mapping_bz_to_ibz]
             else:
                 logger.error(
                     "The number of k-points for the energies does not "
@@ -2325,7 +1670,7 @@ class Bandstructure():
             sys.exit(1)
 
         # fetch old grid in cartesian (IBZ in direct for SKW)
-        if itype == "skw" or itype == "wildmagic" or itype == "einspline":
+        if itype in ("skw", "wildmagic", "einspline"):
             if itype == "skw":
                 old_grid = self.lattice.fetch_kmesh(direct=True, ired=True)
             else:
@@ -2421,7 +1766,7 @@ class Bandstructure():
                     self.lattice.kmesh_ired = self.lattice.kmesh_ired * dvec
                 # use direct for Wildmagic and Einspline, cartesian
                 # for the rest
-                if itype == "wildmagic" or itype == "einspline":
+                if itype in ("wildmagic", "einspline"):
                     if wildmagic_einspline_direct:
                         new_grid = self.lattice.fetch_kmesh(direct=True)
                     else:
@@ -2445,7 +1790,7 @@ class Bandstructure():
         alglib = False
         # loop bands for python stuff, otherwise do loop of bands inside C
         # routines
-        if itype == "linearnd" or itype == "interpn" or itype == "rbf":
+        if itype in ("linearnd", "interpn", "rbf"):  # pylint: disable=too-many-nested-blocks
             for band in range(num_bands):
                 ien_band = None
                 ivel1_band = None
@@ -2476,28 +1821,43 @@ class Bandstructure():
                         ksampling_old[0], ksampling_old[1], ksampling_old[2])
                     possible_methods = ["nearest", "linear"]
                     if itype_sub not in possible_methods:
-                        logger.error("The specified itype_sub is not recognized "
-                                     "by the interpn method, please consult the "
-                                     "Scipy documentation for valid flags. "
-                                     "Possible flags for itype_sub are: " +
-                                     ', '.join(map(str, possible_methods)) +
-                                     ". Exiting.")
+                        options = ', '.join(map(str, possible_methods))
+                        logger.error(
+                            "The specified itype_sub is not recognized "
+                            "by the interpn method, please consult the "
+                            "Scipy documentation for valid flags. "
+                            "Possible flags for itype_sub are: %s. Exiting.",
+                            options)
                         sys.exit(1)
-                    ien_band = scipy.interpolate.interpn(
-                        (kxp, kyp, kzp), eshape, new_grid, method=itype_sub)
+                    ien_band = scipy.interpolate.interpn((kxp, kyp, kzp),
+                                                         eshape,
+                                                         new_grid,
+                                                         method=itype_sub)
                     if ivelocities:
                         vel1shape = velocities[band][0].reshape(
-                            ksampling_old[0], ksampling_old[1], ksampling_old[2])
+                            ksampling_old[0], ksampling_old[1],
+                            ksampling_old[2])
                         vel2shape = velocities[band][1].reshape(
-                            ksampling_old[0], ksampling_old[1], ksampling_old[2])
+                            ksampling_old[0], ksampling_old[1],
+                            ksampling_old[2])
                         vel3shape = velocities[band][2].reshape(
-                            ksampling_old[0], ksampling_old[1], ksampling_old[2])
+                            ksampling_old[0], ksampling_old[1],
+                            ksampling_old[2])
                         ivel1_band = scipy.interpolate.interpn(
-                            (kxp, kyp, kzp), vel1shape, new_grid, method=itype_sub)
+                            (kxp, kyp, kzp),
+                            vel1shape,
+                            new_grid,
+                            method=itype_sub)
                         ivel2_band = scipy.interpolate.interpn(
-                            (kxp, kyp, kzp), vel2shape, new_grid, method=itype_sub)
+                            (kxp, kyp, kzp),
+                            vel2shape,
+                            new_grid,
+                            method=itype_sub)
                         ivel3_band = scipy.interpolate.interpn(
-                            (kxp, kyp, kzp), vel3shape, new_grid, method=itype_sub)
+                            (kxp, kyp, kzp),
+                            vel3shape,
+                            new_grid,
+                            method=itype_sub)
                 if itype == "rbf":
                     # lazy import of Alglib
                     alglib = True
@@ -2514,7 +1874,7 @@ class Bandstructure():
                         inter = xalglib.rbfcreate(3, 1)
                         # data structure of Alglib is a bit different, pad
                         # scalar at the end of coordinate values
-                        # TODO: Fix wrapper to avoid going through list
+                        # TODO: Fix wrapper to avoid going through list pylint: disable=fixme
                         kxkykzscalar = np.column_stack(
                             (old_grid, energies[band])).tolist()
                         # set the points
@@ -2524,10 +1884,10 @@ class Bandstructure():
                         # rebuild model and change coefficients
                         status = xalglib.rbfbuildmodel(inter)
                         if status.terminationtype != 1:
-                            logger.error("The call to rbfbuildmodel of Alglib "
-                                         "returned: " +
-                                         str(status.terminationtype) +
-                                         " for the energies. Exiting.")
+                            logger.error(
+                                "The call to rbfbuildmodel of Alglib "
+                                "returned: %s for the energies. Exiting.",
+                                str(status.terminationtype))
                             sys.exit(1)
                         # this is not good at all from a performance
                         # perspective, but Alglib does not in its current
@@ -2536,8 +1896,7 @@ class Bandstructure():
                         # make a C module or lift it into Cython in the future
                         for k in range(num_new_kpoints):
                             ien[band][k] = np.array(
-                                xalglib.rbfcalc3(inter,
-                                                 new_grid[k, 0],
+                                xalglib.rbfcalc3(inter, new_grid[k, 0],
                                                  new_grid[k, 1],
                                                  new_grid[k, 2]))
                         if ivelocities:
@@ -2549,15 +1908,14 @@ class Bandstructure():
                             xalglib.rbfsetalgoqnn(inter)
                             status = xalglib.rbfbuildmodel(inter)
                             if status.terminationtype != 1:
-                                logger.error("The call to rbfbuildmodel of "
-                                             "Alglib returned: " +
-                                             str(status.terminationtype) +
-                                             " for the velocities. Exiting.")
+                                logger.error(
+                                    "The call to rbfbuildmodel of "
+                                    "Alglib returned: %s for the velocities. Exiting.",
+                                    str(status.terminationtype))
                                 sys.exit(1)
                             for k in range(num_new_kpoints):
                                 ivel1[band][k] = np.array(
-                                    xalglib.rbfcalc3(inter,
-                                                     new_grid[k, 0],
+                                    xalglib.rbfcalc3(inter, new_grid[k, 0],
                                                      new_grid[k, 1],
                                                      new_grid[k, 2]))
 
@@ -2568,15 +1926,14 @@ class Bandstructure():
                             xalglib.rbfsetalgoqnn(inter)
                             status = xalglib.rbfbuildmodel(inter)
                             if status.terminationtype != 1:
-                                logger.error("The call to rbfbuildmodel of "
-                                             "Alglib returned: " +
-                                             str(status.terminationtype) +
-                                             " for the velocities. Exiting.")
+                                logger.error(
+                                    "The call to rbfbuildmodel of "
+                                    "Alglib returned: %s for the velocities. Exiting.",
+                                    str(status.terminationtype))
                                 sys.exit(1)
                             for k in range(num_new_kpoints):
                                 ivel2[band][k] = np.array(
-                                    xalglib.rbfcalc3(inter,
-                                                     new_grid[k, 0],
+                                    xalglib.rbfcalc3(inter, new_grid[k, 0],
                                                      new_grid[k, 1],
                                                      new_grid[k, 2]))
 
@@ -2587,15 +1944,14 @@ class Bandstructure():
                             xalglib.rbfsetalgoqnn(inter)
                             status = xalglib.rbfbuildmodel(inter)
                             if status.terminationtype != 1:
-                                logger.error("The call to rbfbuildmodel of "
-                                             "Alglib returned: " +
-                                             str(status.terminationtype) +
-                                             " for the velocities. Exiting.")
+                                logger.error(
+                                    "The call to rbfbuildmodel of "
+                                    "Alglib returned: %s for the velocities. Exiting.",
+                                    str(status.terminationtype))
                                 sys.exit(1)
                             for k in range(num_new_kpoints):
                                 ivel3[band][k] = np.array(
-                                    xalglib.rbfcalc3(inter,
-                                                     new_grid[k, 0],
+                                    xalglib.rbfcalc3(inter, new_grid[k, 0],
                                                      new_grid[k, 1],
                                                      new_grid[k, 2]))
 
@@ -2604,31 +1960,48 @@ class Bandstructure():
                         kx_old, ky_old, kz_old = old_grid.T
                         kx_new, ky_new, kz_new = new_grid.T
                         if itype_sub not in constants.rbf_functions:
-                            logger.error("The specified itype_sub is not recognized "
-                                         "by the Rbf method, please consult the Scipy "
-                                         "documentation for valid flags. Possible flags "
-                                         "for itype_sub are: " +
-                                         ', '.join(map(str, constants.rbf_functions)) +
-                                         ". Exiting.")
+                            options = ', '.join(
+                                map(str, constants.rbf_functions))
+                            logger.error(
+                                "The specified itype_sub is not recognized "
+                                "by the Rbf method, please consult the Scipy "
+                                "documentation for valid flags. Possible flags "
+                                "for itype_sub are: %s. Exiting.", options)
                         sys.exit(1)
                         # force Rbf to go through the original points
                         smooth = 0.0
                         intere = scipy.interpolate.Rbf(
-                            kx_old, ky_old, kz_old, energies[band],
-                            function=itype_sub, smooth=smooth)
+                            kx_old,
+                            ky_old,
+                            kz_old,
+                            energies[band],
+                            function=itype_sub,
+                            smooth=smooth)
                         ien_band = intere(kx_new, ky_new, kz_new)
                         if ivelocities:
                             intervel1 = scipy.interpolate.Rbf(
-                                kx_old, ky_old, kz_old, velocities[band][0],
-                                function=itype_sub, smooth=smooth)
+                                kx_old,
+                                ky_old,
+                                kz_old,
+                                velocities[band][0],
+                                function=itype_sub,
+                                smooth=smooth)
                             ivel1_band = intervel1(kx_new, ky_new, kz_new)
                             intervel2 = scipy.interpolate.Rbf(
-                                kx_old, ky_old, kz_old, velocities[band][1],
-                                function=itype_sub, smooth=smooth)
+                                kx_old,
+                                ky_old,
+                                kz_old,
+                                velocities[band][1],
+                                function=itype_sub,
+                                smooth=smooth)
                             ivel2_band = intervel2(kx_new, ky_new, kz_new)
                             intervel3 = scipy.interpolate.Rbf(
-                                kx_old, ky_old, kz_old, velocities[band][2],
-                                function=itype_sub, smooth=smooth)
+                                kx_old,
+                                ky_old,
+                                kz_old,
+                                velocities[band][2],
+                                function=itype_sub,
+                                smooth=smooth)
                             ivel3_band = intervel3(kx_new, ky_new, kz_new)
                 # we do this internally if alglib is True
                 if not alglib:
@@ -2646,85 +2019,61 @@ class Bandstructure():
             import t4me.einspline as einspline
 
             bz_border = old_bz_border
-            domainx = np.array(
-                [bz_border[0], bz_border[1]], dtype=np.double)
-            domainy = np.array(
-                [bz_border[2], bz_border[3]], dtype=np.double)
-            domainz = np.array(
-                [bz_border[4], bz_border[5]], dtype=np.double)
+            domainx = np.array([bz_border[0], bz_border[1]], dtype=np.double)
+            domainy = np.array([bz_border[2], bz_border[3]], dtype=np.double)
+            domainz = np.array([bz_border[4], bz_border[5]], dtype=np.double)
             domain_num_points = ksampling_old
             ix = np.ascontiguousarray(new_grid.T[0], dtype=np.double)
             iy = np.ascontiguousarray(new_grid.T[1], dtype=np.double)
             iz = np.ascontiguousarray(new_grid.T[2], dtype=np.double)
             if itype_sub not in constants.einspline_boundary_cond:
-                logger.error("The specified itype_sub is not recognized "
-                             "by the einspline method, please consult the "
-                             "einspline documentation for valid flags. "
-                             "Possible flags for itype_sub are: " +
-                             ', '.join(map(str, constants.einspline_boundary_cond)) +
-                             ". Notice that the DERIV1 and DERIV2 flags are "
-                             "not available in this version of the "
-                             "interface. Exiting.")
+                options = ', '.join(
+                    map(str, constants.einspline_boundary_cond))
+                logger.error(
+                    "The specified itype_sub is not recognized "
+                    "by the einspline method, please consult the "
+                    "einspline documentation for valid flags. "
+                    "Possible flags for itype_sub are: %s. Notice that the DERIV1 and DERIV2 flags are "
+                    "not available in this version of the "
+                    "interface. Exiting.", options)
                 sys.exit(1)
 
             if gen_velocities and ivelocities:
-                einspline.einspline_execute_interface(domain_num_points,
-                                                      domainx,
-                                                      domainy,
-                                                      domainz,
-                                                      np.ascontiguousarray(
-                                                          energies, dtype="double"),
-                                                      ix, iy, iz, ien,
-                                                      ivel1, ivel2, ivel3, 1,
-                                                      itype_sub)
+                einspline.einspline_execute_interface(
+                    domain_num_points, domainx, domainy, domainz,
+                    np.ascontiguousarray(energies, dtype="double"), ix, iy, iz,
+                    ien, ivel1, ivel2, ivel3, 1, itype_sub)
             else:
                 # no velocities, just create some dummies of length one
                 dummy = np.zeros((num_bands, 1), dtype=np.double)
-                einspline.einspline_execute_interface(ksampling_old,
-                                                      domainx,
-                                                      domainy,
-                                                      domainz,
-                                                      np.ascontiguousarray(
-                                                          energies, dtype="double"),
-                                                      ix, iy, iz, ien,
-                                                      dummy, dummy, dummy, 0,
-                                                      itype_sub)
+                einspline.einspline_execute_interface(
+                    ksampling_old, domainx, domainy, domainz,
+                    np.ascontiguousarray(energies, dtype="double"), ix, iy, iz,
+                    ien, dummy, dummy, dummy, 0, itype_sub)
             if ivelocities and not gen_velocities:
                 # create a dummy
                 dummy = np.zeros((num_bands, 1), dtype=np.double)
                 einspline.einspline_execute_interface(
-                    ksampling_old,
-                    domainx, domainy, domainz,
-                    np.ascontiguousarray(velocities[:, 0, :],
-                                         dtype=np.double),
-                    ix, iy, iz, ivel1,
-                    dummy, dummy, dummy,
-                    0, itype_sub)
+                    ksampling_old, domainx, domainy, domainz,
+                    np.ascontiguousarray(velocities[:, 0, :], dtype=np.double),
+                    ix, iy, iz, ivel1, dummy, dummy, dummy, 0, itype_sub)
                 einspline.einspline_execute_interface(
-                    ksampling_old,
-                    domainx, domainy, domainz,
-                    np.ascontiguousarray(velocities[:, 1, :],
-                                         dtype=np.double),
-                    ix, iy, iz, ivel2,
-                    dummy, dummy, dummy,
-                    0, itype_sub)
+                    ksampling_old, domainx, domainy, domainz,
+                    np.ascontiguousarray(velocities[:, 1, :], dtype=np.double),
+                    ix, iy, iz, ivel2, dummy, dummy, dummy, 0, itype_sub)
                 einspline.einspline_execute_interface(
-                    ksampling_old,
-                    domainx, domainy, domainz,
-                    np.ascontiguousarray(velocities[:, 2, :],
-                                         dtype=np.double),
-                    ix, iy, iz, ivel3,
-                    dummy, dummy, dummy,
-                    0, itype_sub)
+                    ksampling_old, domainx, domainy, domainz,
+                    np.ascontiguousarray(velocities[:, 2, :], dtype=np.double),
+                    ix, iy, iz, ivel3, dummy, dummy, dummy, 0, itype_sub)
         # again loop over bands in the C code
         if itype == "wildmagic":
             if itype_sub not in constants.wildmagic_methods:
-                logger.error("The specified itype_sub is not recognized by "
-                             "the Wildmagic method, please consult the "
-                             "Wildmagic documentation for valid flags. "
-                             "Possible flags for itype_sub are: " +
-                             ', '.join(map(str, constants.wildmagic_methods)) +
-                             ". Exiting.")
+                options = ', '.join(map(str, constants.wildmagic_methods))
+                logger.error(
+                    "The specified itype_sub is not recognized by "
+                    "the Wildmagic method, please consult the "
+                    "Wildmagic documentation for valid flags. "
+                    "Possible flags for itype_sub are: %s. Exiting.", options)
                 sys.exit(1)
             logger.info("Interpolating using Wildmagic/GeometricTools.")
 
@@ -2747,50 +2096,46 @@ class Bandstructure():
                 if gen_velocities:
                     wildmagic.trilinear_gradient_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(
-                            energies, dtype="double"), ix, iy, iz, ien,
-                        ivel1, ivel2, ivel3)
+                        np.ascontiguousarray(energies, dtype="double"), ix, iy,
+                        iz, ien, ivel1, ivel2, ivel3)
                 else:
                     wildmagic.trilinear_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(energies, dtype="double"),
-                        ix, iy, iz, ien)
+                        np.ascontiguousarray(energies, dtype="double"), ix, iy,
+                        iz, ien)
             elif itype_sub == "tricubic_exact":
                 if gen_velocities:
                     wildmagic.tricubic_exact_gradient_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(
-                            energies, dtype="double"), ix, iy, iz, ien,
-                        ivel1, ivel2, ivel3)
+                        np.ascontiguousarray(energies, dtype="double"), ix, iy,
+                        iz, ien, ivel1, ivel2, ivel3)
                 else:
                     wildmagic.tricubic_exact_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(energies, dtype="double"),
-                        ix, iy, iz, ien)
+                        np.ascontiguousarray(energies, dtype="double"), ix, iy,
+                        iz, ien)
             elif itype_sub == "tricubic_bspline":
                 if gen_velocities:
                     wildmagic.tricubic_bspline_gradient_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(
-                            energies, dtype="double"), ix, iy, iz, ien,
-                        ivel1, ivel2, ivel3)
+                        np.ascontiguousarray(energies, dtype="double"), ix, iy,
+                        iz, ien, ivel1, ivel2, ivel3)
                 else:
                     wildmagic.tricubic_bspline_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(energies, dtype="double"),
-                        ix, iy, iz, ien)
+                        np.ascontiguousarray(energies, dtype="double"), ix, iy,
+                        iz, ien)
             elif itype_sub == "akima":
                 if gen_velocities:
                     wildmagic.akima_gradient_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(
-                            energies, dtype="double"), ix, iy, iz, ien,
-                        ivel1, ivel2, ivel3)
+                        np.ascontiguousarray(energies, dtype="double"), ix, iy,
+                        iz, ien, ivel1, ivel2, ivel3)
                 else:
                     wildmagic.akima_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(energies, dtype="double"),
-                        ix, iy, iz, ien)
+                        np.ascontiguousarray(energies, dtype="double"), ix, iy,
+                        iz, ien)
             else:
                 logger.error("The specified itype_sub is not recognized "
                              "by the wildmagic method, please consult the "
@@ -2804,80 +2149,69 @@ class Bandstructure():
                     wildmagic.trilinear_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
                         np.ascontiguousarray(
-                            velocities[:, 0, :], dtype=np.double),
-                        ix, iy, iz, ivel1)
+                            velocities[:, 0, :], dtype=np.double), ix, iy, iz,
+                        ivel1)
                     wildmagic.trilinear_execute_interface(
-                        ksampling_old,
-                        domainx, domainy, domainz,
+                        ksampling_old, domainx, domainy, domainz,
                         np.ascontiguousarray(
-                            velocities[:, 1, :], dtype=np.double),
-                        ix, iy, iz, ivel2)
+                            velocities[:, 1, :], dtype=np.double), ix, iy, iz,
+                        ivel2)
                     wildmagic.trilinear_execute_interface(
-                        ksampling_old,
-                        domainx, domainy, domainz,
+                        ksampling_old, domainx, domainy, domainz,
                         np.ascontiguousarray(
-                            velocities[:, 2, :], dtype=np.double),
-                        ix, iy, iz, ivel3)
+                            velocities[:, 2, :], dtype=np.double), ix, iy, iz,
+                        ivel3)
 
                 elif itype_sub == "tricubic_exact":
                     wildmagic.tricubic_exact_execute_interface(
-                        ksampling_old,
-                        domainx, domainy, domainz,
-                        np.ascontiguousarray(velocities[:, 0, :],
-                                             dtype=np.double),
-                        ix, iy, iz, ivel1)
+                        ksampling_old, domainx, domainy, domainz,
+                        np.ascontiguousarray(
+                            velocities[:, 0, :], dtype=np.double), ix, iy, iz,
+                        ivel1)
                     wildmagic.tricubic_exact_execute_interface(
-                        ksampling_old,
-                        domainx, domainy, domainz,
-                        np.ascontiguousarray(velocities[:, 1, :],
-                                             dtype=np.double),
-                        ix, iy, iz, ivel2)
+                        ksampling_old, domainx, domainy, domainz,
+                        np.ascontiguousarray(
+                            velocities[:, 1, :], dtype=np.double), ix, iy, iz,
+                        ivel2)
                     wildmagic.tricubic_exact_execute_interface(
-                        ksampling_old,
-                        domainx, domainy, domainz,
-                        np.ascontiguousarray(velocities[:, 2, :],
-                                             dtype=np.double),
-                        ix, iy, iz, ivel3)
+                        ksampling_old, domainx, domainy, domainz,
+                        np.ascontiguousarray(
+                            velocities[:, 2, :], dtype=np.double), ix, iy, iz,
+                        ivel3)
 
                 elif itype_sub == "tricubic_bspline":
                     wildmagic.tricubic_bspline_execute_interface(
-                        ksampling_old,
-                        domainx, domainy, domainz,
-                        np.ascontiguousarray(velocities[:, 0, :],
-                                             dtype=np.double),
-                        ix, iy, iz, ivel1)
+                        ksampling_old, domainx, domainy, domainz,
+                        np.ascontiguousarray(
+                            velocities[:, 0, :], dtype=np.double), ix, iy, iz,
+                        ivel1)
                     wildmagic.tricubic_bspline_execute_interface(
-                        ksampling_old,
-                        domainx, domainy, domainz,
-                        np.ascontiguousarray(velocities[:, 1, :],
-                                             dtype=np.double),
-                        ix, iy, iz, ivel2)
+                        ksampling_old, domainx, domainy, domainz,
+                        np.ascontiguousarray(
+                            velocities[:, 1, :], dtype=np.double), ix, iy, iz,
+                        ivel2)
                     wildmagic.tricubic_bspline_execute_interface(
-                        ksampling_old,
-                        domainx, domainy, domainz,
-                        np.ascontiguousarray(velocities[:, 2, :],
-                                             dtype=np.double),
-                        ix, iy, iz, ivel3)
+                        ksampling_old, domainx, domainy, domainz,
+                        np.ascontiguousarray(
+                            velocities[:, 2, :], dtype=np.double), ix, iy, iz,
+                        ivel3)
 
                 elif itype_sub == "akima":
                     wildmagic.akima_execute_interface(
-                        ksampling_old,
-                        domainx, domainy, domainz,
-                        np.ascontiguousarray(velocities[:, 0, :],
-                                             dtype=np.double),
-                        ix, iy, iz, ivel1)
+                        ksampling_old, domainx, domainy, domainz,
+                        np.ascontiguousarray(
+                            velocities[:, 0, :], dtype=np.double), ix, iy, iz,
+                        ivel1)
                     wildmagic.akima_execute_interface(
-                        ksampling_old,
-                        domainx, domainy, domainz,
-                        np.ascontiguousarray(velocities[:, 1, :],
-                                             dtype=np.double),
-                        ix, iy, iz, ivel2)
+                        ksampling_old, domainx, domainy, domainz,
+                        np.ascontiguousarray(
+                            velocities[:, 1, :], dtype=np.double), ix, iy, iz,
+                        ivel2)
                     wildmagic.akima_execute_interface(
-                        ksampling_old,
-                        domainx, domainy, domainz,
-                        np.ascontiguousarray(velocities[:, 2, :],
-                                             dtype=np.double),
-                        ix, iy, iz, ivel3)
+                        ksampling_old, domainx, domainy, domainz,
+                        np.ascontiguousarray(
+                            velocities[:, 2, :], dtype=np.double), ix, iy, iz,
+                        ivel3)
                 else:
                     logger.error("The specified itype_sub is not recognized "
                                  "by the wildmagic method, please consult "
@@ -2925,7 +2259,7 @@ class Bandstructure():
         # store in current object
         if store_inter:
             if iksampling is None:
-                logging.info(
+                logger.info(
                     "It is not possible to store the new interpolation "
                     "grid in the Lattice() object when iksampling is "
                     "not supplied. User beware that the grid and the "
@@ -2937,8 +2271,9 @@ class Bandstructure():
             if itype == "skw":
                 self.lattice.create_kmesh(iksampling, borderless=True)
                 np.seterr(divide='ignore', invalid='ignore')
-                if not np.all(np.nan_to_num((self.lattice.kmesh - new_grid)
-                                            / new_grid) < self.param.symprec):
+                if not np.all(
+                        np.nan_to_num((self.lattice.kmesh - new_grid) /
+                                      new_grid) < self.param.symprec):
                     logger.error(
                         "The regenerated kpoint mesh from SPGLIB "
                         "does not match the output from the SKW "
@@ -2953,55 +2288,28 @@ class Bandstructure():
             # we should now have the velocities
             # or gen_velocities was already False
             self.gen_velocities = False
-        # only return
-        else:
-            # reset lattice
-            if kpoint_mesh is None:
-                self.lattice = lattice_old
-            if ivelocities or gen_velocities:
-                return ien, ivel, new_grid
-            else:
-                return ien, False, new_grid
+            return None, None, None
 
-    def parabolic_effective_mass(self, effmass_t):
+        if kpoint_mesh is None:
+            self.lattice = lattice_old
+        if ivelocities or gen_velocities:
+            return ien, ivel, new_grid
+        return ien, False, new_grid
+
+    def calc_density_of_states(  # pylint: disable=too-many-locals # noqa: MC0001
+            self,
+            return_data=False,
+            num_samples=None,
+            auto_scale=False,
+            transport=False,
+            integral_method=None,
+            interpol_method=None,
+            interpol_type=None):
         """
-        Checks if the supplied effective mass array is parabolic.
+        Calculate the density of states.
 
         Parameters
         ----------
-        effmass_t : ndarray
-            The effective mass tensor in units of the free
-            electron mass.
-
-        Returns
-        -------
-        boolean
-            True if parabolic tensors, False otherwise.
-
-        """
-
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
-        logger.debug("Running parabolic_effective_mass.")
-
-        effmass = effmass_t[0]
-        if not np.allclose(np.array([effmass, effmass, effmass]),
-                           effmass_t, atol=constants.zerocut):
-            return False
-        return True
-
-    def calc_density_of_states(self, spin_degen=False,
-                               return_data=False, num_samples=None,
-                               auto_scale=False, transport=False,
-                               integral_method=None, interpol_method=None,
-                               interpol_type=None):
-        """ Calculate the density of states.
-
-        Parameters
-        ----------
-        spin_degen : boolean, optional
-            If True, include spin degeneracy (basically a factor of 2 in
-            the DOS amplitude).
         return_data : boolean, optional
             If True, return the density of states data instead of
             storing it in the current `Bandstructure()` object.  If False, set
@@ -3092,7 +2400,7 @@ class Bandstructure():
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running calc_density_of_states.")
 
         # set some constants
@@ -3125,7 +2433,7 @@ class Bandstructure():
         num_samples = dos_energies.shape[0]
         dos = np.zeros((num_bands, num_samples), dtype='double')
         int_dos = np.zeros((num_bands, num_samples), dtype='double')
-        if integral_method == 'tetra' or integral_method == 'smeared':
+        if integral_method in ("tetra", "smeared"):
             # these routines only work on the IBZ grid, so
             # check if ibz grid is not None
             if self.lattice.kmesh_ired is None:
@@ -3164,10 +2472,9 @@ class Bandstructure():
                 np.ascontiguousarray(
                     self.lattice.mapping_ibz_to_bz, dtype='intc'),
                 np.ascontiguousarray(self.lattice.ibz_weights, dtype='intc'),
-                self.lattice.ksampling, self.lattice.runitcell,
-                dos_energies, num_samples, num_bands, num_kpoints_ibz,
-                self.spin_degen, volume, volume_bz, weight_type,
-                smearing, dos, int_dos)
+                self.lattice.ksampling, self.lattice.runitcell, dos_energies,
+                num_samples, num_bands, num_kpoints_ibz, self.spin_degen,
+                volume, volume_bz, weight_type, smearing, dos, int_dos)
         elif integral_method == 'cubature':
             logger.debug("Running cubature method.")
             # lazy import of cubature_wildmagic (optional)
@@ -3175,8 +2482,8 @@ class Bandstructure():
 
             # here we call the cubature DOS routine with on the fly
             # interpolation
-            num_points = np.ascontiguousarray(self.lattice.ksampling,
-                                              dtype=np.intc)
+            num_points = np.ascontiguousarray(
+                self.lattice.ksampling, dtype=np.intc)
             # set boundary conditions (luckily we work in direct
             # coordinates)
             bz_border = self.lattice.fetch_bz_border(direct=False)
@@ -3196,74 +2503,41 @@ class Bandstructure():
                 # testing parameter
                 smear_then_interpolate = False
                 if interpol_type not in constants.wildmagic_methods:
-                    logger.error("The specified interpol_type is not "
-                                 "recognized by the Wildmagic method, "
-                                 "please consult the Wildmagic documentation "
-                                 "for valid flags. Possible flags for "
-                                 "itype_sub are: " +
-                                 ', '.join(map(str, constants.wildmagic_methods)) +
-                                 ". Exiting.")
+                    options = ', '.join(map(str, constants.wildmagic_methods))
+                    logger.error(
+                        "The specified interpol_type is not "
+                        "recognized by the Wildmagic method, "
+                        "please consult the Wildmagic documentation "
+                        "for valid flags. Possible flags for "
+                        "itype_sub are: %s. Exiting.", options)
                     sys.exit(1)
                 if interpol_type == "akima":
                     cubature_wildmagic.calc_density_of_states_interface(
-                        num_points,
-                        domainx, domainy, domainz,
-                        self.energies,
-                        dos_energies,
-                        self.spin_degen,
-                        num_samples, num_bands,
-                        self.param.dos_smearing,
-                        3,
-                        smear_then_interpolate,
-                        volume, volume_bz,
-                        max_it, abs_err, rel_err, h,
-                        info,
+                        num_points, domainx, domainy, domainz, self.energies,
+                        dos_energies, self.spin_degen, num_samples, num_bands,
+                        self.param.dos_smearing, 3, smear_then_interpolate,
+                        volume, volume_bz, max_it, abs_err, rel_err, h, info,
                         dos, int_dos)
                 elif interpol_method == "trilinear":
                     cubature_wildmagic.calc_density_of_states_interface(
-                        num_points,
-                        domainx, domainy, domainz,
-                        self.energies,
-                        dos_energies,
-                        self.spin_degen,
-                        num_samples,
-                        num_bands,
-                        self.param.dos_smearing,
-                        0,
-                        smear_then_interpolate,
-                        volume, volume_bz,
-                        max_it, abs_err, rel_err, h,
-                        info,
+                        num_points, domainx, domainy, domainz, self.energies,
+                        dos_energies, self.spin_degen, num_samples, num_bands,
+                        self.param.dos_smearing, 0, smear_then_interpolate,
+                        volume, volume_bz, max_it, abs_err, rel_err, h, info,
                         dos, int_dos)
                 elif interpol_method == "tricubic_exact":
                     cubature_wildmagic.calc_density_of_states_interface(
-                        num_points,
-                        domainx, domainy, domainz,
-                        self.energies,
-                        dos_energies,
-                        self.spin_degen,
-                        num_samples, num_bands,
-                        self.param.dos_smearing,
-                        1,
-                        smear_then_interpolate,
-                        volume, volume_bz,
-                        max_it, abs_err, rel_err, h,
-                        info,
+                        num_points, domainx, domainy, domainz, self.energies,
+                        dos_energies, self.spin_degen, num_samples, num_bands,
+                        self.param.dos_smearing, 1, smear_then_interpolate,
+                        volume, volume_bz, max_it, abs_err, rel_err, h, info,
                         dos, int_dos)
                 elif interpol_method == "tricubic_bspline":
                     cubature_wildmagic.calc_density_of_states_interface(
-                        num_points,
-                        domainx, domainy, domainz,
-                        self.energies,
-                        dos_energies,
-                        self.spin_degen,
-                        num_samples, num_bands,
-                        self.param.dos_smearing,
-                        2,
-                        smear_then_interpolate,
-                        volume, volume_bz,
-                        max_it, abs_err, rel_err, h,
-                        info,
+                        num_points, domainx, domainy, domainz, self.energies,
+                        dos_energies, self.spin_degen, num_samples, num_bands,
+                        self.param.dos_smearing, 2, smear_then_interpolate,
+                        volume, volume_bz, max_it, abs_err, rel_err, h, info,
                         dos, int_dos)
             else:
                 logger.error(
@@ -3272,8 +2546,7 @@ class Bandstructure():
                     "routines. Also remember to set interpol_type accordingly. "
                     "Exiting.")
                 sys.exit(1)
-        elif integral_method == "trapz" or integral_method == "simps" or \
-                integral_method == "romb":
+        elif integral_method in ("trapz", "simps", "romb"):
             logger.debug(
                 "Running trapeziodal, simpson or romberg integration.")
 
@@ -3292,9 +2565,10 @@ class Bandstructure():
                                  "2^k - 1. Exiting.")
                     sys.exit(1)
                 if not utils.is_power_of_two(self.lattice.ksampling[1] - 1):
-                    logger.error("User requests romberg integration, but "
-                                 "the samplings in the second direction is not "
-                                 "2^k - 1. Exiting.")
+                    logger.error(
+                        "User requests romberg integration, but "
+                        "the samplings in the second direction is not "
+                        "2^k - 1. Exiting.")
                     sys.exit(1)
                 if not utils.is_power_of_two(self.lattice.ksampling[2] - 1):
                     logger.error("User requests romberg integration, but "
@@ -3304,13 +2578,12 @@ class Bandstructure():
             for band in range(0, num_bands):
                 spin_factor = self.spin_degen[band]
                 energies_shaped = self.energies[band].reshape(
-                    self.lattice.ksampling[0],
-                    self.lattice.ksampling[1],
+                    self.lattice.ksampling[0], self.lattice.ksampling[1],
                     self.lattice.ksampling[2])
-                for sample_index, sample_energy in np.ndenumerate(dos_energies):
-                    energies_smeared = self.gaussian(energies_shaped,
-                                                     sample_energy,
-                                                     self.param.dos_smearing)
+                for sample_index, sample_energy in np.ndenumerate(
+                        dos_energies):
+                    energies_smeared = gaussian(energies_shaped, sample_energy,
+                                                self.param.dos_smearing)
                     if integral_method == "trapz":
                         dos[band][sample_index] = spin_factor * \
                             scipy.integrate.trapz(
@@ -3335,10 +2608,9 @@ class Bandstructure():
                             volume_bz / volume
 
         else:
-            logger.error(
-                "The supplied integral_method is not supported. "
-                "Use: 'tetra', 'cubature','trapz','simps' or 'romb'. "
-                "Exiting.")
+            logger.error("The supplied integral_method is not supported. "
+                         "Use: 'tetra', 'cubature','trapz','simps' or 'romb'. "
+                         "Exiting.")
             sys.exit(1)
 
         # add Jacobian (we integrate in direct coordinates)
@@ -3348,12 +2620,17 @@ class Bandstructure():
             self.dos_partial = dos
             self.dos = dos_total
             self.dos_energies = dos_energies
-        else:
-            return dos_energies, dos_total, dos
+            return None, None, None
 
-    def fetch_dos_energies(self, e_min=None, e_max=None, num_samples=None,
+        return dos_energies, dos_total, dos
+
+    def fetch_dos_energies(self,
+                           e_min=None,
+                           e_max=None,
+                           num_samples=None,
                            auto_scale=False):
-        """ Set up the energy array for density of states calculations.
+        """
+        Set up the energy array for density of states calculations.
 
         Parameters
         ----------
@@ -3379,7 +2656,7 @@ class Bandstructure():
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running fetch_dos_energies.")
 
         if num_samples is None:
@@ -3398,8 +2675,8 @@ class Bandstructure():
         return np.linspace(e_min, e_max, num_samples)
 
     def fetch_min_max_energy(self):
-        """ Returns the min and max of the energy in the current
-        `Bandstructure()` object.
+        """
+        Returns the min and max of the energy in the current `Bandstructure()` object.
 
         Parameters
         ----------
@@ -3417,7 +2694,7 @@ class Bandstructure():
         """
 
         # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)
+        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running fetch_min_max_energy.")
 
         emin = np.amin(self.energies)
@@ -3425,24 +2702,793 @@ class Bandstructure():
 
         return emin, emax
 
-    def gaussian(self, energy, energy_ref, smearing):
-        """ Returns the value of a Gaussian function.
 
-        Parameters
-        ----------
-        energy : float
-            The energy in eV.
-        energy_ref : float
-            The reference energy in eV.
-        smearing : float
-            The smearing factor in eV.
+def gaussian(energy, energy_ref, smearing):
+    """
+    Returns the value of a Gaussian function.
 
-        Returns
-        -------
-        float
-            The value in eV.
+    Parameters
+    ----------
+    energy : float
+        The energy in eV.
+    energy_ref : float
+        The reference energy in eV.
+    smearing : float
+        The smearing factor in eV.
 
-        """
-        energy_shifted = energy_ref - energy
-        return np.exp(-0.5 * np.power(energy_shifted / smearing, 2.0)) / \
-            (smearing * np.sqrt(2 * np.pi))
+    Returns
+    -------
+    float
+        The value in eV.
+
+    """
+    energy_shifted = energy_ref - energy
+    return np.exp(-0.5 * np.power(energy_shifted / smearing, 2.0)) / \
+        (smearing * np.sqrt(2 * np.pi))
+
+
+def non_parabolic_energy_1(k, effmass, a, scale, e0=0.0, kshift=None):
+    r"""
+    Calculates a energy dispersion, both parabolic and non-parabolic.
+
+    Parameters
+    ----------
+    k : ndarray
+        | Dimension: (N,3)
+
+        Contains the N k-point coordinates (cartesian) where the
+        dispersion is to be evaluated.
+    effmass : ndarray
+        | Dimension: (3)
+
+        Contains the effective mass along the three k-point
+        directions. Only the diagonal components of the effective
+        mass tensor is used. In units of the free electron mass.
+    a : ndarray
+        | Dimension: (3)
+
+        The non parabolic coefficients in front of each :math:`k^2`
+        direction which translates to :math:`a^2k^4` in the one
+        dimensional case.
+    scale : float
+        The scale factor in front of the non-parabolic correction
+    e0 : float, optional
+        Shift of the energy scale in eV.
+    kshift : ndarray, optional
+        | Dimension: (3)
+
+        The shift along the respective k-point vectors in
+        cartesian coordinates.
+
+    Returns
+    -------
+    ndarray
+        | Dimension: (N)
+
+        Contains the energy dispersion in eV at each N k-points.
+
+    Notes
+    -----
+    This routines calculates the energy dispersion according to
+
+    .. math:: E=\\frac{\\hbar^2 k^2}{2m}+ak^4.
+
+    Setting :math:`a` to zero yields a parabolic
+    dispersion.
+
+    """
+
+    # set logger
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
+    logger.debug("Running non_parabolic_energy_1.")
+
+    if kshift is None:
+        kshift = [0.0, 0.0, 0.0]
+
+    k = k - kshift
+    k2 = k * k
+    k4 = np.power(np.sum(a * k2, axis=1), 2.0)
+    k2 = np.sum(k2 / effmass, axis=1)
+    return e0 + constants.bandunit * k2 + scale * k4
+
+
+def non_parabolic_velocity_1(k, effmass, a, scale, kshift=None):
+    r"""
+    Calculates the group velocity for the energy dispersion generated in :func:`non_parabolic_energy_1`.
+
+    For both parabolic and non-parabolic bands.
+
+    Parameters
+    ----------
+    k : ndarray
+        | Dimension: (N,3)
+
+        Contains the N k-point in cartesian coordinates where
+        the dispersion is to be evaluated.
+    effmass : ndarray
+        | Dimension: (3)
+
+        Contains the effective mass along the three k-point
+        directions. Only the diagonal components of the effective
+        mass tensor is used. In units of the free electron mass.
+    a : ndarray
+        | Dimension: (3)
+
+        The non parabolic coefficients in front of each :math:`k^2`
+        direction which translates to :math:`a^2k^4` in the one
+        dimensional case.
+    scale : float
+        The scale factor in front of the non-parabolic correction
+    kshift : ndarray, optional
+        | Dimension: (3)
+
+        The shift along the respective k-point vectors in
+        cartesian coordinates.
+
+    Returns
+    -------
+    vx, vy, vz : ndarray, ndarray, ndarray
+        | Dimension: (N),(N),(N)
+
+        Contains the group velocity at each N k-points
+        for each direction defined by the direction of the k-point
+        unit axis. Units of eVAA.
+
+    Notes
+    -----
+    This routines calculates the group velocity according to
+
+    .. math:: v=\\frac{\\partial E}{\\partial \\vec{k}},
+
+    where
+
+    .. math:: E=\\frac{\\hbar^2 k^2}{2m}+ak^4.
+
+    Setting :math:`a` to zero yields a parabolic dispersion
+    and thus its group velocity.
+
+    .. warning:: The factor :math:`\\hbar^{-1}` is not returned and
+    need to be included externally.
+
+    """
+
+    # set logger
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
+    logger.debug("Running non_parabolic_velocity_1.")
+
+    if kshift is None:
+        kshift = [0.0, 0.0, 0.0]
+
+    k = k - kshift
+    k2 = k * k
+    k2 = np.sum(a * k2, axis=1)
+    parabolic = np.divide(2.0 * constants.bandunit, effmass)
+    scaling = (parabolic + scale * 4.0 * np.column_stack(
+        (a[0] * k2, a[1] * k2, a[2] * k2))).T
+    spreadkz, spreadky, spreadkx = k.T[2], k.T[1], k.T[0]
+    vx = np.multiply(scaling[0], spreadkx)
+    vy = np.multiply(scaling[1], spreadky)
+    vz = np.multiply(scaling[2], spreadkz)
+    return vx, vy, vz
+
+
+def non_parabolic_energy_3(k, effmass, a, scale, e0=0.0, kshift=None):
+    r"""
+    Calculates a k^2 + k^6 energy dispersion.
+
+    Parameters
+    ----------
+    k : ndarray
+        | Dimension: (N,3)
+
+        Contains the N k-point coordinates (cartesian) where the
+        dispersion is to be evaluated.
+    effmass : ndarray
+        | Dimension: (3)
+
+        Contains the effective mass along the three k-point
+        directions. Only the diagonal components of the effective
+        mass tensor is used. In units of the free electron mass.
+    a : ndarray
+        | Dimension: (3)
+
+        The non parabolic coefficients in front of each :math:`k^2`
+        direction which translates to :math:`a^4k^8` in the one
+        dimensional case.
+    scale : float
+        The scale factor in front of the non-parabolic correction
+    e0 : float, optional
+        Shift of the energy scale in eV.
+    kshift : ndarray, optional
+        | Dimension: (3)
+
+        The shift along the respective k-point vectors in
+        cartesian coordinates.
+
+    Returns
+    -------
+    ndarray
+        | Dimension: (N)
+
+        Contains the energy dispersion in eV at each N k-points.
+
+    Notes
+    -----
+    This routines calculates the energy dispersion according to
+
+    .. math:: E=\\frac{\\hbar^2 k^2}{2m}+a^3k^6.
+
+    Setting :math:`a` to zero yields a parabolic
+    dispersion.
+
+    """
+
+    # Set logger
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
+    logger.debug("Running non_parabolic_energy_3.")
+
+    if kshift is None:
+        kshift = [0.0, 0.0, 0.0]
+
+    k = k - kshift
+    k2 = k * k
+    ak2 = np.sum(a * k2, axis=1)
+    k6 = np.power(ak2, 3.0)
+    k2 = np.sum(k2 / effmass, axis=1)
+    return e0 + constants.bandunit * k2 + scale * k6
+
+
+def non_parabolic_velocity_3(k, effmass, a, scale, kshift=None):
+    r"""
+    Calculates the group velocity for the energy dispersion generated in :func:`non_parabolic_energy_3`.
+
+    Parameters
+    ----------
+    k : ndarray
+        | Dimension: (N,3)
+
+        Contains the N k-point in cartesian coordinates where
+        the dispersion is to be evaluated.
+    effmass : ndarray
+        | Dimension: (3)
+
+        Contains the effective mass along the three k-point
+        directions. Only the diagonal components of the effective
+        mass tensor is used. In units of the free electron mass.
+    a : ndarray
+        | Dimension: (3)
+
+        The non parabolic coefficients in front of each :math:`k^2`
+        direction which translates to :math:`a^4k^8` in the one
+        dimensional case.
+    scale : float
+        The scale factor in front of the non-parabolic correction
+    kshift : ndarray, optional
+        | Dimension: (3)
+
+        The shift along the respective k-point vectors in
+        cartesian coordinates.
+
+    Returns
+    -------
+    vx, vy, vz : ndarray, ndarray, ndarray
+        | Dimension: (N),(N),(N)
+
+        Contains the group velocity at each N k-points
+        for each direction defined by the direction of the k-point
+        unit axis. Units of eVAA.
+
+    Notes
+    -----
+    This routines calculates the group velocity according to
+
+    .. math:: v=\\frac{\\partial E}{\\partial \\vec{k}},
+
+    where
+
+    .. math:: E=\\frac{\\hbar^2 k^2}{2m}+a^3k^6.
+
+    Setting :math:`a` to zero yields a parabolic dispersion
+    and thus its group velocity.
+
+    .. warning:: The factor :math:`\\hbar^{-1}` is not returned and
+    need to be included externally.
+
+    """
+
+    # set logger
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
+    logger.debug("Running non_parabolic_velocity_3.")
+
+    if kshift is None:
+        kshift = [0.0, 0.0, 0.0]
+
+    k = k - kshift
+    k2 = k * k
+    k2 = np.sum(a * k2, axis=1)
+    k4 = np.power(k2, 2.0)
+    parabolic = np.divide(2.0 * constants.bandunit, effmass)
+    scaling = (parabolic + scale * 6.0 * np.column_stack(
+        (a[0] * k4, a[1] * k4, a[2] * k4))).T
+    spreadkz, spreadky, spreadkx = k.T[2], k.T[1], k.T[0]
+    vx = np.multiply(scaling[0], spreadkx)
+    vy = np.multiply(scaling[1], spreadky)
+    vz = np.multiply(scaling[2], spreadkz)
+    return vx, vy, vz
+
+
+def non_parabolic_energy_4(k, effmass, a, scale, e0=0.0, kshift=None):
+    r"""
+    Calculates a k^2 + k^8 energy dispersion.
+
+    Parameters
+    ----------
+    k : ndarray
+        | Dimension: (N,3)
+
+        Contains the N k-point coordinates (cartesian) where the
+        dispersion is to be evaluated.
+    effmass : ndarray
+        | Dimension: (3)
+
+        Contains the effective mass along the three k-point
+        directions. Only the diagonal components of the effective
+        mass tensor is used. In units of the free electron mass.
+    a : ndarray
+        | Dimension: (3)
+
+        The non parabolic coefficients in front of each :math:`k^2`
+        direction which translates to :math:`a^4k^8` in the one
+        dimensional case.
+    scale : float
+        The scale factor in front of the non-parabolic correction
+    e0 : float, optional
+        Shift of the energy scale in eV.
+    kshift : ndarray, optional
+        | Dimension: (3)
+
+        The shift along the respective k-point vectors in
+        cartesian coordinates.
+
+    Returns
+    -------
+    ndarray
+        | Dimension: (N)
+
+        Contains the energy dispersion in eV at each N k-points.
+
+    Notes
+    -----
+    This routines calculates the energy dispersion according to
+
+    .. math:: E=\\frac{\\hbar^2 k^2}{2m}+a^4k^8.
+
+    Setting :math:`a` to zero yields a parabolic
+    dispersion.
+
+    """
+
+    # set logger
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
+    logger.debug("Running non_parabolic_energy_4.")
+
+    if kshift is None:
+        kshift = [0.0, 0.0, 0.0]
+
+    k = k - kshift
+    k2 = k * k
+    ak2 = np.sum(a * k2, axis=1)
+    k8 = np.power(ak2, 4.0)
+    k2 = np.sum(k2 / effmass, axis=1)
+    return e0 + constants.bandunit * k2 + scale * k8
+
+
+def non_parabolic_velocity_4(k, effmass, a, scale, kshift=None):
+    r"""
+    Calculates the group velocity for the energy dispersion generated in :func:`non_parabolic_energy_4`.
+
+    Parameters
+    ----------
+    k : ndarray
+        | Dimension: (N,3)
+
+        Contains the N k-point in cartesian coordinates where
+        the dispersion is to be evaluated.
+    effmass : ndarray
+        | Dimension: (3)
+
+        Contains the effective mass along the three k-point
+        directions. Only the diagonal components of the effective
+        mass tensor is used. In units of the free electron mass.
+    a : ndarray
+        | Dimension: (3)
+
+        The non parabolic coefficients in front of each :math:`k^2`
+        direction which translates to :math:`a^4k^8` in the one
+        dimensional case.
+    scale : float
+        The scale factor in front of the non-parabolic correction
+    kshift : ndarray, optional
+        | Dimension: (3)
+
+        The shift along the respective k-point vectors in
+        cartesian coordinates.
+
+    Returns
+    -------
+    vx, vy, vz : ndarray, ndarray, ndarray
+        | Dimension: (N),(N),(N)
+
+        Contains the group velocity at each N k-points
+        for each direction defined by the direction of the k-point
+        unit axis. Units of eVAA.
+
+    Notes
+    -----
+    This routines calculates the group velocity according to
+
+    .. math:: v=\\frac{\\partial E}{\\partial \\vec{k}},
+
+    where
+
+    .. math:: E=\\frac{\\hbar^2 k^2}{2m}+a^4k^8.
+
+    Setting :math:`a` to zero yields a parabolic dispersion
+    and thus its group velocity.
+
+    .. warning:: The factor :math:`\\hbar^{-1}` is not returned and
+    need to be included externally.
+
+    """
+
+    # set logger
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
+    logger.debug("Running non_parabolic_velocity_4.")
+
+    if kshift is None:
+        kshift = [0.0, 0.0, 0.0]
+
+    k = k - kshift
+    k2 = k * k
+    k2 = np.sum(a * k2, axis=1)
+    k6 = np.power(k2, 3.0)
+    parabolic = np.divide(2.0 * constants.bandunit, effmass)
+    scaling = (parabolic + scale * 8.0 * np.column_stack(
+        (a[0] * k6, a[1] * k6, a[2] * k6))).T
+    spreadkz, spreadky, spreadkx = k.T[2], k.T[1], k.T[0]
+    vx = np.multiply(scaling[0], spreadkx)
+    vy = np.multiply(scaling[1], spreadky)
+    vz = np.multiply(scaling[2], spreadkz)
+    return vx, vy, vz
+
+
+def non_parabolic_energy_5(k, _, a, scale, e0=0.0, kshift=None):
+    r"""
+    Calculates a linear energy dispersion.
+
+    Parameters
+    ----------
+    k : ndarray
+        | Dimension: (N,3)
+
+        Contains the N k-point coordinates (cartesian) where the
+        dispersion is to be evaluated.
+    _ : A dummy.
+    a : ndarray
+        | Dimension: (3)
+
+        The coefficients in front of each :math:`k^2`
+        direction which translates to :math:`\\sqrt(a)k` in the one
+        dimensional case.
+    scale : float
+        The scale factor in front of the linear expression.
+    e0 : float, optional
+        Shift of the energy scale in eV.
+    kshift : ndarray, optional
+        | Dimension: (3)
+
+        The shift along the respective k-point vectors in
+        cartesian coordinates.
+
+    Returns
+    -------
+    ndarray
+        | Dimension: (N)
+
+        Contains the energy dispersion in eV at each N k-points.
+
+    Notes
+    -----
+    This routines calculates the energy dispersion according to
+    (in one dimension)
+
+    .. math:: E=a\\sqrt(k^2).
+
+    Multiplied by the scale factor in front of this.
+
+    """
+
+    # set logger
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
+    logger.debug("Running non_parabolic_energy_5.")
+
+    if kshift is None:
+        kshift = [0.0, 0.0, 0.0]
+
+    k = k - kshift
+    k2 = k * k
+    k2 = np.sum(a * k2, axis=1)
+    return e0 + scale * np.sqrt(k2)
+
+
+def non_parabolic_velocity_5(k, _, a, scale, kshift=None):
+    r"""
+    Calculates the group velocity for the energy dispersion generated in :func:`non_parabolic_energy_5`.
+
+    Parameters
+    ----------
+    k : ndarray
+        | Dimension: (N,3)
+
+        Contains the N k-point in cartesian coordinates where
+        the dispersion is to be evaluated.
+    _ :  A dummy.
+    a : ndarray
+        | Dimension: (3)
+
+        The coefficients in front of each :math:`k^2`
+        direction which translates to :math:`\\sqrt(a)k` in the one
+        dimensional case.
+    scale : float
+        The scale factor in front of the linear expression.
+    kshift : ndarray, optional
+        | Dimension: (3)
+
+        The shift along the respective k-point vectors in
+        cartesian coordinates.
+
+    Returns
+    -------
+    vx, vy, vz : ndarray, ndarray, ndarray
+        | Dimension: (N),(N),(N)
+
+        Contains the group velocity at each N k-points
+        for each direction defined by the direction of the k-point
+        unit axis. Units of eVAA.
+
+    Notes
+    -----
+    This routines calculates the group velocity according to
+
+    .. math:: v=\\frac{\\partial E}{\\partial \\vec{k}},
+
+    where
+
+    .. math:: E=a\\sqrt(k^2).
+
+    Multiplied by the scale factor in front of this.
+
+    .. warning:: The factor :math:`\\hbar^{-1}` is not returned and
+    need to be included externally.
+
+    """
+
+    # set logger
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
+    logger.debug("Running non_parabolic_velocity_5.")
+
+    if kshift is None:
+        kshift = [0.0, 0.0, 0.0]
+
+    k = k - kshift
+    k2 = k * k
+    k2 = np.sum(a * k2, axis=1)
+    vx = scale * a[0] * k[:, 0] / np.sqrt(k2)
+    vy = scale * a[1] * k[:, 1] / np.sqrt(k2)
+    vz = scale * a[2] * k[:, 2] / np.sqrt(k2)
+    return vx, vy, vz
+
+
+def non_parabolic_energy_2(k, effmass, a):
+    r"""
+    Calculates a non-parabolic energy dispersion.
+
+    Parameters
+    ----------
+    k : ndarray
+        | Dimension: (N,3)
+
+        Contains the N k-point cartesian coordinates where the
+        dispersion is to be evaluated.
+    effmass : float
+        The effective mass in units of the free electron mass.
+    a : float
+        The :math:`\\alpha` factor.
+
+    Returns
+    -------
+    ndarray
+        | Dimension: (N)
+
+        Contains the energy in eV at each N k-points for each
+        direction defined by the direction of the k-point unit axis.
+
+    Notes
+    -----
+    This routine calculates the energy dispersion according to
+
+    .. math:: E(1+\\alpha E)=\\frac{\\hbar^2k^2}{2m},
+
+    where :math:`\\alpha` is a parameter that adjust the
+    non-parabolicity
+
+    Note that if :math:`m` is negative (valence bands), the square
+    root is undefined for :math:`k^2>=m/(2\\alpha \\hbar)`, which is
+    a rather limited k-space volume. Consider (either :math:`m` or
+    :math:`\\alpha` negative).
+
+    .. math:: m=m_e, \\alpha=1.0 (E_g=1.0 \\mathrm{eV})
+              \\rightarrow |\\vec{k}| \\geq 0.26 \\mathrm{AA^{-1}}
+
+    .. math:: m=0.1m_e, \\alpha=1.0 \\rightarrow |\\vec{k}|
+              \\geq 0.081 \\mathrm{AA^{-1}}
+
+    .. math:: m=10m_e, \\alpha=1.0 \\rightarrow |\\vec{k}|
+              \\geq 0.81 \\mathrm{AA^{-1}}
+
+    .. math:: m=m_e, \\alpha=10.0 (E_g=0.1 \\mathrm{eV})
+              \\rightarrow |\\vec{k}| \\geq 0.81 \\mathrm{AA^{-1}}
+
+    .. math:: m=m_e, \\alpha=0.1 (E_g=10 \\mathrm{eV})
+              \\rightarrow |\\vec{k}| \\geq 0.081 \\mathrm{AA^{-1}}
+
+    For a simple cell of 10 :math:`\\mathrm{AA}`, the BZ border is
+    typically at 0.31 :math:`\\mathrm{AA^{-1}}` and for a smaller
+    cell, e.g. 3.1 :math:`\\mathrm{AA}`, the BZ border is here
+    at 1.0 :math:`\\mathrm{AA^{-1}}`.
+
+    .. warning:: In order to be able to use all values of
+                 :math:`a`, we return a linear :math:`E(\\vec{k})`
+                 in the undefined region (the last defined value
+                 of :math:`E(\\vec{k})` is used). This is highly
+                 unphysical, so we print a warning to notice the user
+
+    """
+
+    # set logger
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
+    logger.debug("Running non_parabolic_energy_2.")
+
+    if (effmass < 0 and a > 0) or (effmass > 0 and a < 0):  # pylint: disable=chained-comparison
+        k2 = np.sum(k * k, axis=1)
+        last_valid_k2 = -effmass / \
+            (4 * a * constants.bandunit) - constants.zerocut
+        last_valid_energy = (
+            -1.0 + np.sqrt(1 + 4 * a *
+                           (constants.bandunit * last_valid_k2 / effmass))) / (
+                               2 * a)
+        logger.warning(
+            "The product of the effective mass "
+            "and non parabolic correction factor "
+            "is negative. The Kane model is thus "
+            "only defined for a restricted k-vector set. "
+            "Returning a linear E(k)=E in the undefined "
+            "region, where the linear E is the last "
+            "allowed value. USER BEWARE THAT THE "
+            "TRANSPORT INTEGRALS COULD PICK UP THIS "
+            "DISCONTINUITY. Last valid energy for "
+            "the Kane model is %s eV. Remember no "
+            "band folding is performed.", str(last_valid_energy))
+        energy = constants.bandunit * k2 / effmass
+        # need to loop manually to fill the array outside the
+        # valid range
+        for i in range(k2.shape[0]):
+            if k2[i] < last_valid_k2:
+                energy[i] = (-1.0 + np.sqrt(1 + 4 * a * energy[i])) / (2 * a)
+            else:
+                energy[i] = last_valid_energy
+        return energy
+
+    e_parabolic = constants.bandunit * \
+                  np.sum(k * k, axis=1) / effmass
+    return (-1.0 + np.sqrt(1 + 4 * a * e_parabolic)) / (2 * a)
+
+
+def non_parabolic_velocity_2(k, effmass, a):
+    r"""
+    Calculates the group velocity for the energy dispersion generated in :func:`non_parabolic_energy_2`.
+
+    For both parabolic and non-parabolic.
+
+    Parameters
+    ----------
+    k : ndarray
+        | Dimension: (N,3)
+
+        Contains the N k-point in cartesian coordinates where
+        the dispersion is to be evaluated.
+    effmass : float
+        The effective mass in units of the free electron mass.
+    a : ndarray
+        | Dimension: (3)
+
+        The :math:`\\alpha` factor.
+
+    Returns
+    -------
+    vx, vy, vz : ndarray, ndarray, ndarray
+        | Dimension: (N), (N), (N)
+
+        The group velocity along each axis in the reciprocal
+        unit cell. In units of eVAA.
+
+    Notes
+    -----
+    Consult comments in :func:`non_parabolic_energy_1`
+
+    .. warning:: The factor :math:`\\hbar^{-1}` is not returned
+                 and need to be included externally.
+
+    """
+
+    # set logger
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
+    logger.debug("Running non_parabolic_velocity_2.")
+
+    spreadkz, spreadky, spreadkx = k.T[2], k.T[1], k.T[0]
+    # check validity
+    if (effmass < 0 and a > 0) or (effmass > 0 and a < 0):  # pylint: disable=chained-comparison
+        k2 = np.sum(k * k, axis=1)
+        last_valid_k2 = -effmass / \
+            (4 * a * constants.bandunit)
+        energy = constants.bandunit * k2 / effmass
+        last_valid_energy = (
+            -1.0 + np.sqrt(1 + 4 * a *
+                           (constants.bandunit * last_valid_k2 / effmass))) / (
+                               2 * a)
+        # need to loop manually to fill the array outside the
+        # valid range
+        for i in range(k2.shape[0]):
+            if k2[i] < last_valid_k2:
+                energy[i] = (-1.0 + np.sqrt(1 + 4 * a * energy[i])) / (2 * a)
+            else:
+                energy[i] = last_valid_energy
+    else:
+        e_parabolic = constants.bandunit * \
+            np.sum(k * k, axis=1) / effmass
+        energy = (-1.0 + np.sqrt(1 + 4 * a * e_parabolic)) / (2 * a)
+    scaling = 2.0 * constants.bandunit / (effmass * (1 + 2 * a * energy))
+    vx = np.multiply(scaling, spreadkx)
+    vy = np.multiply(scaling, spreadky)
+    vz = np.multiply(scaling, spreadkz)
+    return vx, vy, vz
+
+
+def parabolic_effective_mass(effmass_t):
+    """
+    Checks if the supplied effective mass array is parabolic.
+
+    Parameters
+    ----------
+    effmass_t : ndarray
+        The effective mass tensor in units of the free
+        electron mass.
+
+    Returns
+    -------
+    boolean
+        True if parabolic tensors, False otherwise.
+
+    """
+
+    # set logger
+    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
+    logger.debug("Running parabolic_effective_mass.")
+
+    effmass = effmass_t[0]
+    if not np.allclose(
+            np.array([effmass, effmass, effmass]),
+            effmass_t,
+            atol=constants.zerocut):
+        return False
+    return True

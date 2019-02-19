@@ -54,7 +54,7 @@ void wildmagic_execute_interpolation(int *num_points,double *domainx, double *do
     }
   }
 
- 
+
   // generate interpolator
   if (itype==0) {
     for (int band=0;band<num_bands;band++) {
@@ -72,7 +72,7 @@ void wildmagic_execute_interpolation(int *num_points,double *domainx, double *do
     }
   }
   else if (itype==1) {
-    for (int band=0;band<num_bands;band++) { 
+    for (int band=0;band<num_bands;band++) {
       IntpTricubic3<double> interpolator(xBound,yBound,zBound,xMin,xSpacing,yMin,ySpacing,zMin,zSpacing,data[band],true);
       // fetch points
       for (int i=0;i<ip;i++) {
@@ -83,11 +83,11 @@ void wildmagic_execute_interpolation(int *num_points,double *domainx, double *do
 	  printf("element %d did not interpolate correctly, coordinate=%f, %f, %f\n", i, ix[i], iy[i], iz[i]);
 	}
 	idata[band*ip+i]=value;
-      } 
+      }
     }
   }
   else if (itype==2) {
-    for (int band=0;band<num_bands;band++) { 
+    for (int band=0;band<num_bands;band++) {
       IntpTricubic3<double> interpolator(xBound,yBound,zBound,xMin,xSpacing,yMin,ySpacing,zMin,zSpacing,data[band],false);
       // fetch points
       for (int i=0;i<ip;i++) {
@@ -102,7 +102,7 @@ void wildmagic_execute_interpolation(int *num_points,double *domainx, double *do
     }
   }
   else if (itype==3) {
-    for (int band=0;band<num_bands;band++) { 
+    for (int band=0;band<num_bands;band++) {
       IntpAkimaUniform3<double> interpolator(xBound,yBound,zBound,xMin,xSpacing,yMin,ySpacing,zMin,zSpacing,data[band]);
       // fetch points
       for (int i=0;i<ip;i++) {
@@ -121,7 +121,7 @@ void wildmagic_execute_interpolation(int *num_points,double *domainx, double *do
     exit(1);
   }
   // kill data
-  for (int band=0;band<num_bands;band++) { 
+  for (int band=0;band<num_bands;band++) {
     for (int k=0;k<zBound;k++) {
       for (int j=0;j<yBound;j++) {
 	delete[] data[band][k][j];
@@ -146,7 +146,7 @@ void wildmagic_gradient_execute_interpolation(int *num_points,double *domainx, d
   double zMin=domainz[0];
   double zSpacing=(domainz[1]-domainz[0])/(zBound-1);
   int num_kpoints = xBound*yBound*zBound;
- 
+
   // now we do something that is probably _really_ uncessary, but need to get going...
   double ****tempdata=new double ***[num_bands];
   for (int band=0;band<num_bands;band++) {
@@ -204,7 +204,7 @@ void wildmagic_gradient_execute_interpolation(int *num_points,double *domainx, d
 	igradx[band*ip+i]=interpolator(1,0,0,ix[i], iy[i], iz[i]);
 	igrady[band*ip+i]=interpolator(0,1,0,ix[i], iy[i], iz[i]);
 	igradz[band*ip+i]=interpolator(0,0,1,ix[i], iy[i], iz[i]);
-      } 
+      }
     }
   }
   else if (itype==2) {
@@ -223,7 +223,7 @@ void wildmagic_gradient_execute_interpolation(int *num_points,double *domainx, d
 	igradx[band*ip+i]=interpolator(1,0,0,ix[i], iy[i], iz[i]);
 	igrady[band*ip+i]=interpolator(0,1,0,ix[i], iy[i], iz[i]);
 	igradz[band*ip+i]=interpolator(0,0,1,ix[i], iy[i], iz[i]);
-      } 
+      }
     }
   }
   else if (itype==3) {
@@ -251,7 +251,7 @@ void wildmagic_gradient_execute_interpolation(int *num_points,double *domainx, d
   }
 
   // kill tempdata
-  for (int band=0;band<num_bands;band++) { 
+  for (int band=0;band<num_bands;band++) {
     for (int k=0;k<zBound;k++) {
       for (int j=0;j<yBound;j++) {
 	delete[] tempdata[band][k][j];

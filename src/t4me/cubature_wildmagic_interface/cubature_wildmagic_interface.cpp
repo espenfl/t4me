@@ -23,8 +23,8 @@ double pi=3.1415926535897932;
 double betafact=1e5/8.6173324;
 double r_factor[12]={0.0,0.0,0.0,1.0,1.0,2.0,2.0,0.0,0.0,0.0,0.0,0.5};
 
-double fetch_combined_scattering_parabolic(double energy, 
-					   double *tau0, 
+double fetch_combined_scattering_parabolic(double energy,
+					   double *tau0,
 					   int num_scatterings,
 					   double *energy_trans) {
 
@@ -39,7 +39,7 @@ double fetch_combined_scattering_parabolic(double energy,
   return tau;
 }
 
-int f_tdf_0_trilinear(unsigned ndim,const double *x, void *params, 
+int f_tdf_0_trilinear(unsigned ndim,const double *x, void *params,
 		  unsigned fdim, double *fval) {
 
   struct f_tdf_params * p = (struct f_tdf_params *)params;
@@ -54,17 +54,17 @@ int f_tdf_0_trilinear(unsigned ndim,const double *x, void *params,
   fval[0]=fetch_combined_scattering_parabolic(fabs(temp_energy),
 					      p->tau0,p->num_scatterings,
 					      p->tau_energy_trans)*
-    temp_velocity_l*temp_velocity_m / 
+    temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_0_trilinear_num_scatter(unsigned ndim,const double *x, 
-			      void *params, unsigned fdim, 
+int f_tdf_0_trilinear_num_scatter(unsigned ndim,const double *x,
+			      void *params, unsigned fdim,
 			      double *fval) {
 
-  struct f_tdf_params_num_scatter * p = 
+  struct f_tdf_params_num_scatter * p =
     (struct f_tdf_params_num_scatter *)params;
   double temp_energy=static_cast<IntpTrilinear3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -79,17 +79,17 @@ int f_tdf_0_trilinear_num_scatter(unsigned ndim,const double *x,
   double chempot=p->chempot;
   if (std::isnan(temp_scattering)) {
     temp_scattering = std::numeric_limits<double>::max();
-  } 
-  fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m / 
+  }
+  fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 }
 
-int f_tdf_0_trilinear_const_scatter(unsigned ndim,const double *x, 
-				void *params, unsigned fdim, double 
+int f_tdf_0_trilinear_const_scatter(unsigned ndim,const double *x,
+				void *params, unsigned fdim, double
 				*fval) {
 
-  struct f_tdf_params_const_scatter * p = 
+  struct f_tdf_params_const_scatter * p =
     (struct f_tdf_params_const_scatter *)params;
   double temp_energy=static_cast<IntpTrilinear3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -99,13 +99,13 @@ int f_tdf_0_trilinear_const_scatter(unsigned ndim,const double *x,
     (p->velocity_interpolator_m)->operator()(x[0],x[1],x[2]);
   double beta=p->beta;
   double chempot=p->chempot;
-  fval[0]=temp_velocity_l*temp_velocity_m / 
+  fval[0]=temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_1_trilinear(unsigned ndim,const double *x, void *params, 
+int f_tdf_1_trilinear(unsigned ndim,const double *x, void *params,
 		  unsigned fdim, double *fval) {
 
   struct f_tdf_params * p = (struct f_tdf_params *)params;
@@ -120,17 +120,17 @@ int f_tdf_1_trilinear(unsigned ndim,const double *x, void *params,
   fval[0]=fetch_combined_scattering_parabolic(fabs(temp_energy),
 					      p->tau0,p->num_scatterings,
 					      p->tau_energy_trans)*
-    temp_velocity_l*temp_velocity_m*(temp_energy-chempot) / 
+    temp_velocity_l*temp_velocity_m*(temp_energy-chempot) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
-  
+
 }
 
-int f_tdf_1_trilinear_num_scatter(unsigned ndim,const double *x, 
-			      void *params, unsigned fdim, 
+int f_tdf_1_trilinear_num_scatter(unsigned ndim,const double *x,
+			      void *params, unsigned fdim,
 			      double *fval) {
 
-  struct f_tdf_params_num_scatter * p = 
+  struct f_tdf_params_num_scatter * p =
     (struct f_tdf_params_num_scatter *)params;
   double temp_energy=static_cast<IntpTrilinear3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -147,17 +147,17 @@ int f_tdf_1_trilinear_num_scatter(unsigned ndim,const double *x,
     temp_scattering = std::numeric_limits<double>::max();
   }
   fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m*
-    (temp_energy-chempot) / 
+    (temp_energy-chempot) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
-  
+
 }
 
-int f_tdf_1_trilinear_const_scatter(unsigned ndim,const double *x, 
-				void *params, unsigned fdim, 
+int f_tdf_1_trilinear_const_scatter(unsigned ndim,const double *x,
+				void *params, unsigned fdim,
 				double *fval) {
 
-  struct f_tdf_params_const_scatter * p = 
+  struct f_tdf_params_const_scatter * p =
     (struct f_tdf_params_const_scatter *)params;
   double temp_energy=static_cast<IntpTrilinear3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -167,15 +167,15 @@ int f_tdf_1_trilinear_const_scatter(unsigned ndim,const double *x,
     (p->velocity_interpolator_m)->operator()(x[0],x[1],x[2]);
   double beta=p->beta;
   double chempot=p->chempot;
-  fval[0]=temp_velocity_l*temp_velocity_m*(temp_energy-chempot) / 
+  fval[0]=temp_velocity_l*temp_velocity_m*(temp_energy-chempot) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_2_trilinear(unsigned ndim,const double *x, void *params, 
+int f_tdf_2_trilinear(unsigned ndim,const double *x, void *params,
 		  unsigned fdim, double *fval) {
-  
+
   struct f_tdf_params * p = (struct f_tdf_params *)params;
   double temp_energy=static_cast<IntpTrilinear3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -188,17 +188,17 @@ int f_tdf_2_trilinear(unsigned ndim,const double *x, void *params,
   fval[0]=fetch_combined_scattering_parabolic(fabs(temp_energy),
 					      p->tau0,p->num_scatterings,
 					      p->tau_energy_trans)*
-    temp_velocity_l*temp_velocity_m*pow(temp_energy-chempot,2.0) / 
+    temp_velocity_l*temp_velocity_m*pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_2_trilinear_num_scatter(unsigned ndim,const double *x, 
-			      void *params, unsigned fdim, 
+int f_tdf_2_trilinear_num_scatter(unsigned ndim,const double *x,
+			      void *params, unsigned fdim,
 			      double *fval) {
 
-  struct f_tdf_params_num_scatter * p = 
+  struct f_tdf_params_num_scatter * p =
     (struct f_tdf_params_num_scatter *)params;
   double temp_energy=static_cast<IntpTrilinear3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -215,17 +215,17 @@ int f_tdf_2_trilinear_num_scatter(unsigned ndim,const double *x,
     temp_scattering = std::numeric_limits<double>::max();
   }
   fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m*
-    pow(temp_energy-chempot,2.0) / 
+    pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_2_trilinear_const_scatter(unsigned ndim,const double *x, 
-				void *params, unsigned fdim, 
+int f_tdf_2_trilinear_const_scatter(unsigned ndim,const double *x,
+				void *params, unsigned fdim,
 				double *fval) {
-  
-  struct f_tdf_params_const_scatter * p = 
+
+  struct f_tdf_params_const_scatter * p =
     (struct f_tdf_params_const_scatter *)params;
   double temp_energy=static_cast<IntpTrilinear3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -236,18 +236,18 @@ int f_tdf_2_trilinear_const_scatter(unsigned ndim,const double *x,
   double beta=p->beta;
   double chempot=p->chempot;
   fval[0]=temp_velocity_l*temp_velocity_m*
-    pow(temp_energy-chempot,2.0) / 
+    pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
 
-int f_tdf_0_trilinear_deriv(unsigned ndim,const double *x, 
-			void *params, unsigned fdim, 
+int f_tdf_0_trilinear_deriv(unsigned ndim,const double *x,
+			void *params, unsigned fdim,
 			double *fval) {
 
-  struct f_tdf_params_deriv * p = 
+  struct f_tdf_params_deriv * p =
     (struct f_tdf_params_deriv *)params;
   double temp_energy=static_cast<IntpTrilinear3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -266,17 +266,17 @@ int f_tdf_0_trilinear_deriv(unsigned ndim,const double *x,
   fval[0]=fetch_combined_scattering_parabolic(fabs(temp_energy),
 					      p->tau0,p->num_scatterings,
 					      p->tau_energy_trans)*
-    temp_velocity_l*temp_velocity_m / 
+    temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_0_trilinear_deriv_num_scatter(unsigned ndim,const double *x, 
-				    void *params, unsigned fdim, 
+int f_tdf_0_trilinear_deriv_num_scatter(unsigned ndim,const double *x,
+				    void *params, unsigned fdim,
 				    double *fval) {
 
-  struct f_tdf_params_deriv_num_scatter * p = 
+  struct f_tdf_params_deriv_num_scatter * p =
     (struct f_tdf_params_deriv_num_scatter *)params;
   double temp_energy=static_cast<IntpTrilinear3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -298,17 +298,17 @@ int f_tdf_0_trilinear_deriv_num_scatter(unsigned ndim,const double *x,
   if (std::isnan(temp_scattering)) {
     temp_scattering = std::numeric_limits<double>::max();
   }
-  fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m / 
+  fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
 int f_tdf_0_trilinear_deriv_const_scatter(unsigned ndim,const double *x,
-				      void *params, unsigned fdim, 
+				      void *params, unsigned fdim,
 				      double *fval) {
 
-  struct f_tdf_params_deriv_const_scatter * p = 
+  struct f_tdf_params_deriv_const_scatter * p =
     (struct f_tdf_params_deriv_const_scatter *)params;
   double temp_energy=static_cast<IntpTrilinear3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -324,17 +324,17 @@ int f_tdf_0_trilinear_deriv_const_scatter(unsigned ndim,const double *x,
 					 x[0],x[1],x[2]);
   double beta=p->beta;
   double chempot=p->chempot;
-  fval[0]=temp_velocity_l*temp_velocity_m / 
+  fval[0]=temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_1_trilinear_deriv(unsigned ndim,const double *x, 
-			void *params, unsigned fdim, 
+int f_tdf_1_trilinear_deriv(unsigned ndim,const double *x,
+			void *params, unsigned fdim,
 			double *fval) {
 
-  struct f_tdf_params_deriv * p = 
+  struct f_tdf_params_deriv * p =
     (struct f_tdf_params_deriv *)params;
   double temp_energy=static_cast<IntpTrilinear3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -354,16 +354,16 @@ int f_tdf_1_trilinear_deriv(unsigned ndim,const double *x,
 					      p->tau0,
 					      p->num_scatterings,
 					      p->tau_energy_trans)*
-    temp_velocity_l*temp_velocity_m*(temp_energy-chempot) / 
+    temp_velocity_l*temp_velocity_m*(temp_energy-chempot) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_1_trilinear_deriv_num_scatter(unsigned ndim,const double *x, 
-				    void *params, unsigned fdim, 
+int f_tdf_1_trilinear_deriv_num_scatter(unsigned ndim,const double *x,
+				    void *params, unsigned fdim,
 				    double *fval) {
-  
+
   struct f_tdf_params_deriv_num_scatter * p =
     (struct f_tdf_params_deriv_num_scatter *)params;
   double temp_energy=static_cast<IntpTrilinear3<double>*>
@@ -391,10 +391,10 @@ int f_tdf_1_trilinear_deriv_num_scatter(unsigned ndim,const double *x,
   return 0;
 }
 
-int f_tdf_1_trilinear_deriv_const_scatter(unsigned ndim,const double *x, 
-				      void *params, unsigned fdim, 
+int f_tdf_1_trilinear_deriv_const_scatter(unsigned ndim,const double *x,
+				      void *params, unsigned fdim,
 				      double *fval) {
-  
+
   struct f_tdf_params_deriv_const_scatter * p =
     (struct f_tdf_params_deriv_const_scatter *)params;
   double temp_energy=static_cast<IntpTrilinear3<double>*>
@@ -411,16 +411,16 @@ int f_tdf_1_trilinear_deriv_const_scatter(unsigned ndim,const double *x,
 					 x[0],x[1],x[2]);
   double beta=p->beta;
   double chempot=p->chempot;
-  fval[0]=temp_velocity_l*temp_velocity_m*(temp_energy-chempot) / 
+  fval[0]=temp_velocity_l*temp_velocity_m*(temp_energy-chempot) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 }
 
-int f_tdf_2_trilinear_deriv(unsigned ndim,const double *x, 
-			void *params, unsigned fdim, 
+int f_tdf_2_trilinear_deriv(unsigned ndim,const double *x,
+			void *params, unsigned fdim,
 			double *fval) {
-  
-  struct f_tdf_params_deriv * p = 
+
+  struct f_tdf_params_deriv * p =
     (struct f_tdf_params_deriv *)params;
   double temp_energy=static_cast<IntpTrilinear3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -441,17 +441,17 @@ int f_tdf_2_trilinear_deriv(unsigned ndim,const double *x,
 					      p->num_scatterings,
 					      p->tau_energy_trans)*
     temp_velocity_l*temp_velocity_m*
-    pow(temp_energy-chempot,2.0) / 
+    pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_2_trilinear_deriv_num_scatter(unsigned ndim,const double *x, 
-				    void *params, unsigned fdim, 
+int f_tdf_2_trilinear_deriv_num_scatter(unsigned ndim,const double *x,
+				    void *params, unsigned fdim,
 				    double *fval) {
-  
-  struct f_tdf_params_deriv_num_scatter * p = 
+
+  struct f_tdf_params_deriv_num_scatter * p =
     (struct f_tdf_params_deriv_num_scatter *)params;
   double temp_energy=static_cast<IntpTrilinear3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -474,16 +474,16 @@ int f_tdf_2_trilinear_deriv_num_scatter(unsigned ndim,const double *x,
     temp_scattering = std::numeric_limits<double>::max();
   }
   fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m*
-    pow(temp_energy-chempot,2.0) / 
+    pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 }
 
-int f_tdf_2_trilinear_deriv_const_scatter(unsigned ndim,const double *x, 
-				      void *params, unsigned fdim, 
+int f_tdf_2_trilinear_deriv_const_scatter(unsigned ndim,const double *x,
+				      void *params, unsigned fdim,
 				      double *fval) {
-  
-  struct f_tdf_params_deriv_const_scatter * p = 
+
+  struct f_tdf_params_deriv_const_scatter * p =
     (struct f_tdf_params_deriv_const_scatter *)params;
   double temp_energy=static_cast<IntpTrilinear3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -494,13 +494,13 @@ int f_tdf_2_trilinear_deriv_const_scatter(unsigned ndim,const double *x,
   double beta=p->beta;
   double chempot=p->chempot;
   fval[0]=temp_velocity_l*temp_velocity_m*
-    pow(temp_energy-chempot,2.0) / 
+    pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_0_tricubic(unsigned ndim,const double *x, void *params, 
+int f_tdf_0_tricubic(unsigned ndim,const double *x, void *params,
 		  unsigned fdim, double *fval) {
 
   struct f_tdf_params * p = (struct f_tdf_params *)params;
@@ -515,17 +515,17 @@ int f_tdf_0_tricubic(unsigned ndim,const double *x, void *params,
   fval[0]=fetch_combined_scattering_parabolic(fabs(temp_energy),
 					      p->tau0,p->num_scatterings,
 					      p->tau_energy_trans)*
-    temp_velocity_l*temp_velocity_m / 
+    temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_0_tricubic_num_scatter(unsigned ndim,const double *x, 
-			      void *params, unsigned fdim, 
+int f_tdf_0_tricubic_num_scatter(unsigned ndim,const double *x,
+			      void *params, unsigned fdim,
 			      double *fval) {
 
-  struct f_tdf_params_num_scatter * p = 
+  struct f_tdf_params_num_scatter * p =
     (struct f_tdf_params_num_scatter *)params;
   double temp_energy=static_cast<IntpTricubic3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -541,16 +541,16 @@ int f_tdf_0_tricubic_num_scatter(unsigned ndim,const double *x,
   if (std::isnan(temp_scattering)) {
     temp_scattering = std::numeric_limits<double>::max();
   }
-  fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m / 
+  fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 }
 
-int f_tdf_0_tricubic_const_scatter(unsigned ndim,const double *x, 
-				void *params, unsigned fdim, double 
+int f_tdf_0_tricubic_const_scatter(unsigned ndim,const double *x,
+				void *params, unsigned fdim, double
 				*fval) {
 
-  struct f_tdf_params_const_scatter * p = 
+  struct f_tdf_params_const_scatter * p =
     (struct f_tdf_params_const_scatter *)params;
   double temp_energy=static_cast<IntpTricubic3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -560,13 +560,13 @@ int f_tdf_0_tricubic_const_scatter(unsigned ndim,const double *x,
     (p->velocity_interpolator_m)->operator()(x[0],x[1],x[2]);
   double beta=p->beta;
   double chempot=p->chempot;
-  fval[0]=temp_velocity_l*temp_velocity_m / 
+  fval[0]=temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_1_tricubic(unsigned ndim,const double *x, void *params, 
+int f_tdf_1_tricubic(unsigned ndim,const double *x, void *params,
 		  unsigned fdim, double *fval) {
 
   struct f_tdf_params * p = (struct f_tdf_params *)params;
@@ -581,17 +581,17 @@ int f_tdf_1_tricubic(unsigned ndim,const double *x, void *params,
   fval[0]=fetch_combined_scattering_parabolic(fabs(temp_energy),
 					      p->tau0,p->num_scatterings,
 					      p->tau_energy_trans)*
-    temp_velocity_l*temp_velocity_m*(temp_energy-chempot) / 
+    temp_velocity_l*temp_velocity_m*(temp_energy-chempot) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
-  
+
 }
 
-int f_tdf_1_tricubic_num_scatter(unsigned ndim,const double *x, 
-			      void *params, unsigned fdim, 
+int f_tdf_1_tricubic_num_scatter(unsigned ndim,const double *x,
+			      void *params, unsigned fdim,
 			      double *fval) {
 
-  struct f_tdf_params_num_scatter * p = 
+  struct f_tdf_params_num_scatter * p =
     (struct f_tdf_params_num_scatter *)params;
   double temp_energy=static_cast<IntpTricubic3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -608,17 +608,17 @@ int f_tdf_1_tricubic_num_scatter(unsigned ndim,const double *x,
     temp_scattering = std::numeric_limits<double>::max();
   }
   fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m*
-    (temp_energy-chempot) / 
+    (temp_energy-chempot) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
-  
+
 }
 
-int f_tdf_1_tricubic_const_scatter(unsigned ndim,const double *x, 
-				void *params, unsigned fdim, 
+int f_tdf_1_tricubic_const_scatter(unsigned ndim,const double *x,
+				void *params, unsigned fdim,
 				double *fval) {
 
-  struct f_tdf_params_const_scatter * p = 
+  struct f_tdf_params_const_scatter * p =
     (struct f_tdf_params_const_scatter *)params;
   double temp_energy=static_cast<IntpTricubic3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -628,15 +628,15 @@ int f_tdf_1_tricubic_const_scatter(unsigned ndim,const double *x,
     (p->velocity_interpolator_m)->operator()(x[0],x[1],x[2]);
   double beta=p->beta;
   double chempot=p->chempot;
-  fval[0]=temp_velocity_l*temp_velocity_m*(temp_energy-chempot) / 
+  fval[0]=temp_velocity_l*temp_velocity_m*(temp_energy-chempot) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_2_tricubic(unsigned ndim,const double *x, void *params, 
+int f_tdf_2_tricubic(unsigned ndim,const double *x, void *params,
 		  unsigned fdim, double *fval) {
-  
+
   struct f_tdf_params * p = (struct f_tdf_params *)params;
   double temp_energy=static_cast<IntpTricubic3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -649,17 +649,17 @@ int f_tdf_2_tricubic(unsigned ndim,const double *x, void *params,
   fval[0]=fetch_combined_scattering_parabolic(fabs(temp_energy),
 					      p->tau0,p->num_scatterings,
 					      p->tau_energy_trans)*
-    temp_velocity_l*temp_velocity_m*pow(temp_energy-chempot,2.0) / 
+    temp_velocity_l*temp_velocity_m*pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_2_tricubic_num_scatter(unsigned ndim,const double *x, 
-			      void *params, unsigned fdim, 
+int f_tdf_2_tricubic_num_scatter(unsigned ndim,const double *x,
+			      void *params, unsigned fdim,
 			      double *fval) {
 
-  struct f_tdf_params_num_scatter * p = 
+  struct f_tdf_params_num_scatter * p =
     (struct f_tdf_params_num_scatter *)params;
   double temp_energy=static_cast<IntpTricubic3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -676,17 +676,17 @@ int f_tdf_2_tricubic_num_scatter(unsigned ndim,const double *x,
     temp_scattering = std::numeric_limits<double>::max();
   }
   fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m*
-    pow(temp_energy-chempot,2.0) / 
+    pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_2_tricubic_const_scatter(unsigned ndim,const double *x, 
-				void *params, unsigned fdim, 
+int f_tdf_2_tricubic_const_scatter(unsigned ndim,const double *x,
+				void *params, unsigned fdim,
 				double *fval) {
-  
-  struct f_tdf_params_const_scatter * p = 
+
+  struct f_tdf_params_const_scatter * p =
     (struct f_tdf_params_const_scatter *)params;
   double temp_energy=static_cast<IntpTricubic3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -697,18 +697,18 @@ int f_tdf_2_tricubic_const_scatter(unsigned ndim,const double *x,
   double beta=p->beta;
   double chempot=p->chempot;
   fval[0]=temp_velocity_l*temp_velocity_m*
-    pow(temp_energy-chempot,2.0) / 
+    pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
 
-int f_tdf_0_tricubic_deriv(unsigned ndim,const double *x, 
-			void *params, unsigned fdim, 
+int f_tdf_0_tricubic_deriv(unsigned ndim,const double *x,
+			void *params, unsigned fdim,
 			double *fval) {
 
-  struct f_tdf_params_deriv * p = 
+  struct f_tdf_params_deriv * p =
     (struct f_tdf_params_deriv *)params;
   double temp_energy=static_cast<IntpTricubic3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -727,17 +727,17 @@ int f_tdf_0_tricubic_deriv(unsigned ndim,const double *x,
   fval[0]=fetch_combined_scattering_parabolic(fabs(temp_energy),
 					      p->tau0,p->num_scatterings,
 					      p->tau_energy_trans)*
-    temp_velocity_l*temp_velocity_m / 
+    temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_0_tricubic_deriv_num_scatter(unsigned ndim,const double *x, 
-				    void *params, unsigned fdim, 
+int f_tdf_0_tricubic_deriv_num_scatter(unsigned ndim,const double *x,
+				    void *params, unsigned fdim,
 				    double *fval) {
 
-  struct f_tdf_params_deriv_num_scatter * p = 
+  struct f_tdf_params_deriv_num_scatter * p =
     (struct f_tdf_params_deriv_num_scatter *)params;
   double temp_energy=static_cast<IntpTricubic3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -759,17 +759,17 @@ int f_tdf_0_tricubic_deriv_num_scatter(unsigned ndim,const double *x,
   if (std::isnan(temp_scattering)) {
     temp_scattering = std::numeric_limits<double>::max();
   }
-  fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m / 
+  fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
 int f_tdf_0_tricubic_deriv_const_scatter(unsigned ndim,const double *x,
-				      void *params, unsigned fdim, 
+				      void *params, unsigned fdim,
 				      double *fval) {
 
-  struct f_tdf_params_deriv_const_scatter * p = 
+  struct f_tdf_params_deriv_const_scatter * p =
     (struct f_tdf_params_deriv_const_scatter *)params;
   double temp_energy=static_cast<IntpTricubic3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -785,17 +785,17 @@ int f_tdf_0_tricubic_deriv_const_scatter(unsigned ndim,const double *x,
 					 x[0],x[1],x[2]);
   double beta=p->beta;
   double chempot=p->chempot;
-  fval[0]=temp_velocity_l*temp_velocity_m / 
+  fval[0]=temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_1_tricubic_deriv(unsigned ndim,const double *x, 
-			void *params, unsigned fdim, 
+int f_tdf_1_tricubic_deriv(unsigned ndim,const double *x,
+			void *params, unsigned fdim,
 			double *fval) {
 
-  struct f_tdf_params_deriv * p = 
+  struct f_tdf_params_deriv * p =
     (struct f_tdf_params_deriv *)params;
   double temp_energy=static_cast<IntpTricubic3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -815,16 +815,16 @@ int f_tdf_1_tricubic_deriv(unsigned ndim,const double *x,
 					      p->tau0,
 					      p->num_scatterings,
 					      p->tau_energy_trans)*
-    temp_velocity_l*temp_velocity_m*(temp_energy-chempot) / 
+    temp_velocity_l*temp_velocity_m*(temp_energy-chempot) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_1_tricubic_deriv_num_scatter(unsigned ndim,const double *x, 
-				    void *params, unsigned fdim, 
+int f_tdf_1_tricubic_deriv_num_scatter(unsigned ndim,const double *x,
+				    void *params, unsigned fdim,
 				    double *fval) {
-  
+
   struct f_tdf_params_deriv_num_scatter * p =
     (struct f_tdf_params_deriv_num_scatter *)params;
   double temp_energy=static_cast<IntpTricubic3<double>*>
@@ -852,10 +852,10 @@ int f_tdf_1_tricubic_deriv_num_scatter(unsigned ndim,const double *x,
   return 0;
 }
 
-int f_tdf_1_tricubic_deriv_const_scatter(unsigned ndim,const double *x, 
-				      void *params, unsigned fdim, 
+int f_tdf_1_tricubic_deriv_const_scatter(unsigned ndim,const double *x,
+				      void *params, unsigned fdim,
 				      double *fval) {
-  
+
   struct f_tdf_params_deriv_const_scatter * p =
     (struct f_tdf_params_deriv_const_scatter *)params;
   double temp_energy=static_cast<IntpTricubic3<double>*>
@@ -872,16 +872,16 @@ int f_tdf_1_tricubic_deriv_const_scatter(unsigned ndim,const double *x,
 					 x[0],x[1],x[2]);
   double beta=p->beta;
   double chempot=p->chempot;
-  fval[0]=temp_velocity_l*temp_velocity_m*(temp_energy-chempot) / 
+  fval[0]=temp_velocity_l*temp_velocity_m*(temp_energy-chempot) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 }
 
-int f_tdf_2_tricubic_deriv(unsigned ndim,const double *x, 
-			void *params, unsigned fdim, 
+int f_tdf_2_tricubic_deriv(unsigned ndim,const double *x,
+			void *params, unsigned fdim,
 			double *fval) {
-  
-  struct f_tdf_params_deriv * p = 
+
+  struct f_tdf_params_deriv * p =
     (struct f_tdf_params_deriv *)params;
   double temp_energy=static_cast<IntpTricubic3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -902,17 +902,17 @@ int f_tdf_2_tricubic_deriv(unsigned ndim,const double *x,
 					      p->num_scatterings,
 					      p->tau_energy_trans)*
     temp_velocity_l*temp_velocity_m*
-    pow(temp_energy-chempot,2.0) / 
+    pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_2_tricubic_deriv_num_scatter(unsigned ndim,const double *x, 
-				    void *params, unsigned fdim, 
+int f_tdf_2_tricubic_deriv_num_scatter(unsigned ndim,const double *x,
+				    void *params, unsigned fdim,
 				    double *fval) {
-  
-  struct f_tdf_params_deriv_num_scatter * p = 
+
+  struct f_tdf_params_deriv_num_scatter * p =
     (struct f_tdf_params_deriv_num_scatter *)params;
   double temp_energy=static_cast<IntpTricubic3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -935,16 +935,16 @@ int f_tdf_2_tricubic_deriv_num_scatter(unsigned ndim,const double *x,
     temp_scattering = std::numeric_limits<double>::max();
   }
   fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m*
-    pow(temp_energy-chempot,2.0) / 
+    pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 }
 
-int f_tdf_2_tricubic_deriv_const_scatter(unsigned ndim,const double *x, 
-				      void *params, unsigned fdim, 
+int f_tdf_2_tricubic_deriv_const_scatter(unsigned ndim,const double *x,
+				      void *params, unsigned fdim,
 				      double *fval) {
-  
-  struct f_tdf_params_deriv_const_scatter * p = 
+
+  struct f_tdf_params_deriv_const_scatter * p =
     (struct f_tdf_params_deriv_const_scatter *)params;
   double temp_energy=static_cast<IntpTricubic3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -955,13 +955,13 @@ int f_tdf_2_tricubic_deriv_const_scatter(unsigned ndim,const double *x,
   double beta=p->beta;
   double chempot=p->chempot;
   fval[0]=temp_velocity_l*temp_velocity_m*
-    pow(temp_energy-chempot,2.0) / 
+    pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_0_akima(unsigned ndim,const double *x, void *params, 
+int f_tdf_0_akima(unsigned ndim,const double *x, void *params,
 		  unsigned fdim, double *fval) {
 
   struct f_tdf_params * p = (struct f_tdf_params *)params;
@@ -976,17 +976,17 @@ int f_tdf_0_akima(unsigned ndim,const double *x, void *params,
   fval[0]=fetch_combined_scattering_parabolic(fabs(temp_energy),
 					      p->tau0,p->num_scatterings,
 					      p->tau_energy_trans)*
-    temp_velocity_l*temp_velocity_m / 
+    temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_0_akima_num_scatter(unsigned ndim,const double *x, 
-			      void *params, unsigned fdim, 
+int f_tdf_0_akima_num_scatter(unsigned ndim,const double *x,
+			      void *params, unsigned fdim,
 			      double *fval) {
 
-  struct f_tdf_params_num_scatter * p = 
+  struct f_tdf_params_num_scatter * p =
     (struct f_tdf_params_num_scatter *)params;
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -999,16 +999,16 @@ int f_tdf_0_akima_num_scatter(unsigned ndim,const double *x,
     (p->tau_interpolator)->operator()(temp_energy+energy_trans);
   double beta=p->beta;
   double chempot=p->chempot;
-  fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m / 
+  fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 }
 
-int f_tdf_0_akima_const_scatter(unsigned ndim,const double *x, 
-				void *params, unsigned fdim, double 
+int f_tdf_0_akima_const_scatter(unsigned ndim,const double *x,
+				void *params, unsigned fdim, double
 				*fval) {
 
-  struct f_tdf_params_const_scatter * p = 
+  struct f_tdf_params_const_scatter * p =
     (struct f_tdf_params_const_scatter *)params;
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -1018,12 +1018,12 @@ int f_tdf_0_akima_const_scatter(unsigned ndim,const double *x,
     (p->velocity_interpolator_m)->operator()(x[0],x[1],x[2]);
   double beta=p->beta;
   double chempot=p->chempot;
-  fval[0]=temp_velocity_l*temp_velocity_m / 
+  fval[0]=temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 }
 
-int f_tdf_1_akima(unsigned ndim,const double *x, void *params, 
+int f_tdf_1_akima(unsigned ndim,const double *x, void *params,
 		  unsigned fdim, double *fval) {
 
   struct f_tdf_params * p = (struct f_tdf_params *)params;
@@ -1038,18 +1038,18 @@ int f_tdf_1_akima(unsigned ndim,const double *x, void *params,
   fval[0]=fetch_combined_scattering_parabolic(fabs(temp_energy),
 					      p->tau0,p->num_scatterings,
 					      p->tau_energy_trans)*
-    temp_velocity_l*temp_velocity_m*(temp_energy-chempot) / 
+    temp_velocity_l*temp_velocity_m*(temp_energy-chempot) /
     (1+cosh((temp_energy-chempot)*beta));
 
   return 0;
-  
+
 }
 
-int f_tdf_1_akima_num_scatter(unsigned ndim,const double *x, 
-			      void *params, unsigned fdim, 
+int f_tdf_1_akima_num_scatter(unsigned ndim,const double *x,
+			      void *params, unsigned fdim,
 			      double *fval) {
 
-  struct f_tdf_params_num_scatter * p = 
+  struct f_tdf_params_num_scatter * p =
     (struct f_tdf_params_num_scatter *)params;
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -1066,17 +1066,17 @@ int f_tdf_1_akima_num_scatter(unsigned ndim,const double *x,
     temp_scattering = std::numeric_limits<double>::max();
   }
   fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m*
-    (temp_energy-chempot) / 
+    (temp_energy-chempot) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
-  
+
 }
 
-int f_tdf_1_akima_const_scatter(unsigned ndim,const double *x, 
-				void *params, unsigned fdim, 
+int f_tdf_1_akima_const_scatter(unsigned ndim,const double *x,
+				void *params, unsigned fdim,
 				double *fval) {
 
-  struct f_tdf_params_const_scatter * p = 
+  struct f_tdf_params_const_scatter * p =
     (struct f_tdf_params_const_scatter *)params;
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -1086,15 +1086,15 @@ int f_tdf_1_akima_const_scatter(unsigned ndim,const double *x,
     (p->velocity_interpolator_m)->operator()(x[0],x[1],x[2]);
   double beta=p->beta;
   double chempot=p->chempot;
-  fval[0]=temp_velocity_l*temp_velocity_m*(temp_energy-chempot) / 
+  fval[0]=temp_velocity_l*temp_velocity_m*(temp_energy-chempot) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_2_akima(unsigned ndim,const double *x, void *params, 
+int f_tdf_2_akima(unsigned ndim,const double *x, void *params,
 		  unsigned fdim, double *fval) {
-  
+
   struct f_tdf_params * p = (struct f_tdf_params *)params;
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -1107,17 +1107,17 @@ int f_tdf_2_akima(unsigned ndim,const double *x, void *params,
   fval[0]=fetch_combined_scattering_parabolic(fabs(temp_energy),
 					      p->tau0,p->num_scatterings,
 					      p->tau_energy_trans)*
-    temp_velocity_l*temp_velocity_m*pow(temp_energy-chempot,2.0) / 
+    temp_velocity_l*temp_velocity_m*pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_2_akima_num_scatter(unsigned ndim,const double *x, 
-			      void *params, unsigned fdim, 
+int f_tdf_2_akima_num_scatter(unsigned ndim,const double *x,
+			      void *params, unsigned fdim,
 			      double *fval) {
 
-  struct f_tdf_params_num_scatter * p = 
+  struct f_tdf_params_num_scatter * p =
     (struct f_tdf_params_num_scatter *)params;
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -1134,17 +1134,17 @@ int f_tdf_2_akima_num_scatter(unsigned ndim,const double *x,
     temp_scattering = std::numeric_limits<double>::max();
   }
   fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m*
-    pow(temp_energy-chempot,2.0) / 
+    pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_2_akima_const_scatter(unsigned ndim,const double *x, 
-				void *params, unsigned fdim, 
+int f_tdf_2_akima_const_scatter(unsigned ndim,const double *x,
+				void *params, unsigned fdim,
 				double *fval) {
-  
-  struct f_tdf_params_const_scatter * p = 
+
+  struct f_tdf_params_const_scatter * p =
     (struct f_tdf_params_const_scatter *)params;
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -1155,18 +1155,18 @@ int f_tdf_2_akima_const_scatter(unsigned ndim,const double *x,
   double beta=p->beta;
   double chempot=p->chempot;
   fval[0]=temp_velocity_l*temp_velocity_m*
-    pow(temp_energy-chempot,2.0) / 
+    pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
 
-int f_tdf_0_akima_deriv(unsigned ndim,const double *x, 
-			void *params, unsigned fdim, 
+int f_tdf_0_akima_deriv(unsigned ndim,const double *x,
+			void *params, unsigned fdim,
 			double *fval) {
 
-  struct f_tdf_params_deriv * p = 
+  struct f_tdf_params_deriv * p =
     (struct f_tdf_params_deriv *)params;
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -1185,17 +1185,17 @@ int f_tdf_0_akima_deriv(unsigned ndim,const double *x,
   fval[0]=fetch_combined_scattering_parabolic(fabs(temp_energy),
 					      p->tau0,p->num_scatterings,
 					      p->tau_energy_trans)*
-    temp_velocity_l*temp_velocity_m / 
+    temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_0_akima_deriv_num_scatter(unsigned ndim,const double *x, 
-				    void *params, unsigned fdim, 
+int f_tdf_0_akima_deriv_num_scatter(unsigned ndim,const double *x,
+				    void *params, unsigned fdim,
 				    double *fval) {
 
-  struct f_tdf_params_deriv_num_scatter * p = 
+  struct f_tdf_params_deriv_num_scatter * p =
     (struct f_tdf_params_deriv_num_scatter *)params;
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -1217,17 +1217,17 @@ int f_tdf_0_akima_deriv_num_scatter(unsigned ndim,const double *x,
   if (std::isnan(temp_scattering)) {
     temp_scattering = std::numeric_limits<double>::max();
   }
-  fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m / 
+  fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
 int f_tdf_0_akima_deriv_const_scatter(unsigned ndim,const double *x,
-				      void *params, unsigned fdim, 
+				      void *params, unsigned fdim,
 				      double *fval) {
 
-  struct f_tdf_params_deriv_const_scatter * p = 
+  struct f_tdf_params_deriv_const_scatter * p =
     (struct f_tdf_params_deriv_const_scatter *)params;
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -1243,17 +1243,17 @@ int f_tdf_0_akima_deriv_const_scatter(unsigned ndim,const double *x,
 					 x[0],x[1],x[2]);
   double beta=p->beta;
   double chempot=p->chempot;
-  fval[0]=temp_velocity_l*temp_velocity_m / 
+  fval[0]=temp_velocity_l*temp_velocity_m /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_1_akima_deriv(unsigned ndim,const double *x, 
-			void *params, unsigned fdim, 
+int f_tdf_1_akima_deriv(unsigned ndim,const double *x,
+			void *params, unsigned fdim,
 			double *fval) {
 
-  struct f_tdf_params_deriv * p = 
+  struct f_tdf_params_deriv * p =
     (struct f_tdf_params_deriv *)params;
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -1273,16 +1273,16 @@ int f_tdf_1_akima_deriv(unsigned ndim,const double *x,
 					      p->tau0,
 					      p->num_scatterings,
 					      p->tau_energy_trans)*
-    temp_velocity_l*temp_velocity_m*(temp_energy-chempot) / 
+    temp_velocity_l*temp_velocity_m*(temp_energy-chempot) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_1_akima_deriv_num_scatter(unsigned ndim,const double *x, 
-				    void *params, unsigned fdim, 
+int f_tdf_1_akima_deriv_num_scatter(unsigned ndim,const double *x,
+				    void *params, unsigned fdim,
 				    double *fval) {
-  
+
   struct f_tdf_params_deriv_num_scatter * p =
     (struct f_tdf_params_deriv_num_scatter *)params;
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
@@ -1310,10 +1310,10 @@ int f_tdf_1_akima_deriv_num_scatter(unsigned ndim,const double *x,
   return 0;
 }
 
-int f_tdf_1_akima_deriv_const_scatter(unsigned ndim,const double *x, 
-				      void *params, unsigned fdim, 
+int f_tdf_1_akima_deriv_const_scatter(unsigned ndim,const double *x,
+				      void *params, unsigned fdim,
 				      double *fval) {
-  
+
   struct f_tdf_params_deriv_const_scatter * p =
     (struct f_tdf_params_deriv_const_scatter *)params;
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
@@ -1330,16 +1330,16 @@ int f_tdf_1_akima_deriv_const_scatter(unsigned ndim,const double *x,
 					 x[0],x[1],x[2]);
   double beta=p->beta;
   double chempot=p->chempot;
-  fval[0]=temp_velocity_l*temp_velocity_m*(temp_energy-chempot) / 
+  fval[0]=temp_velocity_l*temp_velocity_m*(temp_energy-chempot) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 }
 
-int f_tdf_2_akima_deriv(unsigned ndim,const double *x, 
-			void *params, unsigned fdim, 
+int f_tdf_2_akima_deriv(unsigned ndim,const double *x,
+			void *params, unsigned fdim,
 			double *fval) {
-  
-  struct f_tdf_params_deriv * p = 
+
+  struct f_tdf_params_deriv * p =
     (struct f_tdf_params_deriv *)params;
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -1360,17 +1360,17 @@ int f_tdf_2_akima_deriv(unsigned ndim,const double *x,
 					      p->num_scatterings,
 					      p->tau_energy_trans)*
     temp_velocity_l*temp_velocity_m*
-    pow(temp_energy-chempot,2.0) / 
+    pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_tdf_2_akima_deriv_num_scatter(unsigned ndim,const double *x, 
-				    void *params, unsigned fdim, 
+int f_tdf_2_akima_deriv_num_scatter(unsigned ndim,const double *x,
+				    void *params, unsigned fdim,
 				    double *fval) {
-  
-  struct f_tdf_params_deriv_num_scatter * p = 
+
+  struct f_tdf_params_deriv_num_scatter * p =
     (struct f_tdf_params_deriv_num_scatter *)params;
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -1393,16 +1393,16 @@ int f_tdf_2_akima_deriv_num_scatter(unsigned ndim,const double *x,
     temp_scattering = std::numeric_limits<double>::max();
   }
   fval[0]=temp_scattering*temp_velocity_l*temp_velocity_m*
-    pow(temp_energy-chempot,2.0) / 
+    pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 }
 
-int f_tdf_2_akima_deriv_const_scatter(unsigned ndim,const double *x, 
-				      void *params, unsigned fdim, 
+int f_tdf_2_akima_deriv_const_scatter(unsigned ndim,const double *x,
+				      void *params, unsigned fdim,
 				      double *fval) {
-  
-  struct f_tdf_params_deriv_const_scatter * p = 
+
+  struct f_tdf_params_deriv_const_scatter * p =
     (struct f_tdf_params_deriv_const_scatter *)params;
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
     (p->energy_interpolator)->operator()(x[0],x[1],x[2]);
@@ -1413,13 +1413,13 @@ int f_tdf_2_akima_deriv_const_scatter(unsigned ndim,const double *x,
   double beta=p->beta;
   double chempot=p->chempot;
   fval[0]=temp_velocity_l*temp_velocity_m*
-    pow(temp_energy-chempot,2.0) / 
+    pow(temp_energy-chempot,2.0) /
     (1+cosh((temp_energy-chempot)*beta));
   return 0;
 
 }
 
-int f_akima(unsigned ndim,const double *x, void *params, 
+int f_akima(unsigned ndim,const double *x, void *params,
 	    unsigned fdim, double *fval) {
 
   fval[0]=static_cast<IntpAkimaUniform3<double>*>
@@ -1428,25 +1428,25 @@ int f_akima(unsigned ndim,const double *x, void *params,
 
 }
 
-int f_akima_gaussian(unsigned ndim,const double *x, 
-		     void *params, unsigned fdim, 
+int f_akima_gaussian(unsigned ndim,const double *x,
+		     void *params, unsigned fdim,
 		     double *fval) {
 
-  struct f_gaussian_params * p = 
+  struct f_gaussian_params * p =
     (struct f_gaussian_params *)params;
   // fetch interpolated value
   double temp_energy=static_cast<IntpAkimaUniform3<double>*>
     (p->interpolator)->operator()(x[0],x[1],x[2]);
   double sigma=p->sigma;
   // apply gaussian smearing and return
-  fval[0]=exp(-0.5*pow((p->energy_ref-temp_energy)/sigma,2.0)) / 
+  fval[0]=exp(-0.5*pow((p->energy_ref-temp_energy)/sigma,2.0)) /
     (sigma*sqrt(2*pi));
   return 0;
 
 }
 
-int f_tricubic(unsigned ndim,const double *x, 
-	       void *params, unsigned fdim, 
+int f_tricubic(unsigned ndim,const double *x,
+	       void *params, unsigned fdim,
 	       double *fval) {
 
   fval[0]=static_cast<IntpTricubic3<double>*>
@@ -1455,24 +1455,24 @@ int f_tricubic(unsigned ndim,const double *x,
 
 }
 
-int f_tricubic_gaussian(unsigned ndim,const double *x, 
-			void *params, unsigned fdim, 
+int f_tricubic_gaussian(unsigned ndim,const double *x,
+			void *params, unsigned fdim,
 			double *fval) {
 
-  struct f_gaussian_params * p = 
+  struct f_gaussian_params * p =
     (struct f_gaussian_params *)params;
   // fetch interpolated value
   double temp_energy=static_cast<IntpTricubic3<double>*>
     (p->interpolator)->operator()(x[0],x[1],x[2]);
   double sigma=p->sigma;
   // apply gaussian smearing and return
-  fval[0]=exp(-0.5*pow((p->energy_ref-temp_energy)/sigma,2.0)) / 
+  fval[0]=exp(-0.5*pow((p->energy_ref-temp_energy)/sigma,2.0)) /
     (sigma*sqrt(2*pi));
   return 0;
-  
+
 }
 
-int f_trilinear(unsigned ndim,const double *x, 
+int f_trilinear(unsigned ndim,const double *x,
 		void *params, unsigned fdim,
 		double *fval) {
 
@@ -1482,30 +1482,30 @@ int f_trilinear(unsigned ndim,const double *x,
 
 }
 
-int f_trilinear_gaussian(unsigned ndim,const double *x, 
+int f_trilinear_gaussian(unsigned ndim,const double *x,
 			 void *params, unsigned fdim, double *fval) {
-  
-  struct f_gaussian_params * p = 
+
+  struct f_gaussian_params * p =
     (struct f_gaussian_params *)params;
   // fetch interpolated value
   double temp_energy=static_cast<IntpTrilinear3<double>*>
     (p->interpolator)->operator()(x[0],x[1],x[2]);
   double sigma=p->sigma;
   // apply gaussian smearing and return
-  fval[0]=exp(-0.5*pow((p->energy_ref-temp_energy)/sigma,2.0)) / 
+  fval[0]=exp(-0.5*pow((p->energy_ref-temp_energy)/sigma,2.0)) /
     (sigma*sqrt(2*pi));
   return 0;
 
 }
 
-int gaussian(int xBound, int yBound, int zBound, 
-	     double ***unsmeared, double ***smeared, 
+int gaussian(int xBound, int yBound, int zBound,
+	     double ***unsmeared, double ***smeared,
 	     double energy_ref, double sigma) {
 
   for (int k=0;k<zBound;k++) {
     for (int j=0;j<yBound;j++) {
       for (int i=0;i<xBound;i++) {
-	smeared[k][j][i]=exp(-0.5*pow((energy_ref-unsmeared[k][j][i]) / 
+	smeared[k][j][i]=exp(-0.5*pow((energy_ref-unsmeared[k][j][i]) /
 				      sigma,2.0))/(sigma*sqrt(2*pi));
       }
     }
@@ -1515,11 +1515,11 @@ int gaussian(int xBound, int yBound, int zBound,
 }
 
 void cubature_wildmagic_execute_integration(int *num_points,
-					    double *domainx, 
-					    double *domainy, 
-					    double *domainz, 
-					    double *data, 
-					    double &value, 
+					    double *domainx,
+					    double *domainy,
+					    double *domainz,
+					    double *data,
+					    double &value,
 					    double &error,
 					    int itype) {
 
@@ -1581,7 +1581,7 @@ void cubature_wildmagic_execute_integration(int *num_points,
 				       xSpacing,yMin,ySpacing,
 				       zMin,zSpacing,tempdata,false);
     hcubature(fdim,f_tricubic,&interpolator,dim,vmin,vmax,max_it,
-	      abs_err,rel_err,norm,&value,&error);   
+	      abs_err,rel_err,norm,&value,&error);
   }
   else if (itype==3) {
     IntpAkimaUniform3<double> interpolator(xBound,yBound,zBound,xMin,
@@ -1606,34 +1606,34 @@ not defined", itype);
 }
 
 void calc_transport_tensors_cubature(int *num_points,
-				     double *domainx, 
-				     double *domainy, 
-				     double *domainz, 
-				     double *energy, int num_bands, 
-				     double *velocity, 
+				     double *domainx,
+				     double *domainy,
+				     double *domainz,
+				     double *energy, int num_bands,
+				     double *velocity,
 				     double *tau,
 				     double *energy_samples,
 				     int *spin_degen,
-				     int num_scatterings, 
-				     int num_energy_samples, 
-				     double *tau_energy_trans, 
-				     double *chempot, int num_chempot, 
-				     double *temperatures, 
+				     int num_scatterings,
+				     int num_energy_samples,
+				     double *tau_energy_trans,
+				     double *chempot, int num_chempot,
+				     double *temperatures,
 				     int num_temps,
-				     int num_kpoints_ibz, 
+				     int num_kpoints_ibz,
 				     int *k_sampling,
 				     double *rec_basis,
-				     int tensor_type, 
-				     int interpol_type, 
-				     int integral_type, 
-				     int max_it, double abs_err, 
+				     int tensor_type,
+				     int interpol_type,
+				     int integral_type,
+				     int max_it, double abs_err,
 				     double rel_err,
                                      int iso,
                                      int info,
-				     double *cond, 
-				     double *seebeck, 
-				     double *lorenz, 
-				     int gen_velocities, 
+				     double *cond,
+				     double *seebeck,
+				     double *lorenz,
+				     int gen_velocities,
 				     int scattering_type) {
 
   bool tetra=true;
@@ -1641,7 +1641,7 @@ void calc_transport_tensors_cubature(int *num_points,
   if (integral_type == 1) {
     h=true;
   }
-  
+
   double g=7.7480917310;
   double hbar=6.582119514;
   double hbar_c=197.3269788;
@@ -1649,7 +1649,7 @@ void calc_transport_tensors_cubature(int *num_points,
   double sigmaunit=1e11*g/(16*pow(pi,2.0)*hbar*kb);
   double seebeckunit=1e6;
   double lorenzunit=1e8;
-  
+
   // wildmagic interpolation
   if ((interpol_type >= 0) && (interpol_type < 4)) {
     // initialize domain
@@ -1666,7 +1666,7 @@ void calc_transport_tensors_cubature(int *num_points,
     double zSpacing=(domainz[1]-domainz[0])/(zBound-1);
     double zMax=zMin+zSpacing*(zBound-1);
     int tot_k_points=xBound*yBound*zBound;
-    
+
 
     if (!gen_velocities) {
       if (info) {
@@ -1748,7 +1748,7 @@ void calc_transport_tensors_cubature(int *num_points,
 	}
       }
     }
-    
+
     // some more stuff on the stack
     double vmin[3]={xMin,yMin,zMin};
     double vmax[3]={xMax,yMax,zMax};
@@ -1757,18 +1757,18 @@ void calc_transport_tensors_cubature(int *num_points,
     error_norm norm=ERROR_INDIVIDUAL;
     double value=0.0;
     double error=0.0;
-    
-    std::vector<std::vector<std::vector<std::vector<double> > > > 
-      sigma(num_temps, std::vector<std::vector<std::vector<double> > > 
-	    (num_chempot,std::vector<std::vector<double> > 
+
+    std::vector<std::vector<std::vector<std::vector<double> > > >
+      sigma(num_temps, std::vector<std::vector<std::vector<double> > >
+	    (num_chempot,std::vector<std::vector<double> >
 	     (3, std::vector<double> (3))));
-    std::vector<std::vector<std::vector<std::vector<double> > > > 
-      chi(num_temps, std::vector<std::vector<std::vector<double> > > 
-	  (num_chempot,std::vector<std::vector<double> > 
+    std::vector<std::vector<std::vector<std::vector<double> > > >
+      chi(num_temps, std::vector<std::vector<std::vector<double> > >
+	  (num_chempot,std::vector<std::vector<double> >
 	   (3, std::vector<double> (3))));
-    std::vector<std::vector<std::vector<std::vector<double> > > > 
-      kappa(num_temps, std::vector<std::vector<std::vector<double> > > 
-	    (num_chempot,std::vector<std::vector<double> > 
+    std::vector<std::vector<std::vector<std::vector<double> > > >
+      kappa(num_temps, std::vector<std::vector<std::vector<double> > >
+	    (num_chempot,std::vector<std::vector<double> >
 	     (3, std::vector<double> (3))));
 
     int dir2_limit;
@@ -1808,15 +1808,15 @@ void calc_transport_tensors_cubature(int *num_points,
 	for (int chemp=0;chemp<num_chempot;chemp++) {
 	  // loop bands
 	  for (int band=0;band<num_bands;band++) {
-            if (info) { 
+            if (info) {
               std::cout << "Cubature/Wildmagic: numerical tabulated scattering at " << temperatures[temp] << "K, chempot: " << chempot[chemp] << " eV" << std::endl;
             }
 	    if (interpol_type == 0) {
-	      IntpAkimaUniform1<double> 
+	      IntpAkimaUniform1<double>
 		tau_interpolator(num_energy_samples,energy_samples_min,
 				 energy_samples_spacing,
 				 tau_data[temp][band]);
-	      IntpTrilinear3<double> 
+	      IntpTrilinear3<double>
 		energy_interpolator(xBound,yBound,zBound,xMin,
 				    xSpacing,yMin,ySpacing,
 				    zMin,zSpacing,energy_data[band]);
@@ -1824,7 +1824,7 @@ void calc_transport_tensors_cubature(int *num_points,
               if (!gen_velocities) {
                 // loop tensor
                 for (int dir1=0;dir1<3;dir1++) {
-                  IntpTrilinear3<double> 
+                  IntpTrilinear3<double>
                     velocity_interpolator_dir1(xBound,yBound,zBound,xMin,
                                                xSpacing,yMin,ySpacing,
                                                zMin,zSpacing,
@@ -1836,12 +1836,12 @@ void calc_transport_tensors_cubature(int *num_points,
                     dir2_limit = 3;
                   }
                   for (int dir2=dir1;dir2<dir2_limit;dir2++) {
-                    IntpTrilinear3<double> 
+                    IntpTrilinear3<double>
                       velocity_interpolator_dir2(xBound,yBound,zBound,xMin,
 						 xSpacing,yMin,ySpacing,
 						 zMin,zSpacing,
 						 velocity_data[band][dir2]);
-		    
+
 		    struct f_tdf_params_num_scatter p=
 		      {&energy_interpolator,&velocity_interpolator_dir1,
 		       &velocity_interpolator_dir2,&tau_interpolator,
@@ -1854,7 +1854,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_0_trilinear_num_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
-		    }    
+		    }
 		    sigma[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // chi
 		    if (h) {
@@ -1890,7 +1890,7 @@ void calc_transport_tensors_cubature(int *num_points,
                   }
                   else {
                     dir2_limit = 3;
-                  }                                    
+                  }
                   for (int dir2=dir1;dir2<dir2_limit;dir2++) {
 		    // set deriv arrays
 		    int deriv2[3]={0,0,0};
@@ -1906,7 +1906,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_0_trilinear_deriv_num_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
-		    }    
+		    }
 		    sigma[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // chi
 		    if (h) {
@@ -1933,11 +1933,11 @@ void calc_transport_tensors_cubature(int *num_points,
 	      }
 	    }
 	    if (interpol_type == 1) {
-	      IntpAkimaUniform1<double> 
+	      IntpAkimaUniform1<double>
 		tau_interpolator(num_energy_samples,energy_samples_min,
 				 energy_samples_spacing,
 				 tau_data[temp][band]);
-	      IntpTricubic3<double> 
+	      IntpTricubic3<double>
 		energy_interpolator(xBound,yBound,zBound,xMin,
 				    xSpacing,yMin,ySpacing,
 				    zMin,zSpacing,energy_data[band], true);
@@ -1945,7 +1945,7 @@ void calc_transport_tensors_cubature(int *num_points,
               if (!gen_velocities) {
                 // loop tensor
                 for (int dir1=0;dir1<3;dir1++) {
-                  IntpTricubic3<double> 
+                  IntpTricubic3<double>
                     velocity_interpolator_dir1(xBound,yBound,zBound,xMin,
                                                xSpacing,yMin,ySpacing,
                                                zMin,zSpacing,
@@ -1957,12 +1957,12 @@ void calc_transport_tensors_cubature(int *num_points,
                     dir2_limit = 3;
                   }
                   for (int dir2=dir1;dir2<dir2_limit;dir2++) {
-		    IntpTricubic3<double> 
+		    IntpTricubic3<double>
 		      velocity_interpolator_dir2(xBound,yBound,zBound,xMin,
 						 xSpacing,yMin,ySpacing,
 						 zMin,zSpacing,
 						 velocity_data[band][dir2], true);
-		    
+
 		    struct f_tdf_params_num_scatter p=
 		      {&energy_interpolator,&velocity_interpolator_dir1,
 		       &velocity_interpolator_dir2,&tau_interpolator,
@@ -1975,7 +1975,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_0_tricubic_num_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
-		    }    
+		    }
 		    sigma[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // chi
 		    if (h) {
@@ -2027,7 +2027,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_0_tricubic_deriv_num_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
-		    }    
+		    }
 		    sigma[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // chi
 		    if (h) {
@@ -2054,11 +2054,11 @@ void calc_transport_tensors_cubature(int *num_points,
 	      }
 	    }
 	    if (interpol_type == 2) {
-	      IntpAkimaUniform1<double> 
+	      IntpAkimaUniform1<double>
 		tau_interpolator(num_energy_samples,energy_samples_min,
 				 energy_samples_spacing,
 				 tau_data[temp][band]);
-	      IntpTricubic3<double> 
+	      IntpTricubic3<double>
 		energy_interpolator(xBound,yBound,zBound,xMin,
 				    xSpacing,yMin,ySpacing,
 				    zMin,zSpacing,energy_data[band], false);
@@ -2066,7 +2066,7 @@ void calc_transport_tensors_cubature(int *num_points,
               if (!gen_velocities) {
                 // loop tensor
                 for (int dir1=0;dir1<3;dir1++) {
-                  IntpTricubic3<double> 
+                  IntpTricubic3<double>
                     velocity_interpolator_dir1(xBound,yBound,zBound,xMin,
                                                xSpacing,yMin,ySpacing,
                                                zMin,zSpacing,
@@ -2078,12 +2078,12 @@ void calc_transport_tensors_cubature(int *num_points,
                     dir2_limit = 3;
                   }
                   for (int dir2=dir1;dir2<dir2_limit;dir2++) {
-		    IntpTricubic3<double> 
+		    IntpTricubic3<double>
 		      velocity_interpolator_dir2(xBound,yBound,zBound,xMin,
 						 xSpacing,yMin,ySpacing,
 						 zMin,zSpacing,
 						 velocity_data[band][dir2], false);
-		    
+
 		    struct f_tdf_params_num_scatter p=
 		      {&energy_interpolator,&velocity_interpolator_dir1,
 		       &velocity_interpolator_dir2,&tau_interpolator,
@@ -2096,7 +2096,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_0_tricubic_num_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
-		    }    
+		    }
 		    sigma[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // chi
 		    if (h) {
@@ -2148,7 +2148,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_0_tricubic_deriv_num_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
-		    }    
+		    }
 		    sigma[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // chi
 		    if (h) {
@@ -2175,11 +2175,11 @@ void calc_transport_tensors_cubature(int *num_points,
 	      }
 	    }
 	    if (interpol_type == 3) {
-	      IntpAkimaUniform1<double> 
+	      IntpAkimaUniform1<double>
 		tau_interpolator(num_energy_samples,energy_samples_min,
 				 energy_samples_spacing,
 				 tau_data[temp][band]);
-	      IntpAkimaUniform3<double> 
+	      IntpAkimaUniform3<double>
 		energy_interpolator(xBound,yBound,zBound,xMin,
 				    xSpacing,yMin,ySpacing,
 				    zMin,zSpacing,energy_data[band]);
@@ -2187,7 +2187,7 @@ void calc_transport_tensors_cubature(int *num_points,
               if (!gen_velocities) {
                 // loop tensor
                 for (int dir1=0;dir1<3;dir1++) {
-                  IntpAkimaUniform3<double> 
+                  IntpAkimaUniform3<double>
                     velocity_interpolator_dir1(xBound,yBound,zBound,xMin,
                                                xSpacing,yMin,ySpacing,
                                                zMin,zSpacing,
@@ -2199,12 +2199,12 @@ void calc_transport_tensors_cubature(int *num_points,
                     dir2_limit = 3;
                   }
                   for (int dir2=dir1;dir2<dir2_limit;dir2++) {
-		    IntpAkimaUniform3<double> 
+		    IntpAkimaUniform3<double>
 		      velocity_interpolator_dir2(xBound,yBound,zBound,xMin,
 						 xSpacing,yMin,ySpacing,
 						 zMin,zSpacing,
 						 velocity_data[band][dir2]);
-		    
+
 		    struct f_tdf_params_num_scatter p=
 		      {&energy_interpolator,&velocity_interpolator_dir1,
 		       &velocity_interpolator_dir2,&tau_interpolator,
@@ -2269,7 +2269,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_0_akima_deriv_num_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
-		    }    
+		    }
 		    sigma[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // chi
 		    if (h) {
@@ -2391,7 +2391,7 @@ void calc_transport_tensors_cubature(int *num_points,
               if (!gen_velocities) {
                 // loop tensor
                 for (int dir1=0;dir1<3;dir1++) {
-                  IntpTrilinear3<double> 
+                  IntpTrilinear3<double>
                     velocity_interpolator_dir1(xBound,yBound,zBound,xMin,
                                                xSpacing,yMin,ySpacing,
                                                zMin,zSpacing,
@@ -2403,7 +2403,7 @@ void calc_transport_tensors_cubature(int *num_points,
                     dir2_limit = 3;
                   }
                   for (int dir2=dir1;dir2<dir2_limit;dir2++) {
-		    IntpTrilinear3<double> 
+		    IntpTrilinear3<double>
 		      velocity_interpolator_dir2(xBound,yBound,zBound,xMin,
 						 xSpacing,yMin,ySpacing,
 						 zMin,zSpacing,
@@ -2413,7 +2413,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		       &velocity_interpolator_dir2,beta,chempot[chemp],
 		       tau0_data,num_scatterings,tau_energy_trans_data[band]};
 		    // sigma
-		    if (h) {		    
+		    if (h) {
 		      hcubature(fdim,f_tdf_0_trilinear,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
 		    }
@@ -2422,7 +2422,7 @@ void calc_transport_tensors_cubature(int *num_points,
 				max_it,abs_err,rel_err,norm,&value,&error);
 		    }
 		    sigma[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
-		    
+
 		    // chi
 		    if (h) {
 		      hcubature(fdim,f_tdf_1_trilinear,&p,dim,vmin,vmax,
@@ -2431,7 +2431,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_1_trilinear,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    chi[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // kappa
 		    if (h) {
@@ -2441,7 +2441,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_2_trilinear,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    kappa[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		  }
                 }
@@ -2458,7 +2458,7 @@ void calc_transport_tensors_cubature(int *num_points,
                   else {
                     dir2_limit = 3;
                   }
-                  for (int dir2=dir1;dir2<dir2_limit;dir2++) {                    
+                  for (int dir2=dir1;dir2<dir2_limit;dir2++) {
 		    // set deriv arrays
 		    int deriv2[3]={0,0,0};
 		    deriv2[dir2]=1;
@@ -2473,7 +2473,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_0_trilinear_deriv,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    sigma[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // chi
 		    if (h) {
@@ -2483,7 +2483,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_1_trilinear_deriv,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    chi[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // kappa
 		    if (h) {
@@ -2493,7 +2493,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_2_trilinear_deriv,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    kappa[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		  }
 		}
@@ -2507,7 +2507,7 @@ void calc_transport_tensors_cubature(int *num_points,
               if (!gen_velocities) {
                 // loop tensor
                 for (int dir1=0;dir1<3;dir1++) {
-                  IntpTricubic3<double> 
+                  IntpTricubic3<double>
                     velocity_interpolator_dir1(xBound,yBound,zBound,xMin,
                                                xSpacing,yMin,ySpacing,
                                                zMin,zSpacing,
@@ -2519,7 +2519,7 @@ void calc_transport_tensors_cubature(int *num_points,
                     dir2_limit = 3;
                   }
                   for (int dir2=dir1;dir2<dir2_limit;dir2++) {
-		    IntpTricubic3<double> 
+		    IntpTricubic3<double>
 		      velocity_interpolator_dir2(xBound,yBound,zBound,xMin,
 						 xSpacing,yMin,ySpacing,
 						 zMin,zSpacing,
@@ -2529,7 +2529,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		       &velocity_interpolator_dir2,beta,chempot[chemp],
 		       tau0_data,num_scatterings,tau_energy_trans_data[band]};
 		    // sigma
-		    if (h) {		    
+		    if (h) {
 		      hcubature(fdim,f_tdf_0_tricubic,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
 		    }
@@ -2538,7 +2538,7 @@ void calc_transport_tensors_cubature(int *num_points,
 				max_it,abs_err,rel_err,norm,&value,&error);
 		    }
 		    sigma[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
-		    
+
 		    // chi
 		    if (h) {
 		      hcubature(fdim,f_tdf_1_tricubic,&p,dim,vmin,vmax,
@@ -2547,7 +2547,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_1_tricubic,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    chi[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // kappa
 		    if (h) {
@@ -2557,7 +2557,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_2_tricubic,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    kappa[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		  }
                 }
@@ -2589,7 +2589,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_0_tricubic_deriv,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    sigma[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // chi
 		    if (h) {
@@ -2599,7 +2599,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_1_tricubic_deriv,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    chi[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // kappa
 		    if (h) {
@@ -2609,7 +2609,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_2_tricubic_deriv,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    kappa[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		  }
 		}
@@ -2623,7 +2623,7 @@ void calc_transport_tensors_cubature(int *num_points,
               if (!gen_velocities) {
                 // loop tensor
                 for (int dir1=0;dir1<3;dir1++) {
-                  IntpTricubic3<double> 
+                  IntpTricubic3<double>
                     velocity_interpolator_dir1(xBound,yBound,zBound,xMin,
                                                xSpacing,yMin,ySpacing,
                                                zMin,zSpacing,
@@ -2635,7 +2635,7 @@ void calc_transport_tensors_cubature(int *num_points,
                     dir2_limit = 3;
                   }
                   for (int dir2=dir1;dir2<dir2_limit;dir2++) {
-                    IntpTricubic3<double> 
+                    IntpTricubic3<double>
                       velocity_interpolator_dir2(xBound,yBound,zBound,xMin,
                                                  xSpacing,yMin,ySpacing,
                                                  zMin,zSpacing,
@@ -2645,7 +2645,7 @@ void calc_transport_tensors_cubature(int *num_points,
                        &velocity_interpolator_dir2,beta,chempot[chemp],
                        tau0_data,num_scatterings,tau_energy_trans_data[band]};
                     // sigma
-                    if (h) {		    
+                    if (h) {
                       hcubature(fdim,f_tdf_0_tricubic,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
 		    }
@@ -2654,7 +2654,7 @@ void calc_transport_tensors_cubature(int *num_points,
 				max_it,abs_err,rel_err,norm,&value,&error);
 		    }
 		    sigma[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
-		    
+
 		    // chi
 		    if (h) {
 		      hcubature(fdim,f_tdf_1_tricubic,&p,dim,vmin,vmax,
@@ -2663,7 +2663,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_1_tricubic,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    chi[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // kappa
 		    if (h) {
@@ -2673,7 +2673,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_2_tricubic,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    kappa[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		  }
                 }
@@ -2683,7 +2683,7 @@ void calc_transport_tensors_cubature(int *num_points,
                 for (int dir1=0;dir1<3;dir1++) {
                   // set deriv arrays
                   int deriv1[3]={0,0,0};
-                  deriv1[dir1]=1;                    
+                  deriv1[dir1]=1;
                   if (iso) {
                     dir2_limit = dir1 + 1;
                   }
@@ -2705,7 +2705,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_0_tricubic_deriv,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    sigma[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // chi
 		    if (h) {
@@ -2715,7 +2715,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_1_tricubic_deriv,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    chi[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // kappa
 		    if (h) {
@@ -2725,7 +2725,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_2_tricubic_deriv,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    kappa[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		  }
 		}
@@ -2739,7 +2739,7 @@ void calc_transport_tensors_cubature(int *num_points,
               if (!gen_velocities) {
                 // loop tensor
                 for (int dir1=0;dir1<3;dir1++) {
-                  IntpAkimaUniform3<double> 
+                  IntpAkimaUniform3<double>
                     velocity_interpolator_dir1(xBound,yBound,zBound,xMin,
                                                xSpacing,yMin,ySpacing,
                                                zMin,zSpacing,
@@ -2751,7 +2751,7 @@ void calc_transport_tensors_cubature(int *num_points,
                     dir2_limit = 3;
                   }
                   for (int dir2=dir1;dir2<dir2_limit;dir2++) {
-		    IntpAkimaUniform3<double> 
+		    IntpAkimaUniform3<double>
 		      velocity_interpolator_dir2(xBound,yBound,zBound,xMin,
 						 xSpacing,yMin,ySpacing,
 						 zMin,zSpacing,
@@ -2761,7 +2761,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		       &velocity_interpolator_dir2,beta,chempot[chemp],
 		       tau0_data,num_scatterings,tau_energy_trans_data[band]};
 		    // sigma
-		    if (h) {		    
+		    if (h) {
 		      hcubature(fdim,f_tdf_0_akima,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
 		    }
@@ -2770,7 +2770,7 @@ void calc_transport_tensors_cubature(int *num_points,
 				max_it,abs_err,rel_err,norm,&value,&error);
 		    }
 		    sigma[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
-		    
+
 		    // chi
 		    if (h) {
 		      hcubature(fdim,f_tdf_1_akima,&p,dim,vmin,vmax,
@@ -2779,7 +2779,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_1_akima,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    chi[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // kappa
 		    if (h) {
@@ -2789,7 +2789,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_2_akima,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    kappa[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		  }
                 }
@@ -2799,7 +2799,7 @@ void calc_transport_tensors_cubature(int *num_points,
                 for (int dir1=0;dir1<3;dir1++) {
                   // set deriv arrays
                   int deriv1[3]={0,0,0};
-                  deriv1[dir1]=1;                    
+                  deriv1[dir1]=1;
                   if (iso) {
                     dir2_limit = dir1 + 1;
                   }
@@ -2821,7 +2821,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_0_akima_deriv,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    sigma[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // chi
 		    if (h) {
@@ -2831,7 +2831,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_1_akima_deriv,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    chi[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		    // kappa
 		    if (h) {
@@ -2841,7 +2841,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_2_akima_deriv,&p,dim,vmin,vmax,
 				max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    kappa[temp][chemp][dir1][dir2]+=spin_degen[band]*value;
 		  }
 		}
@@ -2925,15 +2925,15 @@ void calc_transport_tensors_cubature(int *num_points,
 	  // loop bands
 	  for (int band=0;band<num_bands;band++) {
 	    if (interpol_type == 0) {
-	      IntpTrilinear3<double> 
+	      IntpTrilinear3<double>
 		energy_interpolator(xBound,yBound,zBound,xMin,xSpacing,
 				    yMin,ySpacing,zMin,zSpacing,
-				    energy_data[band]);	      
+				    energy_data[band]);
               // supply velocity grid
-              if (!gen_velocities) {                
+              if (!gen_velocities) {
                 // loop tensor
                 for (int dir1=0;dir1<3;dir1++) {
-                  IntpTrilinear3<double> 
+                  IntpTrilinear3<double>
                     velocity_interpolator_dir1(xBound,yBound,zBound,xMin,
                                                xSpacing,yMin,ySpacing,
                                                zMin,zSpacing,
@@ -2945,7 +2945,7 @@ void calc_transport_tensors_cubature(int *num_points,
                     dir2_limit = 3;
                   }
                   for (int dir2=dir1;dir2<dir2_limit;dir2++) {
-		    IntpTrilinear3<double> 
+		    IntpTrilinear3<double>
 		      velocity_interpolator_dir2(xBound,yBound,zBound,xMin,
 						 xSpacing,yMin,ySpacing,
 						 zMin,zSpacing,
@@ -2954,7 +2954,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		      {&energy_interpolator,&velocity_interpolator_dir1,
 		       &velocity_interpolator_dir2,beta,chempot[chemp]};
 		    // sigma
-		    if (h) {		    
+		    if (h) {
 		      hcubature(fdim,f_tdf_0_trilinear_const_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
 		    }
@@ -2963,7 +2963,7 @@ void calc_transport_tensors_cubature(int *num_points,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
 		    }
 		    sigma[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
-		    
+
 		    // chi
 		    if (h) {
 		      hcubature(fdim,f_tdf_1_trilinear_const_scatter,&p,dim,vmin,
@@ -2972,7 +2972,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_1_trilinear_const_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    chi[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
 		    // kappa
 		    if (h) {
@@ -2982,7 +2982,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_2_trilinear_const_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    kappa[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
 		  }
                 }
@@ -2992,7 +2992,7 @@ void calc_transport_tensors_cubature(int *num_points,
                 for (int dir1=0;dir1<3;dir1++) {
                   // set deriv arrays
                   int deriv1[3] = {0,0,0};
-                  deriv1[dir1]=1;                      
+                  deriv1[dir1]=1;
                   if (iso) {
                     dir2_limit = dir1 + 1;
                   }
@@ -3013,7 +3013,7 @@ void calc_transport_tensors_cubature(int *num_points,
                     else {
                       pcubature(fdim,f_tdf_0_trilinear_deriv_const_scatter,&p,dim,vmin,
                                 vmax,max_it,abs_err,rel_err,norm,&value,&error);
-                    }  
+                    }
                     sigma[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
                     // chi
                     if (h) {
@@ -3023,7 +3023,7 @@ void calc_transport_tensors_cubature(int *num_points,
                     else {
                       pcubature(fdim,f_tdf_1_trilinear_deriv_const_scatter,&p,dim,
                                 vmin,vmax,max_it,abs_err,rel_err,norm,&value,&error);
-                    }  
+                    }
                     chi[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
                     // kappa
                     if (h) {
@@ -3033,22 +3033,22 @@ void calc_transport_tensors_cubature(int *num_points,
                     else {
                       pcubature(fdim,f_tdf_2_trilinear_deriv_const_scatter,&p,dim,vmin,
                                 vmax,max_it,abs_err,rel_err,norm,&value,&error);
-		      }  
+		      }
                     kappa[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
                   }
 		}
 	      }
 	    }
 	    if (interpol_type == 1) {
-	      IntpTricubic3<double> 
+	      IntpTricubic3<double>
 		energy_interpolator(xBound,yBound,zBound,xMin,xSpacing,
 				    yMin,ySpacing,zMin,zSpacing,
-				    energy_data[band], true);	      
+				    energy_data[band], true);
               // supply velocity grid
               if (!gen_velocities) {
                 // loop tensor
                 for (int dir1=0;dir1<3;dir1++) {
-                  IntpTricubic3<double> 
+                  IntpTricubic3<double>
                     velocity_interpolator_dir1(xBound,yBound,zBound,xMin,
                                                xSpacing,yMin,ySpacing,
                                                zMin,zSpacing,
@@ -3060,7 +3060,7 @@ void calc_transport_tensors_cubature(int *num_points,
                     dir2_limit = 3;
                   }
                   for (int dir2=dir1;dir2<dir2_limit;dir2++) {
-		    IntpTricubic3<double> 
+		    IntpTricubic3<double>
 		      velocity_interpolator_dir2(xBound,yBound,zBound,xMin,
 						 xSpacing,yMin,ySpacing,
 						 zMin,zSpacing,
@@ -3069,7 +3069,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		      {&energy_interpolator,&velocity_interpolator_dir1,
 		       &velocity_interpolator_dir2,beta,chempot[chemp]};
 		    // sigma
-		    if (h) {		    
+		    if (h) {
 		      hcubature(fdim,f_tdf_0_tricubic_const_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
 		    }
@@ -3078,7 +3078,7 @@ void calc_transport_tensors_cubature(int *num_points,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
 		    }
 		    sigma[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
-		    
+
 		    // chi
 		    if (h) {
 		      hcubature(fdim,f_tdf_1_tricubic_const_scatter,&p,dim,vmin,
@@ -3087,7 +3087,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_1_tricubic_const_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    chi[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
 		    // kappa
 		    if (h) {
@@ -3097,7 +3097,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_2_tricubic_const_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    kappa[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
 		  }
                 }
@@ -3128,7 +3128,7 @@ void calc_transport_tensors_cubature(int *num_points,
                     else {
                       pcubature(fdim,f_tdf_0_tricubic_deriv_const_scatter,&p,dim,vmin,
                                 vmax,max_it,abs_err,rel_err,norm,&value,&error);
-                    }  
+                    }
                     sigma[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
                     // chi
                     if (h) {
@@ -3138,7 +3138,7 @@ void calc_transport_tensors_cubature(int *num_points,
                     else {
                       pcubature(fdim,f_tdf_1_tricubic_deriv_const_scatter,&p,dim,
 				vmin,vmax,max_it,abs_err,rel_err,norm,&value,&error);
-                    }  
+                    }
                     chi[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
                     // kappa
                     if (h) {
@@ -3148,28 +3148,28 @@ void calc_transport_tensors_cubature(int *num_points,
                     else {
                       pcubature(fdim,f_tdf_2_tricubic_deriv_const_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
-                    }  
+                    }
                     kappa[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
                   }
                 }
               }
             }
 	    if (interpol_type == 2) {
-	      IntpTricubic3<double> 
+	      IntpTricubic3<double>
 		energy_interpolator(xBound,yBound,zBound,xMin,xSpacing,
 				    yMin,ySpacing,zMin,zSpacing,
-				    energy_data[band], false);	      
+				    energy_data[band], false);
 	      // loop tensor
               // supply velocity grid
               if (!gen_velocities) {
                 for (int dir1=0;dir1<3;dir1++) {
-                  IntpTricubic3<double> 
+                  IntpTricubic3<double>
                     velocity_interpolator_dir1(xBound,yBound,zBound,xMin,
                                                xSpacing,yMin,ySpacing,
                                                zMin,zSpacing,
                                                velocity_data[band][dir1], false);
                   for (int dir2=dir1;dir2<3;dir2++) {
-		    IntpTricubic3<double> 
+		    IntpTricubic3<double>
 		      velocity_interpolator_dir2(xBound,yBound,zBound,xMin,
 						 xSpacing,yMin,ySpacing,
 						 zMin,zSpacing,
@@ -3178,7 +3178,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		      {&energy_interpolator,&velocity_interpolator_dir1,
 		       &velocity_interpolator_dir2,beta,chempot[chemp]};
 		    // sigma
-		    if (h) {		    
+		    if (h) {
 		      hcubature(fdim,f_tdf_0_tricubic_const_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
 		    }
@@ -3187,7 +3187,7 @@ void calc_transport_tensors_cubature(int *num_points,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
 		    }
 		    sigma[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
-		    
+
 		    // chi
 		    if (h) {
 		      hcubature(fdim,f_tdf_1_tricubic_const_scatter,&p,dim,vmin,
@@ -3196,7 +3196,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_1_tricubic_const_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    chi[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
 		    // kappa
 		    if (h) {
@@ -3206,7 +3206,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_2_tricubic_const_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    kappa[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
 		  }
                 }
@@ -3236,7 +3236,7 @@ void calc_transport_tensors_cubature(int *num_points,
                     else {
                       pcubature(fdim,f_tdf_0_tricubic_deriv_const_scatter,&p,dim,vmin,
                                 vmax,max_it,abs_err,rel_err,norm,&value,&error);
-                    }  
+                    }
                     sigma[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
                     // chi
                     if (h) {
@@ -3246,7 +3246,7 @@ void calc_transport_tensors_cubature(int *num_points,
                     else {
                       pcubature(fdim,f_tdf_1_tricubic_deriv_const_scatter,&p,dim,
                                 vmin,vmax,max_it,abs_err,rel_err,norm,&value,&error);
-                    }  
+                    }
                     chi[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
                     // kappa
                     if (h) {
@@ -3256,14 +3256,14 @@ void calc_transport_tensors_cubature(int *num_points,
                     else {
                       pcubature(fdim,f_tdf_2_tricubic_deriv_const_scatter,&p,dim,vmin,
                                 vmax,max_it,abs_err,rel_err,norm,&value,&error);
-                    }  
+                    }
                     kappa[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
                   }
 		}
 	      }
 	    }
 	    if (interpol_type == 3) {
-	      IntpAkimaUniform3<double> 
+	      IntpAkimaUniform3<double>
 		energy_interpolator(xBound,yBound,zBound,xMin,xSpacing,
 				    yMin,ySpacing,zMin,zSpacing,
 				    energy_data[band]);
@@ -3271,7 +3271,7 @@ void calc_transport_tensors_cubature(int *num_points,
               if (!gen_velocities) {
                 // loop tensor
                 for (int dir1=0;dir1<3;dir1++) {
-                  IntpAkimaUniform3<double> 
+                  IntpAkimaUniform3<double>
                     velocity_interpolator_dir1(xBound,yBound,zBound,xMin,
                                                xSpacing,yMin,ySpacing,
                                                zMin,zSpacing,
@@ -3282,8 +3282,8 @@ void calc_transport_tensors_cubature(int *num_points,
                   else {
                     dir2_limit = 3;
                   }
-                  for (int dir2=dir1;dir2<dir2_limit;dir2++) {                    
-                    IntpAkimaUniform3<double> 
+                  for (int dir2=dir1;dir2<dir2_limit;dir2++) {
+                    IntpAkimaUniform3<double>
 		      velocity_interpolator_dir2(xBound,yBound,zBound,xMin,
 						 xSpacing,yMin,ySpacing,
 						 zMin,zSpacing,
@@ -3292,17 +3292,17 @@ void calc_transport_tensors_cubature(int *num_points,
 		      {&energy_interpolator,&velocity_interpolator_dir1,
 		       &velocity_interpolator_dir2,beta,chempot[chemp]};
 		    // sigma
-		    if (h) {		    
+		    if (h) {
 		      hcubature(fdim,f_tdf_0_akima_const_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
 		    }
-                    
+
 		    else {
 		      pcubature(fdim,f_tdf_0_akima_const_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
 		    }
 		    sigma[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
-		    
+
 		    // chi
 		    if (h) {
 		      hcubature(fdim,f_tdf_1_akima_const_scatter,&p,dim,vmin,
@@ -3311,7 +3311,7 @@ void calc_transport_tensors_cubature(int *num_points,
 		    else {
 		      pcubature(fdim,f_tdf_1_akima_const_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    chi[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
 		    // kappa
 		    if (h) {
@@ -3321,7 +3321,7 @@ void calc_transport_tensors_cubature(int *num_points,
                     else {
 		      pcubature(fdim,f_tdf_2_akima_const_scatter,&p,dim,vmin,
 				vmax,max_it,abs_err,rel_err,norm,&value,&error);
-		    }  
+		    }
 		    kappa[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
 		  }
                 }
@@ -3352,7 +3352,7 @@ void calc_transport_tensors_cubature(int *num_points,
                     else {
                       pcubature(fdim,f_tdf_0_akima_deriv_const_scatter,&p,dim,vmin,
                                 vmax,max_it,abs_err,rel_err,norm,&value,&error);
-                    }  
+                    }
                     sigma[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
                     // chi
                     if (h) {
@@ -3362,7 +3362,7 @@ void calc_transport_tensors_cubature(int *num_points,
                     else {
                       pcubature(fdim,f_tdf_1_akima_deriv_const_scatter,&p,dim,
                                 vmin,vmax,max_it,abs_err,rel_err,norm,&value,&error);
-                    }  
+                    }
                     chi[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
                     // kappa
                     if (h) {
@@ -3372,7 +3372,7 @@ void calc_transport_tensors_cubature(int *num_points,
                     else {
                       pcubature(fdim,f_tdf_2_akima_deriv_const_scatter,&p,dim,vmin,
                                 vmax,max_it,abs_err,rel_err,norm,&value,&error);
-                    }  
+                    }
                     kappa[temp][chemp][dir1][dir2]+=tau0[band]*spin_degen[band]*value;
                   }
 		}
@@ -3459,7 +3459,7 @@ void calc_transport_tensors_cubature(int *num_points,
   }
 }
 
-void calc_total_dos(double *dos_decomp, int num_decomps, 
+void calc_total_dos(double *dos_decomp, int num_decomps,
 		    int num_energy_samples,double *dos) {
 
   for (int energy=0;energy<num_energy_samples;energy++) {
@@ -3472,14 +3472,14 @@ void calc_total_dos(double *dos_decomp, int num_decomps,
 }
 
 void calc_dos_cubature(int *num_points,
-		       double *domainx, double *domainy, 
-		       double *domainz, double *energies, 
+		       double *domainx, double *domainy,
+		       double *domainz, double *energies,
 		       double *energy_samples, int *spin_degen,
 		       int num_energy_samples, int num_bands,
-		       double sigma, int interpol_method, 
+		       double sigma, int interpol_method,
 		       int smear_then_interpolate,
                        double volume, double volume_bz,
-		       unsigned max_it, 
+		       unsigned max_it,
 		       double abs_err, double rel_err, int integral_type,
                        int info,
 		       double *dos, double *int_dos) {
@@ -3503,7 +3503,7 @@ void calc_dos_cubature(int *num_points,
   double zSpacing=(domainz[1]-domainz[0])/(zBound-1);
   double zMax=zMin+zSpacing*(zBound-1);
   int tot_num_points=xBound*yBound*zBound;
-  
+
   double ****energies_temp=new double ***[num_bands];
   double ***delta_approx_energy_slit=new double **[zBound];
   for (int band=0;band<num_bands;band++) {
@@ -3533,7 +3533,7 @@ void calc_dos_cubature(int *num_points,
   error_norm norm=ERROR_INDIVIDUAL;
   double value=0.0;
   double error=0.0;
-  
+
   // loop bands
   for (int band=0;band<num_bands;band++) {
     double idos = 0.0;
@@ -3547,7 +3547,7 @@ void calc_dos_cubature(int *num_points,
 	gaussian(xBound,yBound,zBound,energies_temp[band],
 		 delta_approx_energy_slit,energy_samples[energy],sigma);
 	if (interpol_method==0) {
-	  IntpTrilinear3<double> 
+	  IntpTrilinear3<double>
 	    interpolator(xBound,yBound,zBound,xMin,
 			 xSpacing,yMin,ySpacing,
 			 zMin,zSpacing,delta_approx_energy_slit);
@@ -3561,7 +3561,7 @@ void calc_dos_cubature(int *num_points,
 	  }
 	}
 	else if (interpol_method==1) {
-	  IntpTricubic3<double> 
+	  IntpTricubic3<double>
 	    interpolator(xBound,yBound,zBound,xMin,
 			 xSpacing,yMin,ySpacing,
 			 zMin,zSpacing,delta_approx_energy_slit,true);
@@ -3575,7 +3575,7 @@ void calc_dos_cubature(int *num_points,
 	  }
 	}
 	else if (interpol_method==2) {
-	  IntpTricubic3<double> 
+	  IntpTricubic3<double>
 	    interpolator(xBound,yBound,zBound,xMin,
 			 xSpacing,yMin,ySpacing,
 			 zMin,zSpacing,delta_approx_energy_slit,false);
@@ -3589,7 +3589,7 @@ void calc_dos_cubature(int *num_points,
 	  }
 	}
 	else {
-	  IntpAkimaUniform3<double> 
+	  IntpAkimaUniform3<double>
 	    interpolator(xBound,yBound,zBound,xMin,
 			 xSpacing,yMin,ySpacing,
 			 zMin,zSpacing,delta_approx_energy_slit);
@@ -3605,7 +3605,7 @@ void calc_dos_cubature(int *num_points,
       }
       else {
 	if (interpol_method==0) {
-	  IntpTrilinear3<double> 
+	  IntpTrilinear3<double>
 	    interpolator(xBound,yBound,zBound,xMin,xSpacing,yMin,
 			 ySpacing,zMin,zSpacing,energies_temp[band]);
 	  struct f_gaussian_params p=
@@ -3617,10 +3617,10 @@ void calc_dos_cubature(int *num_points,
 	  else {
 	    pcubature(fdim,f_trilinear_gaussian,&p,dim,vmin,vmax,
 		      max_it,abs_err,rel_err,norm,&value,&error);
-	  } 
+	  }
 	}
 	else if (interpol_method==1) {
-	  IntpTricubic3<double> 
+	  IntpTricubic3<double>
 	    interpolator(xBound,yBound,zBound,xMin,
 			 xSpacing,yMin,ySpacing,zMin,
 			 zSpacing,energies_temp[band],true);
@@ -3636,7 +3636,7 @@ void calc_dos_cubature(int *num_points,
 	  }
 	}
 	else if (interpol_method==2) {
-	  IntpTricubic3<double> 
+	  IntpTricubic3<double>
 	    interpolator(xBound,yBound,zBound,xMin,
 			 xSpacing,yMin,ySpacing,
 			 zMin,zSpacing,energies_temp[band],false);
@@ -3652,7 +3652,7 @@ void calc_dos_cubature(int *num_points,
 	  }
 	}
 	else {
-	  IntpAkimaUniform3<double> 
+	  IntpAkimaUniform3<double>
 	    interpolator(xBound,yBound,zBound,xMin,
 			 xSpacing,yMin,ySpacing,
 			 zMin,zSpacing,energies_temp[band]);
@@ -3696,7 +3696,7 @@ void calc_dos_cubature(int *num_points,
     }
   }
   delete[] energies_temp;
-  }  
+  }
 
 
 void multiply_3x3_matrix(std::vector<std::vector<double> >
@@ -3705,7 +3705,7 @@ void multiply_3x3_matrix(std::vector<std::vector<double> >
                          &input_matrix_b,
                          std::vector<std::vector<double> >
                          &output_matrix) {
-  
+
   for(int i=0;i<3;i++){
     for(int j=0;j<3;j++){
       output_matrix[i][j]=0.0;
@@ -3731,7 +3731,7 @@ void adjoint_and_scale_3x3_matrix(std::vector<std::vector<double> >
                                   double scale,
                                   std::vector<std::vector<double> >
                                   &output_matrix) {
-  
+
   output_matrix[0][0] = (scale) * (input_matrix[1][1] *
                                    input_matrix[2][2] -
                                    input_matrix[1][2] *
@@ -3769,7 +3769,7 @@ void adjoint_and_scale_3x3_matrix(std::vector<std::vector<double> >
                                    input_matrix[0][1] *
                                    input_matrix[1][0]);
 }
-  
+
 double determinant_3x3_matrix(std::vector<std::vector<double> >
                               &matrix) {
   double determinant =

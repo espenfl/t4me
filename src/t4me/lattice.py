@@ -1054,33 +1054,6 @@ class Lattice():  # pylint: disable=too-many-instance-attributes
         return iksampling
 
 
-def pull_points_back_into_zone(kpoints):
-    """
-    Pulls all points outside [-0.5,0.5] in direct coordinates back into the BZ.
-
-    Parameters
-    ----------
-    kpoints : ndarray
-        | Dimension: (N, 3)
-
-        The N k-points to be checked and thrown back into
-        the zone. Should be in direct coordinates.
-
-    Returns
-    -------
-    None
-
-    """
-
-    # do positive side
-    kpoints[np.where(kpoints > 0.5)] = \
-        kpoints[np.where(kpoints > 0.5)] - 1.0
-
-    # then negative side
-    kpoints[np.where(kpoints < -0.5)] = \
-        kpoints[np.where(kpoints < -0.5)] + 1.0
-
-
 def calculate_cell_volume(cell):
     """
     Calculates the cell volume.

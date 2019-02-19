@@ -124,8 +124,7 @@ class Transport():  # pylint: disable=too-many-instance-attributes, too-many-bra
                     # need to calculate the density of states
                     logger.info("No density of states present to set up "
                                 "the scattering properties. Calculating it.")
-                    self.bs.calc_density_of_states(
-                        spin_degen=True, transport=True)
+                    self.bs.calc_density_of_states(transport=True)
                 else:
                     # check that the energy range is at least
                     # transport_energycutband outside the min
@@ -139,8 +138,7 @@ class Transport():  # pylint: disable=too-many-instance-attributes, too-many-bra
                                     "to a too narrow energy range in order "
                                     "to set up the scattering data in a "
                                     "sufficiently wide energy range.")
-                        self.bs.calc_density_of_states(
-                            spin_degen=True, transport=True)
+                        self.bs.calc_density_of_states(transport=True)
 
             dos = self.bs.dos_partial
             if dos_energies is None:

@@ -28,7 +28,6 @@ import numpy as np
 import t4me.utils as utils
 import t4me.inputoutput as inputoutput
 import t4me.constants as constants
-from t4me.lattice import pull_points_back_into_zone
 
 
 def lattice_param_numpy(lattice, location=None, filename=None):
@@ -291,7 +290,7 @@ def lattice_vasp(lattice, location=None, filename=None):  # pylint: disable=too-
         kpointsvasp[index] = np.fromstring(kpoint.text, sep=' ')
 
     # pull k-points back into zone
-    pull_points_back_into_zone(kpointsvasp)
+    utils.pull_points_back_into_zone(kpointsvasp)
     # now sort according to k-point sort (z increasing
     # fastests) and store
     k_sort_index = utils.fetch_sorting_indexes(kpointsvasp)
@@ -310,7 +309,7 @@ def lattice_vasp(lattice, location=None, filename=None):  # pylint: disable=too-
             mapping_bz_to_ibz_vasp[index] = np.fromstring(
                 mapping.text, sep=' ')
         # pull k-points back into zone
-        pull_points_back_into_zone(kpointsvasp_full)
+        utils.pull_points_back_into_zone(kpointsvasp_full)
         k_sort_index = utils.fetch_sorting_indexes(kpointsvasp_full)
         lattice.kdata.mesh = np.ascontiguousarray(
             kpointsvasp_full[k_sort_index], dtype='double')
@@ -452,7 +451,7 @@ def lattice_w90(lattice):  # pylint: disable=too-many-locals, too-many-branches
             [float(element) for element in line.split()])
 
     # pull k-points back into zone
-    pull_points_back_into_zone(kpointswannier)
+    utils.pull_points_back_into_zone(kpointswannier)
 
     # fetch sorting indexes
     k_sort_index = utils.fetch_sorting_indexes(kpointswannier)

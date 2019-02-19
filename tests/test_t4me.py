@@ -17,8 +17,8 @@
 
 #!/usr/local/bin/python
 
-import sys
-import os
+# pylint: disable=unused-import, useless-import-alias
+
 import pytest
 import numpy as np
 import logging
@@ -49,7 +49,7 @@ def test_closed_parabolic(may_data, read_and_setup_bs):
     # fetch chempots from etas at 300 K (may_data)
     temperature = 300
     tran.temperatures = np.array([temperature])
-    tran.chempots = tran.fetch_chempot_from_etas(temperature, may_data[:, 0])
+    tran.chempots = transport.fetch_chempot_from_etas(temperature, may_data[:, 0])
 
     # now calculate the coefficients
     tran.calc_transport_tensors(method="closed")

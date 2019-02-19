@@ -342,3 +342,30 @@ def fetch_sorting_indexes(data, order="C"):
                  "Only C or F (Fortran) order is supported. "
                  "Exiting.")
     sys.exit(1)
+
+
+def pull_points_back_into_zone(points):
+    """
+    Pulls all points outside [-0.5,0.5] in direct coordinates back into [-0.5, 0.5].
+
+    Parameters
+    ----------
+    points : ndarray
+        | Dimension: (N, 3)
+
+        The N points to be checked and thrown back into
+        the zone (between [-0.5, 0.5]). Should be in direct coordinates.
+
+    Returns
+    -------
+    None
+
+    """
+
+    # do positive side
+    points[np.where(points > 0.5)] = \
+        points[np.where(points > 0.5)] - 1.0
+
+    # then negative side
+    points[np.where(points < -0.5)] = \
+        points[np.where(points < -0.5)] + 1.0

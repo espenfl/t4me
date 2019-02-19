@@ -30,6 +30,7 @@ import t4me.constants as constants
 import t4me.scattering as scattering
 import t4me.utils as utils
 import t4me.spglib_interface as spglib_interface
+from t4me.bandstructure import parabolic_effective_mass
 
 
 def parabolice(tr, eta, temperature, bs, tau0, method):
@@ -198,7 +199,7 @@ def parabolic_closed(tr, eta, bs, tau0_t, temperature):  # pylint: disable=too-m
         band_actual = tr.included_bands[band]
         # check for parabolic effective mass
         effmass_vec = bs.effmass[band_actual]
-        if not tr.bs.parabolic_effective_mass(effmass_vec):
+        if not parabolic_effective_mass(effmass_vec):
             logger.error("In order to run the closed Fermi-Dirac "
                          "integrals the effective mass needs to be "
                          "parabolic. Exiting.")
@@ -619,7 +620,7 @@ def parabolic_numeric(tr, eta, bs, tau0_t, temperature):  # pylint: disable=too-
         band_actual = tr.included_bands[band]
         # check for parabolic effective mass
         effmass_vec = bs.effmass[band_actual]
-        tr.bs.parabolic_effective_mass(effmass_vec)
+        parabolic_effective_mass(effmass_vec)
         # and make sure it is positive
         effmass[band] = np.abs(effmass_vec[0])
         w0[band_actual] = w0[band_actual] * \

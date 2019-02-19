@@ -26,6 +26,7 @@ import numpy as np
 import scipy
 
 import t4me.constants as constants
+from t4me.bandstructure import parabolic_effective_mass
 
 
 def scattering_dos(tr, dos, energies, select_scattering):  # pylint: disable=too-many-locals, too-many-branches # noqa: MC0001
@@ -598,7 +599,7 @@ def scattering_parabolic(tr, energies, select_scattering, use_eonk=False):  # py
             sign = 1.0
             # check parabolic effmass for all bands
             effmass_vec = tr.bs.effmass[band]
-            if not tr.bs.parabolic_effective_mass(effmass_vec):
+            if not parabolic_effective_mass(effmass_vec):
                 logger.error("The setup of scattering mechanisms using "
                              "parabolic models requires a parabolic "
                              "effective mass. Exiting.")

@@ -7,8 +7,6 @@ usage: pip install -e .[graphs]
 
 import os
 import json
-import logging
-import shutil
 import tempfile
 from setuptools import setup, find_packages, Extension
 from setuptools.command.build_ext import build_ext
@@ -331,7 +329,7 @@ class sdist_override(_sdist):
             print(
                 "You do not have Cython installed and are thus not allowed to issue sdist."
             )
-            sys.exit(1)
+            return
         cythonize([
             'src/t4me/spglib_interface/spglib.pyx',
             'src/t4me/gsl_interface/gsl.pyx',

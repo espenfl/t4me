@@ -1,13 +1,18 @@
 notifacation:
   email: false
 language: python
-sudo: required
-dist: xenial
-python: "3.7"
+dist: thrusty
+python: 3.6
 cache: pip
 install:
+  - pip install --upgrade pip
   - pip install numpy
   - pip install .
-  - pip install tox-travis
+  - pip install tox-travis coveralls
 env:
-script: tox
+  - TEST_TYPE="pre-commit"
+  - TEST_TYPE="unittests" TOX_ENV=py36-t4me
+script: ./run_ci_tests.sh
+after_success:
+  - coverage combine
+  - coveralls

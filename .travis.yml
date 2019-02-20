@@ -14,8 +14,7 @@ install:
   - pip install tox-travis coveralls
 env:
   - TEST_TYPE="pre-commit"
-  - TEST_TYPE="unittests" TOX_ENV=py36-t4me
-  - TEST_TYPE="unittests" TOX_ENV=py37-t4me
+  - TEST_TYPE="unittests" TOX_ENV=t4me
 script: ./run_ci_tests.sh
 #after_success:
 #  - coverage combine

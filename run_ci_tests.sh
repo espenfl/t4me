@@ -1,7 +1,7 @@
 set -ev
 case "$TEST_TYPE" in 
     unittests)
-        tox -e $TOX_ENV
+        tox -e $TOX_ENV --skip-missing-interpreter
         ;;
     pre-commit)
         pre-commit run --all-files || ( git diff; git status; exit 1; )

@@ -29,7 +29,7 @@ import numpy as np
 import t4me.utils as utils
 import t4me.constants as constants
 import t4me.interface as interface
-import t4me.spglib_interface as spglib_interface
+import t4me.spglib_interface as spglib_interface  # pylint: disable=import-error, no-name-in-module
 
 
 class Lattice():  # pylint: disable=too-many-instance-attributes

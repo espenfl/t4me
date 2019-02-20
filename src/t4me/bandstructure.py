@@ -31,7 +31,6 @@ import t4me.inputoutput as inputoutput
 import t4me.interface as interface
 import t4me.utils as utils
 import t4me.constants as constants
-import t4me.spglib_interface as spglib_interface
 from t4me.lattice import check_sensible_ksampling
 
 
@@ -2016,7 +2015,7 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             logger.info("Interpolating using Einspline.")
 
             # lazy import of einspline (optional)
-            import t4me.einspline as einspline
+            import t4me.einspline as einspline  # pylint: disable=import-error, no-name-in-module
 
             bz_border = old_bz_border
             domainx = np.array([bz_border[0], bz_border[1]], dtype=np.double)
@@ -2078,7 +2077,7 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             logger.info("Interpolating using Wildmagic/GeometricTools.")
 
             # lazy import of wildmagic (optional)
-            import t4me.wildmagic as wildmagic
+            import t4me.wildmagic as wildmagic  # pylint: disable=import-error, no-name-in-module
 
             # set boundary conditions
             bz_border = old_bz_border
@@ -2434,6 +2433,9 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
         dos = np.zeros((num_bands, num_samples), dtype='double')
         int_dos = np.zeros((num_bands, num_samples), dtype='double')
         if integral_method in ("tetra", "smeared"):
+            # lazy import
+            import t4me.spglib_interface as spglib_interface  # pylint: disable=import-error, no-name-in-module
+
             # these routines only work on the IBZ grid, so
             # check if ibz grid is not None
             if self.lattice.kmesh_ired is None:
@@ -2478,7 +2480,7 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
         elif integral_method == 'cubature':
             logger.debug("Running cubature method.")
             # lazy import of cubature_wildmagic (optional)
-            import t4me.cubature_wildmagic as cubature_wildmagic
+            import t4me.cubature_wildmagic as cubature_wildmagic  # pylint: disable=import-error, no-name-in-module
 
             # here we call the cubature DOS routine with on the fly
             # interpolation

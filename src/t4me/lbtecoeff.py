@@ -29,7 +29,6 @@ import t4me.lbteint as lbteint
 import t4me.constants as constants
 import t4me.scattering as scattering
 import t4me.utils as utils
-import t4me.spglib_interface as spglib_interface
 from t4me.bandstructure import parabolic_effective_mass
 
 
@@ -891,7 +890,7 @@ def numerick(tr, chempots, temperatures, bs=None):  # pylint: disable=too-many-l
             "routines to calculate the transport coefficients.")
 
         # lazy import of cubature_wildmagic (optional)
-        import t4me.cubature_wildmagic as cubature_wildmagic
+        import t4me.cubature_wildmagic as cubature_wildmagic  # pylint: disable=import-error, no-name-in-module
 
         # set scattering type (numeric or analytic)
         # check now to see if only constant scattering is set
@@ -1197,6 +1196,9 @@ def numerick(tr, chempots, temperatures, bs=None):  # pylint: disable=too-many-l
     # smeared weights are implemented.
     elif ((tr.param.transport_integration_method == "tetra")
           or (tr.param.transport_integration_method == "smeared")):
+
+        # lazy import
+        import t4me.spglib_interface as spglib_interface  # pylint: disable=import-error, no-name-in-module
         # this method needs the IBZ. This is not available if we work
         # on the full grid.
         if tr.param.work_on_full_grid:

@@ -434,7 +434,7 @@ def fermiintclosed(order, eta, spin_fact):  # noqa: MC0001
     logger.debug("Running fermiintclosed.")
 
     # lazy import og gsl
-    import t4me.gsl as gsl  # pylint: disable=useless-import-alias
+    import t4me.gsl as gsl  # pylint: disable=import-error, no-name-in-module
 
     # check for bogus r values
     if order < -2:

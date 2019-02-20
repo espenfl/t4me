@@ -31,6 +31,8 @@ from .fixtures import read_and_setup_bs
 
 @pytest.mark.parametrize('read_and_setup_bs', ('closed_parabolic',), indirect=True)
 def test_closed_parabolic(may_data, read_and_setup_bs):
+    gsl = pytest.importorskip("t4me.gsl")
+
     """
     Test the Seebeck and Lorenz coefficient, carrier
     concentration and the small-h Hall factor against
@@ -75,6 +77,7 @@ def test_closed_parabolic(may_data, read_and_setup_bs):
 
 @pytest.mark.parametrize('read_and_setup_bs', ('numeric_parabolic_one_band',), indirect=True)
 def test_numeric_parabolic_one_band(read_and_setup_bs):
+    gsl = pytest.importorskip("t4me.gsl")
     """
     Test the numerical solution of the energy
     dependent integral that appear when making then
@@ -148,6 +151,7 @@ def test_numeric_parabolic_one_band(read_and_setup_bs):
 
 @pytest.mark.parametrize('read_and_setup_bs', ['numeric_parabolic_multi_band'], indirect=True)
 def test_numeric_parabolic_multi_band(read_and_setup_bs):
+    gsl = pytest.importorskip("t4me.gsl")
     """
     Same as the previous test, but here an additional
     valence band with an effective mass of 0.2 of the free
@@ -211,6 +215,7 @@ def test_numeric_parabolic_multi_band(read_and_setup_bs):
 
 @pytest.mark.parametrize('read_and_setup_bs', ['trapz_parabolic_one_band_fast'], indirect=True)
 def test_trapz_parabolic_one_band_fast(read_and_setup_bs):
+    gsl = pytest.importorskip("t4me.gsl")
     """
     Test the direct integrals in reciprocal space against
     the results of the closed Fermi-Dirac integrals
@@ -258,6 +263,7 @@ def test_trapz_parabolic_one_band_fast(read_and_setup_bs):
 
 @pytest.mark.parametrize('read_and_setup_bs', ['trapz_parabolic_one_band_tri_fast'], indirect=True)
 def test_trapz_parabolic_one_band_tri_fast(read_and_setup_bs):
+    gsl = pytest.importorskip("t4me.gsl")
     """
     Test the direct integrals in reciprocal space against
     the results of the closed Fermi-Dirac integrals
@@ -309,6 +315,7 @@ def test_trapz_parabolic_one_band_tri_fast(read_and_setup_bs):
 
 @pytest.mark.parametrize('read_and_setup_bs', ['trapz_parabolic_one_band_numdiff_fast'], indirect=True)
 def test_trapz_parabolic_one_band_numdiff_fast(read_and_setup_bs):
+    gsl = pytest.importorskip("t4me.gsl")
     """
     Test the direct integrals in reciprocal space against
     the results of the closed Fermi-Dirac integrals
@@ -361,6 +368,7 @@ def test_trapz_parabolic_one_band_numdiff_fast(read_and_setup_bs):
 
 @pytest.mark.parametrize('read_and_setup_bs', ['trapz_parabolic_one_band_tri_numdiff_fast'], indirect=True)
 def test_trapz_parabolic_one_band_tri_numdiff_fast(read_and_setup_bs):
+    gsl = pytest.importorskip("t4me.gsl")
     """
     Test the direct integrals in reciprocal space against
     the results of the closed Fermi-Dirac integrals
@@ -416,6 +424,7 @@ def test_trapz_parabolic_one_band_tri_numdiff_fast(read_and_setup_bs):
 
 @pytest.mark.parametrize('read_and_setup_bs', ['trapz_preinter_parabolic_one_band_fast'], indirect=True)
 def test_trapz_preinter_parabolic_one_band_fast(read_and_setup_bs):
+    gsl = pytest.importorskip("t4me.gsl")
     """
     Test the direct integrals in reciprocal space against
     the results of the closed Fermi-Dirac integrals
@@ -515,6 +524,7 @@ def test_si_45_primitive(read_and_setup_bs):
 
 @pytest.mark.parametrize('read_and_setup_bs', ['trapz_parabolic_one_band'], indirect=True)
 def test_trapz_parabolic_one_band(read_and_setup_bs):
+    gsl = pytest.importorskip("t4me.gsl")
     """
     Test the direct integrals in reciprocal space against
     the results of the closed Fermi-Dirac integrals
@@ -587,6 +597,7 @@ def test_trapz_parabolic_one_band(read_and_setup_bs):
 
 @pytest.mark.parametrize('read_and_setup_bs', ['tetra_parabolic_one_band'], indirect=True)
 def test_tetra_parabolic_one_band(read_and_setup_bs):
+    gsl = pytest.importorskip("t4me.gsl")
     """
     Test the direct integrals in reciprocal space against
     the results of the closed Fermi-Dirac integrals
@@ -638,6 +649,7 @@ def test_tetra_parabolic_one_band(read_and_setup_bs):
 
 @pytest.mark.parametrize('read_and_setup_bs', ['trapz_preinter_parabolic_one_band'], indirect=True)
 def test_trapz_preinter_parabolic_one_band(read_and_setup_bs):
+    gsl = pytest.importorskip("t4me.gsl")
     """
     Test the direct integrals in reciprocal space against
     the results of the closed Fermi-Dirac integrals
@@ -699,6 +711,7 @@ def test_trapz_preinter_parabolic_one_band(read_and_setup_bs):
 
 @pytest.mark.parametrize('read_and_setup_bs', ['cubature_parabolic_one_band'], indirect=True)
 def test_cubature_parabolic_one_band(read_and_setup_bs):
+    gsl = pytest.importorskip("t4me.gsl")
     """
     Test the direct integrals in reciprocal space against
     the results of the closed Fermi-Dirac integrals

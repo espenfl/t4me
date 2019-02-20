@@ -26,10 +26,13 @@ import logging
 import copy
 import numpy as np
 
+import spglib
+
 import t4me.utils as utils
 import t4me.constants as constants
 import t4me.interface as interface
-import t4me.spglib_interface as spglib_interface  # pylint: disable=import-error, no-name-in-module
+
+#import t4me.spglib_interface as spglib_interface  # pylint: disable=import-error, no-name-in-module
 
 
 class Lattice():  # pylint: disable=too-many-instance-attributes
@@ -883,33 +886,42 @@ class Lattice():  # pylint: disable=too-many-instance-attributes
                 str(ksampling[2]))
             if self.borderless:
                 borderless = True
-            if borderless:
-                logger.info(
-                    "Running borderless compatible k-point generation etc. "
-                    "(VASP, SKW, W90, etc.)")
-                # the international symbol returned from spglib
-                intsym = spglib_interface.get_reciprocal_mesh(
-                    ksampling,
-                    np.ascontiguousarray(self.unitcell.T),
-                    self.positions,
-                    self.species,
-                    shift,
-                    k,
-                    spg_mapping,
-                    is_time_reversal=False,
-                    symprec=self.param.symprec)
-            else:
-                # the international symbol returned from spglib
-                intsym = spglib_interface.get_reciprocal_mesh(
-                    ksampling,
-                    np.ascontiguousarray(self.unitcell.T),
-                    self.positions,
-                    self.species,
-                    shift,
-                    k,
-                    spg_mapping,
-                    is_time_reversal=True,
-                    symprec=self.param.symprec)
+            # first create required tuple for Spglib
+            cell = (self.unitcell, self.positions, self.species)
+            # get the spacegroup
+            intsym = spglib.get_spacegroup(cell, symprec=self.param.symprec)
+            # get the k-point mesh
+            spg_mapping, k = spglib.get_ir_reciprocal_mesh(
+                ksampling, cell, is_shift=shift)
+            # if borderless:
+            #     logger.info(
+            #         "Running borderless compatible k-point generation etc. "
+            #         "(VASP, SKW, W90, etc.)")
+            #     # the international symbol returned from spglib
+            #     cell = (self.unitcell, self.positions, self.species)
+            #     insym = spglib.get_spacegroup(cell, symprec=self.param.symprec)
+            #     # intsym = spglib_interface.get_reciprocal_mesh(
+            #     #     ksampling,
+            #     #     np.ascontiguousarray(self.unitcell.T),
+            #     #     self.positions,
+            #     #     self.species,
+            #     #     shift,
+            #     #     k,
+            #     #     spg_mapping,
+            #     #     is_time_reversal=False,
+            #     #     symprec=self.param.symprec)
+            # else:
+            #     # the international symbol returned from spglib
+            #     intsym = spglib_interface.get_reciprocal_mesh(
+            #         ksampling,
+            #         np.ascontiguousarray(self.unitcell.T),
+            #         self.positions,
+            #         self.species,
+            #         shift,
+            #         k,
+            #         spg_mapping,
+            #         is_time_reversal=True,
+            #         symprec=self.param.symprec)
             logger.info(
                 "Spglib detected the symmetry %s with symprec set to %s",
                 str(intsym), str(self.param.symprec))

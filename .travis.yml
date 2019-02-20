@@ -7,7 +7,7 @@ python:
   - 3.7
 cache: pip
 install:
-  - pip install --upgrade pip
+  - pip install --upgrade pip setuptools
   - pip install numpy
   - pip install Cython
   - pip install .[dev]

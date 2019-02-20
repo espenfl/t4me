@@ -12,6 +12,7 @@ include src/t4me/wildmagic_interface/*.hpp
 include src/t4me/wildmagic_interface/wildmagic.cpp
 include src/t4me/skw_interface/*.hpp
 include src/t4me/skw_interface/skw.cpp
+include README.rst
 global-exclude *.pyc
 global-exclude *.so
 global-exclude *.a

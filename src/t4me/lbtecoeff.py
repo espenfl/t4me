@@ -1244,7 +1244,7 @@ def numerick(tr, chempots, temperatures, bs=None):  # pylint: disable=too-many-l
         #    tr.lattice.mapping_ibz_to_bz.size, dtype='intc')
         energies_ibz = np.take(
             tr.bs.energies, tr.lattice.mapping_ibz_to_bz, axis=1)
-        spglib_interface.calc_transport_tensors_weights_interface(
+        spglib_interface.calc_transport_tensors_weights_interface(  # pylint: disable=c-extension-no-member
             energies_ibz, tr.bs.velocities, scatter, temperatures, chempots,
             tr.lattice.spg_kmesh,
             np.ascontiguousarray(tr.lattice.mapping_bz_to_ibz, dtype="intc"),

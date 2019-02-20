@@ -325,20 +325,19 @@ class sdist_override(_sdist):
     def run(self):
         try:
             from Cython.Build import cythonize
+            cythonize([
+                'src/t4me/spglib_interface/spglib.pyx',
+                'src/t4me/gsl_interface/gsl.pyx',
+                'src/t4me/einspline_interface/einspline.pyx',
+                'src/t4me/cubature_wildmagic_interface/cubature_wildmagic.pyx',
+                'src/t4me/wildmagic_interface/wildmagic.pyx',
+                'src/t4me/skw_interface/skw.pyx'
+            ])
+            _sdist.run(self)
         except ImportError:
             print(
                 "You do not have Cython installed and are thus not allowed to issue sdist."
             )
-            return
-        cythonize([
-            'src/t4me/spglib_interface/spglib.pyx',
-            'src/t4me/gsl_interface/gsl.pyx',
-            'src/t4me/einspline_interface/einspline.pyx',
-            'src/t4me/cubature_wildmagic_interface/cubature_wildmagic.pyx',
-            'src/t4me/wildmagic_interface/wildmagic.pyx',
-            'src/t4me/skw_interface/skw.pyx'
-        ])
-        _sdist.run(self)
 
 
 try:

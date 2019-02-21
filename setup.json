@@ -11,17 +11,17 @@
     ],
     "description": "T4ME - Transport for Materials.",
     "extras_require": {
-	"dev": [
-	    "pre-commit == 1.14.3",
-	    "prospector == 1.1.6.2",
-	    "pylint == 2.1.1",
-	    "flake8",
-	    "yapf == 0.26.0",
-	    "coverage",
-	    "pytest",
-	    "pytest-cov",
-	    "packaging"
-	]
+        "dev": [
+            "pre-commit == 1.14.3",
+            "prospector == 1.1.6.2",
+            "pylint == 2.1.1",
+            "flake8",
+            "yapf == 0.26.0",
+            "coverage",
+            "pytest",
+            "pytest-cov",
+            "packaging"
+        ]
     },
     "include_package_data": true,
     "install_requires": [
@@ -43,5 +43,5 @@
         "numpy"
     ],
     "url": "https://github.com/espenfl/t4me",
-    "version": "1.1.0"
+    "version": "1.1.1"
 }

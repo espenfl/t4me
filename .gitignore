@@ -1,14 +1,3 @@
-*.so
-*.pyc
-*.log
-*.a
-*.o
-'*
-#*
 build
-timings
-external
-xalglib.py
-skw_test.py
-cpc
-copytocpc
+dist
+utilities

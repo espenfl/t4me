@@ -1,33 +1,20 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>scattering module &#8212; T4ME 1 documentation</title>
-    
-    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <title>scattering module &#8212; T4ME 1.1.0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -38,8 +25,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-  </head>
-  <body role="document">
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -52,7 +38,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           T4ME</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>1.1</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -101,7 +87,7 @@
               
                 
   <li>
-    <a href="api.html" title="Previous Chapter: API Documentation"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; API Documenta...</span>
+    <a href="api.html" title="Previous Chapter: API Documentation"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; API Documentation</span>
     </a>
   </li>
   <li>
@@ -139,13 +125,16 @@
   <div class="row">
     <div class="col-md-12 content">
       
-  <div class="section" id="module-scattering">
-<span id="scattering-module"></span><h1>scattering module<a class="headerlink" href="#module-scattering" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="scattering-module">
+<h1>scattering module<a class="headerlink" href="#scattering-module" title="Permalink to this headline">¶</a></h1>
+<p>This module, <code class="file docutils literal notranslate"><span class="pre">scattering.py</span></code> contains the setup and
+calculation of the scattering properties.</p>
+<span class="target" id="module-scattering"></span><p>Contains routines to set up the scattering of the charge carriers.</p>
 <dl class="function">
 <dt id="scattering.check_scattering">
 <code class="descclassname">scattering.</code><code class="descname">check_scattering</code><span class="sig-paren">(</span><em>tr</em><span class="sig-paren">)</span><a class="headerlink" href="#scattering.check_scattering" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks the scattering arrays and that they are dimensionalized
-to the energy values stored in the current <cite>Bandstructure()</cite>
+<dd><p>Checks the scattering arrays.</p>
+<p>Also that they are dimensionalized to the energy values stored in the current <cite>Bandstructure()</cite>
 object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -194,8 +183,8 @@ different scattering mechanisms in units of fs.</p>
 <div class="line">Dimension: (12)</div>
 </div>
 <p>Contains the energy transitions in eV (that is added to the energy
-in <img class="math" src="_images/math/13689d4e16f8f3fb0e2c840e26c11b4afacc464d.png" alt="\tau=\tau_0E^{r-1/2}"/>, typically,
-<img class="math" src="_images/math/d1e4b78ef262afbe8897834fd70ffb8d7f41d12b.png" alt="E=E+\hbar \omega"/>, where <img class="math" src="_images/math/73a7b598f7ff7e710c4cd72fc94c9484af714e08.png" alt="\hbar \omega"/>
+in <img class="math" src="_images/math/1d9d76a273cd573f471ea4e5b82d4050fd33868d.png" alt="\\tau=\\tau_0E^{r-1/2}"/>, typically,
+<img class="math" src="_images/math/d4828deb99c4eaf49eace38ebc6ea8ec55b6a124.png" alt="E=E+\\hbar \\omega"/>, where <img class="math" src="_images/math/ee2eaa5e2b749ff788c990e02abd66516a8d7a10.png" alt="\\hbar \\omega"/>
 is the size of the energy transition. Set it to zero for
 the non-relevant scattering mechanisms.</p>
 </div></blockquote>
@@ -215,13 +204,89 @@ the non-relevant scattering mechanisms.</p>
 </table>
 <p class="rubric">Notes</p>
 <p>Calculates the total relaxation time</p>
-<div class="math">
-<p><img src="_images/math/a27b56cb315c442dffeb1d59b30ddf42704fddee.png" alt="\frac{1}{\tau}=\sum_i \frac{1}{\tau_i},"/></p>
-</div><p>where <img class="math" src="_images/math/13689d4e16f8f3fb0e2c840e26c11b4afacc464d.png" alt="\tau=\tau_0E^{r-1/2}"/>.
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\\frac{1}{\\tau}=\\sum_i \\frac{1}{\\tau_i},
+
+</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/ucs/utf8x.def))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/ucs/ucs.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/ucs/data/uni-global.def))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/ucs/ucsencs.def)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...au}=\\sum_i \\frac{1}{\\tau_i},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...au}=\\sum_i \\frac{1}{\\tau_i},\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...au}=\\sum_i \\frac{1}{\\tau_i},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...au}=\\sum_i \\frac{1}{\\tau_i},\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...au}=\\sum_i \\frac{1}{\\tau_i},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...au}=\\sum_i \\frac{1}{\\tau_i},\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...au}=\\sum_i \\frac{1}{\\tau_i},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...au}=\\sum_i \\frac{1}{\\tau_i},\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 444 bytes).
+Transcript written on math.log.
+</div>
+<p>where <img class="math" src="_images/math/1d9d76a273cd573f471ea4e5b82d4050fd33868d.png" alt="\\tau=\\tau_0E^{r-1/2}"/>.
 The array <cite>scattering_tau0_select</cite> determines which
-scattering to include in the sum. Consult <a class="reference internal" href="#scattering.scattering_spherical" title="scattering.scattering_spherical"><code class="xref py py-func docutils literal"><span class="pre">scattering_spherical()</span></code></a>
+scattering to include in the sum. Consult <a class="reference internal" href="#scattering.scattering_parabolic" title="scattering.scattering_parabolic"><code class="xref py py-func docutils literal notranslate"><span class="pre">scattering_parabolic()</span></code></a>
 for additional details. The scattering prefactors
-<img class="math" src="_images/math/07130899dcab33ba0f269c773f4d88b4774f664e.png" alt="\tau_0"/> are ordered in a sequence described there.
+<img class="math" src="_images/math/6895252e9a460b65a90bb2b952abbf1a9f2e1284.png" alt="\\tau_0"/> are ordered in a sequence described there.
 The <cite>scattering_tau0_select</cite> follows this sequence and is
 set in the bandstructure configuration file.</p>
 </dd></dl>
@@ -272,8 +337,8 @@ and the energies etc.</p>
 <p><strong>method</strong> : string, optional</p>
 <blockquote>
 <div><p>The interpolation method to use. Uses
-the <code class="xref py py-func docutils literal"><span class="pre">interp1d()</span></code> function of Scipy and this sets the
-parameter <cite>kind</cite>. Defaults to &#8220;linear&#8221;.</p>
+the <code class="xref py py-func docutils literal notranslate"><span class="pre">interp1d()</span></code> function of Scipy and this sets the
+parameter <cite>kind</cite>. Defaults to “linear”.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -284,7 +349,7 @@ parameter <cite>kind</cite>. Defaults to &#8220;linear&#8221;.</p>
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html#scipy.interpolate.interp1d" title="(in SciPy v0.19.0)"><code class="xref py py-obj docutils literal"><span class="pre">scipy.interpolate.interp1d</span></code></a></p>
+<p class="last"><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html#scipy.interpolate.interp1d" title="(in SciPy v1.2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.interpolate.interp1d</span></code></a></p>
 </div>
 <p class="rubric">Notes</p>
 <p>Here we only perform an interpolation on the array containing the total
@@ -325,8 +390,8 @@ at temperatures below 2000 K.</p>
 <dl class="function">
 <dt id="scattering.scattering_dos">
 <code class="descclassname">scattering.</code><code class="descname">scattering_dos</code><span class="sig-paren">(</span><em>tr</em>, <em>dos</em>, <em>energies</em>, <em>select_scattering</em><span class="sig-paren">)</span><a class="headerlink" href="#scattering.scattering_dos" title="Permalink to this definition">¶</a></dt>
-<dd><p>Setup scattering mechnisms and store values in the
-scattering arrays using the density of states data
+<dd><p>Setup scattering mechnisms.</p>
+<p>Store values in the scattering arrays using the density of states data
 as the energy dependency.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -472,7 +537,7 @@ shift required for the transfer energies.
 This is quite serious, but does not influene the acoustic
 phonon scattering (taken to be zero in the model implemented
 here). The current approach if not using the
-analytic spherical models is that the transfer energies
+analytic parabolic models is that the transfer energies
 for all scattering mechanisms are summed and the energy
 of where the relaxation time is evaluated is shifted by
 this amount during interpolation. The sum approximation
@@ -487,10 +552,10 @@ scattering.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="scattering.scattering_spherical">
-<code class="descclassname">scattering.</code><code class="descname">scattering_spherical</code><span class="sig-paren">(</span><em>tr</em>, <em>energies</em>, <em>select_scattering</em>, <em>use_eonk=False</em><span class="sig-paren">)</span><a class="headerlink" href="#scattering.scattering_spherical" title="Permalink to this definition">¶</a></dt>
-<dd><p>Setup scattering mechnisms and store values in the
-scattering arrays using spherical band dispersions
+<dt id="scattering.scattering_parabolic">
+<code class="descclassname">scattering.</code><code class="descname">scattering_parabolic</code><span class="sig-paren">(</span><em>tr</em>, <em>energies</em>, <em>select_scattering</em>, <em>use_eonk=False</em><span class="sig-paren">)</span><a class="headerlink" href="#scattering.scattering_parabolic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup scattering mechnisms.</p>
+<p>Store values in the scattering arrays using parabolic band dispersions
 as an approximation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -653,8 +718,8 @@ mechanisms.</p>
       
     </p>
     <p>
-        &copy; Copyright 2016, Espen Flage-Larsen.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+        &copy; Copyright 2019, Espen Flage-Larsen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.<br/>
     </p>
   </div>
 </footer>

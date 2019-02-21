@@ -1,56 +1,68 @@
 Installing
 ==========
 
-Please consult the :file:`setup.py` file for details on
-how to configure the location of the include and libraries.
-
-Only Spglib (in principle the only requirement for minimal
-functionality against calculations based on first-principle
-data) is included as a Git submodule. This can be activated by
+Basic install
+-------------
+First make sure Spglib is installed
 
 ::
 
-   git submodule init
-   git submodule update
+   pip install spglib
 
-And Spglib can be build with the included :file:`build_spglib`
+Then install T4ME by executing the command
+
+::
+
+   pip install t4me
+
+This will give the user the posibility to calculate the transport coefficients
+using integration routines in SciPy. For other integration and interpolation routines
+the user needs to follow the following recipe.
+
+Advanced install
+----------------
+For more advanced functionality (interpolation and other integration routines) the
+user should determine which external libraries are needed and install them based
+on their respective documentation.
+
+The :file:`setup.py` file assume in its supplied form that the user installs the libraries
+in the standard folders, e.g. `$HOME/include` and `$HOME/lib` for the include and library
+files, respectively. If other locations are needed, please adapt the :file:`setup.py`
+file.
+
+As an example, we want to enable the tetrahedron integration. A Spglib interface needs to be compiled.
+This can be build with the included :file:`build_spglib` file.
 
 ::
 
    ./build_spglib
 
-It is possible to build Spglib elsewhere, but consult
-:file:`build_spglib` and make sure that the
-:file:`tetrahedron_method.h` is also inside the include
-directory. For instance, if access to Git is difficult one
-should make a `spglib` folder in the main T4ME directory
-and place a recent Spglib version there. This would give the
-same data structure as if using the Git submodule.
-The build script :file:`build_spglib` can then be executed.
+If that was successfull, T4ME can then be built by issuing the following command
 
+::
+
+   pip install .
+
+or
+
+::
+
+   pip install -e .[dev]
+
+Another example. We want to enable SKW interpolation. The SKW routines can be built (assuming Intel MKL is installed) by issuing
+
+::
+
+   ./build_skw
+
+If successfull, T4ME can then be installed by issuing one of the two commands listed above. If other FFT routines are to be used, please modify :file:`skw/Makefile`.
+   
 All other libraries need to be built externally and linked in.
 
-Then execute
+Upon successfull completion of the installation, T4ME is executed with the command
 
 ::
 
-       python setup.py build_ext --inplace
-       
-To build the necessary parts of interfaces used in T4ME. You should
-now be able to now execute t4me.py which is
-the main driver routine
+   t4me
 
-::
-
-    python t4me.py
-
-This should execute cleanly. However, it might be usefull
-to run T4ME from other locations. In order to for this to
-work, the main directory of T4ME needs to be added to
-your ``PYTHONPATH`` environmental variable. Usually, this can
-be done (in bash) by adding the following to your
-:file:`.bashrc` or :file:`.bash_profile`
-
-::
-   
-   export PYTHONPATH=$PYTHONPATH:/home/username/somepath/t4me
+An `input` directory is needed which should contain the input files.

@@ -1,0 +1,49 @@
+#/usr/bin/env bash
+
+# get the current branch
+branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+
+# check that we are on the right branch
+if [ $branch != "updated_documentation" ]; then
+   echo "Please make sure you issue this command on the 'updated_documentation' branch."
+   exit
+fi
+
+# check for uncommit changes
+if [ -n "$(git status --porcelain)" ]; then
+  echo "Please commit your changes before executing this command"
+  exit
+fi
+
+# build the docs
+cd docs
+make clean
+make html
+cd ..
+
+# updated docs
+git add docs/_build/html
+git commit -m "Updated documentation for later gh-pages push"
+
+# switch branches and pull the data we want
+git checkout gh-pages && rm -rf *
+touch .nojekyll
+git checkout updated_documentation docs/_build/html
+
+# now we only need html content for gh-pages
+mv ./docs/_build/html/* ./ && rm -rf ./docs
+
+# add, commit and push gh-pages
+git add -A
+git commit -m "Publishing updated documentation"
+git push origin gh-pages
+
+# switch back to branch
+git checkout updated_documentation
+
+# Clean stuff
+cd docs
+make clean
+# Some LaTeX folder that needs to be removed
+rm -rf docs/auto
+cd ..

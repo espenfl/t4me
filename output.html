@@ -1,33 +1,20 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Output &#8212; T4ME 1 documentation</title>
-    
-    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <title>Output &#8212; T4ME 1.1.0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -38,8 +25,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-  </head>
-  <body role="document">
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -52,7 +38,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           T4ME</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>1.1</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -155,42 +141,42 @@
   <div class="section" id="output">
 <h1>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h1>
 <p>The transport coefficients are written to the <cite>output</cite> directory.
-The log file <code class="file docutils literal"><span class="pre">info.log</span></code> is also written in this directory
+The log file <code class="file docutils literal notranslate"><span class="pre">info.log</span></code> is also written in this directory
 and can be monitored during a run to check the process.</p>
 <div class="section" id="files">
 <h2>Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="electrical-conductivity">
 <h3>Electrical conductivity<a class="headerlink" href="#electrical-conductivity" title="Permalink to this headline">¶</a></h3>
-<p>The electrical conductivity can be found in the <code class="file docutils literal"><span class="pre">sigma</span></code>.
+<p>The electrical conductivity can be found in the <code class="file docutils literal notranslate"><span class="pre">sigma</span></code>.
 In units of <img class="math" src="_images/math/42cc15906bcf933a631496cf2c9dcee3faf055d3.png" alt="\mathrm{S/m}"/>. Consult the documentation in
 the header of the output file for layout.</p>
 </div>
 <div class="section" id="seebeck-coefficients">
 <h3>Seebeck coefficients<a class="headerlink" href="#seebeck-coefficients" title="Permalink to this headline">¶</a></h3>
-<p>The Seebeck coefficient can be found in the <code class="file docutils literal"><span class="pre">seebeck</span></code>.
+<p>The Seebeck coefficient can be found in the <code class="file docutils literal notranslate"><span class="pre">seebeck</span></code>.
 In units of <img class="math" src="_images/math/e3e77c7e378cccf89ba1fffa6e2a31435eae0c94.png" alt="\mu \mathrm{V/K}"/>. Consult the documentation in
 the header of the output file for layout.</p>
 </div>
 <div class="section" id="lorenz-coefficient">
 <h3>Lorenz coefficient<a class="headerlink" href="#lorenz-coefficient" title="Permalink to this headline">¶</a></h3>
-<p>The Lorenz coefficient can be found in the <code class="file docutils literal"><span class="pre">lorenz</span></code>.
+<p>The Lorenz coefficient can be found in the <code class="file docutils literal notranslate"><span class="pre">lorenz</span></code>.
 In units of <img class="math" src="_images/math/4b9404eca2d0336e98813f8e6bdd66527baedf68.png" alt="10^{-8} \mathrm{V^2/K^2}"/>. Consult the
 documentation in the header of the output file for layout.</p>
 </div>
 <div class="section" id="the-electrothermal-conductivity">
 <h3>The electrothermal conductivity<a class="headerlink" href="#the-electrothermal-conductivity" title="Permalink to this headline">¶</a></h3>
 <p>The electrical part of the thermal conductivity can be found
-in the <code class="file docutils literal"><span class="pre">kappae</span></code>. In units of <img class="math" src="_images/math/bdb46f3bea010c6f32a67dc64f16a6e34f297257.png" alt="\mathrm{W}/\mathrm{mK}"/>.</p>
+in the <code class="file docutils literal notranslate"><span class="pre">kappae</span></code>. In units of <img class="math" src="_images/math/bdb46f3bea010c6f32a67dc64f16a6e34f297257.png" alt="\mathrm{W}/\mathrm{mK}"/>.</p>
 </div>
 <div class="section" id="the-charge-carrier-concentration">
 <h3>The charge carrier concentration<a class="headerlink" href="#the-charge-carrier-concentration" title="Permalink to this headline">¶</a></h3>
-<p>The charge carrier concentration can be located in the <code class="file docutils literal"><span class="pre">cc</span></code>.
+<p>The charge carrier concentration can be located in the <code class="file docutils literal notranslate"><span class="pre">cc</span></code>.
 In units of <img class="math" src="_images/math/a09ef94619238dd7673f569ab91ca1d6b1a0a6f4.png" alt="10^{21} \mathrm{cm}^{-3}"/>. Consult the documentation
 in the header of the output file for layout.</p>
 </div>
 <div class="section" id="the-hall-coefficient">
 <h3>The Hall coefficient<a class="headerlink" href="#the-hall-coefficient" title="Permalink to this headline">¶</a></h3>
-<p>The Hall coefficient (big R) can be located in the <code class="file docutils literal"><span class="pre">hall</span></code>.
+<p>The Hall coefficient (big R) can be located in the <code class="file docutils literal notranslate"><span class="pre">hall</span></code>.
 In units of <img class="math" src="_images/math/ef0c3e58cff9399cadcd89177cd681012bfdb5dc.png" alt="\mathrm{cm}^3/\mathrm{C}"/>. Consult the documentation
 in the header of the output file for layout.</p>
 <div class="admonition warning">
@@ -203,7 +189,7 @@ BANDS AT THE MOMENT.</p>
 <div class="section" id="the-relaxation-times">
 <h3>The relaxation times<a class="headerlink" href="#the-relaxation-times" title="Permalink to this headline">¶</a></h3>
 <p>The total relaxation time for each band can be found in
-the files <code class="file docutils literal"><span class="pre">scattering_band_n</span></code>, for band number <cite>n</cite>. In units of fs.</p>
+the files <code class="file docutils literal notranslate"><span class="pre">scattering_band_n</span></code>, for band number <cite>n</cite>. In units of fs.</p>
 </div>
 </div>
 <div class="section" id="visualization">
@@ -226,8 +212,8 @@ Data is blocked on temperature.</p>
       
     </p>
     <p>
-        &copy; Copyright 2016, Espen Flage-Larsen.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+        &copy; Copyright 2019, Espen Flage-Larsen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.<br/>
     </p>
   </div>
 </footer>

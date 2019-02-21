@@ -1,33 +1,20 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Band structure input parameters &#8212; T4ME 1 documentation</title>
-    
-    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <title>Band structure input parameters &#8212; T4ME 1.1.0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -38,8 +25,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-  </head>
-  <body role="document">
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -52,7 +38,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           T4ME</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>1.1</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -94,72 +80,72 @@
 <li><a class="reference internal" href="#">Band structure input parameters</a><ul>
 <li><a class="reference internal" href="#notes-about-format">Notes about format</a></li>
 <li><a class="reference internal" href="#general-parameters">General parameters</a><ul>
-<li><a class="reference internal" href="#type"><code class="docutils literal"><span class="pre">type</span></code></a></li>
-<li><a class="reference internal" href="#effmass"><code class="docutils literal"><span class="pre">effmass</span></code></a></li>
-<li><a class="reference internal" href="#a"><code class="docutils literal"><span class="pre">a</span></code></a></li>
-<li><a class="reference internal" href="#e0"><code class="docutils literal"><span class="pre">e0</span></code></a></li>
-<li><a class="reference internal" href="#status"><code class="docutils literal"><span class="pre">status</span></code></a></li>
-<li><a class="reference internal" href="#kshift"><code class="docutils literal"><span class="pre">kshift</span></code></a></li>
-<li><a class="reference internal" href="#spin-degen"><code class="docutils literal"><span class="pre">spin_degen</span></code></a></li>
+<li><a class="reference internal" href="#type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li><a class="reference internal" href="#effmass"><code class="docutils literal notranslate"><span class="pre">effmass</span></code></a></li>
+<li><a class="reference internal" href="#a"><code class="docutils literal notranslate"><span class="pre">a</span></code></a></li>
+<li><a class="reference internal" href="#e0"><code class="docutils literal notranslate"><span class="pre">e0</span></code></a></li>
+<li><a class="reference internal" href="#status"><code class="docutils literal notranslate"><span class="pre">status</span></code></a></li>
+<li><a class="reference internal" href="#kshift"><code class="docutils literal notranslate"><span class="pre">kshift</span></code></a></li>
+<li><a class="reference internal" href="#spin-degen"><code class="docutils literal notranslate"><span class="pre">spin_degen</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#general-scattering-related-parameters">General scattering related parameters</a><ul>
-<li><a class="reference internal" href="#select-scattering"><code class="docutils literal"><span class="pre">select_scattering</span></code></a></li>
-<li><a class="reference internal" href="#explicit-prefact"><code class="docutils literal"><span class="pre">explicit_prefact</span></code></a></li>
-<li><a class="reference internal" href="#explicit-prefact-values"><code class="docutils literal"><span class="pre">explicit_prefact_values</span></code></a></li>
+<li><a class="reference internal" href="#select-scattering"><code class="docutils literal notranslate"><span class="pre">select_scattering</span></code></a></li>
+<li><a class="reference internal" href="#explicit-prefact"><code class="docutils literal notranslate"><span class="pre">explicit_prefact</span></code></a></li>
+<li><a class="reference internal" href="#explicit-prefact-values"><code class="docutils literal notranslate"><span class="pre">explicit_prefact_values</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#acoustic-phonon-scattering-parameters">Acoustic phonon scattering parameters</a><ul>
-<li><a class="reference internal" href="#d-a"><code class="docutils literal"><span class="pre">d_a</span></code></a></li>
-<li><a class="reference internal" href="#speed-sound"><code class="docutils literal"><span class="pre">speed_sound</span></code></a></li>
+<li><a class="reference internal" href="#d-a"><code class="docutils literal notranslate"><span class="pre">d_a</span></code></a></li>
+<li><a class="reference internal" href="#speed-sound"><code class="docutils literal notranslate"><span class="pre">speed_sound</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#piezoelectric-phonon-scattering-parameters">Piezoelectric phonon scattering parameters</a><ul>
-<li><a class="reference internal" href="#p"><code class="docutils literal"><span class="pre">p</span></code></a></li>
-<li><a class="reference internal" href="#isl"><code class="docutils literal"><span class="pre">isl</span></code></a></li>
+<li><a class="reference internal" href="#p"><code class="docutils literal notranslate"><span class="pre">p</span></code></a></li>
+<li><a class="reference internal" href="#isl"><code class="docutils literal notranslate"><span class="pre">isl</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#non-polar-optical-phonon-scattering">Non-polar optical phonon scattering</a><ul>
-<li><a class="reference internal" href="#d-o"><code class="docutils literal"><span class="pre">d_o</span></code></a></li>
-<li><a class="reference internal" href="#n-o"><code class="docutils literal"><span class="pre">n_o</span></code></a></li>
-<li><a class="reference internal" href="#omega-o"><code class="docutils literal"><span class="pre">omega_o</span></code></a></li>
+<li><a class="reference internal" href="#d-o"><code class="docutils literal notranslate"><span class="pre">d_o</span></code></a></li>
+<li><a class="reference internal" href="#n-o"><code class="docutils literal notranslate"><span class="pre">n_o</span></code></a></li>
+<li><a class="reference internal" href="#omega-o"><code class="docutils literal notranslate"><span class="pre">omega_o</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#polar-optical-phonon-scattering">Polar optical phonon scattering</a><ul>
-<li><a class="reference internal" href="#epsi"><code class="docutils literal"><span class="pre">epsi</span></code></a></li>
-<li><a class="reference internal" href="#f"><code class="docutils literal"><span class="pre">f</span></code></a></li>
+<li><a class="reference internal" href="#epsi"><code class="docutils literal notranslate"><span class="pre">epsi</span></code></a></li>
+<li><a class="reference internal" href="#f"><code class="docutils literal notranslate"><span class="pre">f</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#intervalley-acoustic-phonon-scattering">Intervalley acoustic phonon scattering</a><ul>
-<li><a class="reference internal" href="#n-vv"><code class="docutils literal"><span class="pre">n_vv</span></code></a></li>
-<li><a class="reference internal" href="#omega-vv"><code class="docutils literal"><span class="pre">omega_vv</span></code></a></li>
-<li><a class="reference internal" href="#etrans"><code class="docutils literal"><span class="pre">etrans</span></code></a></li>
-<li><a class="reference internal" href="#zf"><code class="docutils literal"><span class="pre">zf</span></code></a></li>
-<li><a class="reference internal" href="#q-energy-trans"><code class="docutils literal"><span class="pre">q_energy_trans</span></code></a></li>
+<li><a class="reference internal" href="#n-vv"><code class="docutils literal notranslate"><span class="pre">n_vv</span></code></a></li>
+<li><a class="reference internal" href="#omega-vv"><code class="docutils literal notranslate"><span class="pre">omega_vv</span></code></a></li>
+<li><a class="reference internal" href="#etrans"><code class="docutils literal notranslate"><span class="pre">etrans</span></code></a></li>
+<li><a class="reference internal" href="#zf"><code class="docutils literal notranslate"><span class="pre">zf</span></code></a></li>
+<li><a class="reference internal" href="#q-energy-trans"><code class="docutils literal notranslate"><span class="pre">q_energy_trans</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#ionized-impurity-scattering-parameters">Ionized impurity scattering parameters</a><ul>
-<li><a class="reference internal" href="#n-i"><code class="docutils literal"><span class="pre">n_i</span></code></a></li>
-<li><a class="reference internal" href="#isl-i"><code class="docutils literal"><span class="pre">isl_i</span></code></a></li>
-<li><a class="reference internal" href="#z"><code class="docutils literal"><span class="pre">z</span></code></a></li>
+<li><a class="reference internal" href="#n-i"><code class="docutils literal notranslate"><span class="pre">n_i</span></code></a></li>
+<li><a class="reference internal" href="#isl-i"><code class="docutils literal notranslate"><span class="pre">isl_i</span></code></a></li>
+<li><a class="reference internal" href="#z"><code class="docutils literal notranslate"><span class="pre">z</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#alloy-scattering-parameters">Alloy scattering parameters</a><ul>
-<li><a class="reference internal" href="#vdiff"><code class="docutils literal"><span class="pre">vdiff</span></code></a></li>
-<li><a class="reference internal" href="#alloyconc"><code class="docutils literal"><span class="pre">alloyconc</span></code></a></li>
+<li><a class="reference internal" href="#vdiff"><code class="docutils literal notranslate"><span class="pre">vdiff</span></code></a></li>
+<li><a class="reference internal" href="#alloyconc"><code class="docutils literal notranslate"><span class="pre">alloyconc</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#common-scattering-parameters">Common scattering parameters</a><ul>
-<li><a class="reference internal" href="#eps"><code class="docutils literal"><span class="pre">eps</span></code></a></li>
-<li><a class="reference internal" href="#rho"><code class="docutils literal"><span class="pre">rho</span></code></a></li>
-<li><a class="reference internal" href="#tau0-c"><code class="docutils literal"><span class="pre">tau0_c</span></code></a></li>
-<li><a class="reference internal" href="#emmission"><code class="docutils literal"><span class="pre">emmission</span></code></a></li>
+<li><a class="reference internal" href="#eps"><code class="docutils literal notranslate"><span class="pre">eps</span></code></a></li>
+<li><a class="reference internal" href="#rho"><code class="docutils literal notranslate"><span class="pre">rho</span></code></a></li>
+<li><a class="reference internal" href="#tau0-c"><code class="docutils literal notranslate"><span class="pre">tau0_c</span></code></a></li>
+<li><a class="reference internal" href="#emmission"><code class="docutils literal notranslate"><span class="pre">emmission</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#tight-binding-related-parameters">Tight binding related parameters</a><ul>
-<li><a class="reference internal" href="#torb"><code class="docutils literal"><span class="pre">torb</span></code></a></li>
-<li><a class="reference internal" href="#tonsite"><code class="docutils literal"><span class="pre">tonsite</span></code></a></li>
-<li><a class="reference internal" href="#thop"><code class="docutils literal"><span class="pre">thop</span></code></a></li>
+<li><a class="reference internal" href="#torb"><code class="docutils literal notranslate"><span class="pre">torb</span></code></a></li>
+<li><a class="reference internal" href="#tonsite"><code class="docutils literal notranslate"><span class="pre">tonsite</span></code></a></li>
+<li><a class="reference internal" href="#thop"><code class="docutils literal notranslate"><span class="pre">thop</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -217,72 +203,72 @@
 <ul class="simple">
 <li><a class="reference internal" href="#notes-about-format" id="id3">Notes about format</a></li>
 <li><a class="reference internal" href="#general-parameters" id="id4">General parameters</a><ul>
-<li><a class="reference internal" href="#type" id="id5"><code class="docutils literal"><span class="pre">type</span></code></a></li>
-<li><a class="reference internal" href="#effmass" id="id6"><code class="docutils literal"><span class="pre">effmass</span></code></a></li>
-<li><a class="reference internal" href="#a" id="id7"><code class="docutils literal"><span class="pre">a</span></code></a></li>
-<li><a class="reference internal" href="#e0" id="id8"><code class="docutils literal"><span class="pre">e0</span></code></a></li>
-<li><a class="reference internal" href="#status" id="id9"><code class="docutils literal"><span class="pre">status</span></code></a></li>
-<li><a class="reference internal" href="#kshift" id="id10"><code class="docutils literal"><span class="pre">kshift</span></code></a></li>
-<li><a class="reference internal" href="#spin-degen" id="id11"><code class="docutils literal"><span class="pre">spin_degen</span></code></a></li>
+<li><a class="reference internal" href="#type" id="id5"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li><a class="reference internal" href="#effmass" id="id6"><code class="docutils literal notranslate"><span class="pre">effmass</span></code></a></li>
+<li><a class="reference internal" href="#a" id="id7"><code class="docutils literal notranslate"><span class="pre">a</span></code></a></li>
+<li><a class="reference internal" href="#e0" id="id8"><code class="docutils literal notranslate"><span class="pre">e0</span></code></a></li>
+<li><a class="reference internal" href="#status" id="id9"><code class="docutils literal notranslate"><span class="pre">status</span></code></a></li>
+<li><a class="reference internal" href="#kshift" id="id10"><code class="docutils literal notranslate"><span class="pre">kshift</span></code></a></li>
+<li><a class="reference internal" href="#spin-degen" id="id11"><code class="docutils literal notranslate"><span class="pre">spin_degen</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#general-scattering-related-parameters" id="id12">General scattering related parameters</a><ul>
-<li><a class="reference internal" href="#select-scattering" id="id13"><code class="docutils literal"><span class="pre">select_scattering</span></code></a></li>
-<li><a class="reference internal" href="#explicit-prefact" id="id14"><code class="docutils literal"><span class="pre">explicit_prefact</span></code></a></li>
-<li><a class="reference internal" href="#explicit-prefact-values" id="id15"><code class="docutils literal"><span class="pre">explicit_prefact_values</span></code></a></li>
+<li><a class="reference internal" href="#select-scattering" id="id13"><code class="docutils literal notranslate"><span class="pre">select_scattering</span></code></a></li>
+<li><a class="reference internal" href="#explicit-prefact" id="id14"><code class="docutils literal notranslate"><span class="pre">explicit_prefact</span></code></a></li>
+<li><a class="reference internal" href="#explicit-prefact-values" id="id15"><code class="docutils literal notranslate"><span class="pre">explicit_prefact_values</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#acoustic-phonon-scattering-parameters" id="id16">Acoustic phonon scattering parameters</a><ul>
-<li><a class="reference internal" href="#d-a" id="id17"><code class="docutils literal"><span class="pre">d_a</span></code></a></li>
-<li><a class="reference internal" href="#speed-sound" id="id18"><code class="docutils literal"><span class="pre">speed_sound</span></code></a></li>
+<li><a class="reference internal" href="#d-a" id="id17"><code class="docutils literal notranslate"><span class="pre">d_a</span></code></a></li>
+<li><a class="reference internal" href="#speed-sound" id="id18"><code class="docutils literal notranslate"><span class="pre">speed_sound</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#piezoelectric-phonon-scattering-parameters" id="id19">Piezoelectric phonon scattering parameters</a><ul>
-<li><a class="reference internal" href="#p" id="id20"><code class="docutils literal"><span class="pre">p</span></code></a></li>
-<li><a class="reference internal" href="#isl" id="id21"><code class="docutils literal"><span class="pre">isl</span></code></a></li>
+<li><a class="reference internal" href="#p" id="id20"><code class="docutils literal notranslate"><span class="pre">p</span></code></a></li>
+<li><a class="reference internal" href="#isl" id="id21"><code class="docutils literal notranslate"><span class="pre">isl</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#non-polar-optical-phonon-scattering" id="id22">Non-polar optical phonon scattering</a><ul>
-<li><a class="reference internal" href="#d-o" id="id23"><code class="docutils literal"><span class="pre">d_o</span></code></a></li>
-<li><a class="reference internal" href="#n-o" id="id24"><code class="docutils literal"><span class="pre">n_o</span></code></a></li>
-<li><a class="reference internal" href="#omega-o" id="id25"><code class="docutils literal"><span class="pre">omega_o</span></code></a></li>
+<li><a class="reference internal" href="#d-o" id="id23"><code class="docutils literal notranslate"><span class="pre">d_o</span></code></a></li>
+<li><a class="reference internal" href="#n-o" id="id24"><code class="docutils literal notranslate"><span class="pre">n_o</span></code></a></li>
+<li><a class="reference internal" href="#omega-o" id="id25"><code class="docutils literal notranslate"><span class="pre">omega_o</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#polar-optical-phonon-scattering" id="id26">Polar optical phonon scattering</a><ul>
-<li><a class="reference internal" href="#epsi" id="id27"><code class="docutils literal"><span class="pre">epsi</span></code></a></li>
-<li><a class="reference internal" href="#f" id="id28"><code class="docutils literal"><span class="pre">f</span></code></a></li>
+<li><a class="reference internal" href="#epsi" id="id27"><code class="docutils literal notranslate"><span class="pre">epsi</span></code></a></li>
+<li><a class="reference internal" href="#f" id="id28"><code class="docutils literal notranslate"><span class="pre">f</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#intervalley-acoustic-phonon-scattering" id="id29">Intervalley acoustic phonon scattering</a><ul>
-<li><a class="reference internal" href="#n-vv" id="id30"><code class="docutils literal"><span class="pre">n_vv</span></code></a></li>
-<li><a class="reference internal" href="#omega-vv" id="id31"><code class="docutils literal"><span class="pre">omega_vv</span></code></a></li>
-<li><a class="reference internal" href="#etrans" id="id32"><code class="docutils literal"><span class="pre">etrans</span></code></a></li>
-<li><a class="reference internal" href="#zf" id="id33"><code class="docutils literal"><span class="pre">zf</span></code></a></li>
-<li><a class="reference internal" href="#q-energy-trans" id="id34"><code class="docutils literal"><span class="pre">q_energy_trans</span></code></a></li>
+<li><a class="reference internal" href="#n-vv" id="id30"><code class="docutils literal notranslate"><span class="pre">n_vv</span></code></a></li>
+<li><a class="reference internal" href="#omega-vv" id="id31"><code class="docutils literal notranslate"><span class="pre">omega_vv</span></code></a></li>
+<li><a class="reference internal" href="#etrans" id="id32"><code class="docutils literal notranslate"><span class="pre">etrans</span></code></a></li>
+<li><a class="reference internal" href="#zf" id="id33"><code class="docutils literal notranslate"><span class="pre">zf</span></code></a></li>
+<li><a class="reference internal" href="#q-energy-trans" id="id34"><code class="docutils literal notranslate"><span class="pre">q_energy_trans</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#ionized-impurity-scattering-parameters" id="id35">Ionized impurity scattering parameters</a><ul>
-<li><a class="reference internal" href="#n-i" id="id36"><code class="docutils literal"><span class="pre">n_i</span></code></a></li>
-<li><a class="reference internal" href="#isl-i" id="id37"><code class="docutils literal"><span class="pre">isl_i</span></code></a></li>
-<li><a class="reference internal" href="#z" id="id38"><code class="docutils literal"><span class="pre">z</span></code></a></li>
+<li><a class="reference internal" href="#n-i" id="id36"><code class="docutils literal notranslate"><span class="pre">n_i</span></code></a></li>
+<li><a class="reference internal" href="#isl-i" id="id37"><code class="docutils literal notranslate"><span class="pre">isl_i</span></code></a></li>
+<li><a class="reference internal" href="#z" id="id38"><code class="docutils literal notranslate"><span class="pre">z</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#alloy-scattering-parameters" id="id39">Alloy scattering parameters</a><ul>
-<li><a class="reference internal" href="#vdiff" id="id40"><code class="docutils literal"><span class="pre">vdiff</span></code></a></li>
-<li><a class="reference internal" href="#alloyconc" id="id41"><code class="docutils literal"><span class="pre">alloyconc</span></code></a></li>
+<li><a class="reference internal" href="#vdiff" id="id40"><code class="docutils literal notranslate"><span class="pre">vdiff</span></code></a></li>
+<li><a class="reference internal" href="#alloyconc" id="id41"><code class="docutils literal notranslate"><span class="pre">alloyconc</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#common-scattering-parameters" id="id42">Common scattering parameters</a><ul>
-<li><a class="reference internal" href="#eps" id="id43"><code class="docutils literal"><span class="pre">eps</span></code></a></li>
-<li><a class="reference internal" href="#rho" id="id44"><code class="docutils literal"><span class="pre">rho</span></code></a></li>
-<li><a class="reference internal" href="#tau0-c" id="id45"><code class="docutils literal"><span class="pre">tau0_c</span></code></a></li>
-<li><a class="reference internal" href="#emmission" id="id46"><code class="docutils literal"><span class="pre">emmission</span></code></a></li>
+<li><a class="reference internal" href="#eps" id="id43"><code class="docutils literal notranslate"><span class="pre">eps</span></code></a></li>
+<li><a class="reference internal" href="#rho" id="id44"><code class="docutils literal notranslate"><span class="pre">rho</span></code></a></li>
+<li><a class="reference internal" href="#tau0-c" id="id45"><code class="docutils literal notranslate"><span class="pre">tau0_c</span></code></a></li>
+<li><a class="reference internal" href="#emmission" id="id46"><code class="docutils literal notranslate"><span class="pre">emmission</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#tight-binding-related-parameters" id="id47">Tight binding related parameters</a><ul>
-<li><a class="reference internal" href="#torb" id="id48"><code class="docutils literal"><span class="pre">torb</span></code></a></li>
-<li><a class="reference internal" href="#tonsite" id="id49"><code class="docutils literal"><span class="pre">tonsite</span></code></a></li>
-<li><a class="reference internal" href="#thop" id="id50"><code class="docutils literal"><span class="pre">thop</span></code></a></li>
+<li><a class="reference internal" href="#torb" id="id48"><code class="docutils literal notranslate"><span class="pre">torb</span></code></a></li>
+<li><a class="reference internal" href="#tonsite" id="id49"><code class="docutils literal notranslate"><span class="pre">tonsite</span></code></a></li>
+<li><a class="reference internal" href="#thop" id="id50"><code class="docutils literal notranslate"><span class="pre">thop</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -290,7 +276,7 @@
 <div class="section" id="notes-about-format">
 <h2><a class="toc-backref" href="#id3">Notes about format</a><a class="headerlink" href="#notes-about-format" title="Permalink to this headline">¶</a></h2>
 <p>The input files follow normal YAML conventions.
-Please inspect the sample file <code class="file docutils literal"><span class="pre">input/bandparam.yml</span></code>.
+Please inspect the sample file <code class="file docutils literal notranslate"><span class="pre">input/bandparam.yml</span></code>.
 Even though many parameters have default values if not
 specified the user should always run the calculations with
 fully specified input files for consistency and reproducibility.</p>
@@ -326,28 +312,28 @@ bands was included.</p>
 <p>The following parameters are general and does not relate
 directly to a specific scattering mechanism etc.</p>
 <div class="section" id="type">
-<h3><a class="toc-backref" href="#id5"><code class="docutils literal"><span class="pre">type</span></code></a><a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id5"><code class="docutils literal notranslate"><span class="pre">type</span></code></a><a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h3>
 <p>Determines how to generate the bands if not read. Relevant only
-if <code class="docutils literal"><span class="pre">read</span></code> is set to <cite>param</cite>. The following options are
+if <code class="docutils literal notranslate"><span class="pre">read</span></code> is set to <cite>param</cite>. The following options are
 possible:</p>
 <ul>
-<li><p class="first"><cite>0</cite> - spherical bands according to the relation</p>
-<p>where the effective mass <img class="math" src="_images/math/edba97b4c0d864d26e92ea7ea73767fa38eef3f7.png" alt="m"/> is set by <code class="docutils literal"><span class="pre">effmass</span></code>.</p>
+<li><p class="first"><cite>0</cite> - parabolic bands according to the relation</p>
+<p>where the effective mass <img class="math" src="_images/math/edba97b4c0d864d26e92ea7ea73767fa38eef3f7.png" alt="m"/> is set by <code class="docutils literal notranslate"><span class="pre">effmass</span></code>.</p>
 </li>
-<li><p class="first"><cite>1</cite> - spherical bands pluss a quartic correction according
+<li><p class="first"><cite>1</cite> - parabolic bands pluss a quartic correction according
 to the relation:</p>
-<p>where the effective mass <img class="math" src="_images/math/edba97b4c0d864d26e92ea7ea73767fa38eef3f7.png" alt="m"/> is set by <code class="docutils literal"><span class="pre">effmass</span></code> and
-the correction factor <img class="math" src="_images/math/bd9d9c7512c898e0a254a0882184197bc1bd9c9f.png" alt="a"/> is set by <code class="docutils literal"><span class="pre">a</span></code>.</p>
+<p>where the effective mass <img class="math" src="_images/math/edba97b4c0d864d26e92ea7ea73767fa38eef3f7.png" alt="m"/> is set by <code class="docutils literal notranslate"><span class="pre">effmass</span></code> and
+the correction factor <img class="math" src="_images/math/bd9d9c7512c898e0a254a0882184197bc1bd9c9f.png" alt="a"/> is set by <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
 </li>
 <li><p class="first"><cite>2</cite> - Kane types (alpha correction) according to the relation:</p>
-<p>where the effective mass <img class="math" src="_images/math/edba97b4c0d864d26e92ea7ea73767fa38eef3f7.png" alt="m"/> is set by <code class="docutils literal"><span class="pre">effmass</span></code> and
-the correction factor <img class="math" src="_images/math/101f481ff06a05b69161e66a24e8c7d2b8cd38b1.png" alt="\\alpha"/> is set by <code class="docutils literal"><span class="pre">a</span></code>.</p>
+<p>where the effective mass <img class="math" src="_images/math/edba97b4c0d864d26e92ea7ea73767fa38eef3f7.png" alt="m"/> is set by <code class="docutils literal notranslate"><span class="pre">effmass</span></code> and
+the correction factor <img class="math" src="_images/math/101f481ff06a05b69161e66a24e8c7d2b8cd38b1.png" alt="\\alpha"/> is set by <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
 </li>
 <li><p class="first"><cite>3</cite> - tight-binding bands if which the relation depends on the
 specific model used, but is typically a combination of cosines
 and sines. The tight-binding model is generated in PythTB using
-the additional parameters <code class="docutils literal"><span class="pre">torb</span></code>, <code class="docutils literal"><span class="pre">tonsite</span></code>,
-<code class="docutils literal"><span class="pre">tadjust_onsite_zero</span></code> and <code class="docutils literal"><span class="pre">thop</span></code>. Users should consult the
+the additional parameters <code class="docutils literal notranslate"><span class="pre">torb</span></code>, <code class="docutils literal notranslate"><span class="pre">tonsite</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tadjust_onsite_zero</span></code> and <code class="docutils literal notranslate"><span class="pre">thop</span></code>. Users should consult the
 <a class="reference external" href="http://physics.rutgers.edu/pythtb/usage.html">PythTB manual</a>
 for additional details.</p>
 </li>
@@ -358,41 +344,41 @@ enough band coverage within the requested region of the chemical
 potentials pluss the excess needed for the thermal broadening.</p>
 </div>
 <div class="section" id="effmass">
-<h3><a class="toc-backref" href="#id6"><code class="docutils literal"><span class="pre">effmass</span></code></a><a class="headerlink" href="#effmass" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id6"><code class="docutils literal notranslate"><span class="pre">effmass</span></code></a><a class="headerlink" href="#effmass" title="Permalink to this headline">¶</a></h3>
 <p>The effective mass in units of the free electron mass along
 each configured unit vector in reciprocal cell. Use negative
 values to generate bands that curve down and vice versa.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">effmass</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">effmass</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Generates band that for the spherical case curves down
+<p>Generates band that for the parabolic case curves down
 with an effective mass along each unit vector of the
 configured recirprocal cell equal to the free electron mass.</p>
 </div>
 <div class="section" id="a">
-<h3><a class="toc-backref" href="#id7"><code class="docutils literal"><span class="pre">a</span></code></a><a class="headerlink" href="#a" title="Permalink to this headline">¶</a></h3>
-<p>The correction factor to be applied. See <code class="docutils literal"><span class="pre">type</span></code> for
+<h3><a class="toc-backref" href="#id7"><code class="docutils literal notranslate"><span class="pre">a</span></code></a><a class="headerlink" href="#a" title="Permalink to this headline">¶</a></h3>
+<p>The correction factor to be applied. See <code class="docutils literal notranslate"><span class="pre">type</span></code> for
 additional description. Is given along each unit vector
 in the configured reciprocal cell similar to the effective mass.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">100.0</span><span class="p">,</span><span class="o">-</span><span class="mf">100.0</span><span class="p">,</span><span class="o">-</span><span class="mf">100.0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">100.0</span><span class="p">,</span><span class="o">-</span><span class="mf">100.0</span><span class="p">,</span><span class="o">-</span><span class="mf">100.0</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Applies a correction factor of -100.0 along each unit vector
 direction in the currently configured reciprocal cell.</p>
 </div>
 <div class="section" id="e0">
-<h3><a class="toc-backref" href="#id8"><code class="docutils literal"><span class="pre">e0</span></code></a><a class="headerlink" href="#e0" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id8"><code class="docutils literal notranslate"><span class="pre">e0</span></code></a><a class="headerlink" href="#e0" title="Permalink to this headline">¶</a></h3>
 <p>An energy shift in units of eV. Applies to the current band.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">e0</span><span class="p">:</span> <span class="mf">0.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">e0</span><span class="p">:</span> <span class="mf">0.0</span>
 </pre></div>
 </div>
 <p>Shift the band with 0.0 eV.</p>
 </div>
 <div class="section" id="status">
-<h3><a class="toc-backref" href="#id9"><code class="docutils literal"><span class="pre">status</span></code></a><a class="headerlink" href="#status" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id9"><code class="docutils literal notranslate"><span class="pre">status</span></code></a><a class="headerlink" href="#status" title="Permalink to this headline">¶</a></h3>
 <p>Determines if this is a valence or a conduction band.
 The following options are available:</p>
 <ul class="simple">
@@ -400,24 +386,24 @@ The following options are available:</p>
 <li><cite>c</cite> - conduction band</li>
 </ul>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">status</span><span class="p">:</span> <span class="n">v</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">status</span><span class="p">:</span> <span class="n">v</span>
 </pre></div>
 </div>
 <p>This band is a valence band.</p>
 </div>
 <div class="section" id="kshift">
-<h3><a class="toc-backref" href="#id10"><code class="docutils literal"><span class="pre">kshift</span></code></a><a class="headerlink" href="#kshift" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id10"><code class="docutils literal notranslate"><span class="pre">kshift</span></code></a><a class="headerlink" href="#kshift" title="Permalink to this headline">¶</a></h3>
 <p>Shift the band by a reciprocal vector, otherwise it
 is centered at Gamma. Have to be specified in cartesian
 coordinates.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">kshift</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kshift</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Do not apply any shift to the current band.</p>
 </div>
 <div class="section" id="spin-degen">
-<h3><a class="toc-backref" href="#id11"><code class="docutils literal"><span class="pre">spin_degen</span></code></a><a class="headerlink" href="#spin-degen" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id11"><code class="docutils literal notranslate"><span class="pre">spin_degen</span></code></a><a class="headerlink" href="#spin-degen" title="Permalink to this headline">¶</a></h3>
 <p>The spin degeneracy of the current band. The following options
 are available:</p>
 <ul class="simple">
@@ -425,7 +411,7 @@ are available:</p>
 <li><cite>2</cite> - spin degenerated</li>
 </ul>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">spin_degen</span><span class="p">:</span> <span class="mi">2</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">spin_degen</span><span class="p">:</span> <span class="mi">2</span>
 </pre></div>
 </div>
 <p>The current band is spin degenerated.</p>
@@ -436,7 +422,7 @@ are available:</p>
 <p>In the following the parameters related to the setup of
 the scattering mechanisms are given.</p>
 <div class="section" id="select-scattering">
-<h3><a class="toc-backref" href="#id13"><code class="docutils literal"><span class="pre">select_scattering</span></code></a><a class="headerlink" href="#select-scattering" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id13"><code class="docutils literal notranslate"><span class="pre">select_scattering</span></code></a><a class="headerlink" href="#select-scattering" title="Permalink to this headline">¶</a></h3>
 <p>Determines which scattering mechnisms to apply for the current
 band. Set element to 1 to include
 scattering, 0 otherwise.
@@ -454,23 +440,23 @@ implemented (the number indicate array index, starting at 1):</p>
 <li>9-11 empty slots</li>
 <li>12 constant scattering</li>
 </ul>
-<p>If one does not use the analytick (spherical)
+<p>If one does not use the analytic (parabolic)
 scattering models and instead use the density of
 states to generate the scattering rate, then only
 the first four and the last have been implemented
 (currently only the first and last have been properly
 tested)</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">select_scattering</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">select_scattering</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Apply acoustic-phonon scattering by deformation potential to the
 following band.</p>
 </div>
 <div class="section" id="explicit-prefact">
-<h3><a class="toc-backref" href="#id14"><code class="docutils literal"><span class="pre">explicit_prefact</span></code></a><a class="headerlink" href="#explicit-prefact" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id14"><code class="docutils literal notranslate"><span class="pre">explicit_prefact</span></code></a><a class="headerlink" href="#explicit-prefact" title="Permalink to this headline">¶</a></h3>
 <p>Set an explicit prefactor for the relaxation time instead of using
-the prefactor from the density of states or spherical band models.
+the prefactor from the density of states or parabolic band models.
 This behavior is enabled by setting the relevant element to <cite>1</cite>
 for the mechanism where one would like to
 specify an explicit prefact (constant tau0 is not
@@ -480,24 +466,24 @@ temperature variations etc. Thus if the user also perform calculations
 at different temperatures, please consider that the prefactor usually
 change. This option should only be used by experts. If all elements
 in the array is <cite>0</cite>, the scattering models based on density of states
-or spherical bands is used.</p>
+or parabolic bands is used.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">explicit_prefact</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">explicit_prefact</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Disable the use of explicit prefactors.</p>
 </div>
 <div class="section" id="explicit-prefact-values">
-<h3><a class="toc-backref" href="#id15"><code class="docutils literal"><span class="pre">explicit_prefact_values</span></code></a><a class="headerlink" href="#explicit-prefact-values" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id15"><code class="docutils literal notranslate"><span class="pre">explicit_prefact_values</span></code></a><a class="headerlink" href="#explicit-prefact-values" title="Permalink to this headline">¶</a></h3>
 <p>The values of the explicit prefactors. Only relevant for the
-entries in <code class="docutils literal"><span class="pre">explicit_prefact</span></code> with a value of <cite>1</cite>.
+entries in <code class="docutils literal notranslate"><span class="pre">explicit_prefact</span></code> with a value of <cite>1</cite>.
 Remember that the units of the relaxation time come out as fs,
 including the energy dependency (density of states or
-spherical band). Depending on the model, the prefactor thus
+parabolic band). Depending on the model, the prefactor thus
 have different units. Also consider that the prefactor usually
 has a temperature and effective mass dependence.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">explicit_prefact_values</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">explicit_prefact_values</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>
                          <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -508,22 +494,22 @@ has a temperature and effective mass dependence.</p>
 <h2><a class="toc-backref" href="#id16">Acoustic phonon scattering parameters</a><a class="headerlink" href="#acoustic-phonon-scattering-parameters" title="Permalink to this headline">¶</a></h2>
 <p>This model uses the linear Debye model.</p>
 <div class="section" id="d-a">
-<h3><a class="toc-backref" href="#id17"><code class="docutils literal"><span class="pre">d_a</span></code></a><a class="headerlink" href="#d-a" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id17"><code class="docutils literal notranslate"><span class="pre">d_a</span></code></a><a class="headerlink" href="#d-a" title="Permalink to this headline">¶</a></h3>
 <p>Acoustic deformation potential in units of eV. Remember to
 rescale this is the overlap matrix is not one.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">d_a</span><span class="p">:</span> <span class="mi">10</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">d_a</span><span class="p">:</span> <span class="mi">10</span>
 </pre></div>
 </div>
 <p>Use a deformation potential of 10 eV.</p>
 </div>
 <div class="section" id="speed-sound">
-<h3><a class="toc-backref" href="#id18"><code class="docutils literal"><span class="pre">speed_sound</span></code></a><a class="headerlink" href="#speed-sound" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id18"><code class="docutils literal notranslate"><span class="pre">speed_sound</span></code></a><a class="headerlink" href="#speed-sound" title="Permalink to this headline">¶</a></h3>
 <p>The speed of sound. This is the group velocity of the
 low energy acoustic branch that is in the Debye model assumed
 to be linear. In units of m/s.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">speed_sound</span><span class="p">:</span> <span class="mi">10000</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">speed_sound</span><span class="p">:</span> <span class="mi">10000</span>
 </pre></div>
 </div>
 <p>Use a group velocity of 10000 m/s.</p>
@@ -535,21 +521,21 @@ to be linear. In units of m/s.</p>
 due to strain effects to describes acoustic
 phonon scattering. Typically important for polar materials.</p>
 <div class="section" id="p">
-<h3><a class="toc-backref" href="#id20"><code class="docutils literal"><span class="pre">p</span></code></a><a class="headerlink" href="#p" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id20"><code class="docutils literal notranslate"><span class="pre">p</span></code></a><a class="headerlink" href="#p" title="Permalink to this headline">¶</a></h3>
 <p>The piezoelectric constant in units of
 <img class="math" src="_images/math/cf0a71932081b737ed76c73de61bc17d0716637a.png" alt="\mathrm{C}/\mathrm{m}^2"/></p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">p</span><span class="p">:</span> <span class="mf">0.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="p">:</span> <span class="mf">0.0</span>
 </pre></div>
 </div>
 <p>The piezoelectric constant is set to zero.</p>
 </div>
 <div class="section" id="isl">
-<h3><a class="toc-backref" href="#id21"><code class="docutils literal"><span class="pre">isl</span></code></a><a class="headerlink" href="#isl" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id21"><code class="docutils literal notranslate"><span class="pre">isl</span></code></a><a class="headerlink" href="#isl" title="Permalink to this headline">¶</a></h3>
 <p>The inverse screening length in the Debye formulation in
 units of inverse AA.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">isl</span><span class="p">:</span> <span class="mf">0.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">isl</span><span class="p">:</span> <span class="mf">0.0</span>
 </pre></div>
 </div>
 <p>The inverse screening length is set to zero.</p>
@@ -561,29 +547,29 @@ units of inverse AA.</p>
 phonon mode (dispersion assumed to be flat so a
 constant value is used for the frequency).</p>
 <div class="section" id="d-o">
-<h3><a class="toc-backref" href="#id23"><code class="docutils literal"><span class="pre">d_o</span></code></a><a class="headerlink" href="#d-o" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id23"><code class="docutils literal notranslate"><span class="pre">d_o</span></code></a><a class="headerlink" href="#d-o" title="Permalink to this headline">¶</a></h3>
 <p>The optical deformation potential in units of eV/AA.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">d_o</span><span class="p">:</span> <span class="mf">35.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">d_o</span><span class="p">:</span> <span class="mf">35.0</span>
 </pre></div>
 </div>
 <p>The optical deformation potential is set to 35.0 eV/AA.</p>
 </div>
 <div class="section" id="n-o">
-<h3><a class="toc-backref" href="#id24"><code class="docutils literal"><span class="pre">n_o</span></code></a><a class="headerlink" href="#n-o" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id24"><code class="docutils literal notranslate"><span class="pre">n_o</span></code></a><a class="headerlink" href="#n-o" title="Permalink to this headline">¶</a></h3>
 <p>The occupation number of the optical phonon.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">n_o</span><span class="p">:</span> <span class="mf">0.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">n_o</span><span class="p">:</span> <span class="mf">0.0</span>
 </pre></div>
 </div>
 <p>The occupation number of the optical phonon is set to zero.</p>
 </div>
 <div class="section" id="omega-o">
-<h3><a class="toc-backref" href="#id25"><code class="docutils literal"><span class="pre">omega_o</span></code></a><a class="headerlink" href="#omega-o" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id25"><code class="docutils literal notranslate"><span class="pre">omega_o</span></code></a><a class="headerlink" href="#omega-o" title="Permalink to this headline">¶</a></h3>
 <p>The optical phonon frequency to use from the Einstein model. In
 units of THz.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">omega_o</span><span class="p">:</span> <span class="mf">0.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">omega_o</span><span class="p">:</span> <span class="mf">0.0</span>
 </pre></div>
 </div>
 <p>The optical phonon frequency is set to zero.</p>
@@ -594,20 +580,20 @@ units of THz.</p>
 <p>After the Froelich model. Should be replaced for a more
 explicit model in the future.</p>
 <div class="section" id="epsi">
-<h3><a class="toc-backref" href="#id27"><code class="docutils literal"><span class="pre">epsi</span></code></a><a class="headerlink" href="#epsi" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id27"><code class="docutils literal notranslate"><span class="pre">epsi</span></code></a><a class="headerlink" href="#epsi" title="Permalink to this headline">¶</a></h3>
 <p>The permitivity of the electron in units of the vacuum
 permitivity.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">epsi</span><span class="p">:</span> <span class="mf">0.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">epsi</span><span class="p">:</span> <span class="mf">0.0</span>
 </pre></div>
 </div>
 <p>The permitivity is set to zero.</p>
 </div>
 <div class="section" id="f">
-<h3><a class="toc-backref" href="#id28"><code class="docutils literal"><span class="pre">f</span></code></a><a class="headerlink" href="#f" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id28"><code class="docutils literal notranslate"><span class="pre">f</span></code></a><a class="headerlink" href="#f" title="Permalink to this headline">¶</a></h3>
 <p>The Froehlich term.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">:</span> <span class="mf">0.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">:</span> <span class="mf">0.0</span>
 </pre></div>
 </div>
 <p>The Froechlich term is set to zero.</p>
@@ -618,48 +604,48 @@ permitivity.</p>
 <p>A model where the electron scatters both of acoustic and
 optical phonon modes. E.g. phonons connect two valleys.</p>
 <div class="section" id="n-vv">
-<h3><a class="toc-backref" href="#id30"><code class="docutils literal"><span class="pre">n_vv</span></code></a><a class="headerlink" href="#n-vv" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id30"><code class="docutils literal notranslate"><span class="pre">n_vv</span></code></a><a class="headerlink" href="#n-vv" title="Permalink to this headline">¶</a></h3>
 <p>The intervalley phonon occupation number.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">n_vv</span><span class="p">:</span> <span class="mf">0.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">n_vv</span><span class="p">:</span> <span class="mf">0.0</span>
 </pre></div>
 </div>
 <p>The intervalley phonon occupation number is set to zero.</p>
 </div>
 <div class="section" id="omega-vv">
-<h3><a class="toc-backref" href="#id31"><code class="docutils literal"><span class="pre">omega_vv</span></code></a><a class="headerlink" href="#omega-vv" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id31"><code class="docutils literal notranslate"><span class="pre">omega_vv</span></code></a><a class="headerlink" href="#omega-vv" title="Permalink to this headline">¶</a></h3>
 <p>The transition frequency in units of THz.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">omega_vv</span><span class="p">:</span> <span class="mf">0.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">omega_vv</span><span class="p">:</span> <span class="mf">0.0</span>
 </pre></div>
 </div>
 <p>The transition frequency is set to zero.</p>
 </div>
 <div class="section" id="etrans">
-<h3><a class="toc-backref" href="#id32"><code class="docutils literal"><span class="pre">etrans</span></code></a><a class="headerlink" href="#etrans" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id32"><code class="docutils literal notranslate"><span class="pre">etrans</span></code></a><a class="headerlink" href="#etrans" title="Permalink to this headline">¶</a></h3>
 <p>The transition energy between the bottom of the two values. In
 units of eV.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">etrans</span><span class="p">:</span> <span class="mf">0.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">etrans</span><span class="p">:</span> <span class="mf">0.0</span>
 </pre></div>
 </div>
 <p>The transition energy is set to zero.</p>
 </div>
 <div class="section" id="zf">
-<h3><a class="toc-backref" href="#id33"><code class="docutils literal"><span class="pre">zf</span></code></a><a class="headerlink" href="#zf" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id33"><code class="docutils literal notranslate"><span class="pre">zf</span></code></a><a class="headerlink" href="#zf" title="Permalink to this headline">¶</a></h3>
 <p>The number of possible final states (final state degeneracy).</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">zf</span><span class="p">:</span> <span class="mf">0.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">zf</span><span class="p">:</span> <span class="mf">0.0</span>
 </pre></div>
 </div>
 <p>The number of final states is set to zero.</p>
 </div>
 <div class="section" id="q-energy-trans">
-<h3><a class="toc-backref" href="#id34"><code class="docutils literal"><span class="pre">q_energy_trans</span></code></a><a class="headerlink" href="#q-energy-trans" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id34"><code class="docutils literal notranslate"><span class="pre">q_energy_trans</span></code></a><a class="headerlink" href="#q-energy-trans" title="Permalink to this headline">¶</a></h3>
 <p>The scattering vector connecting the two valleys in direct
 reciprocal coordinates.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">q_energy_trans</span><span class="p">:</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">]]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">q_energy_trans</span><span class="p">:</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">]]</span>
 </pre></div>
 </div>
 <p>The scattering vector is set along the diagonal reciprocal
@@ -672,33 +658,33 @@ cell.</p>
 the Broks and Herring (BH) model to describe ionized
 impurity scattering.</p>
 <div class="section" id="n-i">
-<h3><a class="toc-backref" href="#id36"><code class="docutils literal"><span class="pre">n_i</span></code></a><a class="headerlink" href="#n-i" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id36"><code class="docutils literal notranslate"><span class="pre">n_i</span></code></a><a class="headerlink" href="#n-i" title="Permalink to this headline">¶</a></h3>
 <p>The density of ionized impurities in units of
 <img class="math" src="_images/math/a09ef94619238dd7673f569ab91ca1d6b1a0a6f4.png" alt="10^{21} \mathrm{cm}^{-3}"/>. Used for both the
 CW and BH model.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">n_i</span><span class="p">:</span> <span class="mf">0.01</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">n_i</span><span class="p">:</span> <span class="mf">0.01</span>
 </pre></div>
 </div>
 <p>The density of ionized impurities is set to
 <img class="math" src="_images/math/117ca82bfed1a71177bb422f9900816746975ec8.png" alt="10^{19} \mathrm{cm}^{-3}"/>.</p>
 </div>
 <div class="section" id="isl-i">
-<h3><a class="toc-backref" href="#id37"><code class="docutils literal"><span class="pre">isl_i</span></code></a><a class="headerlink" href="#isl-i" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id37"><code class="docutils literal notranslate"><span class="pre">isl_i</span></code></a><a class="headerlink" href="#isl-i" title="Permalink to this headline">¶</a></h3>
 <p>The inverse screening length in units of inverse AA. Only
 used for the BH model.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">isl_i</span><span class="p">:</span> <span class="mf">0.3</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">isl_i</span><span class="p">:</span> <span class="mf">0.3</span>
 </pre></div>
 </div>
 <p>The inverse screening length is set to 0.3 inverse AA.</p>
 </div>
 <div class="section" id="z">
-<h3><a class="toc-backref" href="#id38"><code class="docutils literal"><span class="pre">z</span></code></a><a class="headerlink" href="#z" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id38"><code class="docutils literal notranslate"><span class="pre">z</span></code></a><a class="headerlink" href="#z" title="Permalink to this headline">¶</a></h3>
 <p>The number of charge units of the impurity. In units of the
 electron charge.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">z</span><span class="p">:</span> <span class="mf">1.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">z</span><span class="p">:</span> <span class="mf">1.0</span>
 </pre></div>
 </div>
 <p>The charge of the impurity is set to one electron charge.</p>
@@ -709,20 +695,20 @@ electron charge.</p>
 <p>A scattering model for the alloy
 <img class="math" src="_images/math/96aa26c22276d6ed2b94ad4187d7c179e087138a.png" alt="\mathrm{A}_x\mathrm{B}_{1-x}\mathrm{C}"/>.</p>
 <div class="section" id="vdiff">
-<h3><a class="toc-backref" href="#id40"><code class="docutils literal"><span class="pre">vdiff</span></code></a><a class="headerlink" href="#vdiff" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id40"><code class="docutils literal notranslate"><span class="pre">vdiff</span></code></a><a class="headerlink" href="#vdiff" title="Permalink to this headline">¶</a></h3>
 <p>The atomic potential difference between the species A and
 B in eV.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vdiff</span><span class="p">:</span> <span class="mf">1.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vdiff</span><span class="p">:</span> <span class="mf">1.0</span>
 </pre></div>
 </div>
 <p>The potential difference is set to 1.0 eV.</p>
 </div>
 <div class="section" id="alloyconc">
-<h3><a class="toc-backref" href="#id41"><code class="docutils literal"><span class="pre">alloyconc</span></code></a><a class="headerlink" href="#alloyconc" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id41"><code class="docutils literal notranslate"><span class="pre">alloyconc</span></code></a><a class="headerlink" href="#alloyconc" title="Permalink to this headline">¶</a></h3>
 <p>The concentration, <img class="math" src="_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/> of the alloy.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alloyconc</span><span class="p">:</span> <span class="mf">0.5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">alloyconc</span><span class="p">:</span> <span class="mf">0.5</span>
 </pre></div>
 </div>
 <p>The concentration is set to 50%, i.e. 50% of A and 50% of B.</p>
@@ -733,42 +719,42 @@ B in eV.</p>
 <p>Here follows scattering parameters that are shared between
 the different scattering mechnisms.</p>
 <div class="section" id="eps">
-<h3><a class="toc-backref" href="#id43"><code class="docutils literal"><span class="pre">eps</span></code></a><a class="headerlink" href="#eps" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id43"><code class="docutils literal notranslate"><span class="pre">eps</span></code></a><a class="headerlink" href="#eps" title="Permalink to this headline">¶</a></h3>
 <p>The dielectric constant in units of the vacuum value.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">eps</span><span class="p">:</span> <span class="mf">12.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">eps</span><span class="p">:</span> <span class="mf">12.0</span>
 </pre></div>
 </div>
 <p>The dielectric constant is set to 12.0 times the vacuum value.</p>
 </div>
 <div class="section" id="rho">
-<h3><a class="toc-backref" href="#id44"><code class="docutils literal"><span class="pre">rho</span></code></a><a class="headerlink" href="#rho" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id44"><code class="docutils literal notranslate"><span class="pre">rho</span></code></a><a class="headerlink" href="#rho" title="Permalink to this headline">¶</a></h3>
 <p>The mass density of the material in
 <img class="math" src="_images/math/55070ec34e06bd428907c0b97b2ea5d130063045.png" alt="\mathrm{g}/\mathrm{cm}^3"/>.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">rho</span><span class="p">:</span> <span class="mf">2.4</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rho</span><span class="p">:</span> <span class="mf">2.4</span>
 </pre></div>
 </div>
 <p>The mass density of the material is set to 2.4
 <img class="math" src="_images/math/55070ec34e06bd428907c0b97b2ea5d130063045.png" alt="\mathrm{g}/\mathrm{cm}^3"/>.</p>
 </div>
 <div class="section" id="tau0-c">
-<h3><a class="toc-backref" href="#id45"><code class="docutils literal"><span class="pre">tau0_c</span></code></a><a class="headerlink" href="#tau0-c" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id45"><code class="docutils literal notranslate"><span class="pre">tau0_c</span></code></a><a class="headerlink" href="#tau0-c" title="Permalink to this headline">¶</a></h3>
 <p>The value of the constant relaxation time in units of fs.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">tau0_c</span><span class="p">:</span> <span class="mf">100.0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tau0_c</span><span class="p">:</span> <span class="mf">100.0</span>
 </pre></div>
 </div>
 <p>The constant relaxation time is set at 100.0 fs.</p>
 </div>
 <div class="section" id="emmission">
-<h3><a class="toc-backref" href="#id46"><code class="docutils literal"><span class="pre">emmission</span></code></a><a class="headerlink" href="#emmission" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id46"><code class="docutils literal notranslate"><span class="pre">emmission</span></code></a><a class="headerlink" href="#emmission" title="Permalink to this headline">¶</a></h3>
 <p>Determines if the considered scattering mechnism is by
 emmision or absorption. Acoustic phonon scattering includes both
 so this is only relevant where scattering of optical phonons
 is encountered.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">emission</span><span class="p">:</span> <span class="kc">False</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">emission</span><span class="p">:</span> <span class="kc">False</span>
 </pre></div>
 </div>
 <p>Use absorption, i.e. a phonon is absorbed in the scattering event.</p>
@@ -777,30 +763,30 @@ is encountered.</p>
 <div class="section" id="tight-binding-related-parameters">
 <h2><a class="toc-backref" href="#id47">Tight binding related parameters</a><a class="headerlink" href="#tight-binding-related-parameters" title="Permalink to this headline">¶</a></h2>
 <p>In the following the parameters which set up the tight binding
-parameters are explained. They are only relevant if <code class="docutils literal"><span class="pre">type</span></code> is set
+parameters are explained. They are only relevant if <code class="docutils literal notranslate"><span class="pre">type</span></code> is set
 to <cite>3</cite>. PythTB is used to set up the model. Please consult
 <a class="reference external" href="http://physics.rutgers.edu/pythtb/usage.html">PythTB manual</a>
 for additional details.</p>
 <div class="section" id="torb">
-<h3><a class="toc-backref" href="#id48"><code class="docutils literal"><span class="pre">torb</span></code></a><a class="headerlink" href="#torb" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id48"><code class="docutils literal notranslate"><span class="pre">torb</span></code></a><a class="headerlink" href="#torb" title="Permalink to this headline">¶</a></h3>
 <p>The direct coordinate of each tight binding orbital.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">torb</span><span class="p">:</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">torb</span><span class="p">:</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]]</span>
 </pre></div>
 </div>
 <p>A tight binding orbital is <img class="math" src="_images/math/efdde42c23b9469f63c32687ccf7efbb384158e3.png" alt="\\Gamma"/> centered.</p>
 </div>
 <div class="section" id="tonsite">
-<h3><a class="toc-backref" href="#id49"><code class="docutils literal"><span class="pre">tonsite</span></code></a><a class="headerlink" href="#tonsite" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id49"><code class="docutils literal notranslate"><span class="pre">tonsite</span></code></a><a class="headerlink" href="#tonsite" title="Permalink to this headline">¶</a></h3>
 <p>The onsite energies for each orbital in units of eV.</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">tonsite</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tonsite</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>The onsite energy of the first orbital is set at 0.0 eV.</p>
 </div>
 <div class="section" id="thop">
-<h3><a class="toc-backref" href="#id50"><code class="docutils literal"><span class="pre">thop</span></code></a><a class="headerlink" href="#thop" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id50"><code class="docutils literal notranslate"><span class="pre">thop</span></code></a><a class="headerlink" href="#thop" title="Permalink to this headline">¶</a></h3>
 <p>A list of each hopping term, where each term has the format</p>
 <div class="line-block">
 <div class="line">[</div>
@@ -812,7 +798,7 @@ for additional details.</p>
 <dd><a class="reference external" href="http://physics.rutgers.edu/pythtb/usage.html">PythTB manual</a></dd>
 </dl>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">thop</span><span class="p">:</span> <span class="p">[[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">thop</span><span class="p">:</span> <span class="p">[[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span>
        <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span>
        <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]]</span>
 </pre></div>
@@ -833,8 +819,8 @@ for additional details.</p>
       
     </p>
     <p>
-        &copy; Copyright 2016, Espen Flage-Larsen.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+        &copy; Copyright 2019, Espen Flage-Larsen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.<br/>
     </p>
   </div>
 </footer>

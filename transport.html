@@ -1,33 +1,20 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>transport module &#8212; T4ME 1 documentation</title>
-    
-    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <title>transport module &#8212; T4ME 1.1.0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -38,8 +25,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-  </head>
-  <body role="document">
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -52,7 +38,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           T4ME</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>1.1</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -139,12 +125,16 @@
   <div class="row">
     <div class="col-md-12 content">
       
-  <div class="section" id="module-transport">
-<span id="transport-module"></span><h1>transport module<a class="headerlink" href="#module-transport" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="transport-module">
+<h1>transport module<a class="headerlink" href="#transport-module" title="Permalink to this headline">¶</a></h1>
+<p>This module, <code class="file docutils literal notranslate"><span class="pre">transport.py</span></code> contains the setup
+and checks necessary to execute the calculation of the
+transport coefficients. It also execute those routines.</p>
+<span class="target" id="module-transport"></span><p>Contains routines to set up the calculation of the charge carrier transport coefficients.</p>
 <dl class="class">
 <dt id="transport.Transport">
 <em class="property">class </em><code class="descclassname">transport.</code><code class="descname">Transport</code><span class="sig-paren">(</span><em>bs</em><span class="sig-paren">)</span><a class="headerlink" href="#transport.Transport" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Involves all transport related routines.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -166,47 +156,6 @@
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="transport.Transport.acceptor_ionization">
-<code class="descname">acceptor_ionization</code><span class="sig-paren">(</span><em>number</em>, <em>energy</em>, <em>degen</em>, <em>e_fermi</em>, <em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#transport.Transport.acceptor_ionization" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the number of ionized acceptors.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>number</strong> : float</p>
-<blockquote>
-<div><p>Number of acceptors.</p>
-</div></blockquote>
-<p><strong>energy</strong> : float</p>
-<blockquote>
-<div><p>The energy in eV where
-the acceptor compensation is to be evaluated.</p>
-</div></blockquote>
-<p><strong>degen</strong> : float</p>
-<blockquote>
-<div><p>The acceptor degeneration number.</p>
-</div></blockquote>
-<p><strong>e_fermi</strong> : float</p>
-<blockquote>
-<div><p>The Fermi level in eV.</p>
-</div></blockquote>
-<p><strong>beta</strong> : float</p>
-<blockquote>
-<div><p>The beta (1/kT) factor in eV.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
-<blockquote class="last">
-<div><p>The acceptor ionization compensation.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="method">
 <dt id="transport.Transport.calc_carrier_concentration">
 <code class="descname">calc_carrier_concentration</code><span class="sig-paren">(</span><em>temperature</em>, <em>chempot</em>, <em>dos=None</em>, <em>dos_energies=None</em>, <em>band_decomp=False</em>, <em>defect_ionization=False</em><span class="sig-paren">)</span><a class="headerlink" href="#transport.Transport.calc_carrier_concentration" title="Permalink to this definition">¶</a></dt>
@@ -248,7 +197,7 @@ parameter of the current <cite>Bandstructure()</cite> object.</p>
 <div><p>Selects if defect ionization compensation should be
 included. The <cite>donor_number</cite>, <cite>donor_energy</cite>,
 <cite>donor_degen_fact</cite>, <cite>acceptor_number</cite>, <cite>acceptor_energy</cite>
-and <cite>acceptor_degen_fact</cite> need to be set in the 
+and <cite>acceptor_degen_fact</cite> need to be set in the
 general configuration file.</p>
 </div></blockquote>
 </td>
@@ -277,9 +226,8 @@ index N in units of <img class="math" src="_images/math/a09ef94619238dd7673f569a
 
 <dl class="method">
 <dt id="transport.Transport.calc_transport_tensors">
-<code class="descname">calc_transport_tensors</code><span class="sig-paren">(</span><em>bs=None</em>, <em>temperatures=None</em>, <em>chempots=None</em>, <em>method=None</em>, <em>transport=False</em><span class="sig-paren">)</span><a class="headerlink" href="#transport.Transport.calc_transport_tensors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Selects which method to use when calculating the transport
-coefficients</p>
+<code class="descname">calc_transport_tensors</code><span class="sig-paren">(</span><em>bs=None</em>, <em>temperatures=None</em>, <em>chempots=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#transport.Transport.calc_transport_tensors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects which method to use when calculating the transport coefficients.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -302,34 +250,35 @@ coefficients</p>
 supplied the <cite>chempot</cite> from the active <cite>Transport()</cite> object
 is used.</p>
 </div></blockquote>
-<p><strong>method</strong> : {&#8220;closed&#8221;, &#8220;numeric&#8221;, &#8220;numerick&#8221;}</p>
+<p><strong>method</strong> : {“closed”, “numeric”, “numerick”}</p>
 <blockquote>
-<div><p>If <cite>method</cite> is not supplied is defaults to &#8220;numeric&#8221; unless
-bandstructure data is read numerically when it defaults to
-&#8220;numerick&#8221;.</p>
+<div><p>If <cite>method</cite> is not supplied is defaults to “numeric” unless
+bandstructure data is read numerically or generated (all
+cases where the closed Fermi Dirac integrals cannot be
+used) when it defaults to “numerick”.</p>
 <div class="line-block">
-<div class="line">&#8220;closed&#8221; evaluates the closed Fermi integrals where only </div>
+<div class="line">“closed” evaluates the closed Fermi integrals where only</div>
 <div class="line">one scattering mechanism is possible per band. Only valid</div>
 <div class="line">for systems where one can strictly rely on a parametrized</div>
-<div class="line">spherical bandstructure based on effective mass models.</div>
-<div class="line">Parameters (e.g. effective masses for each band) are set </div>
-<div class="line">in the bandstructure configuration file. </div>
-<div class="line">The driver routine is <a class="reference internal" href="lbtecoeff.html#lbtecoeff.spherical_closed" title="lbtecoeff.spherical_closed"><code class="xref py py-func docutils literal"><span class="pre">lbtecoeff.spherical_closed()</span></code></a></div>
+<div class="line">parabolic bandstructure based on effective mass models.</div>
+<div class="line">Parameters (e.g. effective masses for each band) are set</div>
+<div class="line">in the bandstructure configuration file.</div>
+<div class="line">The driver routine is <a class="reference internal" href="lbtecoeff.html#lbtecoeff.parabolic_closed" title="lbtecoeff.parabolic_closed"><code class="xref py py-func docutils literal notranslate"><span class="pre">lbtecoeff.parabolic_closed()</span></code></a></div>
 </div>
 <div class="line-block">
-<div class="line">&#8220;numeric&#8221; similar to &#8220;closed, but evaluates the Fermi </div>
-<div class="line">integrals in an open form (e.g. it is possible to </div>
-<div class="line">concatenate the scattering mechanisms, which is not </div>
-<div class="line">possible for the closed Fermi integrals). </div>
-<div class="line">The driver routine is <a class="reference internal" href="lbtecoeff.html#lbtecoeff.spherical_numeric" title="lbtecoeff.spherical_numeric"><code class="xref py py-func docutils literal"><span class="pre">lbtecoeff.spherical_numeric()</span></code></a></div>
+<div class="line">“numeric” similar to “closed, but evaluates the Fermi</div>
+<div class="line">integrals in an open form (e.g. it is possible to</div>
+<div class="line">concatenate the scattering mechanisms, which is not</div>
+<div class="line">possible for the closed Fermi integrals).</div>
+<div class="line">The driver routine is <a class="reference internal" href="lbtecoeff.html#lbtecoeff.parabolic_numeric" title="lbtecoeff.parabolic_numeric"><code class="xref py py-func docutils literal notranslate"><span class="pre">lbtecoeff.parabolic_numeric()</span></code></a></div>
 </div>
 <div class="line-block">
-<div class="line">&#8220;numerick&#8221; evaluates the transport integrals more generally</div>
+<div class="line">“numerick” evaluates the transport integrals more generally</div>
 <div class="line">as an integral over the k-points. It is less restrictive</div>
 <div class="line">than the two other options, but also more prone to</div>
 <div class="line">convergence issues etc. However, for bandstructures</div>
 <div class="line">read from datafiles, this is the only option.</div>
-<div class="line">The driver routine is <a class="reference internal" href="lbtecoeff.html#lbtecoeff.numerick" title="lbtecoeff.numerick"><code class="xref py py-func docutils literal"><span class="pre">lbtecoeff.numerick()</span></code></a></div>
+<div class="line">The driver routine is <a class="reference internal" href="lbtecoeff.html#lbtecoeff.numerick" title="lbtecoeff.numerick"><code class="xref py py-func docutils literal notranslate"><span class="pre">lbtecoeff.numerick()</span></code></a></div>
 </div>
 </div></blockquote>
 </td>
@@ -341,9 +290,9 @@ bandstructure data is read numerically when it defaults to
 </div>
 <p>Returns the electrical condcutivity, Seebeck coefficient and
 Lorenz tensor for N temperature and M chemical potential
-steps in units of <img class="math" src="_images/math/f23bcf7d1c4c73fa282eac8d1ab2fd538c7ed186.png" alt="\mathrm{S}/\mathrm{m}"/>,
-<img class="math" src="_images/math/da4b0c16c77720bdcec23b9d615ad77fe4aa71d8.png" alt="\mu \mathrm{V}/\mathrm{K}"/>,
-<img class="math" src="_images/math/9f6da772223da01884111fc764ee9cd11a646fad.png" alt="\mathrm{V^2}/\mathrm{K^2}"/>. These are stored in the
+steps in units of <img class="math" src="_images/math/e77a457524240cbf03b500bc8326f6703afc73d7.png" alt="\\mathrm{S}/\\mathrm{m}"/>,
+<img class="math" src="_images/math/54f9640bfa7e574fff3e600580ffddceb5a8c78e.png" alt="\\mu \\mathrm{V}/\\mathrm{K}"/>,
+<img class="math" src="_images/math/2f2c2d0c91980fbc5f2074c3ef120e3f5c5c754e.png" alt="\\mathrm{V^2}/\\mathrm{K^2}"/>. These are stored in the
 current <cite>Transport()</cite> object.</p>
 </div></blockquote>
 </td>
@@ -352,118 +301,8 @@ current <cite>Transport()</cite> object.</p>
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="lbtecoeff.html#lbtecoeff.spherical_closed" title="lbtecoeff.spherical_closed"><code class="xref py py-obj docutils literal"><span class="pre">lbtecoeff.spherical_closed</span></code></a>, <a class="reference internal" href="lbtecoeff.html#lbtecoeff.spherical_numeric" title="lbtecoeff.spherical_numeric"><code class="xref py py-obj docutils literal"><span class="pre">lbtecoeff.spherical_numeric</span></code></a>, <a class="reference internal" href="lbtecoeff.html#lbtecoeff.numerick" title="lbtecoeff.numerick"><code class="xref py py-obj docutils literal"><span class="pre">lbtecoeff.numerick</span></code></a></p>
+<p class="last"><a class="reference internal" href="lbtecoeff.html#lbtecoeff.parabolic_closed" title="lbtecoeff.parabolic_closed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lbtecoeff.parabolic_closed</span></code></a>, <a class="reference internal" href="lbtecoeff.html#lbtecoeff.parabolic_numeric" title="lbtecoeff.parabolic_numeric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lbtecoeff.parabolic_numeric</span></code></a>, <a class="reference internal" href="lbtecoeff.html#lbtecoeff.numerick" title="lbtecoeff.numerick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lbtecoeff.numerick</span></code></a></p>
 </div>
-</dd></dl>
-
-<dl class="method">
-<dt id="transport.Transport.donor_ionization">
-<code class="descname">donor_ionization</code><span class="sig-paren">(</span><em>number</em>, <em>energy</em>, <em>degen</em>, <em>e_fermi</em>, <em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#transport.Transport.donor_ionization" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the number of ionized donors.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>number</strong> : float</p>
-<blockquote>
-<div><p>Number of donors.</p>
-</div></blockquote>
-<p><strong>energy</strong> : float</p>
-<blockquote>
-<div><p>The energy in eV where the
-donor compensation is to be
-evaluated.</p>
-</div></blockquote>
-<p><strong>degen</strong> : float</p>
-<blockquote>
-<div><p>The donor degeneration number.</p>
-</div></blockquote>
-<p><strong>e_fermi</strong> : float</p>
-<blockquote>
-<div><p>The Fermi level in eV.</p>
-</div></blockquote>
-<p><strong>beta</strong> : float The beta (1/kT) factor in eV.</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
-<blockquote class="last">
-<div><p>The donor ionization compensation.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="transport.Transport.fermi_dist">
-<code class="descname">fermi_dist</code><span class="sig-paren">(</span><em>e</em>, <em>e_fermi</em>, <em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#transport.Transport.fermi_dist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the Fermi Dirac distribution function (without spin
-degeneracy).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>e</strong> : float</p>
-<blockquote>
-<div><p>The energy in eV where the Fermi Dirac distribution is to
-be evaluated.</p>
-</div></blockquote>
-<p><strong>e_fermi</strong> : float</p>
-<blockquote>
-<div><p>The Fermi level in eV.</p>
-</div></blockquote>
-<p><strong>beta</strong> : float</p>
-<blockquote>
-<div><p>The beta factor (1/kT) in eV.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
-<blockquote class="last">
-<div><p>The value of the Fermi function (without spin degeneracy).</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="transport.Transport.fetch_chempot_from_etas">
-<code class="descname">fetch_chempot_from_etas</code><span class="sig-paren">(</span><em>temperature</em>, <em>etas</em><span class="sig-paren">)</span><a class="headerlink" href="#transport.Transport.fetch_chempot_from_etas" title="Permalink to this definition">¶</a></dt>
-<dd><p>This routines simply takes the temperature and an array
-of etas (unitless chemical potentials) and calculates
-the associated values of the chemical potential</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>temperature</strong> : float</p>
-<blockquote>
-<div><p>The temperature in K.</p>
-</div></blockquote>
-<p><strong>etas</strong> : ndarray</p>
-<blockquote>
-<div><div class="line-block">
-<div class="line">Dimension: N</div>
-</div>
-<p>The unitless chemical potential, <img class="math" src="_images/math/5635a7c34414599c2452d72430811e816b460335.png" alt="\eta"/> for N
-steps.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>chempots</strong> : ndarray</p>
-<blockquote class="last">
-<div><div class="line-block">
-<div class="line">Dimension: N</div>
-</div>
-<p>The chemical potentials in units of eV.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
@@ -512,7 +351,7 @@ and its number of samples.</p>
 <div><div class="line-block">
 <div class="line">Dimension: (N)</div>
 </div>
-<p>Contains N samples of the chemical potential in 
+<p>Contains N samples of the chemical potential in
 units of eV.</p>
 </div></blockquote>
 <p><strong>temperature</strong> : float</p>
@@ -554,9 +393,9 @@ units of eV.</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>The included bands are located by considering the input 
-range of chemical potentials from <cite>transport_chempot_min</cite> 
-and <cite>transport_chempot_max</cite> padded with the value 
+<p>The included bands are located by considering the input
+range of chemical potentials from <cite>transport_chempot_min</cite>
+and <cite>transport_chempot_max</cite> padded with the value
 <cite>transport_energycutband</cite> on
 each side (see the general configuration file).</p>
 </dd></dl>
@@ -592,7 +431,7 @@ minimum temperature and its number of steps.</p>
 
 <dl class="method">
 <dt id="transport.Transport.setup_scattering">
-<code class="descname">setup_scattering</code><span class="sig-paren">(</span><em>dos=None</em>, <em>dos_energies=None</em>, <em>select_scattering=None</em>, <em>numerick=False</em><span class="sig-paren">)</span><a class="headerlink" href="#transport.Transport.setup_scattering" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setup_scattering</code><span class="sig-paren">(</span><em>dos=None</em>, <em>dos_energies=None</em>, <em>select_scattering=None</em><span class="sig-paren">)</span><a class="headerlink" href="#transport.Transport.setup_scattering" title="Permalink to this definition">¶</a></dt>
 <dd><p>Selects which how to set up the carrier scattering.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -604,7 +443,7 @@ minimum temperature and its number of steps.</p>
 <div class="line">Dimension: (N,M)</div>
 </div>
 <p>Array containing the partial density of states in units
-of 1/eV/AA^3, where N is the band index and M is the 
+of 1/eV/AA^3, where N is the band index and M is the
 energy index.</p>
 </div></blockquote>
 <p><strong>dos_energies</strong> : ndarray</p>
@@ -636,10 +475,158 @@ for the currrently available scattering mechnisms.</p>
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="scattering.html#scattering.scattering_dos" title="scattering.scattering_dos"><code class="xref py py-obj docutils literal"><span class="pre">scattering.scattering_dos</span></code></a>, <a class="reference internal" href="scattering.html#scattering.scattering_spherical" title="scattering.scattering_spherical"><code class="xref py py-obj docutils literal"><span class="pre">scattering.scattering_spherical</span></code></a></p>
+<p class="last"><a class="reference internal" href="scattering.html#scattering.scattering_dos" title="scattering.scattering_dos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scattering.scattering_dos</span></code></a>, <a class="reference internal" href="scattering.html#scattering.scattering_parabolic" title="scattering.scattering_parabolic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scattering.scattering_parabolic</span></code></a></p>
 </div>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="transport.acceptor_ionization">
+<code class="descclassname">transport.</code><code class="descname">acceptor_ionization</code><span class="sig-paren">(</span><em>number</em>, <em>energy</em>, <em>degen</em>, <em>e_fermi</em>, <em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#transport.acceptor_ionization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of ionized acceptors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>number</strong> : float</p>
+<blockquote>
+<div><p>Number of acceptors.</p>
+</div></blockquote>
+<p><strong>energy</strong> : float</p>
+<blockquote>
+<div><p>The energy in eV where
+the acceptor compensation is to be evaluated.</p>
+</div></blockquote>
+<p><strong>degen</strong> : float</p>
+<blockquote>
+<div><p>The acceptor degeneration number.</p>
+</div></blockquote>
+<p><strong>e_fermi</strong> : float</p>
+<blockquote>
+<div><p>The Fermi level in eV.</p>
+</div></blockquote>
+<p><strong>beta</strong> : float</p>
+<blockquote>
+<div><p>The beta (1/kT) factor in eV.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
+<blockquote class="last">
+<div><p>The acceptor ionization compensation.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="transport.donor_ionization">
+<code class="descclassname">transport.</code><code class="descname">donor_ionization</code><span class="sig-paren">(</span><em>number</em>, <em>energy</em>, <em>degen</em>, <em>e_fermi</em>, <em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#transport.donor_ionization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of ionized donors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>number</strong> : float</p>
+<blockquote>
+<div><p>Number of donors.</p>
+</div></blockquote>
+<p><strong>energy</strong> : float</p>
+<blockquote>
+<div><p>The energy in eV where the
+donor compensation is to be
+evaluated.</p>
+</div></blockquote>
+<p><strong>degen</strong> : float</p>
+<blockquote>
+<div><p>The donor degeneration number.</p>
+</div></blockquote>
+<p><strong>e_fermi</strong> : float</p>
+<blockquote>
+<div><p>The Fermi level in eV.</p>
+</div></blockquote>
+<p><strong>beta</strong> : float The beta (1/kT) factor in eV.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
+<blockquote class="last">
+<div><p>The donor ionization compensation.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="transport.fermi_dist">
+<code class="descclassname">transport.</code><code class="descname">fermi_dist</code><span class="sig-paren">(</span><em>e</em>, <em>e_fermi</em>, <em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#transport.fermi_dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Fermi Dirac distribution function (without spin degeneracy).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>e</strong> : float</p>
+<blockquote>
+<div><p>The energy in eV where the Fermi Dirac distribution is to
+be evaluated.</p>
+</div></blockquote>
+<p><strong>e_fermi</strong> : float</p>
+<blockquote>
+<div><p>The Fermi level in eV.</p>
+</div></blockquote>
+<p><strong>beta</strong> : float</p>
+<blockquote>
+<div><p>The beta factor (1/kT) in eV.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
+<blockquote class="last">
+<div><p>The value of the Fermi function (without spin degeneracy).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="transport.fetch_chempot_from_etas">
+<code class="descclassname">transport.</code><code class="descname">fetch_chempot_from_etas</code><span class="sig-paren">(</span><em>temperature</em>, <em>etas</em><span class="sig-paren">)</span><a class="headerlink" href="#transport.fetch_chempot_from_etas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the chemical potential from eta and the temperature.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>temperature</strong> : float</p>
+<blockquote>
+<div><p>The temperature in K.</p>
+</div></blockquote>
+<p><strong>etas</strong> : ndarray</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Dimension: N</div>
+</div>
+<p>The unitless chemical potential, <img class="math" src="_images/math/30d7c1ca2bcd6f6baa1d2b28304047f1ca32ef49.png" alt="\\eta"/> for N
+steps.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>chempots</strong> : ndarray</p>
+<blockquote class="last">
+<div><div class="line-block">
+<div class="line">Dimension: N</div>
+</div>
+<p>The chemical potentials in units of eV.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -656,8 +643,8 @@ for the currrently available scattering mechnisms.</p>
       
     </p>
     <p>
-        &copy; Copyright 2016, Espen Flage-Larsen.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
+        &copy; Copyright 2019, Espen Flage-Larsen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.<br/>
     </p>
   </div>
 </footer>

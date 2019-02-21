@@ -12,7 +12,6 @@ if [ -n "$(git status --porcelain)" ]; then
   exit
 fi
 
-exit
 # build the docs
 cd docs
 make clean

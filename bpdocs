@@ -35,7 +35,7 @@ mv ./docs/_build/html/* ./ && rm -rf ./docs
 
 # add, commit and push gh-pages
 git add -A
-git commit -m "Publishing updated documentation"
+PRE_COMMIT_ALLOW_NO_CONFIG=1 git commit -m "Publishing updated documentation"
 git push origin gh-pages
 
 # switch back to branch

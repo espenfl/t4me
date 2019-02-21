@@ -35,7 +35,7 @@ Then execute
 ::
 
        python setup.py build_ext --inplace
-       
+
 To build the necessary parts of interfaces used in T4ME. You should
 now be able to now execute t4me.py which is
 the main driver routine
@@ -52,5 +52,5 @@ be done (in bash) by adding the following to your
 :file:`.bashrc` or :file:`.bash_profile`
 
 ::
-   
+
    export PYTHONPATH=$PYTHONPATH:/home/username/somepath/t4me

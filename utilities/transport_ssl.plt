@@ -1,5 +1,5 @@
 set output "transport_ssl.eps"
-set encoding iso_8859_1 
+set encoding iso_8859_1
 # letter is 21.59 x 27.94 cm
 # a4 is 21 x 29.7 cm
 # general format is 1 cm for bottom and top, 0.25 at the
@@ -7,14 +7,14 @@ set encoding iso_8859_1
 # on as many figures as is needed, i.e. 2.2 cm high each
 set terminal postscript eps enhanced color size 5cm,7.6cm
 set nokey
-set style line 10 lc rgb "#000000" lt -1 lw 1 
+set style line 10 lc rgb "#000000" lt -1 lw 1
 set style line 1 lc rgb "#000000" lt -1 lw 2
 set style line 2 lc rgb "#0000FF" lt -1 lw 2
-set style line 3 lc rgb "#228B22" lt -1 lw 2 
+set style line 3 lc rgb "#228B22" lt -1 lw 2
 set style line 4 lc rgb "#8A2BE2" lt -1 lw 2
-set style line 5 lc rgb "#000000" lt -1 lw 4 dt 2 
+set style line 5 lc rgb "#000000" lt -1 lw 4 dt 2
 set tics scale 1
-set border ls 10 
+set border ls 10
 set xtics font ",12" offset 0, -0.5
 set ytics font ",12"
 set format x "%1.1f"
@@ -52,7 +52,7 @@ set xlabel "Chemical potential [eV]" font ",12"
 set ylabel "L [10^{-8} V^2/K^2]" font ",12" offset -1, 0
 set xrange [-0.4:0.4]
 set yrange [1.2:4.1]
-set ytics 1.4, 0.5, 3.9  
+set ytics 1.4, 0.5, 3.9
 set format y "%1.1f"
 set xtics center offset 0 0 -0.4, 0.2, 0.4
 set xtics format "%1.1f"

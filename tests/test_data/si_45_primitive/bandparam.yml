@@ -1,0 +1,168 @@
+##########################################################
+##########################################################
+#                                                        #
+##########################################################
+#                                                        #
+#           Band structure configuration file            #
+#                                                        #
+##########################################################
+# The format follows normal YAML conventions, one entry
+# per band. If many bands are used one can use a range,
+# e.g. Band X-Y: to set the same parameters for bands X
+# to Y. Or if one would want to set the same parameters
+# for all bands one should use Band 1-: All this is quite
+# usefull when reading data from a full-band calculation
+# of some sort.
+#
+# Remember to use two spaces indent after each Band
+# entry
+#
+# For select_scattering, set element to 1 to include
+# scattering, 0 otherwise currently the following
+# scattering mechanisms have been implemented:
+# 1 - elastic acoustic phonon scattering from def. pot.
+# 2 - non-polar optical phonon scattering
+# 3 - intervalley phonon scattering
+# 4 - polar optical phonon scattering
+# 5 - piezoelectric phonon scattering
+# 6 - ionized impurity scattering (Brooks-Herring)
+# 7 - ionized impority scattering (Conwell-Weiskopf)
+# 8 - alloy scattering
+# 9-11 - empty slots
+# 12 - constant (with respect to energy) scattering
+#
+# If one does not use the analytic (parabolic)
+# scattering models and instead use the density of
+# states to generate the scattering rate, then only
+# the first four and the last have been implemented
+# (currently only the first and last have been tested)
+#
+# First band
+Band 1-:
+  # -----------------------------------------------------#
+  #  General parameters                                  #
+  # -----------------------------------------------------#
+  # Band type to be generated:
+  # 0 for parabolic,
+  # 1 for k^4 corrections,
+  # 2 for Kane types (alpha correction)
+  # 3 for tight binding
+  type: 0
+  # Bandfolding? Please leave at False
+  folding: False
+  # Effective masses in units of the electron mass
+  effmass: [-1.0,-1.0,-1.0]
+  # Alpha factor or factor in front of k^4 term
+  a: [-100.0,-100.0,-100.0]
+  # Scale and sign of non-parabolic term
+  # (not valid for alpha models)
+  ascale : 1.0
+  # Energy shift
+  e0: 0.0
+  # Valence (v) og conduction (c) band?
+  status: v
+  # Shift in k-space (out from Gamma)OA
+  kshift: [0.0,0.0,0.0]
+  # Is the band spin degenerated? Include factor 2?
+  spin_degen: 2
+  #
+  # -----------------------------------------------------#
+  #  Scattering parameters                               #
+  # -----------------------------------------------------#
+  select_scattering: [0,0,0,0,0,0,0,0,0,0,0,1]
+  # here we set an explicit scattering prefact instead,
+  # which is enabled by setting explicit_prefact to
+  # integer 1 for the mechanism where one would like to
+  # specify an explicit prefact (constant tau0 is not
+  # included and is set below)
+  explicit_prefact: [0,0,0,0,0,0,0,0,0,0,0]
+  explicit_prefact_values: [10.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                            0.0, 0.0, 0.0, 0.0, 0.0]
+  # elastic acoustic phonon from deformation potential
+  # -----------------------------------------------------#
+  # acoustical deformation potantial
+  d_a: 10 # eV
+  # speed of sound
+  speed_sound: 10000 # m/s
+  #
+  # piezoelectric (polar acoustic phonon) scattering
+  # -----------------------------------------------------#
+  # piezoelectric constant
+  p: 0.0 # C/m^2
+  # inverse screening length
+  isl: 0.0 # AA^-1
+  #
+  # non-polar optical phonon scattering
+  # -----------------------------------------------------#
+  # optical deformation potential
+  d_o: 35.0 # eV/AA
+  # optical phonon occupation number
+  n_o: 0.0
+  # optical phonon frequency
+  omega_o: 0.0 # THz
+  #
+  # polar optical phonon scattering
+  # -----------------------------------------------------#
+  # electronic permitivity in units of vacuum perm.
+  epsi: 0.0
+  # froehlich term
+  f: 0.0
+  #
+  # intervalley acoustic phonon scattering
+  # -----------------------------------------------------#
+  # intervalley phonon occupation number
+  n_vv: 0.0
+  # intervalley transition frequency
+  omega_vv: 0.0 # THz
+  # transition energy (between bottom of two valleys)
+  etrans: 0.0 # eV
+  # numer of possible final states (final degeneracy)
+  zf: 0.0
+  # the q vector between the two valleys in direct
+  # coordinates
+  q_energy_trans: [[0,0,0],[0.5,0.5,0.5]]
+  #
+  # ionized impurity scattering
+  # -----------------------------------------------------#
+  # ioninized impurity density
+  n_i: 0.01 # 10^21 cm^-3
+  # inverse screening length (BH model, not used for CW)
+  isl_i: 0.3 # AA^-1
+  # number of charge units (units of e) of the impurity
+  z: 1.0
+  #
+  # alloy scattering
+  # -----------------------------------------------------#
+  # atomic potential difference between the two species
+  vdiff: 1.0 # eV
+  # the concentration of alloy, x, A_xB_(1-x)C for
+  # species A, B and C
+  alloyconc: 0.5
+  #
+  # general (or partly common) scattering params
+  # -----------------------------------------------------#
+  # dielectric constant in units of vacuum dielectric
+  eps: 12.0
+  # density of the material
+  rho: 2.4 # g/cm^3
+  # the value of the constant relaxation time
+  tau0_c: 100 # fs
+  # emmission or absorption?
+  # for acoustic phonons both are included in the model
+  emission: False
+  #
+  # -----------------------------------------------------#
+  #  Tight binding generation parameters                 #
+  #  (consult PythTB manual for additional details)      #
+  #  (only enabled if type is set to 3)                  #
+  # -----------------------------------------------------#
+  # the direct coordinate of each tight binding orbital
+  torb: []
+  # the onsite energies for each orbital
+  tonsite: [0.0] # eV
+  # adjust energy scale, currently NOT used
+  tadjust_onsite_zero: ["max"] # n/a
+  # list of each hopping term, where each term has the
+  # format [amplitude in eV, ind_i, ind_j, ind_R] as
+  # described in the PythTB manual
+  thop: [[-0.5, 0, 0, [1, 0, 0]],[-0.5, 0, 0, [0, 1, 0]], [-0.5, 0, 0, [0, 0, 1]]]

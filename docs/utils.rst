@@ -4,7 +4,7 @@ utils module
 This module, :file:`utils.py` contains general
 routines.
 
-.. automodule:: utils 
+.. automodule:: utils
     :members:
     :undoc-members:
     :show-inheritance:

@@ -5,7 +5,7 @@ General input parameters
 
 .. contents::
    :depth: 2
-   :local: 
+   :local:
 
 Notes about format
 ------------------
@@ -14,7 +14,7 @@ Please inspect the sample file :file:`input/param.yml`.
 Even though many parameters have default values if not
 specified the user should always run the calculations with
 fully specified input files for consistency and reproducibility.
-      
+
 Dispersion relations
 --------------------
 
@@ -85,7 +85,7 @@ and, given what they are, quite accurate.
 
 Example:
 ::
-   
+
    dispersion_interpolate_method: "wildmagic"
 
 Will for instance use the WildMagic library.
@@ -100,10 +100,10 @@ following options are availble:
   ``dispersion_interpolate_method`` = `linearnd`
 - `trilinear`, `tricubic_exact`, `tricubic_bspline`, `akima`
   - if ``dispersion_interpolate_method`` = `wildmagic`
-  
+
 Example:
 ::
-   
+
    dispersion_interpolate_type: "akima"
 
 Uses the Akima interpolation in the WildMagic library.
@@ -119,7 +119,7 @@ routines that do not support velocity extraction)
 
 Example:
 ::
-   
+
    dispersion_velocities_numdiff: False
 
 Turns for instance of the numerical difference calculation
@@ -149,7 +149,7 @@ are present this is also written to the file :file:`velocities_inter`
 
 Example:
 ::
-   
+
    dispersion_write_postinter: False
 
 Does not write the extracted band structure values along a line
@@ -161,7 +161,7 @@ The start point (in direct coordinates) for the line extraction.
 
 Example:
 ::
-   
+
    dispersion_write_start: [0.0, 0.0, 0.0]
 
 An example start point, here the Gamma point.
@@ -172,7 +172,7 @@ The end point (in direct coordinates) for the line extraction.
 
 Example:
 ::
-   
+
    dispersion_write_end: [0.5, 0.0, 0.0]
 
 ``dispersion_num_kpoints_along_line``
@@ -239,7 +239,7 @@ the top of the valence band.
 
 Example:
 ::
-   
+
    dispersion_w90_tb_zero_energy:  5.0
 
 Sets it to 5.0 eV and this value is then subtracted from the energies.
@@ -255,7 +255,7 @@ for additional details. In units of eV.
 
 Example:
 ::
-   
+
    dispersion_w90_tb_min_hopping_norm: 0.01
 
 Tight binding hopping parameters with a norm less than 0.01 eV is not included
@@ -272,7 +272,7 @@ for additional details. In units of AA.
 
 Example:
 ::
-   
+
    dispersion_w90_tb_max_distance: 4.0
 
 Hopping terms with a distance larger than 4 AA is not included in the
@@ -314,7 +314,7 @@ Currently three different modes are accepted;
 
 Example:
 ::
-   
+
    transport_method: "numerick"
 
 In this example the transport integrals are solved using the closed
@@ -338,7 +338,7 @@ Only applicable if ``transport_method`` is set to `numerick`.
   library. Yields the posibility to specify a target accuracy. This
   approach currently only works for cubic, tetragonal and orthorhombic
   unit cell.
-  
+
 ``transport_integration_spectral_smearing``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Gaussian smearing factor for the weighted sum approach.
@@ -347,11 +347,11 @@ is set to `smeared`.
 
 Example:
 ::
-   
+
    transport_integration_spectral_smearing: 0.1
 
 Would set it to 0.1 eV.
-   
+
 ``transport_integration_spectral_density``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The sampling density of the spectral function. Only relevant if
@@ -359,15 +359,15 @@ The sampling density of the spectral function. Only relevant if
 
 Example:
 ::
-   
+
    transport_integration_spectral_density: 1000
 
 An example requesting 1000 samples.
-   
+
 ``transport_integration_spectral_energy_cutoff``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Determines the extra padding that is used for the spectral function on
-both sides of the requested chemical potential. If multiple chemical 
+both sides of the requested chemical potential. If multiple chemical
 potentials are requested, the lowest and the highest value is checked and
 the range of the energy interval on which the spectral function is
 calculated is padded with the specified value. Only relevant if
@@ -396,7 +396,7 @@ Which particular interpolation type to use is set with
 
 Example:
 ::
-   
+
    transport_integration_method: "wildmagic"
 
 Selects the only available method of interpolation during the
@@ -434,7 +434,7 @@ coefficients are calculated. In units of eV.
 
 Example:
 ::
-   
+
    transport_chempot_min: -1.0
 
 Starts the calculation of the transport properties at -1.0 eV.
@@ -446,7 +446,7 @@ coefficients are calculated. In units of eV.
 
 Example:
 ::
-   
+
    transport_chempot_max: 1.0
 
 Ends the calculation of the transport properties at 1.0 eV.
@@ -483,7 +483,7 @@ Substract and add 1.0 eV to ``transport_chempot_min`` and
 ``transport_chempot_max``, respectively. Bands that does not have
 any k-point with energy in the range [-2.0 eV, 2.0 eV] is not included
 in the calculation of the transport coefficients.
-   
+
 ``transport_include_bands``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 A list containing specific bands on which to calculate the transport
@@ -492,10 +492,10 @@ coefficients. If the list is empty, use all bands within the range set by
 
 Example:
 ::
-   
+
    transport_include_bands: [3, 4, 10]
 
-Calculate the transport coefficients for band 3, 4 and 10. 
+Calculate the transport coefficients for band 3, 4 and 10.
 
 ``transport_use_analytic_scattering``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -509,7 +509,7 @@ Example:
    transport_use_analytic_scattering: False
 
 Use the density-of-states to set up the scattering mechanisms.
-   
+
 ``transport_use_scattering_ontfly``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Determines if the scattering values should also be integrated on-the-fly
@@ -518,7 +518,7 @@ when performing Cubature integration. Only relevant if
 
 Example:
 ::
-   
+
    transport_use_scattering_ontfly: False
 
 Do not use on-the-fly interpolation of the scattering values.
@@ -574,7 +574,7 @@ parameter set to `True` and e.g. ``transport_calc`` set to
 `False` it is possible to only calculate the density of states.
 
 ::
-   
+
    dos_calc: False
 
 Do not calculate the density of states.
@@ -589,7 +589,7 @@ it is called from other routines, e.g. the density of states
 dependent scattering models in order to cover enough energies.
 
 ::
-   
+
    dos_e_min: -5.0
 
 Calculate the density of states from -5.0 eV.
@@ -604,7 +604,7 @@ it is called from other routines, e.g. the density of states
 dependent scattering models in order to cover enough energies.
 
 ::
-   
+
    dos_e_max: 2.0
 
 Calculate the density of states to 2.0 eV.
@@ -615,7 +615,7 @@ The number of energy samples between ``dos_e_min`` and
 ``dos_e_max``.
 
 ::
-   
+
    dos_num_samples: 1000
 
 Use 1000 energy points from ``dos_e_min`` to ``dos_e_max``.
@@ -627,7 +627,7 @@ Gaussian smearing factor in units of eV. Only relevant if
 `simps` or `romb`.
 
 ::
-   
+
    dos_smearing: 0.1
 
 ``dos_interpolate_method``
@@ -639,7 +639,7 @@ GeometricTools/WildMagic. Only relevant if
 ``dos_integrating_method`` is set to `cubature`.
 
 ::
-   
+
    dos_interpolate_method: "wildmagic"
 
 The only valid option if ``dos_integrating_method``
@@ -652,7 +652,7 @@ Determines which interpolation type to use if
 otherwise not relevant.
 
 ::
-   
+
    dos_interpolate_type: "akima"
 
 Use on the fly Akima interpolation during Cubature integration.
@@ -669,7 +669,7 @@ density of states. The following options are available:
 - `cubature` - Cubature integration with on the fly interpolation
 
 ::
-   
+
    dos_integrating_method: "trapz"
 
 Use trapezoidal integration to obtain the density of states.
@@ -678,7 +678,7 @@ General parameters
 ------------------
 
 Here follows general parameters.
-   
+
 ``temperature_min``
 ~~~~~~~~~~~~~~~~~~~
 The minimum temperature in K.
@@ -696,7 +696,7 @@ The maximum temperature in K.
 
 Example:
 ::
-   
+
    temperature_max: 700
 
 The maximum temperature is set at 700 K.
@@ -708,7 +708,7 @@ to ``temperature_max``.
 
 Example:
 ::
-   
+
    temperature_steps: 7
 
 In total 7 temperature steps, resulting in temperature
@@ -734,7 +734,7 @@ Only relevant if ``transport_method`` is set to `numerick`.
 
 Example:
 ::
-   
+
    maxeint: 100
 
 Sets the limits of the Fermi-Dirac integrals to 100 :math:`\\eta`.
@@ -747,7 +747,7 @@ the band gap.
 
 Example:
 ::
-   
+
    occ_cutoff: 1.0e-4
 
 The occupancy cutoff is set at 1.0e-4, which means that states with
@@ -761,9 +761,9 @@ the gap.
 
 Example:
 ::
-   
+
    e_fermi_in_gap: False
-   
+
 Do not place the Fermi level in the middle of the gap.
 
 ``e_fermi``
@@ -773,7 +773,7 @@ Fermi level (usually read in the interface).
 
 Example:
 ::
-   
+
    e_fermi: True
 
 Shift the energies such that zero is placed at the supplied
@@ -787,7 +787,7 @@ maximum.
 
 Example:
 ::
-   
+
    e_vbm: False
 
 Do not set the Fermi level at the top valence band.
@@ -813,7 +813,7 @@ Only relevant if ``transport_integration_method`` is set to `cubature`.
 
 Example:
 ::
-   
+
    cubature_h: False
 
 Use p-cubature.
@@ -829,7 +829,7 @@ Only relevant if ``transport_integration_method`` is set to `cubature`.
 
 Example:
 ::
-   
+
    cubature_max_it: 0
 
 No maximum limit to the number of iterations (integration stops
@@ -844,7 +844,7 @@ Only relevant if ``transport_integration_method`` is set to `cubature`.
 
 Example:
 ::
-   
+
    cubature_abs_err: 0.0
 
 The relative error is set at 0.0. If ``cubature_rel_err`` is set
@@ -877,7 +877,7 @@ tells how many unit cells that can be used. Only relevant if
 
 Example:
 ::
-   
+
    skw_expansion_factor: 5
 
 Use 5 unit cells in each direction. In a second step a sphere is cut
@@ -892,7 +892,7 @@ eV.
 
 Example:
 ::
-   
+
    carrier_valence_energy: 0.0
 
 Would make sure all carriers at negative energies are interpreted
@@ -906,7 +906,7 @@ eV.
 
 Example:
 ::
-   
+
    carrier_valence_energy: 0.0
 
 Would make sure all carriers at positive energies are interpreted
@@ -921,7 +921,7 @@ is generated from analytical models.
 
 Example:
 ::
-   
+
    carrier_dos_analytick: True
 
 Do not recalculate and use the analytical expressions for the carrier
@@ -946,7 +946,7 @@ The density of donors in units of :math:`10^{-21} \mathrm{cm}^{-3}`.
 
 Example:
 ::
-   
+
    donor_number: 0.0
 
 No donors present.
@@ -981,7 +981,7 @@ The density of acceptors in units of :math:`10^{-21} \mathrm{cm}^{-3}`.
 
 Example:
 ::
-   
+
    donor_number: 0.0
 
 No acceptors present.
@@ -1021,10 +1021,10 @@ The following options are possible:
   band structure is performed in PythTB and read automatically.
   The parameters pertaining to the construction of the bandstructure
   itself is set in the file :file:`bandparam.yml`.
-  
+
 
 - `numpy` - Read data from NumPy datafiles without group velocities.
-  
+
   | The datastructure of the supplied numpy array
   | should be on the following format:
   | [
@@ -1035,16 +1035,16 @@ The following options are possible:
 
   The band parameters still need to be set in :file:`bandparam.yml` as they
   contain necessary information about scattering etc.
-  
+
 
 - `numpyv` - Read data from NumPy datafiles, including group velocities.
-  
+
   | The datastructure of the supplied numpy array
   | should be on the following format:
   | [
   | [kx], [ky], [kz], [e_1], [e_2], ... , [e_n]
   | ]
-  
+
   The band parameters still need to be set in :file:`bandparam.yml` as they
   contain necessary information about scattering etc.
 
@@ -1076,7 +1076,7 @@ following behaviour:
 - `numpyv` - the name of the NumPy datafile
 - `w90` - the prefix used during the Wannier90 calculations, if not set it
   defaults to `wannier90`
-  
+
 Example:
 ::
 
@@ -1092,7 +1092,7 @@ In units of eV if not `False`.
 
 Example:
 ::
-   
+
    scissor: False
 
 Do not apply a scissor operator.
@@ -1107,7 +1107,7 @@ If errors regarding this is invoked, please try to adjust symprec.
 
 Example:
 ::
-   
+
    symprec: 1.0e-6
 
 If two coordinates are within 1.0e-6 it is assumed that they are the
@@ -1134,7 +1134,7 @@ to the external libraries.
 
 Example:
 ::
-   
+
    libinfo: False
 
 Do not print stdout information from the interfaces.
@@ -1161,7 +1161,7 @@ implemented, so users should leave this to `False`.
 
 Example:
 ::
-   
+
    parallel: False
 
 Do not use the parallel features.
@@ -1178,7 +1178,7 @@ Determines if the tests are to be run. Several options are available:
 
 Example:
 ::
-   
+
    run_tests: False
 
 Do not run any tests.

@@ -4,14 +4,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+
     <title>lbteint module &#8212; T4ME 1 documentation</title>
-    
+
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    
+
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -57,8 +57,8 @@
 
         <div class="collapse navbar-collapse nav-collapse">
           <ul class="nav navbar-nav">
-            
-            
+
+
               <li class="dropdown globaltoc-container">
   <a role="button"
      id="dLabelGlobalToc"
@@ -81,7 +81,7 @@
 </ul>
 </ul>
 </li>
-              
+
                 <li class="dropdown">
   <a role="button"
      id="dLabelLocalToc"
@@ -95,11 +95,11 @@
 </ul>
 </ul>
 </li>
-              
-            
-            
-              
-                
+
+
+
+
+
   <li>
     <a href="transport.html" title="Previous Chapter: transport module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; transport module</span>
     </a>
@@ -108,21 +108,21 @@
     <a href="lbtecoeff.html" title="Next Chapter: lbtecoeff module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">lbtecoeff module &raquo;</span>
     </a>
   </li>
-              
-            
-            
-            
-            
+
+
+
+
+
               <li class="hidden-sm">
 <div id="sourcelink">
   <a href="_sources/lbteint.rst.txt"
      rel="nofollow">Source</a>
 </div></li>
-            
+
           </ul>
 
-          
-            
+
+
 <form class="navbar-form navbar-right" action="search.html" method="get">
  <div class="form-group">
   <input type="text" name="q" class="form-control" placeholder="Search" />
@@ -130,7 +130,7 @@
   <input type="hidden" name="check_keywords" value="yes" />
   <input type="hidden" name="area" value="default" />
 </form>
-          
+
         </div>
     </div>
   </div>
@@ -138,7 +138,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12 content">
-      
+
   <div class="section" id="lbteint-module">
 <h1>lbteint module<a class="headerlink" href="#lbteint-module" title="Permalink to this headline">¶</a></h1>
 <p>This module, <code class="file docutils literal"><span class="pre">lbteint.py</span></code> contains the integral solvers
@@ -172,7 +172,7 @@ for the linearized Boltzmann Transport equations.</p>
 <div><div class="line-block">
 <div class="line">Dimension: (3)</div>
 </div>
-<p>The effective mass along <img class="math" src="_images/math/4410a1b11dbbd03f49bf47cb6e47d4d73f70c4a4.png" alt="k_x"/>, 
+<p>The effective mass along <img class="math" src="_images/math/4410a1b11dbbd03f49bf47cb6e47d4d73f70c4a4.png" alt="k_x"/>,
 <img class="math" src="_images/math/31a7145dbde4acc2182609fcac3447ffbf258906.png" alt="k_y"/> and <img class="math" src="_images/math/e1d3590e1cf9218953a6efe70c1da3aa0d4a3aae.png" alt="k_z"/>, respectively.</p>
 </div></blockquote>
 </td>
@@ -195,7 +195,7 @@ for the linearized Boltzmann Transport equations.</p>
 <dl class="function">
 <dt id="lbteint.analytic_k_space_integrand">
 <code class="descclassname">lbteint.</code><code class="descname">analytic_k_space_integrand</code><span class="sig-paren">(</span><em>kz</em>, <em>ky</em>, <em>kx</em>, <em>eta</em>, <em>beta</em>, <em>effmass</em>, <em>e0</em>, <em>i</em>, <em>l</em>, <em>m</em><span class="sig-paren">)</span><a class="headerlink" href="#lbteint.analytic_k_space_integrand" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the integrand for the anlytic reciprocal 
+<dd><p>Returns the integrand for the anlytic reciprocal
 space integration of the transport
 tensor.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -229,7 +229,7 @@ in eV.</p>
 </div></blockquote>
 <p><strong>e0</strong> : float</p>
 <blockquote>
-<div><p>The energy shift, e.g. <img class="math" src="_images/math/a73c1ebbd905ff1ba3a52ecdc85e6bbf8d41e32a.png" alt="E=\hbar^2 k^2/2m + E_0"/>, 
+<div><p>The energy shift, e.g. <img class="math" src="_images/math/a73c1ebbd905ff1ba3a52ecdc85e6bbf8d41e32a.png" alt="E=\hbar^2 k^2/2m + E_0"/>,
 where <img class="math" src="_images/math/10c4bd0c5cfb7a116bde63541919dfbbf3282298.png" alt="E_0"/> is the energy shift in eV.</p>
 </div></blockquote>
 <p><strong>i</strong> : int</p>
@@ -281,12 +281,12 @@ where <img class="math" src="_images/math/10c4bd0c5cfb7a116bde63541919dfbbf32822
 <div><div class="line-block">
 <div class="line">Dimension: (3)</div>
 </div>
-<p>The effective mass along <img class="math" src="_images/math/4410a1b11dbbd03f49bf47cb6e47d4d73f70c4a4.png" alt="k_x"/>, 
+<p>The effective mass along <img class="math" src="_images/math/4410a1b11dbbd03f49bf47cb6e47d4d73f70c4a4.png" alt="k_x"/>,
 <img class="math" src="_images/math/31a7145dbde4acc2182609fcac3447ffbf258906.png" alt="k_y"/> and <img class="math" src="_images/math/e1d3590e1cf9218953a6efe70c1da3aa0d4a3aae.png" alt="k_z"/>, respectively.</p>
 </div></blockquote>
 <p><strong>i</strong> : {0,1,2}</p>
 <blockquote>
-<div><p>The direction to evaluate the velocity 
+<div><p>The direction to evaluate the velocity
 (0 is along <img class="math" src="_images/math/4410a1b11dbbd03f49bf47cb6e47d4d73f70c4a4.png" alt="k_x"/> etc.).</p>
 </div></blockquote>
 </td>
@@ -298,9 +298,9 @@ where <img class="math" src="_images/math/10c4bd0c5cfb7a116bde63541919dfbbf32822
 <div class="last admonition warning">
 <p class="first admonition-title">Warning</p>
 <p>This routine only accepts the diagonal</p>
-<p class="last">elements of the effective mass tensor. 
-The <img class="math" src="_images/math/a78140b5313dfcd354770bfe68b1d5d119d62088.png" alt="\hbar/m_e"/> factor is not 
-returned and need to be introduced 
+<p class="last">elements of the effective mass tensor.
+The <img class="math" src="_images/math/a78140b5313dfcd354770bfe68b1d5d119d62088.png" alt="\hbar/m_e"/> factor is not
+returned and need to be introduced
 externally.</p>
 </div>
 </td>
@@ -322,7 +322,7 @@ externally.</p>
 <dl class="function">
 <dt id="lbteint.fermiintclosed">
 <code class="descclassname">lbteint.</code><code class="descname">fermiintclosed</code><span class="sig-paren">(</span><em>order</em>, <em>eta</em>, <em>spin_fact</em><span class="sig-paren">)</span><a class="headerlink" href="#lbteint.fermiintclosed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the value of the closed expressions for 
+<dd><p>Returns the value of the closed expressions for
 the Fermi integrals.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -330,17 +330,17 @@ the Fermi integrals.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>order</strong> : integer</p>
 <blockquote>
-<div><p>The Fermi integral order (two times <img class="math" src="_images/math/eaa6ad49a7f78fe5a13b486690163bf2dc7e3e60.png" alt="r"/> 
+<div><p>The Fermi integral order (two times <img class="math" src="_images/math/eaa6ad49a7f78fe5a13b486690163bf2dc7e3e60.png" alt="r"/>
 to avoid half integers).</p>
 </div></blockquote>
 <p><strong>eta</strong> : float</p>
 <blockquote>
-<div><p>The chemical potential given in reduced 
+<div><p>The chemical potential given in reduced
 form (<img class="math" src="_images/math/a9a660ee2c86095b834464df90b49272f565349e.png" alt="\mu/kT"/>, dimensionless).</p>
 </div></blockquote>
 <p><strong>spin_fact</strong> : int</p>
 <blockquote>
-<div><p>The spin degeneracy. 1 for non-spin degeneracy 
+<div><p>The spin degeneracy. 1 for non-spin degeneracy
 and 2 for spin degeneracy.</p>
 </div></blockquote>
 </td>
@@ -355,10 +355,10 @@ and 2 for spin degeneracy.</p>
 </table>
 <p class="rubric">Notes</p>
 <p>Utilizes the GSL <a class="reference internal" href="#gsl" id="id1">[1]</a> library and a few inlined
-function from the literature. Consult Ref. 
+function from the literature. Consult Ref.
 <a class="reference internal" href="#halen-1985-joap-assatfioo" id="id2">[2]</a> and Ref.
-<a class="reference internal" href="#halen-1986-joap-essatfioo" id="id3">[3]</a> 
-as a suplement. The Gamma factor renormalization which 
+<a class="reference internal" href="#halen-1986-joap-essatfioo" id="id3">[3]</a>
+as a suplement. The Gamma factor renormalization which
 is included in the GSL returns should be removed and
 this is done in the interface Cython file.</p>
 <div class="math">
@@ -366,8 +366,8 @@ this is done in the interface Cython file.</p>
 (1+\exp(\epsilon-\eta))"/></p>
 </div><div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">in order to avoid half numbers, order 
-should be given as two times the actual 
+<p class="last">in order to avoid half numbers, order
+should be given as two times the actual
 order of the integral.</p>
 </div>
 <p class="rubric">References</p>
@@ -395,8 +395,8 @@ order of the integral.</p>
 <dl class="function">
 <dt id="lbteint.integrandpar">
 <code class="descclassname">lbteint.</code><code class="descname">integrandpar</code><span class="sig-paren">(</span><em>eps</em>, <em>transport</em>, <em>w0</em>, <em>eta</em>, <em>beta</em>, <em>energy_trans</em>, <em>effmass</em>, <em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#lbteint.integrandpar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the integrand used in the analytic energy 
-integration of the transport coefficients 
+<dd><p>Returns the integrand used in the analytic energy
+integration of the transport coefficients
 in <code class="xref py py-func docutils literal"><span class="pre">integrate_e()</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -415,7 +415,7 @@ in <code class="xref py py-func docutils literal"><span class="pre">integrate_e(
 <div><div class="line-block">
 <div class="line">Dimension: (12)</div>
 </div>
-<p>Contains the scattering rate prefactor for the different 
+<p>Contains the scattering rate prefactor for the different
 scattering mechanisms in units of inverse fs.</p>
 </div></blockquote>
 <p><strong>eta</strong> : float</p>
@@ -431,10 +431,10 @@ scattering mechanisms in units of inverse fs.</p>
 <div><div class="line-block">
 <div class="line">Dimension: (12)</div>
 </div>
-<p>Contains the energy transitions (that is added to the 
-energy in <img class="math" src="_images/math/13689d4e16f8f3fb0e2c840e26c11b4afacc464d.png" alt="\tau=\tau_0E^{r-1/2}"/>, typically, 
-<img class="math" src="_images/math/d1e4b78ef262afbe8897834fd70ffb8d7f41d12b.png" alt="E=E+\hbar \omega"/>, where <img class="math" src="_images/math/73a7b598f7ff7e710c4cd72fc94c9484af714e08.png" alt="\hbar \omega"/> 
-is the size of the energy transition. Set it to zero 
+<p>Contains the energy transitions (that is added to the
+energy in <img class="math" src="_images/math/13689d4e16f8f3fb0e2c840e26c11b4afacc464d.png" alt="\tau=\tau_0E^{r-1/2}"/>, typically,
+<img class="math" src="_images/math/d1e4b78ef262afbe8897834fd70ffb8d7f41d12b.png" alt="E=E+\hbar \omega"/>, where <img class="math" src="_images/math/73a7b598f7ff7e710c4cd72fc94c9484af714e08.png" alt="\hbar \omega"/>
+is the size of the energy transition. Set it to zero
 for the non-relevant scattering mechanisms.</p>
 </div></blockquote>
 <p><strong>effmass</strong> : float</p>
@@ -456,9 +456,9 @@ for the non-relevant scattering mechanisms.</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>The total scattering is calculated based on the well 
-known scattering models for spherical energy dispersions 
-<img class="math" src="_images/math/33b7248b4453b950a5d792df8d15141675a128e0.png" alt="\tau=\tau_0\epsilon^{r-1/2}"/>, 
+<p>The total scattering is calculated based on the well
+known scattering models for spherical energy dispersions
+<img class="math" src="_images/math/33b7248b4453b950a5d792df8d15141675a128e0.png" alt="\tau=\tau_0\epsilon^{r-1/2}"/>,
 where <img class="math" src="_images/math/eaa6ad49a7f78fe5a13b486690163bf2dc7e3e60.png" alt="r"/> is the scattering factor.</p>
 </dd></dl>
 
@@ -484,7 +484,7 @@ energy</p>
 <div><div class="line-block">
 <div class="line">Dimension: (12)</div>
 </div>
-<p>Contains the scattering rate prefactor for the different 
+<p>Contains the scattering rate prefactor for the different
 scattering mechanisms in units of inverse fs. Not
 used in this routine, but it needs the dummy from the
 call argument.</p>
@@ -504,10 +504,10 @@ call argument.</p>
 <div><div class="line-block">
 <div class="line">Dimension: (12)</div>
 </div>
-<p>Contains the energy transitions (that is added to the 
-energy in <img class="math" src="_images/math/13689d4e16f8f3fb0e2c840e26c11b4afacc464d.png" alt="\tau=\tau_0E^{r-1/2}"/>, typically, 
-<img class="math" src="_images/math/d1e4b78ef262afbe8897834fd70ffb8d7f41d12b.png" alt="E=E+\hbar \omega"/>, where <img class="math" src="_images/math/73a7b598f7ff7e710c4cd72fc94c9484af714e08.png" alt="\hbar \omega"/> 
-is the size of the energy transition. Set it to zero 
+<p>Contains the energy transitions (that is added to the
+energy in <img class="math" src="_images/math/13689d4e16f8f3fb0e2c840e26c11b4afacc464d.png" alt="\tau=\tau_0E^{r-1/2}"/>, typically,
+<img class="math" src="_images/math/d1e4b78ef262afbe8897834fd70ffb8d7f41d12b.png" alt="E=E+\hbar \omega"/>, where <img class="math" src="_images/math/73a7b598f7ff7e710c4cd72fc94c9484af714e08.png" alt="\hbar \omega"/>
+is the size of the energy transition. Set it to zero
 for the non-relevant scattering mechanisms. Not
 used in this routine, but it needs the dummy from the
 call argument.</p>
@@ -544,8 +544,8 @@ of states.</p>
 <dl class="function">
 <dt id="lbteint.integrandpart2">
 <code class="descclassname">lbteint.</code><code class="descname">integrandpart2</code><span class="sig-paren">(</span><em>eps</em>, <em>transport</em>, <em>w0</em>, <em>eta</em>, <em>beta</em>, <em>energy_trans</em>, <em>effmass</em>, <em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#lbteint.integrandpart2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the integrand used in the analytic energy 
-integration of the transport distribution function 
+<dd><p>Returns the integrand used in the analytic energy
+integration of the transport distribution function
 with a quadratic <img class="math" src="_images/math/557d5fad862c9046d26e1a930f45a550c146d592.png" alt="\tau"/> term</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -564,7 +564,7 @@ with a quadratic <img class="math" src="_images/math/557d5fad862c9046d26e1a930f4
 <div><div class="line-block">
 <div class="line">Dimension: (12)</div>
 </div>
-<p>Contains the scattering rate prefactor for the different 
+<p>Contains the scattering rate prefactor for the different
 scattering mechanisms in units of inverse fs.</p>
 </div></blockquote>
 <p><strong>eta</strong> : float</p>
@@ -580,11 +580,11 @@ scattering mechanisms in units of inverse fs.</p>
 <div><div class="line-block">
 <div class="line">Dimension: (12)</div>
 </div>
-<p>Contains the energy transitions (that is added to the 
-energy in <img class="math" src="_images/math/13689d4e16f8f3fb0e2c840e26c11b4afacc464d.png" alt="\tau=\tau_0E^{r-1/2}"/>, 
-typically, <img class="math" src="_images/math/d1e4b78ef262afbe8897834fd70ffb8d7f41d12b.png" alt="E=E+\hbar \omega"/>, 
-where <img class="math" src="_images/math/73a7b598f7ff7e710c4cd72fc94c9484af714e08.png" alt="\hbar \omega"/> is the size of the 
-energy transition. Set it to zero for the 
+<p>Contains the energy transitions (that is added to the
+energy in <img class="math" src="_images/math/13689d4e16f8f3fb0e2c840e26c11b4afacc464d.png" alt="\tau=\tau_0E^{r-1/2}"/>,
+typically, <img class="math" src="_images/math/d1e4b78ef262afbe8897834fd70ffb8d7f41d12b.png" alt="E=E+\hbar \omega"/>,
+where <img class="math" src="_images/math/73a7b598f7ff7e710c4cd72fc94c9484af714e08.png" alt="\hbar \omega"/> is the size of the
+energy transition. Set it to zero for the
 non-relevant scattering mechanisms.</p>
 </div></blockquote>
 <p><strong>effmass</strong> : float</p>
@@ -606,11 +606,11 @@ non-relevant scattering mechanisms.</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>The total scattering is calculated based on the well 
-known scattering models for spherical energy dispersions 
-<img class="math" src="_images/math/33b7248b4453b950a5d792df8d15141675a128e0.png" alt="\tau=\tau_0\epsilon^{r-1/2}"/>, 
+<p>The total scattering is calculated based on the well
+known scattering models for spherical energy dispersions
+<img class="math" src="_images/math/33b7248b4453b950a5d792df8d15141675a128e0.png" alt="\tau=\tau_0\epsilon^{r-1/2}"/>,
 where <img class="math" src="_images/math/eaa6ad49a7f78fe5a13b486690163bf2dc7e3e60.png" alt="r"/> is the scattering factor.
-Difference from <a class="reference internal" href="#lbteint.integrandpar" title="lbteint.integrandpar"><code class="xref py py-func docutils literal"><span class="pre">integrandpar()</span></code></a>: here tau^2 
+Difference from <a class="reference internal" href="#lbteint.integrandpar" title="lbteint.integrandpar"><code class="xref py py-func docutils literal"><span class="pre">integrandpar()</span></code></a>: here tau^2
 is used in the integrand (for the
 calculation of the Hall factor).</p>
 </dd></dl>
@@ -630,8 +630,8 @@ the SciPy function <a class="reference external" href="https://docs.scipy.org/do
 </div></blockquote>
 <p><strong>integrand</strong> : {&#8220;normal&#8221;,&#8221;hall&#8221;,&#8221;dos&#8221;}</p>
 <blockquote>
-<div><p>Selects the type of integrand to be used. &#8220;normal&#8221; selects 
-<a class="reference internal" href="#lbteint.integrandpar" title="lbteint.integrandpar"><code class="xref py py-func docutils literal"><span class="pre">integrandpar()</span></code></a>. &#8220;hall&#8221; selects <a class="reference internal" href="#lbteint.integrandpart2" title="lbteint.integrandpart2"><code class="xref py py-func docutils literal"><span class="pre">integrandpart2()</span></code></a>, 
+<div><p>Selects the type of integrand to be used. &#8220;normal&#8221; selects
+<a class="reference internal" href="#lbteint.integrandpar" title="lbteint.integrandpar"><code class="xref py py-func docutils literal"><span class="pre">integrandpar()</span></code></a>. &#8220;hall&#8221; selects <a class="reference internal" href="#lbteint.integrandpart2" title="lbteint.integrandpart2"><code class="xref py py-func docutils literal"><span class="pre">integrandpart2()</span></code></a>,
 &#8220;dos&#8221; selects <a class="reference internal" href="#lbteint.integrandpardos" title="lbteint.integrandpardos"><code class="xref py py-func docutils literal"><span class="pre">integrandpardos()</span></code></a>.</p>
 </div></blockquote>
 <p><strong>e_min</strong> : float</p>
@@ -647,8 +647,8 @@ the SciPy function <a class="reference external" href="https://docs.scipy.org/do
 <div><div class="line-block">
 <div class="line">Dimension: (12)</div>
 </div>
-<p>Contains the scattering rate prefactor (inverse of 
-relaxation time) for the different scattering 
+<p>Contains the scattering rate prefactor (inverse of
+relaxation time) for the different scattering
 mechanisms in units of inverse fs.</p>
 </div></blockquote>
 <p><strong>eta</strong> : float</p>
@@ -665,12 +665,12 @@ in eV.</p>
 <div><div class="line-block">
 <div class="line">Dimension: (3)</div>
 </div>
-<p>The effective mass along the three reciprocal unit 
+<p>The effective mass along the three reciprocal unit
 vectors in units of the free electron mass.</p>
 </div></blockquote>
 <p><strong>e0</strong> : float</p>
 <blockquote>
-<div><p>The energy shift, e.g. <img class="math" src="_images/math/a73c1ebbd905ff1ba3a52ecdc85e6bbf8d41e32a.png" alt="E=\hbar^2 k^2/2m + E_0"/>, 
+<div><p>The energy shift, e.g. <img class="math" src="_images/math/a73c1ebbd905ff1ba3a52ecdc85e6bbf8d41e32a.png" alt="E=\hbar^2 k^2/2m + E_0"/>,
 where <img class="math" src="_images/math/10c4bd0c5cfb7a116bde63541919dfbbf3282298.png" alt="E_0"/> is the energy shift in eV.</p>
 </div></blockquote>
 <p><strong>i</strong> : int</p>
@@ -687,7 +687,7 @@ where <img class="math" src="_images/math/10c4bd0c5cfb7a116bde63541919dfbbf32822
 </div></blockquote>
 <p><strong>spin_fact</strong> : int</p>
 <blockquote>
-<div><p>The spin degeneracy factor. 1 for non-spin degeneracy, 
+<div><p>The spin degeneracy factor. 1 for non-spin degeneracy,
 2 for spin degeneracy.</p>
 </div></blockquote>
 <p><strong>method</strong> : {&#8220;quad&#8221;}, optional</p>
@@ -846,7 +846,7 @@ for discrete data using SciPy integration functions for discrete data.</p>
 </div></blockquote>
 <p><strong>order</strong> : float</p>
 <blockquote>
-<div><p>The order of the energy minus chemical potential term in the 
+<div><p>The order of the energy minus chemical potential term in the
 denominator.</p>
 </div></blockquote>
 <p><strong>method</strong> : {&#8220;trapz&#8221;, &#8220;simps&#8221;, &#8220;romb&#8221;}, optional</p>
@@ -866,14 +866,14 @@ to &#8220;trapz&#8221;.</p>
 
 
     </div>
-      
+
   </div>
 </div>
 <footer class="footer">
   <div class="container">
     <p class="pull-right">
       <a href="#">Back to top</a>
-      
+
     </p>
     <p>
         &copy; Copyright 2016, Espen Flage-Larsen.<br/>

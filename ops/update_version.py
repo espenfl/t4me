@@ -49,7 +49,23 @@ class VersionUpdater():
         self.top_level_init = py_path.local(
             subpath('src', 't4me', '__init__.py'))
         self.setup_json = py_path.local(subpath('setup.json'))
+        self.conf_file = py_path.local(subpath('docs', 'conf.py'))
         self.version = self.get_version()
+
+    def write_to_doc(self):
+        """Write version to the docs."""
+        with open(self.conf_file.strpath, 'r') as conf_fo:
+            lines = conf_fo.readlines()
+
+        for index, line in enumerate(lines):
+            if 'version = ' in line:
+                lines[index] = 'version = ' + str(self.version).rsplit(
+                    '.', 1)[0] + '\n'
+            if 'release = ' in line:
+                lines[index] = 'release = ' + str(self.version) + '\n'
+
+        with open(self.conf_file.strpath, 'w') as conf_fo:
+            conf_fo.writelines(lines)
 
     def write_to_init(self):
         """Write version to init."""
@@ -69,6 +85,16 @@ class VersionUpdater():
     def setup_version(self):
         """Fetch version from setup.json."""
         return version.parse(json.load(self.setup_json)['version'])
+
+    @property
+    def doc_version(self):
+        """Fetch version from docs."""
+        with open(self.conf_file.strpath, 'r') as conf_fo:
+            for line in conf_fo:
+                if 'release = ' in line:
+                    version_string = line.split('=')[1].strip()
+
+        return version.parse(version_string)
 
     @property
     def init_version(self):
@@ -98,6 +124,9 @@ class VersionUpdater():
         return max(self.setup_version, self.init_version, self.tag_version)
 
     def sync(self):
+        """Update respective versions."""
+        if self.version > self.doc_version:
+            self.write_to_doc()
         if self.version > self.init_version:
             self.write_to_init()
         if self.version > self.setup_version:

@@ -1,4 +1,8 @@
-build
-dist
-utilities
+*.pyc
+*.so
 bpdocs
+.tox/
+__pycache__/
+build/
+dist/
+utilities/

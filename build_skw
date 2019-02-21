@@ -5,4 +5,3 @@ cd skw
 make
 make lib
 cd ..
-

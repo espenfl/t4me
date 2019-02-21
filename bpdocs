@@ -1,5 +1,8 @@
 #/usr/bin/env bash
 
+# get the current branch
+branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+
 # check that we are on the right branch
 if [ $branch != "updated_documentation" ]; then
    echo "Please make sure you issue this command on the 'updated_documentation' branch."

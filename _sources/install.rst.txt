@@ -13,7 +13,7 @@ Then install T4ME by executing the command
 
 ::
 
-   pip install t4me
+   pip install T4ME
 
 This will give the user the posibility to calculate the transport coefficients
 using integration routines in SciPy. For other integration and interpolation routines
@@ -23,7 +23,8 @@ Advanced install
 ----------------
 For more advanced functionality (interpolation and other integration routines) the
 user should determine which external libraries are needed and install them based
-on their respective documentation.
+on their respective documentation. Please also fetch the repository from github and work from its
+base directory when executing the following commands.
 
 The :file:`setup.py` file assume in its supplied form that the user installs the libraries
 in the standard folders, e.g. `$HOME/include` and `$HOME/lib` for the include and library

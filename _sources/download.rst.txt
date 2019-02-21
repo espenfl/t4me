@@ -5,7 +5,7 @@ If using `pip` it is not necessary to download the package, it can simply be ins
 
 ::
 
-   pip install t4me
+   pip install T4ME
 
 Otherwise, T4ME is hosted at GitHub and can be obtain by
 

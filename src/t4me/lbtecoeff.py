@@ -129,8 +129,7 @@ def parabolic_closed(tr, eta, bs, tau0_t, temperature):  # pylint: disable=too-m
         .. math:: \\mathrm{S}/\\mathrm{m}, \\mu \\mathrm{V}/\\mathrm{K},
                   10^{-8}\\mathrm{V}^2/\\mathrm{K}^2,
                   \\mathrm{cm}^3/\\mathrm{C},
-                  10^{21} \\mathrm{cm}^{-3},
-        respectively.
+                  10^{21} \\mathrm{cm}^{-3}, respectively.
 
     Notes
     -----

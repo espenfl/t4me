@@ -2849,8 +2849,7 @@ def non_parabolic_velocity_1(k, effmass, a, scale, kshift=None):
     Setting :math:`a` to zero yields a parabolic dispersion
     and thus its group velocity.
 
-    .. warning:: The factor :math:`\\hbar^{-1}` is not returned and
-    need to be included externally.
+    .. warning:: The factor :math:`\\hbar^{-1}` is not returned and need to be included externally.
 
     """
 
@@ -2993,8 +2992,7 @@ def non_parabolic_velocity_3(k, effmass, a, scale, kshift=None):
     Setting :math:`a` to zero yields a parabolic dispersion
     and thus its group velocity.
 
-    .. warning:: The factor :math:`\\hbar^{-1}` is not returned and
-    need to be included externally.
+    .. warning:: The factor :math:`\\hbar^{-1}` is not returned and need to be included externally.
 
     """
 
@@ -3138,8 +3136,7 @@ def non_parabolic_velocity_4(k, effmass, a, scale, kshift=None):
     Setting :math:`a` to zero yields a parabolic dispersion
     and thus its group velocity.
 
-    .. warning:: The factor :math:`\\hbar^{-1}` is not returned and
-    need to be included externally.
+    .. warning:: The factor :math:`\\hbar^{-1}` is not returned and need to be included externally.
 
     """
 
@@ -3270,8 +3267,7 @@ def non_parabolic_velocity_5(k, _, a, scale, kshift=None):
 
     Multiplied by the scale factor in front of this.
 
-    .. warning:: The factor :math:`\\hbar^{-1}` is not returned and
-    need to be included externally.
+    .. warning:: The factor :math:`\\hbar^{-1}` is not returned and need to be included externally.
 
     """
 

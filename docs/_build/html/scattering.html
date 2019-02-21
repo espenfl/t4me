@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>scattering module &#8212; T4ME 1.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="t4me module" href="t4me.html" />
+    <link rel="prev" title="API Documentation" href="api.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          T4ME</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Custom interfaces</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">scattering module</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="api.html" title="Previous Chapter: API Documentation"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; API Documentation</span>
+    </a>
+  </li>
+  <li>
+    <a href="t4me.html" title="Next Chapter: t4me module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">t4me module &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/scattering.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="scattering-module">
+<h1>scattering module<a class="headerlink" href="#scattering-module" title="Permalink to this headline">¶</a></h1>
+<p>This module, <code class="file docutils literal notranslate"><span class="pre">scattering.py</span></code> contains the setup and
+calculation of the scattering properties.</p>
+<span class="target" id="module-scattering"></span><p>Contains routines to set up the scattering of the charge carriers.</p>
+<dl class="function">
+<dt id="scattering.check_scattering">
+<code class="descclassname">scattering.</code><code class="descname">check_scattering</code><span class="sig-paren">(</span><em>tr</em><span class="sig-paren">)</span><a class="headerlink" href="#scattering.check_scattering" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the scattering arrays.</p>
+<p>Also that they are dimensionalized to the energy values stored in the current <cite>Bandstructure()</cite>
+object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tr</strong> : object</p>
+<blockquote>
+<div><p>A <cite>Transport()</cite> object.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="scattering.combined_scattering">
+<code class="descclassname">scattering.</code><code class="descname">combined_scattering</code><span class="sig-paren">(</span><em>tr</em>, <em>energy</em>, <em>tau0</em>, <em>energy_trans</em><span class="sig-paren">)</span><a class="headerlink" href="#scattering.combined_scattering" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the total relaxation time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tr</strong> : object</p>
+<blockquote>
+<div><p>A <cite>Transport()</cite> object</p>
+</div></blockquote>
+<p><strong>energy</strong> : float</p>
+<blockquote>
+<div><p>The energy of the charge carrier in eV.</p>
+</div></blockquote>
+<p><strong>tau0</strong> : ndarray</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Dimension: (12)</div>
+</div>
+<p>Contains the relaxation time prefactors for the
+different scattering mechanisms in units of fs.</p>
+</div></blockquote>
+<p><strong>energy_trans</strong> : ndarray</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Dimension: (12)</div>
+</div>
+<p>Contains the energy transitions in eV (that is added to the energy
+in <img class="math" src="_images/math/1d9d76a273cd573f471ea4e5b82d4050fd33868d.png" alt="\\tau=\\tau_0E^{r-1/2}"/>, typically,
+<img class="math" src="_images/math/d4828deb99c4eaf49eace38ebc6ea8ec55b6a124.png" alt="E=E+\\hbar \\omega"/>, where <img class="math" src="_images/math/ee2eaa5e2b749ff788c990e02abd66516a8d7a10.png" alt="\\hbar \\omega"/>
+is the size of the energy transition. Set it to zero for
+the non-relevant scattering mechanisms.</p>
+</div></blockquote>
+<p><strong>effmass</strong> : float</p>
+<blockquote>
+<div><p>The effective mass in units of the electron mass</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
+<blockquote class="last">
+<div><p>The combined relaxation time in fs.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Calculates the total relaxation time</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\\frac{1}{\\tau}=\\sum_i \\frac{1}{\\tau_i},
+
+</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/ucs/utf8x.def))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/ucs/ucs.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/ucs/data/uni-global.def))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/ucs/ucsencs.def)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...au}=\\sum_i \\frac{1}{\\tau_i},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...au}=\\sum_i \\frac{1}{\\tau_i},\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...au}=\\sum_i \\frac{1}{\\tau_i},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...au}=\\sum_i \\frac{1}{\\tau_i},\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...au}=\\sum_i \\frac{1}{\\tau_i},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...au}=\\sum_i \\frac{1}{\\tau_i},\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...au}=\\sum_i \\frac{1}{\\tau_i},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...au}=\\sum_i \\frac{1}{\\tau_i},\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 444 bytes).
+Transcript written on math.log.
+</div>
+<p>where <img class="math" src="_images/math/1d9d76a273cd573f471ea4e5b82d4050fd33868d.png" alt="\\tau=\\tau_0E^{r-1/2}"/>.
+The array <cite>scattering_tau0_select</cite> determines which
+scattering to include in the sum. Consult <a class="reference internal" href="#scattering.scattering_parabolic" title="scattering.scattering_parabolic"><code class="xref py py-func docutils literal notranslate"><span class="pre">scattering_parabolic()</span></code></a>
+for additional details. The scattering prefactors
+<img class="math" src="_images/math/6895252e9a460b65a90bb2b952abbf1a9f2e1284.png" alt="\\tau_0"/> are ordered in a sequence described there.
+The <cite>scattering_tau0_select</cite> follows this sequence and is
+set in the bandstructure configuration file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scattering.find_r_for_closed">
+<code class="descclassname">scattering.</code><code class="descname">find_r_for_closed</code><span class="sig-paren">(</span><em>tr</em>, <em>band</em><span class="sig-paren">)</span><a class="headerlink" href="#scattering.find_r_for_closed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analyze the input tau0 and find the associated scattering values r.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tr</strong> : object</p>
+<blockquote>
+<div><p>A <cite>Transport()</cite> object</p>
+</div></blockquote>
+<p><strong>band</strong> : integer</p>
+<blockquote>
+<div><p>The band index.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">integer</p>
+<blockquote class="last">
+<div><p>Two times the r value to avoid half integer values.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>These are necessary for the analytic Fermi integrals.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scattering.interpolate">
+<code class="descclassname">scattering.</code><code class="descname">interpolate</code><span class="sig-paren">(</span><em>tr</em>, <em>method='linear'</em><span class="sig-paren">)</span><a class="headerlink" href="#scattering.interpolate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolates the scattering array on all available energies.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tr</strong> : object</p>
+<blockquote>
+<div><p>A <cite>Transport()</cite> object containing the scattering arrays
+and the energies etc.</p>
+</div></blockquote>
+<p><strong>method</strong> : string, optional</p>
+<blockquote>
+<div><p>The interpolation method to use. Uses
+the <code class="xref py py-func docutils literal notranslate"><span class="pre">interp1d()</span></code> function of Scipy and this sets the
+parameter <cite>kind</cite>. Defaults to “linear”.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html#scipy.interpolate.interp1d" title="(in SciPy v1.2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.interpolate.interp1d</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>Here we only perform an interpolation on the array containing the total
+relaxation time since this is used during the transport calculations.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scattering.pad_scattering_values">
+<code class="descclassname">scattering.</code><code class="descname">pad_scattering_values</code><span class="sig-paren">(</span><em>tr</em><span class="sig-paren">)</span><a class="headerlink" href="#scattering.pad_scattering_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pad the scattering values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tr</strong> : object</p>
+<blockquote>
+<div><p>A <cite>Transport()</cite> object.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The padded values are stored in the <cite>tr</cite> object.</p>
+<p>We need to pad the energies where the dos is calculated
+with a larger number of samples such that we cover the whole
+energy range in the stored bandstructure due to later
+interpolation routines etc. not going out of bounds
+when such energies are passed to the interpolator etc.</p>
+<p>We can set it to a large number because 1 eV outside the
+chemical potential. We already know no states contribute
+at temperatures below 2000 K.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scattering.scattering_dos">
+<code class="descclassname">scattering.</code><code class="descname">scattering_dos</code><span class="sig-paren">(</span><em>tr</em>, <em>dos</em>, <em>energies</em>, <em>select_scattering</em><span class="sig-paren">)</span><a class="headerlink" href="#scattering.scattering_dos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup scattering mechnisms.</p>
+<p>Store values in the scattering arrays using the density of states data
+as the energy dependency.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tr</strong> : object</p>
+<blockquote>
+<div><p>A <cite>Transport()</cite> object</p>
+</div></blockquote>
+<p><strong>dos</strong> : ndarray</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Dimension: (N,M)</div>
+</div>
+<p>Array containing the partial density of states
+(1/eV/AA^3), where N is the band index
+and M is the energy index.</p>
+</div></blockquote>
+<p><strong>energies</strong> : ndarray</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Dimension: (M)</div>
+</div>
+<p>Array containing the energy in eV at M samplings
+where the density of states is calculated.</p>
+</div></blockquote>
+<p><strong>select_scattering</strong> : ndarray</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Dimension: (12)</div>
+</div>
+<p>Array containing integers. Set to 1 to select
+the scattering, 0 to exclude.
+The variables in <cite>select_scattering</cite> are set in
+the bandstructure configuration file, one value
+for each scattering and band. See notes below
+for the currrently available scattering mechnisms.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>scattering_inv</strong> : ndarray</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Dimension: (T,N,M,12)</div>
+</div>
+<p>The scattering array in fs units
+in the current <cite>Transport()</cite> object for T temperature steps,
+N number of bands, M number of energy steps and 12 number of
+scattering mechanisms</p>
+</div></blockquote>
+<p><strong>scattering_total_inv</strong> : ndarray</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Dimension: (T, N, M)</div>
+</div>
+<p>The total (all mechanisms summed) scattering array
+in fs units) in the current <cite>Transport()</cite> object for T
+temperature steps, N number of bands and M number of
+energy steps</p>
+</div></blockquote>
+<p><strong>scattering_tau0</strong> : ndarray</p>
+<blockquote class="last">
+<div><div class="line-block">
+<div class="line">Dimension: (T, N, 12)</div>
+</div>
+<p>The scattering prefactor array, tau0 in units of fs,
+in the current <cite>Transport()</cite> object for T temperature
+steps, N number of bands and 12 number of
+scattering mechanisms.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Currently only the following scattering mechanisms are supported:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><cite>select_scattering</cite> index</th>
+<th class="head">scattering mechanism</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>1</td>
+<td>Acoustic phonon scattering from def. pot.</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>Non-polar optical phonon scattering from def. pot. (alpha stage)</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>Intervalley phonon scattering (alpha stage)</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>Polar optical phonon scattering (alpha stage)</td>
+</tr>
+<tr class="row-even"><td>5</td>
+<td>None</td>
+</tr>
+<tr class="row-odd"><td>6</td>
+<td>None</td>
+</tr>
+<tr class="row-even"><td>7</td>
+<td>None</td>
+</tr>
+<tr class="row-odd"><td>8</td>
+<td>None</td>
+</tr>
+<tr class="row-even"><td>9</td>
+<td>None</td>
+</tr>
+<tr class="row-odd"><td>10</td>
+<td>None</td>
+</tr>
+<tr class="row-even"><td>11</td>
+<td>None</td>
+</tr>
+<tr class="row-odd"><td>12</td>
+<td>Constant (energy and k-point independent)</td>
+</tr>
+</tbody>
+</table>
+<p>Only the acoustic phonon scattering has been tested.</p>
+<p>Please consult the book of C. Jacoboni <a class="reference internal" href="#jacoboni-2010-toetis" id="id1">[1]</a> and the
+publication concerning this software by
+E. Flage-Larsen <a class="reference internal" href="#t4me" id="id2">[2]</a> for additional details
+on the involved parameters. Also consult the bandstructure
+configuration file for the respective constants that have to
+be set besides <cite>select_scattering</cite> and their units.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Add more extensive documentation for the different scattering
+mechanisms.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The scattering models based on density of states
+does currently not properly involve the energy
+shift required for the transfer energies.
+This is quite serious, but does not influene the acoustic
+phonon scattering (taken to be zero in the model implemented
+here). The current approach if not using the
+analytic parabolic models is that the transfer energies
+for all scattering mechanisms are summed and the energy
+of where the relaxation time is evaluated is shifted by
+this amount during interpolation. The sum approximation
+is not physically justified and needs additional
+investigation, also the interpolation are sensitive and
+can fail close to the van Hove singularities since the
+relaxation time is propotional to the inverse of
+the density of states. All known problems pertaining to
+density of states are also manifested here for the
+scattering.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="scattering.scattering_parabolic">
+<code class="descclassname">scattering.</code><code class="descname">scattering_parabolic</code><span class="sig-paren">(</span><em>tr</em>, <em>energies</em>, <em>select_scattering</em>, <em>use_eonk=False</em><span class="sig-paren">)</span><a class="headerlink" href="#scattering.scattering_parabolic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup scattering mechnisms.</p>
+<p>Store values in the scattering arrays using parabolic band dispersions
+as an approximation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tr</strong> : object</p>
+<blockquote>
+<div><p>A <cite>Transport()</cite> object</p>
+</div></blockquote>
+<p><strong>energies</strong> : ndarray</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Dimension: (N)</div>
+</div>
+<p>Array containing the energy in eV at N samplings
+where the scattering values are o be calculated.</p>
+</div></blockquote>
+<p><strong>select_scattering</strong> : ndarray</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Dimension: (12)</div>
+</div>
+<p>Array containing integers. Set to 1 to select
+the scattering, 0 to exclude.
+The variables in <cite>select_scattering</cite> are set in
+the bandstructure configuration file, one value
+for each scattering and band. See notes below
+for the currrently available scattering mechnisms.</p>
+</div></blockquote>
+<p><strong>use_eonk</strong> : boolean</p>
+<blockquote>
+<div><p>If set to True, generate the scattering values on the
+supplied energy for each band and on its k-points</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>scattering_inv</strong> : ndarray</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Dimension: (T,N,M,12)</div>
+</div>
+<p>The scattering array in fs units
+in the current <cite>Transport()</cite> object for T temperature steps,
+N number of bands, M number of energy steps and 12 number of
+scattering mechanisms</p>
+</div></blockquote>
+<p><strong>scattering_total_inv</strong> : ndarray</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Dimension: (T, N, M)</div>
+</div>
+<p>The total (all mechanisms summed) scattering array
+in fs units) in the current <cite>Transport()</cite> object for T
+temperature steps, N number of bands and M number of
+energy steps</p>
+</div></blockquote>
+<p><strong>scattering_tau0</strong> : ndarray</p>
+<blockquote class="last">
+<div><div class="line-block">
+<div class="line">Dimension: (T, N, 12)</div>
+</div>
+<p>The scattering prefactor array, tau0 in units of fs,
+in the current <cite>Transport()</cite> object for T temperature
+steps, N number of bands and 12 number of
+scattering mechanisms.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Currently only the following scattering mechanisms are supported:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="67%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><cite>select_scattering</cite> index</th>
+<th class="head">scattering mechanism</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>1</td>
+<td>Acoustic phonon scattering from def. pot.</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>Non-polar optical phonon scattering from def. pot.</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>Intervalley phonon scattering</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>Polar optical phonon scattering</td>
+</tr>
+<tr class="row-even"><td>5</td>
+<td>Piezoelectric acoustic phonon scattering</td>
+</tr>
+<tr class="row-odd"><td>6</td>
+<td>Ionized impurity scattering, Brooks-Herring</td>
+</tr>
+<tr class="row-even"><td>7</td>
+<td>Ionized impurity scattering, Conwell-Weisskopf</td>
+</tr>
+<tr class="row-odd"><td>8</td>
+<td>Alloy scattering</td>
+</tr>
+<tr class="row-even"><td>9</td>
+<td>None</td>
+</tr>
+<tr class="row-odd"><td>10</td>
+<td>None</td>
+</tr>
+<tr class="row-even"><td>11</td>
+<td>None</td>
+</tr>
+<tr class="row-odd"><td>12</td>
+<td>Constant (energy and k-point independent)</td>
+</tr>
+</tbody>
+</table>
+<p>Please consult the book of C. Jacoboni <a class="reference internal" href="#jacoboni-2010-toetis" id="id3">[1]</a> and the
+publication concerning this software by
+E. Flage-Larsen <a class="reference internal" href="#t4me" id="id4">[2]</a> for additional details
+on the involved parameters. Also consult the bandstructure
+configuration file for the respective constants that have to
+be set besides <cite>select_scattering</cite> and their units.</p>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">Add more extensive documentation for the different scattering
+mechanisms.</p>
+</div>
+<p class="rubric">References</p>
+<p id="bibtex-bibliography-scattering-0"><table class="docutils citation" frame="void" id="jacoboni-2010-toetis" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id3">2</a>)</em> Carlo Jacoboni. <em>Theory of Electron Transport in Semiconductors</em>. Springer Berlin Heidelberg, 2010.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="t4me" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[2]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id4">2</a>)</em> E.&nbsp;Flage-Larsen. <em>Computational Physics Communications</em>, 0(0):0, 2016.</td></tr>
+</tbody>
+</table>
+</p>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, Espen Flage-Larsen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

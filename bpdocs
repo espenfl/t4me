@@ -40,5 +40,12 @@ git add -A
 git commit -m "Publishing updated documentation"
 git push origin gh-pages
 
+# Clean stuff
+cd docs
+make clean
+# Some LaTeX folder that needs to be removed
+rm -rf docs/auto
+cd ..
+
 # switch back to branch
 git checkout updated_documentation

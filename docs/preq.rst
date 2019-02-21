@@ -5,14 +5,16 @@ In its basic form T4ME only need the following
 dependency:
 
 - `Spglib <https://atztogo.github.io/spglib/>`_.
-  Which is placed as a Git submodule and handles the
-  setup of the mapping between the full and reduced k-point
-  grid.
+  This can be installed with
+
+::
+
+   pip install spglib
 
 Additional optional dependencies include:
 
-- `mpi4py <https://code.google.com/archive/p/pypar/>`_,
-  Used to parallelize (not yet enabled).
+- `Spglib <https://atztogo.github.io/spglib/>`_,
+  A custom interface to Spglib to enable tetrahedron integration.
 - `GNU Scientific Library <https://www.gnu.org/software/gsl/>`_,
   Used to solve the analytical Fermi-Dirac integrals.
 - `Einspline <http://einspline.sourceforge.net/>`_,

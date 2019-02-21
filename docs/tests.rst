@@ -1,13 +1,17 @@
 Running tests
 =============
 
-Several tests are included, which can be used to test the installation,
-but more importantly assist in verify development steps.
+Several tests are included, which can be used to test the installation.
 
 Currently only basic functionality is tested and developers
 are encouraged to write tests for any added functionality.
 
-Tests can be run by setting the ``run_tests`` in the general parameter file,
-typically the file :file:`param.yml`.
+Tests are executed by issuing
 
-Most of the tests rely on the GSL library, so please install it.
+::
+
+   pytest
+
+In the base directory.
+
+Most of the tests rely on the GSL library, so please install it. If it is not present the tests relying on this will skip.

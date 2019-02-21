@@ -59,10 +59,10 @@ class VersionUpdater():
 
         for index, line in enumerate(lines):
             if 'version = ' in line:
-                lines[index] = 'version = ' + str(self.version).rsplit(
-                    '.', 1)[0] + '\n'
+                lines[index] = "version = '" + str(self.version).rsplit(
+                    '.', 1)[0] + "'\n"
             if 'release = ' in line:
-                lines[index] = 'release = ' + str(self.version) + '\n'
+                lines[index] = "release = '" + str(self.version) + "'\n"
 
         with open(self.conf_file.strpath, 'w') as conf_fo:
             conf_fo.writelines(lines)

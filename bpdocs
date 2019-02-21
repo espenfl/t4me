@@ -32,13 +32,15 @@ touch .nojekyll
 git checkout updated_documentation docs/_build/html
 
 # now we only need html content for gh-pages
-mv ./docs/_build/html/* ./
-rm -rf ./docs
+mv ./docs/_build/html/* ./ && rm -rf ./docs
 
 # add, commit and push gh-pages
 git add -A
 git commit -m "Publishing updated documentation"
 git push origin gh-pages
+
+# switch back to branch
+git checkout updated_documentation
 
 # Clean stuff
 cd docs
@@ -47,5 +49,3 @@ make clean
 rm -rf docs/auto
 cd ..
 
-# switch back to branch
-git checkout updated_documentation

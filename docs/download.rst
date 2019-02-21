@@ -1,7 +1,13 @@
 Download
 ========
 
-T4ME is hosted at GitHub and can be obtain by
+If using `pip` it is not necessary to download the package, it can simply be installed using
+
+::
+
+   pip install t4me
+
+Otherwise, T4ME is hosted at GitHub and can be obtain by
 
 ::
 

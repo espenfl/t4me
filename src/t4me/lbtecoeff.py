@@ -170,8 +170,6 @@ def parabolic_closed(tr, eta, bs, tau0_t, temperature):  # pylint: disable=too-m
     Please consult :func:`parabolic_numeric` for the specific
     transport tensors and units used.
 
-    Notes
-    -----
     The execution of this method needs currently needs the effective
     mass tensor to be isotropic and only one scattering mechanism can
     be used per band. This method is selected by setting

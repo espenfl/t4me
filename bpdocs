@@ -4,12 +4,15 @@
 if [ $branch != "updated_documentation" ]; then
    echo "Please make sure you issue this command on the 'updated_documentation' branch."
    exit
+fi
 
 # check for uncommit changes
 if [ -n "$(git status --porcelain)" ]; then
   echo "Please commit your changes before executing this command"
   exit
+fi
 
+exit
 # build the docs
 cd docs
 make clean

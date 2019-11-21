@@ -6,6 +6,7 @@ usage: pip install -e .[graphs]
 """
 
 import os
+import sys
 import json
 import tempfile
 from setuptools import setup, find_packages, Extension
@@ -215,6 +216,9 @@ def _do_setup(extensions):
         ext_modules = None
     else:
         ext_modules = extensions
+    if "--no-extensions" in sys.argv:
+        ext_modules = None
+        sys.argv.remove("--no-extensions")
 
     with open(SETUP_JSON_PATH, 'r') as info:
         SETUP_KWARGS = json.load(info)

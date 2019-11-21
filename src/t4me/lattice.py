@@ -1,24 +1,15 @@
 # Copyright 2016 Espen Flage-Larsen
 #
-#    This file is part of T4ME.
+#    This file is part of T4ME and covered by the BSD 3-clause license.
 #
-#    T4ME is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    T4ME is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
+#    You should have received a copy of the BSD 3-clause license
+#    along with T4ME.  If not, see <https://opensource.org/licenses/BSD-3-Clause/>.
 
 #!/usr/bin/python
 """Contains routines to setup the lattice."""
 
-# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements, too-many-lines, global-statement, unsubscriptable-object
+# pylint: disable=useless-import-alias, too-many-arguments, invalid-name,
+# pylint: disable=too-many-statements, too-many-lines, global-statement, unsubscriptable-object, no-name-in-module
 
 import sys
 import math
@@ -50,7 +41,6 @@ class Lattice():  # pylint: disable=too-many-instance-attributes
         general configuration file.
 
     """
-
     def __init__(self, param, location=None, filename=None):
         self.param = param
         self.unitcell = None
@@ -63,8 +53,9 @@ class Lattice():  # pylint: disable=too-many-instance-attributes
         self.spacegroup = None
         self.kdata = self.Kmesh()
         if self.param.read == "param" or self.param.read[:5] == "numpy":
-            interface.lattice_param_numpy(
-                self, location=location, filename=filename)
+            interface.lattice_param_numpy(self,
+                                          location=location,
+                                          filename=filename)
         elif self.param.read == "vasp":
             interface.lattice_vasp(self, location=location, filename=filename)
         elif self.param.read == "w90":
@@ -115,7 +106,6 @@ class Lattice():  # pylint: disable=too-many-instance-attributes
         .. todo:: Incorporate this class into the whole program.
 
         """
-
         def __init__(self):
             self.mesh = None
             self.mesh_ired = None
@@ -357,10 +347,10 @@ class Lattice():  # pylint: disable=too-many-instance-attributes
 
         if direct:
             kmesh_unit_vec = np.array([
-                np.unique(np.floor(
-                    self.kmesh[:, 0] / symprec).astype(int)) * symprec,
-                np.unique(np.floor(
-                    self.kmesh[:, 1] / symprec).astype(int)) * symprec,
+                np.unique(np.floor(self.kmesh[:, 0] / symprec).astype(int)) *
+                symprec,
+                np.unique(np.floor(self.kmesh[:, 1] / symprec).astype(int)) *
+                symprec,
                 np.unique(np.floor(self.kmesh[:, 2] / symprec).astype(int)) *
                 symprec
             ])
@@ -374,10 +364,10 @@ class Lattice():  # pylint: disable=too-many-instance-attributes
             #    # sys.exit(1)
             kmesh_cart = self.dir_to_cart(self.kmesh)
             kmesh_unit_vec = np.array([
-                np.unique(np.floor(
-                    kmesh_cart[:, 0] / symprec).astype(int)) * symprec,
-                np.unique(np.floor(
-                    kmesh_cart[:, 1] / symprec).astype(int)) * symprec,
+                np.unique(np.floor(kmesh_cart[:, 0] / symprec).astype(int)) *
+                symprec,
+                np.unique(np.floor(kmesh_cart[:, 1] / symprec).astype(int)) *
+                symprec,
                 np.unique(np.floor(kmesh_cart[:, 2] / symprec).astype(int)) *
                 symprec
             ])
@@ -888,11 +878,12 @@ class Lattice():  # pylint: disable=too-many-instance-attributes
             # first create required tuple for Spglib
             cell = (self.unitcell, self.positions, self.species)
             # get the spacegroup
-            self.spacegroup = spglib.get_spacegroup(
-                cell, symprec=self.param.symprec)
+            self.spacegroup = spglib.get_spacegroup(cell,
+                                                    symprec=self.param.symprec)
             # get the k-point mesh
-            spg_mapping, k = spglib.get_ir_reciprocal_mesh(
-                ksampling, cell, is_shift=shift)
+            spg_mapping, k = spglib.get_ir_reciprocal_mesh(ksampling,
+                                                           cell,
+                                                           is_shift=shift)
             logger.info(
                 "Spglib detected the symmetry %s with symprec set to %s",
                 self.spacegroup, str(self.param.symprec))
@@ -939,8 +930,8 @@ class Lattice():  # pylint: disable=too-many-instance-attributes
                     kmesh_ired = 0.5 * kmesh_ired
 
             # calculate ibz weights
-            dummy, ibz_weights = np.unique(
-                mapping_bz_to_ibz, return_counts=True)
+            dummy, ibz_weights = np.unique(mapping_bz_to_ibz,
+                                           return_counts=True)
 
         else:
             # here we only generate a full grid without fetching the IBZ or

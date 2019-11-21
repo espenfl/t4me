@@ -71,8 +71,9 @@ class VersionUpdater():
         """Write version to init."""
         init_content = self.top_level_init.read()
         self.top_level_init.write(
-            re.sub(self.init_version_pat, r'\1\g<2>{}\4'.format(
-                str(self.version)), init_content, re.DOTALL | re.MULTILINE))
+            re.sub(self.init_version_pat,
+                   r'\1\g<2>{}\4'.format(str(self.version)), init_content,
+                   re.DOTALL | re.MULTILINE))
 
     def write_to_setup(self):
         """Write the updated version number to the setup file."""
@@ -89,10 +90,14 @@ class VersionUpdater():
     @property
     def doc_version(self):
         """Fetch version from docs."""
+        version_string = None
         with open(self.conf_file.strpath, 'r') as conf_fo:
             for line in conf_fo:
                 if 'release = ' in line:
                     version_string = line.split('=')[1].strip()
+
+        if version_string is None:
+            print('Could not determine the doc version string')
 
         return version.parse(version_string)
 
@@ -125,8 +130,6 @@ class VersionUpdater():
 
     def sync(self):
         """Update respective versions."""
-        if self.version > self.doc_version:
-            self.write_to_doc()
         if self.version > self.init_version:
             self.write_to_init()
         if self.version > self.setup_version:

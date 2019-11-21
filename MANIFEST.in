@@ -3,11 +3,6 @@ include setup.json
 include logging.yaml
 include src/t4me/spglib_interface/*.hpp
 include src/t4me/spglib_interface/spglib.cpp
-include src/t4me/gsl_interface/gsl.c
-include src/t4me/einspline_interface/*.hpp
-include src/t4me/einspline_interface/einspline.cpp
-include src/t4me/cubature_wildmagic_interface/*.hpp
-include src/t4me/cubature_wildmagic_interface/cubature_wildmagic.cpp
 include src/t4me/wildmagic_interface/*.hpp
 include src/t4me/wildmagic_interface/wildmagic.cpp
 include src/t4me/skw_interface/*.hpp

@@ -1,24 +1,14 @@
 # Copyright 2016 Espen Flage-Larsen
 #
-#    This file is part of T4ME.
+#    This file is part of T4ME and covered by the BSD 3-clause license.
 #
-#    T4ME is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    T4ME is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
+#    You should have received a copy of the BSD 3-clause license
+#    along with T4ME.  If not, see <https://opensource.org/licenses/BSD-3-Clause/>.
 
 #!/usr/bin/python
 """Contains the routines to perform the Boltzmann transport integrals."""
 
-# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements
+# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements, no-name-in-module
 
 import sys
 import math
@@ -79,16 +69,15 @@ def scipy_k_integrals(eta, beta, effmass, e0, i, l, m, method="tplquad"):
     if method not in func:
         logger.error("The supplied method is not recognized. Exiting.")
         sys.exit(1)
-    return func[method](
-        analytic_k_space_integrand,
-        -1.0,
-        1.0,
-        lambda kx: -1.0,
-        lambda kx: 1.0,
-        lambda kx, ky: -1.0,
-        lambda kx, ky: 1.0,
-        args=(eta, beta, effmass, e0, i, l, m),
-        epsabs=1e-2)[0]
+    return func[method](analytic_k_space_integrand,
+                        -1.0,
+                        1.0,
+                        lambda kx: -1.0,
+                        lambda kx: 1.0,
+                        lambda kx, ky: -1.0,
+                        lambda kx, ky: 1.0,
+                        args=(eta, beta, effmass, e0, i, l, m),
+                        epsabs=1e-2)[0]
 
 
 def scipy_k_integrals_discrete(tr,
@@ -180,11 +169,13 @@ def scipy_k_integrals_discrete(tr,
             integrand_type)
         sys.exit(1)
 
-    integral = func[method](
-        func[method](
-            func[method](integrand_shaped, dx=kz, axis=4), dx=ky, axis=3),
-        dx=kx,
-        axis=2)
+    integral = func[method](func[method](func[method](integrand_shaped,
+                                                      dx=kz,
+                                                      axis=4),
+                                         dx=ky,
+                                         axis=3),
+                            dx=kx,
+                            axis=2)
 
     # add Jacobian (we integrate in direct coordinates)
     integral = jacobian * integral
@@ -281,11 +272,13 @@ def scipy_k_integrals_discrete2(tr,
     elif method == "simps":
         logger.debug("Running SciPy Simpson integration for discrete " "data.")
 
-    integral = func[method](
-        func[method](
-            func[method](integrand_shaped, dx=kz, axis=4), dx=ky, axis=3),
-        dx=kx,
-        axis=2)
+    integral = func[method](func[method](func[method](integrand_shaped,
+                                                      dx=kz,
+                                                      axis=4),
+                                         dx=ky,
+                                         axis=3),
+                            dx=kx,
+                            axis=2)
 
     # add Jacobian (we integrate in direct coordinates)
     integral = jacobian * integral
@@ -374,158 +367,23 @@ def scipy_e_integrals(transport,
     if integrand not in integrands:
         logger.error("The supplied integrand is not valid. Exiting.")
         sys.exit(1)
-    integral = func[method](
-        integrands[integrand],
-        e_min,
-        e_max,
-        args=(transport, w0, eta, beta, energy_trans, effmass, order))[0]
+    integral = func[method](integrands[integrand],
+                            e_min,
+                            e_max,
+                            args=(transport, w0, eta, beta, energy_trans,
+                                  effmass, order))[0]
 
     return spin_fact * integral
 
 
 def fermiintclosed(order, eta, spin_fact):  # noqa: MC0001
-    r"""
-    Returns the value of the closed expressions for the Fermi integrals.
-
-    Parameters
-    ----------
-    order : integer
-        The Fermi integral order (two times :math:`r`
-        to avoid half integers).
-    eta : float
-        The chemical potential given in reduced
-        form (:math:`\\mu/kT`, dimensionless).
-    spin_fact : int
-        The spin degeneracy. 1 for non-spin degeneracy
-        and 2 for spin degeneracy.
-
-    Returns
-    -------
-    float
-         The value of the Fermi integral.
-
-    Notes
-    -----
-    Utilizes the GSL :cite:`gsl` library and a few inlined
-    function from the literature. Consult Ref.
-    :cite:`halen_1985_joap_assatfioo` and Ref.
-    :cite:`halen_1986_joap_essatfioo`
-    as a suplement. The Gamma factor renormalization which
-    is included in the GSL returns should be removed and
-    this is done in the interface Cython file.
-
-    .. math:: F_i=\\int_0^{\\infty}\\epsilon^i d\\epsilon /
-              (1+\\exp(\\epsilon-\\eta))
-
-    .. warning:: in order to avoid half numbers, order
-                 should be given as two times the actual
-                 order of the integral.
-
-    .. rubric:: References
-
-    .. bibliography:: references.bib
-        :style: unsrt
-        :filter: docname in docnames
-
-    """
+    """Returns the value of the closed expressions for the Fermi integrals."""
 
     # set logger
     logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running fermiintclosed.")
 
-    # lazy import og gsl
-    import t4me.gsl as gsl  # pylint: disable=import-error, no-name-in-module
-
-    # check for bogus r values
-    if order < -2:
-        logger.error(
-            "Bogus r passed to fermiintclosed, r < -2, r=%s. Exiting.", order)
-        sys.exit(1)
-    if order % 2 != 0 and order > 8:
-        logger.error(
-            "Bogus r passed to fermiintclosed, r > 4 and not integer, r=%s. Exiting.",
-            order)
-        sys.exit(1)
-    if order == -2:
-        integral = gsl.fermidiracint_m1(eta)
-    elif order == -1:
-        integral = gsl.fermidiracint_mhalf(eta)
-    elif order == 1:
-        integral = gsl.fermidiracint_half(eta)
-    elif order == 3:
-        integral = gsl.fermidiracint_3half(eta)
-    elif order == 5:
-        # after JAP 57, 5271, 1985 (also see erratum)
-        gamma = 15.0 * np.sqrt(constants.pi) / 8.0
-        a1 = np.array(
-            [1.0, 0.088392, 0.021407, 0.007917, 0.003723, 0.001716, 0.000451])
-        a2 = np.array(
-            [0.085972, 1.23738, 1.07293, 0.362030, 38.7579, -750.718, 4378.70])
-        a3 = np.array([
-            0.927560, 0.866971, 0.383690, 0.098863, 0.017398, 0.000418,
-            -0.000067
-        ])
-        if eta <= 0.0:
-            f = 0.0
-            for index, value in np.ndenumerate(a1):
-                f = f + np.power(-1.0, index[0] + 2) * \
-                    value * np.exp(eta * (index[0] + 1))
-
-        elif 0.0 < eta <= 4.0:
-            f = 0.0
-            for index, value in np.ndenumerate(a3):
-                f = f + value * np.power(eta, index[0])
-        else:
-            f = 0.0
-            for index, value in np.ndenumerate(a2):
-                f = f + value / np.power(eta, 2 * (index[0]))
-            f = f * np.power(eta, 3.5)
-        integral = f * gamma
-
-    elif order == 7:
-        # after JAP 57, 5271, 1985 (also see erratum)
-        gamma = 40320 * math.sqrt(math.pi) / 6144
-        a1 = np.array(
-            [1.0, 0.044203, 0.007157, 0.001976, 0.000719, 0.000317, 0.000106])
-        a2 = np.array([
-            0.019105, 0.494958, 2.13722, -0.503902, -6.99243, 96.6031, -426.046
-        ])
-        a3 = np.array([
-            0.961478, 0.927751, 0.432494, 0.129617, 0.023308, 0.004067,
-            -0.000051
-        ])
-        if eta <= 0.0:
-            f = 0.0
-            for index, value in np.ndenumerate(a1):
-                f = f + np.power(-1.0, index[0] + 2) * \
-                    value * np.exp(eta * (index[0] + 1))
-
-        elif 0.0 < eta <= 4.0:
-            f = 0.0
-            for index, value in np.ndenumerate(a3):
-                f = f + value * np.power(eta, index[0])
-        else:
-            f = 0.0
-            for index, value in np.ndenumerate(a2):
-                f = f + value / np.power(eta, 2 * (index[0]))
-            f = f * np.power(eta, 3.5)
-        integral = f * gamma
-
-    elif order == 0:
-        integral = gsl.fermidiracint_0(eta)
-    elif order == 2:
-        integral = gsl.fermidiracint_1(eta)
-    elif order == 4:
-        integral = gsl.fermidiracint_2(eta)
-    elif order > 4 or order < -2:
-        if order % 2 == 0:
-            integral = gsl.fermidiracint_int(order / 2, eta)
-    else:
-        logger.error("No Fermi-Dirac integration routines "
-                     "selected. Exiting.")
-        sys.exit(1)
-
-    return spin_fact * integral
+    raise NotImplementedError
 
 
 def integrandpardos(eps, transport, w0, eta, beta, energy_trans, effmass, i):  # pylint: disable=unused-argument

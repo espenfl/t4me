@@ -1,24 +1,14 @@
 # Copyright 2016 Espen Flage-Larsen
 #
-#    This file is part of T4ME.
+#    This file is part of T4ME and covered by the BSD 3-clause license.
 #
-#    T4ME is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    T4ME is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
+#    You should have received a copy of the BSD 3-clause license
+#    along with T4ME.  If not, see <https://opensource.org/licenses/BSD-3-Clause/>.
 
 #!/usr/local/bin/python
 """Contains various constants used by T4ME."""
 
-# pylint: disable=invalid-name
+# pylint: disable=invalid-name, no-name-in-module
 
 import math
 import numpy as np
@@ -64,8 +54,6 @@ rbf_functions = [
     "multiquadric", "inverse_multiquadric", "gaussian", "linear", "cubic",
     "quintic", "thin_plate"
 ]
-
-einspline_boundary_cond = ["periodic", "flat", "natural", "antiperiodic"]
 
 wildmagic_methods = [
     "trilinear", "tricubic_exact", "tricubic_bspline", "akima"

@@ -13,5 +13,3 @@ Tests are executed by issuing
    pytest
 
 In the base directory.
-
-Most of the tests rely on the GSL library, so please install it. If it is not present the tests relying on this will skip.

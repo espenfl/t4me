@@ -18,7 +18,7 @@
 #!/usr/bin/python
 """Contains routines that sets up and selects the integral functions to be called."""
 
-# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements, too-many-lines
+# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements, too-many-lines, no-name-in-module
 
 import sys
 import math
@@ -81,12 +81,12 @@ def parabolice(tr, eta, temperature, bs, tau0, method):
     # set logger
     logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running parabolice.")
-    func = {"closed": parabolic_closed, "numeric": parabolic_numeric}
+    func = {"numeric": parabolic_numeric}
     try:
         func[method]
     except KeyError:
         logger.error(
-            "The method: '%s' does not exist for calculating the parabolic Fermi integrals. Please use 'closed' or 'numeric'. Exiting. ",
+            "The method: '%s' does not exist for calculating the parabolic Fermi integrals. Please use 'numeric'. Exiting. ",
             method)
         sys.exit(1)
     sigma, seebeck, lorenz, hall, ccn, ccp = func[method](tr, eta, bs, tau0,
@@ -186,173 +186,8 @@ def parabolic_closed(tr, eta, bs, tau0_t, temperature):  # pylint: disable=too-m
     logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.info("Running the closed analytic Fermi-Dirac integrals "
                 "to calculate the transport coefficients.")
-    numbands = tr.included_bands.size
-    effmass = np.zeros(numbands)
-    r = np.zeros(numbands, dtype=np.int)
-    tau0 = np.zeros(numbands)
-    # loop bands to check initials
-    for band in range(numbands):
-        band_actual = tr.included_bands[band]
-        # check for parabolic effective mass
-        effmass_vec = bs.effmass[band_actual]
-        if not parabolic_effective_mass(effmass_vec):
-            logger.error("In order to run the closed Fermi-Dirac "
-                         "integrals the effective mass needs to be "
-                         "parabolic. Exiting.")
-            sys.exit(1)
-        # make sure effective mass is positive
-        effmass[band] = np.abs(effmass_vec[0])
-        # check if tau0 exist
-        try:
-            tr.scattering_tau0.size
-        except AttributeError:
-            logging.error("The tau0 array does not exist. Exiting.")
-            sys.exit(1)
-        # check if r_factor exist
-        try:
-            tr.scattering_r_factor.size
-        except AttributeError:
-            logging.error("The r_factor array does not exist. Exiting.")
-            sys.exit(1)
-        # find scattering factor r from tau0 array (similar for all temps)
-        r[band] = scattering.find_r_for_closed(tr, band_actual)
-        tau0[band] = tau0_t[band_actual][bs.select_scattering[band_actual]]
-        # we need the rescaling in tau0 due to the fact
-        # that the tau0 here defined is defined for E and not E/kT,
-        # which is assumed in the Fermi integrals which follows
-        tau0[band] = tau0[band] * np.power(constants.kb * temperature * 1e-5,
-                                           r[band] / 2.0 - 0.5)
-    sign = {"v": 1.0, "c": -1.0}
-    # calculate contribution for each band
-    sigma = np.zeros(numbands)
-    seebeck = np.zeros(numbands)
-    lorenz = np.zeros(numbands)
-    hall = np.zeros(numbands)
-    cc = np.zeros(numbands)
-    # calculate single band coefficients, set integration limits
-    for band in range(numbands):
-        band_actual = tr.included_bands[band]
-        spin_deg = tr.bs.spin_degen[band_actual]
-        # CAUTION!: all calls to fermiintclosed need to be called
-        # two times its order (to avoid half values and use integers)
-        sigmasigma = (1.0 + r[band] / 2.0) * \
-            lbteint.fermiintclosed(r[band],
-                                   eta[band_actual],
-                                   spin_deg)
-        sigmachi = (2 + r[band] / 2.0) * \
-            lbteint.fermiintclosed(r[band] + 2,
-                                   eta[band_actual],
-                                   spin_deg)
-        sigmakappa = (3.0 + r[band] / 2.0) * \
-            lbteint.fermiintclosed(r[band] + 4,
-                                   eta[band_actual],
-                                   spin_deg)
-        sigmahall = (0.5 + 2.0 * r[band] / 2.0) * \
-            lbteint.fermiintclosed(
-                2 * r[band] - 1, eta[band_actual], spin_deg)
-        sigmados = lbteint.fermiintclosed(1, eta[band_actual], spin_deg)
-        # conductivity
-        # here we need to put in the effective mass dependency
-        bandvaluesigma = tau0[band] * math.sqrt(effmass[band]) * \
-            sigmasigma
-        # for the seebeck, the units in front of the integral in
-        # Sigma cancels, including the effective mass (thus we only
-        # use sigmachi and sigmasigma for the calculation of the
-        # Seebeck coefficient), but we need a sign (n and p type)
-        bandvalueseebeck = sign[tr.bs.status[band_actual]] * (
-            sigmachi / sigmasigma - eta[band_actual])
-        # and now the lorenz
-        bandvaluelorenz = sigmakappa / sigmasigma - \
-            pow(sigmachi / sigmasigma, 2.0)
-        # and hall
-        bandvaluehall = sign[tr.bs.status[
-            band_actual]] * np.power(effmass[band], -1.5) * \
-            sigmahall / np.power(sigmasigma, 2.0)
-        # and cc
-        bandvaluecc = np.power(effmass[band], 1.5) * sigmados
-        # set sigma pr band (adjust units later)
-        sigma[band] = bandvaluesigma
-        # set seebeck pr band (adjust units later)
-        seebeck[band] = bandvalueseebeck
-        # set lorenz pr band (adjust units later)
-        lorenz[band] = bandvaluelorenz
-        # set hall pr band (adjust units later)
-        hall[band] = bandvaluehall
-        # set cc pr band (adjust units later)
-        cc[band] = bandvaluecc
 
-    # now we need to calculate the multiband totals, first conductivity
-    sigma_total = np.sum(sigma)
-    # some temporaries
-    seebecktimessigma = np.multiply(seebeck, sigma)
-    seebeck2timessigma = np.multiply(np.power(seebeck, 2.0), sigma)
-    lorenztimessigma = np.multiply(lorenz, sigma)
-    halltimessigma2 = np.multiply(hall, np.power(sigma, 2.0))
-    # then seebeck
-    seebeck_total = np.sum(seebecktimessigma) / sigma_total
-    # then lorenz
-    lorenz_total = (np.sum(lorenztimessigma) +
-                    np.sum(seebeck2timessigma)) / \
-        sigma_total - np.power(np.sum(seebecktimessigma) /
-                               sigma_total, 2.0)
-    # then hall
-    hall_total = np.sum(halltimessigma2) / np.power(sigma_total, 2.0)
-    # finally the cc, need to separate between n and p-type
-    ntype_index = np.where(tr.bs.status == "c")
-    ptype_index = np.where(tr.bs.status == "v")
-    cc_total_n = np.sum(cc[ntype_index])
-    cc_total_p = np.sum(cc[ptype_index])
-
-    # now set units
-    num_prefact_sigma = np.sqrt(20.0) / (3 * constants.pi)
-    sigma_units = num_prefact_sigma * constants.g0 * constants.sqmcsq * \
-        np.power(constants.kb, 1.5) * \
-        np.power(temperature, 1.5) / constants.hbar
-    num_prefact_seebeck = 100.0
-    seebeck_units = (num_prefact_seebeck * constants.knorm / constants.enorm)
-    lorenz_units = np.power(constants.knorm / constants.enorm, 2.0)  # pylint: disable=assignment-from-no-return
-    # an additional factor of two is included below in order
-    # to comply with e.g. the data given by May for the
-    # Hall factor. Not confirmed, but suspect this is from
-    # the spin degeneracy which is squared in the
-    # denominator and thus needs to be multiplied away
-    # TODO: Check this in more detail pylint: disable=fixme
-    num_prefact_hall = 2.0 * 3.0 * 1e4 * \
-        np.power(constants.pi, 2.0) / (2.0 * math.sqrt(2.0))
-    hall_units = num_prefact_hall * np.power(constants.hbar, 3.0) / \
-        (constants.elcharge * np.power(constants.elmass *
-                                       constants.jtoev *
-                                       constants.kb *
-                                       temperature, 1.5))
-    num_prefact_cc = 10.0 * math.sqrt(5.0) / np.power(math.pi, 2.0)
-    cc_units = num_prefact_cc * \
-        np.power(temperature, 1.5) * constants.scmcsqthird
-
-    # now add units to integral values
-    sigma_total = sigma_units * sigma_total
-    seebeck_total = seebeck_units * seebeck_total
-    lorenz_total = lorenz_units * lorenz_total
-    hall_total = hall_units * hall_total
-    cc_total_n = cc_units * cc_total_n
-    cc_total_p = cc_units * cc_total_p
-
-    # now create the 3x3 tensors and fill the diagonal, since the
-    # closed expressions are fully isotropic
-    sigma_tensor = np.zeros((3, 3))
-    seebeck_tensor = np.zeros((3, 3))
-    lorenz_tensor = np.zeros((3, 3))
-    hall_tensor = np.zeros((3, 3))
-    cc_tensor_n = np.zeros((3, 3))
-    cc_tensor_p = np.zeros((3, 3))
-    np.fill_diagonal(sigma_tensor, sigma_total)
-    np.fill_diagonal(seebeck_tensor, seebeck_total)
-    np.fill_diagonal(lorenz_tensor, lorenz_total)
-    np.fill_diagonal(hall_tensor, hall_total)
-    np.fill_diagonal(cc_tensor_n, cc_total_n)
-    np.fill_diagonal(cc_tensor_p, cc_total_p)
-
-    return sigma_tensor, seebeck_tensor, lorenz_tensor, \
-        hall_tensor, cc_tensor_n, cc_tensor_p
+    raise NotImplementedError
 
 
 def parabolic_numeric(tr, eta, bs, tau0_t, temperature):  # pylint: disable=too-many-locals
@@ -639,20 +474,25 @@ def parabolic_numeric(tr, eta, bs, tau0_t, temperature):  # pylint: disable=too-
             tr, "normal", e_min, e_max, w0[band_actual], eta[band_actual],
             beta, tr.tau_energy_trans[band_actual], effmass[band], 0.0,
             spin_deg)
-        sigmachi = lbteint.scipy_e_integrals(
-            tr, "normal", e_min, e_max, w0[band_actual], eta[band_actual],
-            beta, tr.tau_energy_trans[band_actual], effmass[band], 1.0,
-            spin_deg)
+        sigmachi = lbteint.scipy_e_integrals(tr, "normal", e_min, e_max,
+                                             w0[band_actual], eta[band_actual],
+                                             beta,
+                                             tr.tau_energy_trans[band_actual],
+                                             effmass[band], 1.0, spin_deg)
         sigmakappa = lbteint.scipy_e_integrals(
             tr, "normal", e_min, e_max, w0[band_actual], eta[band_actual],
             beta, tr.tau_energy_trans[band_actual], effmass[band], 2.0,
             spin_deg)
-        sigmahall = lbteint.scipy_e_integrals(
-            tr, "hall", e_min, e_max, w0[band_actual], eta[band_actual], beta,
-            tr.tau_energy_trans[band_actual], effmass[band], 0.0, spin_deg)
-        sigmados = lbteint.scipy_e_integrals(
-            tr, "dos", e_min, e_max, w0[band_actual], eta[band_actual], beta,
-            tr.tau_energy_trans[band_actual], effmass[band], 0.0, spin_deg)
+        sigmahall = lbteint.scipy_e_integrals(tr, "hall", e_min, e_max,
+                                              w0[band_actual],
+                                              eta[band_actual], beta,
+                                              tr.tau_energy_trans[band_actual],
+                                              effmass[band], 0.0, spin_deg)
+        sigmados = lbteint.scipy_e_integrals(tr, "dos", e_min, e_max,
+                                             w0[band_actual], eta[band_actual],
+                                             beta,
+                                             tr.tau_energy_trans[band_actual],
+                                             effmass[band], 0.0, spin_deg)
         # conductivity
         bandvaluesigma = math.sqrt(effmass[band]) * sigmasigma
         # for the seebeck, the units in front of the integral
@@ -807,10 +647,8 @@ def numerick(tr, chempots, temperatures, bs=None):  # pylint: disable=too-many-l
     This routine accepts a predetermined array containg the
     relaxation time sampled at different carrier energy steps.
     When the evaluation of the intergrals are executed the carrier
-    energy dispersion, velocity and scattering array is
-    either interpolated on the fly simultanously (if
-    `transport_integration_method` is "cubature") or only the
-    scattering array is interpolated on all energies stored in `bs`
+    energy dispersion, velocity and scattering array are interpolated on
+    all energies stored in `bs`
     and then the integrals are evaluated statically
     (if `transport_integration_method` is "trapz", "simps", "romb",
     "tetra" or "smeared"). The former method can also be used in the case
@@ -834,170 +672,16 @@ def numerick(tr, chempots, temperatures, bs=None):  # pylint: disable=too-many-l
     lorenz = np.zeros((sigma.shape))
     # check the velocities
     if not bs.check_velocities(constants.zerocut):
-        if bs.gen_velocities and not \
+        if gen_velocities and not \
            bs.param.dispersion_velocities_numdiff:
-            logger.info("No band velocities were supplied, have "
-                        "to run Cubature integration with Wildmagic "
-                        "interpolation in order to extract band velocities "
-                        "on the fly during integration. Consider to "
-                        "turn on the preinterpolator or the "
-                        "dispersion_velocities_numdiff to avoid "
-                        "this.")
-            if not tr.param.transport_integration_method == "cubature":
-                logger.error("User did not specify the only possible option "
-                             "for transport_integration_method for this case: "
-                             "'cubature'. Exiting")
-                sys.exit(1)
-            if not tr.param.transport_interpolate_method == "wildmagic":
-                logger.error("User did not specify the only possible option "
-                             "for transport_interpolate_method for this case: "
-                             "'wildmagic'. Exiting.")
-                sys.exit(1)
-    if tr.param.transport_integration_method == "cubature":
-        # first check if the cell is regular, otherwise eject as the
-        # extraction of the velocities for the Wildmagic routines does
-        # not work for non-regular grids
-        if not tr.lattice.regular:
-            logger.error("The Cubature/Wildmagic integration method only "
-                         "works for systems with a cubic, tetragonal or "
-                         "a orthorhombic unit cell. Exiting.")
+            logger.info("No band velocities were supplied and we have no "
+                        "way to calculate them.")
             sys.exit(1)
-        # check that the right interpolation method is selected, if not, set
-        # and continue
-        if tr.param.transport_interpolate_method != "wildmagic":
-            logger.info("The supplied transport_interpolate_method is "
-                        "not compatible with the cubature integration. "
-                        "Currently the only supported method is 'wildmagic'. "
-                        "Setting this and continuing.")
-            tr.param.transport_interpolate_method = "wildmagic"
-        # now check that the interpol_type is set accordingly
-        if (tr.param.transport_interpolate_type not in
-                constants.wildmagic_methods):
-            options = ', '.join(map(str, constants.wildmagic_methods))
-            logger.error(
-                "The specified transport_interpolate_type "
-                "is not recognized by the Wildmagic method, "
-                "please consult the Wildmagic documentation "
-                "for valid flags. Possible flags for "
-                "transport_interpolate_type are: %s. Exiting.", options)
-            sys.exit(1)
-
-        logger.info(
-            "Running Cubature and Geometric Tools on the fly interpolation "
-            "routines to calculate the transport coefficients.")
-
-        # lazy import of cubature_wildmagic (optional)
-        import t4me.cubature_wildmagic as cubature_wildmagic  # pylint: disable=import-error, no-name-in-module
-
-        # set scattering type (numeric or analytic)
-        # check now to see if only constant scattering is set
-        if np.any(tr.bs.select_scattering[:, 0:11]):
-            # okey, more than constant scattering is selected
-            if tr.param.transport_use_analytic_scattering:
-                if not tr.param.transport_use_scattering_ontfly:
-                    scattering_type = 1
-                    if tr.scattering_tau0 is not None:
-                        # it is easier to use 1/tau0 in the routine that
-                        # sums the combined scattering during integrations (less
-                        # operations), so invert (still call it tau0)
-                        scatter = np.ascontiguousarray(
-                            np.array(np.nan_to_num(1.0 / tr.scattering_tau0)),
-                            dtype=np.double)
-                    else:
-                        logger.error(
-                            "Something is wrong. The scattering_tau0 array does "
-                            "not exist. Exiting.")
-                        sys.exit(1)
-                else:
-                    # allow user to use on-the-fly interpolation with a parabolic
-                    # input as well
-                    scattering_type = 0
-                    if tr.scattering_total_inv is not None:
-                        scatter = np.ascontiguousarray(
-                            np.array(tr.scattering_total_inv), dtype=np.double)
-                    else:
-                        logger.error(
-                            "Something is wrong. The scattering_total_inv "
-                            "array does not exist. Exiting.")
-                        sys.exit(1)
-            else:
-                scattering_type = 0
-                if tr.scattering_total_inv is not None:
-                    scatter = np.ascontiguousarray(
-                        np.array(tr.scattering_total_inv), dtype=np.double)
-                else:
-                    logger.error(
-                        "Something is wrong. The scattering_total_inv "
-                        "array does not exist. Exiting.")
-                    sys.exit(1)
-        else:
-            # only constant scattering selected
-            scattering_type = 2
-            scatter = np.ascontiguousarray(
-                np.array(np.nan_to_num(tr.scattering_tau0)), dtype=np.double)
-
-        num_points = np.ascontiguousarray(tr.lattice.ksampling, dtype=np.intc)
-        # set boundary conditions
-        bz_border = tr.lattice.fetch_bz_border(direct=False)
-        domainx = np.ascontiguousarray(
-            np.array([
-                bz_border[0] + constants.zerocut,
-                bz_border[1] - constants.zerocut
-            ],
-                     dtype=np.double))
-        domainy = np.ascontiguousarray(
-            np.array([
-                bz_border[2] + constants.zerocut,
-                bz_border[3] - constants.zerocut
-            ],
-                     dtype=np.double))
-        domainz = np.ascontiguousarray(
-            np.array([
-                bz_border[4] + constants.zerocut,
-                bz_border[5] - constants.zerocut
-            ],
-                     dtype=np.double))
-        max_it = tr.param.cubature_max_it
-        abs_err = tr.param.cubature_abs_err
-        rel_err = tr.param.cubature_rel_err
-        scattering_energies = tr.scattering_energies
-
-        # check if only isotropic is needed (diagonal elements,
-        # faster calculation)
-        if tr.param.transport_isotropic:
-            iso = 1
-        else:
-            iso = 0
-        # now slice arrays to only include bands set up to be
-        # calculated
-        energies_sliced = np.ascontiguousarray(
-            energies[tr.included_bands], dtype=np.double)
-        velocity_sliced = np.ascontiguousarray(
-            velocities[tr.included_bands], dtype=np.double)
-        scatter_sliced = np.ascontiguousarray(
-            scatter[:, tr.included_bands, :], dtype=np.double)
-        energy_trans_sliced = np.ascontiguousarray(
-            tr.tau_energy_trans[tr.included_bands], dtype=np.double)
-        spin_degen_sliced = np.ascontiguousarray(
-            tr.bs.spin_degen[tr.included_bands], dtype=np.intc)
-
-        # sometimes we do not want to print library output
-        info = tr.param.libinfo
-        cubature_wildmagic.calc_transport_tensors_cubature_interface(
-            num_points, domainx, domainy, domainz, energies_sliced,
-            velocity_sliced, scatter_sliced, scattering_energies,
-            spin_degen_sliced, energy_trans_sliced, chempots, temperatures,
-            tr.lattice.kmesh_ired.shape[0], tr.lattice.ksampling,
-            tr.lattice.runitcell, 2, tr.param.transport_interpolate_method,
-            tr.param.transport_interpolate_type, max_it, abs_err, rel_err,
-            tr.param.cubature_h, iso, info, sigma, seebeck, lorenz,
-            gen_velocities, scattering_type)
-
     # use simple static integration of the input grids
     # accuracy cannot be controlled, but it is rather fast and easy
-    elif (tr.param.transport_integration_method == "simps"  # pylint: disable=too-many-nested-blocks
-          or tr.param.transport_integration_method == "trapz"
-          or tr.param.transport_integration_method == "romb"):
+    if (tr.param.transport_integration_method == "simps"  # pylint: disable=too-many-nested-blocks
+            or tr.param.transport_integration_method == "trapz"
+            or tr.param.transport_integration_method == "romb"):
         logger.info("Running simps, trapz or romb from Scipy to "
                     "calculate the transport coefficients.")
         # first check that the scattering array have been set up on
@@ -1135,58 +819,58 @@ def numerick(tr, chempots, temperatures, bs=None):  # pylint: disable=too-many-l
                     # DOES NOT WORK AT THE MOMENT.
                     raise NotImplementedError(
                         'Parallelization is not yet implemented.')
-                else:
-                    # serial version
-                    for cindex, chempot in np.ndenumerate(chempots):
-                        scatter = tr.scattering_total_inv[tindex, tr.
-                                                          included_bands]
-                        sigmasigma = lbteint.scipy_k_integrals_discrete2(
-                            tr,
-                            energies,
-                            velocities,
-                            scatter,
-                            chempot,
-                            beta,
-                            spin_fact,
-                            0.0,
-                            method=tr.param.transport_integration_method)
-                        sigmachi = lbteint.scipy_k_integrals_discrete2(
-                            tr,
-                            energies,
-                            velocities,
-                            scatter,
-                            chempot,
-                            beta,
-                            spin_fact,
-                            1.0,
-                            method=tr.param.transport_integration_method)
-                        sigmakappa = lbteint.scipy_k_integrals_discrete2(
-                            tr,
-                            energies,
-                            velocities,
-                            scatter,
-                            chempot,
-                            beta,
-                            spin_fact,
-                            2.0,
-                            method=tr.param.transport_integration_method)
-                        # conductivity
-                        sigma_nounit = sigmasigma
-                        # for the seebeck, the units in front of the integral
-                        # in the Sigmas cancels
-                        # remember to do matrix and not elementwise
-                        # for all tensors
-                        # check if sigma is singular
-                        sigmainv = utils.invert_matrix(sigmasigma)
-                        seebeck_nounit = np.dot(sigmainv, sigmachi)
-                        # and now the lorenz (same with the units)
-                        lorenz_nounit = (np.dot(sigmakappa, sigmainv) - np.dot(
-                            np.dot(sigmachi, seebeck_nounit), sigmainv))
-                        # and add units to the integrals
-                        sigma[tindex, cindex] = sigma_units * sigma_nounit
-                        seebeck[tindex, cindex] = seebeck_units * \
-                            seebeck_nounit
-                        lorenz[tindex, cindex] = lorenz_units * lorenz_nounit
+                # serial version
+                for cindex, chempot in np.ndenumerate(chempots):
+                    scatter = tr.scattering_total_inv[tindex, tr.
+                                                      included_bands]
+                    sigmasigma = lbteint.scipy_k_integrals_discrete2(
+                        tr,
+                        energies,
+                        velocities,
+                        scatter,
+                        chempot,
+                        beta,
+                        spin_fact,
+                        0.0,
+                        method=tr.param.transport_integration_method)
+                    sigmachi = lbteint.scipy_k_integrals_discrete2(
+                        tr,
+                        energies,
+                        velocities,
+                        scatter,
+                        chempot,
+                        beta,
+                        spin_fact,
+                        1.0,
+                        method=tr.param.transport_integration_method)
+                    sigmakappa = lbteint.scipy_k_integrals_discrete2(
+                        tr,
+                        energies,
+                        velocities,
+                        scatter,
+                        chempot,
+                        beta,
+                        spin_fact,
+                        2.0,
+                        method=tr.param.transport_integration_method)
+                    # conductivity
+                    sigma_nounit = sigmasigma
+                    # for the seebeck, the units in front of the integral
+                    # in the Sigmas cancels
+                    # remember to do matrix and not elementwise
+                    # for all tensors
+                    # check if sigma is singular
+                    sigmainv = utils.invert_matrix(sigmasigma)
+                    seebeck_nounit = np.dot(sigmainv, sigmachi)
+                    # and now the lorenz (same with the units)
+                    lorenz_nounit = (
+                        np.dot(sigmakappa, sigmainv) -
+                        np.dot(np.dot(sigmachi, seebeck_nounit), sigmainv))
+                    # and add units to the integrals
+                    sigma[tindex, cindex] = sigma_units * sigma_nounit
+                    seebeck[tindex, cindex] = seebeck_units * \
+                        seebeck_nounit
+                    lorenz[tindex, cindex] = lorenz_units * lorenz_nounit
 
     # here we use weighted integration, accuracy cannot be controlled,
     # but it is rather fast and easy, currently linear tetrahedron and
@@ -1239,16 +923,16 @@ def numerick(tr, chempots, temperatures, bs=None):  # pylint: disable=too-many-l
         # that
         # ibz_weights_dummy = np.ones(
         #    tr.lattice.mapping_ibz_to_bz.size, dtype='intc')
-        energies_ibz = np.take(
-            tr.bs.energies, tr.lattice.mapping_ibz_to_bz, axis=1)
+        energies_ibz = np.take(tr.bs.energies,
+                               tr.lattice.mapping_ibz_to_bz,
+                               axis=1)
         spglib_interface.calc_transport_tensors_weights_interface(  # pylint: disable=c-extension-no-member
             energies_ibz, tr.bs.velocities, scatter, temperatures, chempots,
             tr.lattice.spg_kmesh,
             np.ascontiguousarray(tr.lattice.mapping_bz_to_ibz, dtype="intc"),
             np.ascontiguousarray(tr.lattice.mapping_ibz_to_bz, dtype="intc"),
-            np.ascontiguousarray(
-                tr.lattice.ibz_weights,
-                dtype="intc"), tr.lattice.ksampling, tr.lattice.runitcell,
+            np.ascontiguousarray(tr.lattice.ibz_weights, dtype="intc"),
+            tr.lattice.ksampling, tr.lattice.runitcell,
             tr.bs.energies.shape[0], tr.lattice.mapping_ibz_to_bz.size,
             tr.temperatures.shape[0], tr.chempots.shape[0], int_method,
             energy_samples, weight_type, smearing, energy_cutoff, volume,

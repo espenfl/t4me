@@ -73,14 +73,6 @@ possible:
   where the effective mass :math:`m` is set by ``effmass`` and
   the correction factor :math:`\\alpha` is set by ``a``.
 
-- `3` - tight-binding bands if which the relation depends on the
-  specific model used, but is typically a combination of cosines
-  and sines. The tight-binding model is generated in PythTB using
-  the additional parameters ``torb``, ``tonsite``,
-  ``tadjust_onsite_zero`` and ``thop``. Users should consult the
-  `PythTB manual <http://physics.rutgers.edu/pythtb/usage.html>`_
-  for additional details.
-
 No band folding is performed, except for the tight-binding case.
 It is important thus to scale the unit cell such that there is
 enough band coverage within the requested region of the chemical
@@ -572,52 +564,3 @@ Example:
    emission: False
 
 Use absorption, i.e. a phonon is absorbed in the scattering event.
-
-Tight binding related parameters
---------------------------------
-
-In the following the parameters which set up the tight binding
-parameters are explained. They are only relevant if ``type`` is set
-to `3`. PythTB is used to set up the model. Please consult
-`PythTB manual <http://physics.rutgers.edu/pythtb/usage.html>`_
-for additional details.
-
-``torb``
-~~~~~~~~
-The direct coordinate of each tight binding orbital.
-
-Example:
-::
-
-   torb: [[0.0,0.0,0.0]]
-
-A tight binding orbital is :math:`\\Gamma` centered.
-
-``tonsite``
-~~~~~~~~~~~
-The onsite energies for each orbital in units of eV.
-
-Example:
-::
-
-   tonsite: [0.0]
-
-The onsite energy of the first orbital is set at 0.0 eV.
-
-``thop``
-~~~~~~~~
-A list of each hopping term, where each term has the format
-
-| [
-| amplitude in eV, indexi, indexj, indexR
-| ]
-
-as described in the
-  `PythTB manual <http://physics.rutgers.edu/pythtb/usage.html>`_
-
-Example:
-::
-
-   thop: [[-0.5, 0, 0, [1, 0, 0]],
-          [-0.5, 0, 0, [0, 1, 0]],
-          [-0.5, 0, 0, [0, 0, 1]]]

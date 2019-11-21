@@ -1,24 +1,14 @@
 # Copyright 2016 Espen Flage-Larsen
 #
-#    This file is part of T4ME.
+#    This file is part of T4ME and covered by the BSD 3-clause license.
 #
-#    T4ME is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    T4ME is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
+#    You should have received a copy of the BSD 3-clause license
+#    along with T4ME.  If not, see <https://opensource.org/licenses/BSD-3-Clause/>.
 
 #!/usr/bin/python
 """Contains routines to set up the calculation of the charge carrier transport coefficients."""
 
-# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements, too-many-lines, global-statement
+# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements, too-many-lines, global-statement, no-name-in-module
 
 import sys
 import logging
@@ -44,7 +34,6 @@ class Transport():  # pylint: disable=too-many-instance-attributes, too-many-bra
        A `Param()` object.
 
     """
-
     def __init__(self, bs):
         self.bs = bs
         self.param = bs.param
@@ -151,16 +140,6 @@ class Transport():  # pylint: disable=too-many-instance-attributes, too-many-bra
                                           energies,
                                           select_scattering)
 
-            # check if we want Cubature/GeometricTools that the ontfly flag
-            # is enabled for the scattering
-            if self.param.transport_integration_method == "cubature":
-                if not self.param.transport_use_scattering_ontfly:
-                    logger.info("User wants to use Cubature/GeometricTools "
-                                "and with non-analytical scattering. The flag "
-                                "'transport_use_scattering_ontfly' is now "
-                                "forced to True.")
-                    self.param.transport_use_scattering_ontfly = True
-
             # store commons
             self.scattering_inv = scattering_inv
             self.scattering_total_inv = scattering_total_inv
@@ -187,33 +166,8 @@ class Transport():  # pylint: disable=too-many-instance-attributes, too-many-bra
         else:
             logger.info("Setting up the scattering models "
                         "based on the parabolic band models.")
-            if self.param.transport_integration_method == "cubature":
-                # for on the fly interpolation we need a linear
-                # grid for the scattering and that is it
-                use_eonk = False
-                # check that the energy range is at least
-                # transport_energycutband outside the min
-                # and max of the chemical potential
-                emin = (self.param.transport_chempot_min -
-                        self.param.transport_energycutband)
-                emax = (self.param.transport_chempot_max +
-                        self.param.transport_energycutband)
-                # does the analytic dos actually exist?
-                if not self.bs.check_dos_energy_range(emin, emax):
-                    logger.info("Adjusting the energy range locally in "
-                                "order to generate the scattering data "
-                                "in a sufficiently wide energy range. "
-                                "Still using 'dos_num_samples' for the "
-                                "spacing.")
-                else:
-                    emin = self.param.dos_e_min
-                    emax = self.param.dos_e_max
-                # generate grid of energies, still using
-                # the samples requested for the density of states
-                energies = np.linspace(emin, emax, self.param.dos_num_samples)
-            else:
-                use_eonk = True
-                energies = self.bs.energies
+            use_eonk = True
+            energies = self.bs.energies
             scattering_inv, scattering_total_inv, scattering_tau0 = \
                 scattering.scattering_parabolic(self,
                                                 energies,
@@ -225,13 +179,6 @@ class Transport():  # pylint: disable=too-many-instance-attributes, too-many-bra
             self.scattering_total_inv = scattering_total_inv
             self.scattering_tau0 = scattering_tau0
             self.scattering_energies = energies
-
-            if self.param.transport_integration_method == "cubature":
-                # now pad the values such that requests from e.g. an
-                # interpolation routine does not get out of bounds
-                # (dos energy samples sometimes are inside the energy
-                # (range of the eigenvalues)
-                scattering.pad_scattering_values(self)
 
     def calc_transport_tensors(  # pylint: disable=too-many-locals # noqa: MC0001
             self,
@@ -368,8 +315,8 @@ class Transport():  # pylint: disable=too-many-instance-attributes, too-many-bra
         # analytick expansions of energy etc.
         if not numerick:
             sigma = np.zeros((temperatures.shape[0], chempots.shape[0], 3, 3))
-            seebeck = np.zeros((temperatures.shape[0], chempots.shape[0], 3,
-                                3))
+            seebeck = np.zeros(
+                (temperatures.shape[0], chempots.shape[0], 3, 3))
             lorenz = np.zeros((temperatures.shape[0], chempots.shape[0], 3, 3))
             hall = np.zeros((temperatures.shape[0], chempots.shape[0], 3, 3))
             ccn = np.zeros((temperatures.shape[0], chempots.shape[0], 3, 3))
@@ -484,16 +431,16 @@ class Transport():  # pylint: disable=too-many-instance-attributes, too-many-bra
             transport_included_bands = []
             # loop bands, later add vectorize on band as well
             for band in range(energies.shape[0]):
-                if energies[band][(energies[band] > e_min) &
-                                  (energies[band] < e_max)].size != 0:
+                if energies[band][(energies[band] > e_min)
+                                  & (energies[band] < e_max)].size != 0:
                     transport_included_bands.append(band)
 
         if tr is None:
-            self.included_bands = np.array(
-                transport_included_bands, dtype='intc')
+            self.included_bands = np.array(transport_included_bands,
+                                           dtype='intc')
         else:
-            tr.included_bands = np.array(
-                transport_included_bands, dtype='intc')
+            tr.included_bands = np.array(transport_included_bands,
+                                         dtype='intc')
 
     def calc_carrier_concentration(  # pylint: disable=too-many-locals
             self,
@@ -594,11 +541,13 @@ class Transport():  # pylint: disable=too-many-instance-attributes, too-many-bra
             acceptor_number = self.param.acceptor_number
             acceptor_degen_fact = self.param.acceptor_degen_fact
             acceptor_energy = self.param.acceptor_energy
-            donor_ion_number = donor_ionization(
-                donor_number, donor_energy, donor_degen_fact, chempot, beta)
-            acceptor_ion_number = acceptor_ionization(
-                acceptor_number, acceptor_energy, acceptor_degen_fact, chempot,
-                beta)
+            donor_ion_number = donor_ionization(donor_number, donor_energy,
+                                                donor_degen_fact, chempot,
+                                                beta)
+            acceptor_ion_number = acceptor_ionization(acceptor_number,
+                                                      acceptor_energy,
+                                                      acceptor_degen_fact,
+                                                      chempot, beta)
             n_type = 0.5 * (donor_ion_number - acceptor_ion_number) + \
                 np.sqrt(np.power(0.5 * (donor_ion_number -
                                         acceptor_ion_number), 2.0)

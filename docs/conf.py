@@ -312,4 +312,4 @@ latex_elements = {
     # other settings go here
 }
 
-exclude_patterns = ['build', 'setup.*', 'gsl', 'constants']
+exclude_patterns = ['build', 'setup.*', 'constants']

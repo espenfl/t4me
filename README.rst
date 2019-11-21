@@ -39,7 +39,6 @@ Features
     - Parabolic bands
     - Parabolic bands pluss a quartic correction
     - Kane type of bands
-    - Tight binding bands
 
   - Read from first-principle codes
 
@@ -73,16 +72,13 @@ Features
 
   - Trapezoidal, Simpson and Romberg integration of a static
     input grid
-  - Linear tetrahedron method
+  - Linear tetrahedron method (Spglib needed)
   - Weighed sum method
-  - Cubature integration with on-the-fly interpolation
 
 - Interpolation of the band structure and scattering properties:
 
   - All routines available in SciPy
   - GeometricTools/WildMagic regular grid routines
-  - The RGF-ML routine available in ALGLIB
-  - Einspline
 
 
 Structure
@@ -110,6 +106,5 @@ Research Council, Thelma project (228854).
 License
 *******
 
-This project is licensed under the GNU GPLv3. Please see
-``LICENSE.md`` included in the root folder of T4ME
-for additional details.
+This project is licensed under the BSD 3-clause license. Please see
+``LICENSE.md`` included in the root folder of T4ME for additional details.

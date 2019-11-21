@@ -18,7 +18,8 @@
 #!/usr/bin/python
 """Contains routines to set up the scattering of the charge carriers."""
 
-# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements, too-many-lines, global-statement, too-many-nested-blocks
+# pylint: disable=useless-import-alias, too-many-arguments, invalid-name,
+# pylint: disable=too-many-statements, too-many-lines, global-statement, too-many-nested-blocks, no-name-in-module
 
 import sys
 import logging
@@ -150,10 +151,10 @@ def scattering_dos(tr, dos, energies, select_scattering):  # pylint: disable=too
     num_bands = tr.bs.energies.shape[0]
     num_energy_steps = energies.shape[0]
     temperature_steps = temperatures.shape[0]
-    prefactor_scattering = np.zeros((temperature_steps, num_bands,
-                                     num_scatterings))
-    scattering = np.zeros((temperature_steps, num_bands, num_energy_steps,
-                           num_scatterings))
+    prefactor_scattering = np.zeros(
+        (temperature_steps, num_bands, num_scatterings))
+    scattering = np.zeros(
+        (temperature_steps, num_bands, num_energy_steps, num_scatterings))
     inc_in_total = np.zeros((num_bands, num_scatterings), dtype=bool)
     tr.tau_energy_trans = np.zeros((num_bands, num_scatterings))
     # prepare stuff that does not depend on temperature
@@ -513,12 +514,12 @@ def scattering_parabolic(tr, energies, select_scattering, use_eonk=False):  # py
         num_energy_steps = tr.bs.energies.shape[1]
     factor = np.zeros((num_bands, num_scatterings))
     temperature_steps = temperatures.shape[0]
-    prefactor_scattering = np.zeros((temperature_steps, num_bands,
-                                     num_scatterings))
+    prefactor_scattering = np.zeros(
+        (temperature_steps, num_bands, num_scatterings))
     energy_correction_prefactor = np.zeros((num_bands, num_scatterings))
     energy_r_correction = np.zeros((num_bands, num_scatterings))
-    scattering = np.zeros((temperature_steps, num_bands, num_energy_steps,
-                           num_scatterings))
+    scattering = np.zeros(
+        (temperature_steps, num_bands, num_energy_steps, num_scatterings))
     inc_in_total = np.zeros((num_bands, num_scatterings), dtype=bool)
     tr.tau_energy_trans = np.zeros((num_bands, num_scatterings))
     # prepare stuff that does not depend on temperature
@@ -1169,9 +1170,9 @@ def combined_scattering(tr, energy, tau0, energy_trans):
     logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
     logger.debug("Running combined_scattering.")
 
-    tau_decomp = (
-        tau0 * np.power(energy + energy_trans, 0.5 - tr.scattering_r_factor)
-    )[tr.scattering_tau0_select]
+    tau_decomp = (tau0 *
+                  np.power(energy + energy_trans, 0.5 -
+                           tr.scattering_r_factor))[tr.scattering_tau0_select]
     tau_decomp = np.nan_to_num(tau_decomp)
     return np.nan_to_num(1.0 / np.sum(tau_decomp))
 
@@ -1252,11 +1253,11 @@ def interpolate(tr, method="linear"):  # pylint: disable=too-many-locals
     num_bands = scattering_total_inv.shape[1]
     num_energies = inter_energies.shape[1]
     num_scatterings = scattering_inv.shape[3]
-    scattering_total_inv_inter = np.zeros((num_temp_steps, num_bands,
-                                           num_energies))
+    scattering_total_inv_inter = np.zeros(
+        (num_temp_steps, num_bands, num_energies))
     if not tr.param.onlytotalrate:
-        scattering_inv_inter = np.zeros((num_temp_steps, num_bands,
-                                         num_energies, num_scatterings))
+        scattering_inv_inter = np.zeros(
+            (num_temp_steps, num_bands, num_energies, num_scatterings))
     for temp in range(num_temp_steps):
         for band in range(num_bands):
             # do the interpolation of the total first
@@ -1336,29 +1337,31 @@ def pad_scattering_values(tr):
         ebelow = scattering_emin - emin
         numsteps_below = int(np.ceil(ebelow / estep))
         emin = scattering_emin - numsteps_below * estep
-        energies = np.pad(
-            energies, (numsteps_below, 0), 'linear_ramp', end_values=(emin, 0))
+        energies = np.pad(energies, (numsteps_below, 0),
+                          'linear_ramp',
+                          end_values=(emin, 0))
         # now pad scattering arrays with endvalues below
-        scattering_inv = np.pad(scattering_inv, ((0, 0), (0, 0),
-                                                 (numsteps_below, 0), (0, 0)),
+        scattering_inv = np.pad(scattering_inv,
+                                ((0, 0), (0, 0), (numsteps_below, 0), (0, 0)),
                                 'edge')
         scattering_total_inv = np.pad(scattering_total_inv,
-                                      ((0, 0), (0, 0),
-                                       (numsteps_below, 0)), 'edge')
+                                      ((0, 0), (0, 0), (numsteps_below, 0)),
+                                      'edge')
     if emax > scattering_emax:
         # fetch missing interval above and pad with linear
         # tramp
         eabove = emax - scattering_emax
         numsteps_above = int(np.ceil(eabove / estep))
-        energies = np.pad(
-            energies, (0, numsteps_above), 'linear_ramp', end_values=(0, emax))
+        energies = np.pad(energies, (0, numsteps_above),
+                          'linear_ramp',
+                          end_values=(0, emax))
         # now pad scattering arrays with endvalues above
-        scattering_inv = np.pad(scattering_inv, ((0, 0), (0, 0),
-                                                 (0, numsteps_above), (0, 0)),
+        scattering_inv = np.pad(scattering_inv,
+                                ((0, 0), (0, 0), (0, numsteps_above), (0, 0)),
                                 'edge')
         scattering_total_inv = np.pad(scattering_total_inv,
-                                      ((0, 0), (0, 0),
-                                       (0, numsteps_above)), 'edge')
+                                      ((0, 0), (0, 0), (0, numsteps_above)),
+                                      'edge')
     tr.scattering_inv = scattering_inv
     tr.scattering_total_inv = scattering_total_inv
     tr.scattering_energies = energies

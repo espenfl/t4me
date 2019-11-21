@@ -71,9 +71,7 @@ are currently available:
 
 - `linearnd` - Uses ``LinearNDInterpolator`` in SciPy.
 - `interpn` - Uses ``interpn`` in Scipy.
-- `rbf` - Uses the RBF-ML routines of ALGLIB (can also switch to
-  the Scipy version, but that is more memory intensive).
-- `einspline` - Uses Einspline (splines).
+- `rbf` - Uses the Scipy version, but that is memory intensive
 - `wildmagic` - Uses the GeometricTools (former WildMagic)
   interpolation routines.
 - `skw` - Uses Fourier interpolation
@@ -227,57 +225,6 @@ Example:
 
 Do not transform the effective mass tensor.
 
-``dispersion_w90_tb_zero_energy``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Sets the zero energy in the band structure. This parameter is
-passed to `zero_energy` in the :func:`model` function in the :class:`w90`
-class in PythTB and is used if the Wannier90 interface of PythTB is to be
-used to set up the input. Please consult the
-`PythTB manual <http://physics.rutgers.edu/pythtb/usage.html>`_
-for additional details. In units of eV. Usually set to the Fermi level or
-the top of the valence band.
-
-Example:
-::
-
-   dispersion_w90_tb_zero_energy:  5.0
-
-Sets it to 5.0 eV and this value is then subtracted from the energies.
-
-``dispersion_w90_tb_min_hopping_norm``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Hopping terms with a complex norm less than this value will not be included
-in the tight binding model. This parameter is
-passed to `min_hopping_norm` in the :func:`model` function in
-the :class:`w90` class in PythTB. Please consult the
-`PythTB manual <http://physics.rutgers.edu/pythtb/usage.html>`_
-for additional details. In units of eV.
-
-Example:
-::
-
-   dispersion_w90_tb_min_hopping_norm: 0.01
-
-Tight binding hopping parameters with a norm less than 0.01 eV is not included
-in the reconstruction of the tight binding model in PythTB.
-
-``dispersion_w90_tb_max_distance``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Hopping terms between two sites will be ignored if the distance is larger than
-max_distance.
-This parameter is passed to `max_distance` in the :func:`model` function in
-the :class:`w90` class in PythTB. Please consult the
-`PythTB manual <http://physics.rutgers.edu/pythtb/usage.html>`_
-for additional details. In units of AA.
-
-Example:
-::
-
-   dispersion_w90_tb_max_distance: 4.0
-
-Hopping terms with a distance larger than 4 AA is not included in the
-reconstruction of the tight binding model in PythTB.
-
 Electron transport
 ------------------
 
@@ -330,14 +277,6 @@ Only applicable if ``transport_method`` is set to `numerick`.
 - `romberg` - Use the Romberg integration scheme implemented in SciPy
 - `tetra` - Use the linear tetrahedron method
 - `smeared` - Use the weighted sum approach with a smearing factor
-- `cubature` - Use the
-  `Cubature <http://ab-initio.mit.edu/wiki/index.php/Cubature>`_
-  integration library together with one of the interpolation routines
-  available in the
-  `GeometricTools/WildMagic <https://www.geometrictools.com/>`_
-  library. Yields the posibility to specify a target accuracy. This
-  approach currently only works for cubic, tetragonal and orthorhombic
-  unit cell.
 
 ``transport_integration_spectral_smearing``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -383,49 +322,6 @@ Example:
 Here, 1.0 eV is subtracted (added) to the smallest (largest) requested
 chemical potential.
 
-
-``transport_interpolate_method``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Determines which on-the-fly interpolation method is to be used while
-performing the Cubature integration. Only relevant if
-``transport_integration_method`` is set to `cubature`. Currently
-the only option is `wildmagic` which uses the
-`GeometricTools/WildMagic <https://www.geometrictools.com/>`_  library.
-Which particular interpolation type to use is set with
-``transport_interpolate_type``.
-
-Example:
-::
-
-   transport_integration_method: "wildmagic"
-
-Selects the only available method of interpolation during the
-Cubature integration.
-
-
-``transport_interpolate_type``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Determines which on-the-fly interpolation type to be used while
-performing the Cubature integration. Only relevant if
-``transport_integration_method`` is set to `cubature`. Currently
-the following options are available:
-
-- `trilinear` - Using trilinear interpolation
-- `tricubic_exact` - Using exact tricubic interpolation
-- `tricubic_bspline` - Using b-splines
-- `akima` - Using Akima interpolation
-
-Consult the documentation at
-`GeometricTools/WildMagic <https://www.geometrictools.com/>`_ for
-additional details. Akima is particularly usefull since it is a
-special spline interpolation with local character.
-
-Example:
-::
-
-   transport_interpolate_type: "akima"
-
-Perform on-the-fly Akima interpolation during Cubature integration.
 
 ``transport_chempot_min``
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -510,19 +406,6 @@ Example:
 
 Use the density-of-states to set up the scattering mechanisms.
 
-``transport_use_scattering_ontfly``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Determines if the scattering values should also be integrated on-the-fly
-when performing Cubature integration. Only relevant if
-``transport_integration_method`` is set to `cubature`.
-
-Example:
-::
-
-   transport_use_scattering_ontfly: False
-
-Do not use on-the-fly interpolation of the scattering values.
-
 ``transport_drop_valence``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 Determines if all valence band should be dropped while reading
@@ -547,16 +430,6 @@ Example:
 
 Do not exclude the conduction bands during read-in.
 
-``transport_isotropic``
-~~~~~~~~~~~~~~~~~~~~~~~
-Only calculate the first element of the transport tensors during
-Cubature integration. Only relevant if ``transport_integration_method``
-is set to `cubature`
-
-Example:
-::
-
-   transport_isotropic: False
 
 Density of states
 -----------------
@@ -630,32 +503,6 @@ Gaussian smearing factor in units of eV. Only relevant if
 
    dos_smearing: 0.1
 
-``dos_interpolate_method``
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-Similar to the transport integrals it is possible to
-integrate the density of states using Cubature with on the
-fly interpolation through the functions available in
-GeometricTools/WildMagic. Only relevant if
-``dos_integrating_method`` is set to `cubature`.
-
-::
-
-   dos_interpolate_method: "wildmagic"
-
-The only valid option if ``dos_integrating_method``
-is set to `cubature`.
-
-``dos_interpolate_type``
-~~~~~~~~~~~~~~~~~~~~~~~~
-Determines which interpolation type to use if
-``dos_integrating_method`` is set to `cubature`,
-otherwise not relevant.
-
-::
-
-   dos_interpolate_type: "akima"
-
-Use on the fly Akima interpolation during Cubature integration.
 
 ``dos_integrating_method``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -666,7 +513,6 @@ density of states. The following options are available:
 - `simps` - Simpson integration
 - `romb` - Romberg integration
 - `tetra` - linear tetrahedron method without Blochl corrections
-- `cubature` - Cubature integration with on the fly interpolation
 
 ::
 
@@ -803,71 +649,6 @@ Example:
    e_shift: 0.0
 
 Sets the additional energy shift to 0 eV.
-
-``cubature_h``
-~~~~~~~~~~~~~~
-Determines if to use p- or h-cubature for the Cubature integration.
-Consult the manual at
-`Cubature <http://ab-initio.mit.edu/wiki/index.php/Cubature>`_
-Only relevant if ``transport_integration_method`` is set to `cubature`.
-
-Example:
-::
-
-   cubature_h: False
-
-Use p-cubature.
-
-
-``cubature_max_it``
-~~~~~~~~~~~~~~~~~~~
-The maximum number of iterations while performing Cubature
-integration.
-Consult the manual at
-`Cubature <http://ab-initio.mit.edu/wiki/index.php/Cubature>`_
-Only relevant if ``transport_integration_method`` is set to `cubature`.
-
-Example:
-::
-
-   cubature_max_it: 0
-
-No maximum limit to the number of iterations (integration stops
-when ``cubature_abs_err`` or ``cubature_rel_err`` is reached)
-
-``cubature_abs_err``
-~~~~~~~~~~~~~~~~~~~~
-The absolute error when the Cubature integration is truncated.
-Consult the manual at
-`Cubature <http://ab-initio.mit.edu/wiki/index.php/Cubature>`_
-Only relevant if ``transport_integration_method`` is set to `cubature`.
-
-Example:
-::
-
-   cubature_abs_err: 0.0
-
-The relative error is set at 0.0. If ``cubature_rel_err`` is set
-larger than zero, it takes precense.
-
-``cubature_rel_err``
-~~~~~~~~~~~~~~~~~~~~
-The relative error when the Cubature integration is truncated.
-Consult the manual at
-`Cubature <http://ab-initio.mit.edu/wiki/index.php/Cubature>`_
-Only relevant if ``transport_integration_method`` is set to `cubature`.
-
-Example:
-::
-
-   cubature_rel_err: 0.01
-
-Truncate the Cubature integration after a relative error of 0.01
-is reached. Notice that sometimes, if the transport coefficients are
-small (think off-diagonal elements in a isotropic system) it can be
-difficult to obtain the requested relative error and the one
-enters in practice an infinite loop. Carefully setting
-``cubature_max_it`` can alleviate this.
 
 ``skw_expansion_factor``
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1017,8 +798,6 @@ The following options are possible:
 
 - `param` - The band structure is generated from the parameter files.
   For all cases the band structure is generated by analytical models.
-  If tight-binding parameters are specified the construction of the
-  band structure is performed in PythTB and read automatically.
   The parameters pertaining to the construction of the bandstructure
   itself is set in the file :file:`bandparam.yml`.
 
@@ -1053,10 +832,6 @@ The following options are possible:
   The band parameters still need to be set in :file:`bandparam.yml` as they
   contain necessary information about scattering etc.
 
-- `w90` - Read Wannier90 output files. PythTB is used as an intermediate step
-  to import the Wannier90 data and create the tight-binding model. From this
-  we extract the band structure automatically.
-
 Example:
 ::
 
@@ -1074,8 +849,6 @@ following behaviour:
 - `vasp` - the name of the VASP XML file, if not set it defaults to `vasprun.xml`
 - `numpy` - the name of the NumPy datafile
 - `numpyv` - the name of the NumPy datafile
-- `w90` - the prefix used during the Wannier90 calculations, if not set it
-  defaults to `wannier90`
 
 Example:
 ::
@@ -1112,20 +885,6 @@ Example:
 
 If two coordinates are within 1.0e-6 it is assumed that they are the
 same and symmetry is thus detected.
-
-``displaytb``
-~~~~~~~~~~~~~
-Determines if the user wants to print the output from PythTB upon
-construction of tight-binding orbitals. Only relevant if
-``type`` is set to 3 in :file:`bandparam.yml`.
-
-Example:
-::
-
-   displaytb: False
-
-Do not print the detailed information about the tight-binding
-construction.
 
 ``libinfo``
 ~~~~~~~~~~~

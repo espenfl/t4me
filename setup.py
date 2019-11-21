@@ -20,8 +20,8 @@ from distutils.ccompiler import new_compiler
 from distutils.sysconfig import customize_compiler
 
 SETUP_JSON_PATH = os.path.join(os.path.dirname(__file__), 'setup.json')
-README_PATH = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), 'README.rst')
+README_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           'README.rst')
 with open(README_PATH, 'r') as readme:
     LONG_DESCRIPTION = readme.read()
 
@@ -83,11 +83,11 @@ def _have_extension_support(name, libraries, library_dirs, include_dirs):
     customize_compiler(compiler)
     success = False
     try:
-        compiler.link_executable(
-            compiler.compile([src_file], output_dir=tmp_dir),
-            bin_file,
-            libraries=libraries,
-            library_dirs=library_dirs)
+        compiler.link_executable(compiler.compile([src_file],
+                                                  output_dir=tmp_dir),
+                                 bin_file,
+                                 libraries=libraries,
+                                 library_dirs=library_dirs)
     except CCompilerError:
         print('Unable to compile {name} C extensions - missing headers? '
               'This extension will not be installed.'.format(name=name))
@@ -119,75 +119,23 @@ if build_extensions:
 else:
     spglib_sources.append("src/t4me/spglib_interface/spglib.cpp")
 
-if _have_extension_support(
-        name="spglib",
-        libraries=spglib_libraries,
-        include_dirs=spglib_include_dirs,
-        library_dirs=spglib_library_dirs):
+if _have_extension_support(name="spglib",
+                           libraries=spglib_libraries,
+                           include_dirs=spglib_include_dirs,
+                           library_dirs=spglib_library_dirs):
     spglib_include_dirs.append(np.get_include())
     extensions.append(
-        Extension(
-            "t4me.spglib_interface",
-            include_dirs=spglib_include_dirs,
-            library_dirs=spglib_library_dirs,
-            libraries=spglib_libraries,
-            sources=spglib_sources,
-            extra_compile_args=[
-                "-std=c++11", "-w", "-fno-omit-frame-pointer",
-                "-fno-builtin-malloc -fno-builtin-calloc "
-                "-fno-builtin-realloc -fno-builtin-free"
-            ],
-            language="c++"))
-
-# GSL (only if you need access to the closed Fermi integrals)
-gsl_libraries = ["gsl", "gslcblas"]
-gsl_include_dirs = [localinclude]
-gsl_library_dirs = [locallib]
-gsl_sources = ["src/t4me/gsl_interface/gsl.c"]
-
-if build_extensions:
-    gsl_sources = ["src/t4me/gsl_interface/gsl.pyx"]
-
-if _have_extension_support(
-        name="gsl/gsl_sf_fermi_dirac",
-        libraries=gsl_libraries,
-        include_dirs=gsl_include_dirs,
-        library_dirs=gsl_library_dirs):
-    gsl_include_dirs.append(np.get_include())
-    extensions.append(
-        Extension(
-            "t4me.gsl",
-            include_dirs=gsl_include_dirs,
-            library_dirs=gsl_library_dirs,
-            libraries=gsl_libraries,
-            sources=gsl_sources))
-
-# Einspline (only if you are going to use the interpolation routines present here)
-einspline_libraries = ["einspline"]
-einspline_include_dirs = [localinclude]
-einspline_library_dirs = [locallib]
-einspline_sources = ["src/t4me/einspline_interface/einspline_interface.cpp"]
-
-if build_extensions:
-    einspline_sources.append("src/t4me/einspline_interface/einspline.pyx")
-else:
-    einspline_sources.append("src/t4me/einspline_interface/einspline.cpp")
-
-if _have_extension_support(
-        name="einspline/bspline",
-        libraries=einspline_libraries,
-        include_dirs=einspline_include_dirs,
-        library_dirs=einspline_library_dirs):
-    einspline_include_dirs.append(np.get_include())
-    extensions.append(
-        Extension(
-            "t4me.einspline",
-            include_dirs=einspline_include_dirs,
-            library_dirs=einspline_library_dirs,
-            libraries=einspline_libraries,
-            sources=einspline_sources,
-            extra_compile_args=["-std=c++11"],
-            language="c++"))
+        Extension("t4me.spglib_interface",
+                  include_dirs=spglib_include_dirs,
+                  library_dirs=spglib_library_dirs,
+                  libraries=spglib_libraries,
+                  sources=spglib_sources,
+                  extra_compile_args=[
+                      "-std=c++11", "-w", "-fno-omit-frame-pointer",
+                      "-fno-builtin-malloc -fno-builtin-calloc "
+                      "-fno-builtin-realloc -fno-builtin-free"
+                  ],
+                  language="c++"))
 
 # GeometricTools (we still use the old package called WildMagic5 until the developer is
 # done with the transition)
@@ -202,53 +150,19 @@ if build_extensions:
 else:
     geometrictools_sources.append("src/t4me/wildmagic_interface/wildmagic.cpp")
 
-if _have_extension_support(
-        name="WildMagic5/Wm5Math",
-        libraries=geometrictools_libraries,
-        include_dirs=geometrictools_include_dirs,
-        library_dirs=geometrictools_library_dirs):
+if _have_extension_support(name="WildMagic5/Wm5Math",
+                           libraries=geometrictools_libraries,
+                           include_dirs=geometrictools_include_dirs,
+                           library_dirs=geometrictools_library_dirs):
     geometrictools_include_dirs.append(np.get_include())
     extensions.append(
-        Extension(
-            "t4me.wildmagic",
-            include_dirs=geometrictools_include_dirs,
-            library_dirs=geometrictools_library_dirs,
-            libraries=geometrictools_libraries,
-            sources=geometrictools_sources,
-            extra_compile_args=["-std=c++11"],
-            language="c++"))
-
-# GeometricTools and Cubature (offers also cubature integration routines)
-cubature_libraries = ["cubature", "m"]
-cubature_include_dirs = [localinclude]
-cubature_library_dirs = [locallib]
-geometrictools_sources = [
-    "src/t4me/cubature_wildmagic_interface/cubature_wildmagic_interface.cpp"
-]
-
-if build_extensions:
-    geometrictools_sources.append(
-        "src/t4me/cubature_wildmagic_interface/cubature_wildmagic.pyx")
-else:
-    geometrictools_sources.append(
-        "src/t4me/cubature_wildmagic_interface/cubature_wildmagic.cpp")
-
-if _have_extension_support(name="WildMagic5/Wm5Math", libraries=geometrictools_libraries,
-                           include_dirs=geometrictools_include_dirs, library_dirs=geometrictools_library_dirs) and \
-    _have_extension_support(name="cubature", libraries=cubature_libraries,
-                           include_dirs=cubature_include_dirs, library_dirs=cubature_library_dirs):
-    geometrictools_include_dirs = cubature_include_dirs + geometrictools_include_dirs
-    geometrictools_library_dirs = geometrictools_library_dirs + cubature_library_dirs
-    geometrictools_libraries = geometrictools_libraries + cubature_libraries
-    extensions.append(
-        Extension(
-            "t4me.cubature_wildmagic",
-            include_dirs=geometrictools_include_dirs,
-            library_dirs=geometrictools_library_dirs,
-            libraries=geometrictools_libraries,
-            sources=geometrictools_sources,
-            extra_compile_args=["-std=c++11"],
-            language="c++"))
+        Extension("t4me.wildmagic",
+                  include_dirs=geometrictools_include_dirs,
+                  library_dirs=geometrictools_library_dirs,
+                  libraries=geometrictools_libraries,
+                  sources=geometrictools_sources,
+                  extra_compile_args=["-std=c++11"],
+                  language="c++"))
 
 # SKW interpolation
 if mklroot is not None:
@@ -265,27 +179,24 @@ if mklroot is not None:
     else:
         skw_sources.append("src/t4me/skw_interface/skw.cpp")
 
-    if _have_extension_support(
-            name="skw",
-            libraries=skw_libraries,
-            include_dirs=skw_include_dirs,
-            library_dirs=skw_library_dirs):
+    if _have_extension_support(name="skw",
+                               libraries=skw_libraries,
+                               include_dirs=skw_include_dirs,
+                               library_dirs=skw_library_dirs):
         skw_include_dirs.append(np.get_include())
         extensions.append(
-            Extension(
-                "t4me.skw_interface",
-                include_dirs=skw_include_dirs,
-                library_dirs=skw_library_dirs,
-                libraries=skw_libraries,
-                sources=skw_sources,
-                language="c++"))
+            Extension("t4me.skw_interface",
+                      include_dirs=skw_include_dirs,
+                      library_dirs=skw_library_dirs,
+                      libraries=skw_libraries,
+                      sources=skw_sources,
+                      language="c++"))
 else:
     print("No Intel MKL installed. SKW extension will not be installed.")
 
 
 class _T4MEBuildExt(build_ext):
     """Custom build_ext class that handles the checks for the presence of compilers and headers."""
-
     def run(self):
         try:
             build_ext.run(self)
@@ -308,15 +219,14 @@ def _do_setup(extensions):
     with open(SETUP_JSON_PATH, 'r') as info:
         SETUP_KWARGS = json.load(info)
 
-    setup(
-        packages=find_packages(where="src"),
-        long_description=LONG_DESCRIPTION,
-        cmdclass={
-            'build_ext': _T4MEBuildExt,
-            'sdist': sdist_override
-        },
-        ext_modules=ext_modules,
-        **SETUP_KWARGS)
+    setup(packages=find_packages(where="src"),
+          long_description=LONG_DESCRIPTION,
+          cmdclass={
+              'build_ext': _T4MEBuildExt,
+              'sdist': sdist_override
+          },
+          ext_modules=ext_modules,
+          **SETUP_KWARGS)
 
 
 class sdist_override(_sdist):
@@ -327,9 +237,6 @@ class sdist_override(_sdist):
             from Cython.Build import cythonize
             cythonize([
                 'src/t4me/spglib_interface/spglib.pyx',
-                'src/t4me/gsl_interface/gsl.pyx',
-                'src/t4me/einspline_interface/einspline.pyx',
-                'src/t4me/cubature_wildmagic_interface/cubature_wildmagic.pyx',
                 'src/t4me/wildmagic_interface/wildmagic.pyx',
                 'src/t4me/skw_interface/skw.pyx'
             ])

@@ -1,24 +1,14 @@
 # Copyright 2016 Espen Flage-Larsen
 #
-#    This file is part of T4ME.
+#    This file is part of T4ME and covered by the BSD 3-clause license.
 #
-#    T4ME is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    T4ME is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
+#    You should have received a copy of the BSD 3-clause license
+#    along with T4ME.  If not, see <https://opensource.org/licenses/BSD-3-Clause/>.
 
 #!/usr/bin/python
 """Contains routines to set up the bandstructure."""
 
-# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements
+# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements, no-name-in-module
 # pylint: disable=too-many-lines, assignment-from-no-return, unsubscriptable-object, unsupported-assignment-operation, c-extension-no-member
 
 import sys
@@ -27,7 +17,6 @@ import copy
 import numpy as np
 import scipy.interpolate
 
-import t4me.inputoutput as inputoutput
 import t4me.interface as interface
 import t4me.utils as utils
 import t4me.constants as constants
@@ -63,8 +52,6 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
 
     + Parametrized bands (parabolic, non-parabolic, Kane and
       a k^4 model)
-    + Tight binding bands from PythTB, including more
-      generalized Wannier functions
     + VASP input from the VASP XML file (only this file is needed)
     + Numpy input files
 
@@ -83,7 +70,6 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
     .. todo:: Add interfaces to other first principle codes.
 
     """
-
     def __init__(self, lattice, param, location=None, filename=None):
         # configure logger
         logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
@@ -115,17 +101,17 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
         self.kshift = None
         self.scale = None
         if self.param.read == "param":
-            interface.bandstructure_param(
-                self, location=location, filename=filename)
+            interface.bandstructure_param(self,
+                                          location=location,
+                                          filename=filename)
         elif self.param.read == "vasp":
-            interface.bandstructure_vasp(
-                self, location=location, filename=filename)
+            interface.bandstructure_vasp(self,
+                                         location=location,
+                                         filename=filename)
         elif ((self.param.read == "numpy") or (self.param.read == "numpyv")):
-            interface.bandstructure_numpy(
-                self, location=location, filename=filename)
-        elif self.param.read == "w90":
-            interface.bandstructure_w90(
-                self, location=location, filename=filename)
+            interface.bandstructure_numpy(self,
+                                          location=location,
+                                          filename=filename)
         else:
             logger.error(
                 "The supplied read parameter in general configuration "
@@ -202,8 +188,8 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
         # ceil in case of partly occupied band (although then things
         # start to get messy)
         vbm_band = int(
-            np.ceil(occ[
-                (abs(occ) > self.param.occ_cutoff)].shape[0] / numkpoints)) - 1
+            np.ceil(occ[(abs(occ) > self.param.occ_cutoff)].shape[0] /
+                    numkpoints)) - 1
 
         # fetch the kpoint for this band
         vbm_kpoint = np.argmax(energies[vbm_band])
@@ -506,102 +492,6 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
                     band_gap = band_min
         return band_gap
 
-    def tight_binding_energies(self, bandparam):
-        """
-        Sets up the interface to PythTB and execute the tight binding extractions.
-
-        Parameters
-        ----------
-        bandparams : int
-            The index of the tight binding band, which
-            follows the sequential index of the bandstructure
-            configuration file, which also
-            need to be set for the respective band due to scattering
-            mechanisms etc.
-
-        Returns
-        -------
-            The tight binding energy dispersions in eV on the
-            k-point grid storred in the current `Lattice()` object.
-
-        Notes
-        -----
-        The tight binding parameters are set at the bottom of
-        the bandstructure configuration file.
-
-        Consult the documentation for
-        `PythTB <http://www.physics.rutgers.edu/pythtb/>`_ for how
-        to set these parameters.
-
-        .. todo:: Extend the documentation of how to set parameters
-                  relevant to PythTB.
-
-        """
-
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
-        logger.debug("Running tight_binding_energies.")
-
-        # lazy import of PythTB
-        try:
-            import pythtb
-        except ImportError:
-            logger.error(
-                "Could not import the PythTB module. Please make sure it is installed. Exiting."
-            )
-            sys.exit(1)
-
-        hop = self.tight_hop[bandparam]
-        orb = self.tight_orb[bandparam]
-        onsite = self.tight_onsite[bandparam]
-        adjust_onsite = self.tight_adj_onsite[bandparam]
-        lat = [
-            self.lattice.unitcell[0].tolist(),
-            self.lattice.unitcell[1].tolist(),
-            self.lattice.unitcell[2].tolist()
-        ]
-        # if orb is an empty list, set default to
-        # atomic centered orbitals
-        if not orb:
-            orb = self.lattice.positions.tolist()
-        tb = pythtb.tb_model(3, 3, lat, orb)
-        tb.set_onsite(onsite)
-        for jump in hop:
-            tb.set_hop(jump[0], jump[1], jump[2], jump[3])
-        if self.param.displaytb:
-            tb.display()
-        # make sure kmesh that we pass (in direct) goes from
-        # zero to one, not -0.5 to 0.5.
-        kmesh = self.lattice.kmesh + 0.5
-        energies = tb.solve_all(kmesh)
-        e_shape = energies.shape
-        if e_shape[0] != len(orb):
-            logger.error("The number of bands returned from the solve_all "
-                         "function in PythTB does not match the number "
-                         "of entries of torb. Exiting.")
-            sys.exit(1)
-
-        # loop bands
-        for band in range(e_shape[0]):
-            if adjust_onsite:
-                if adjust_onsite[band] == "max":
-                    e_max = np.amax(energies[band])
-                    energies[band] = energies[band] - e_max
-                elif adjust_onsite[band] == "min":
-                    e_min = np.amin(energies[band])
-                    energies[band] = energies[band] - e_min
-                else:
-                    # we should really check what the user sets here...
-                    energies[band] = energies[band] - adjust_onsite[band]
-
-            # then make sure no values are truly zero (cause later
-            # problems in scattering routines etc.)
-            energies[band][
-                np.abs(energies[band]) < constants.zerocut] = constants.zerocut
-        # PythTB does not return velocities
-        self.gen_velocities = True
-        return energies, None
-
     def gen_dos(self):
         """
         Generates the density of states for the analytic models
@@ -667,8 +557,8 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
         # some tests
         for band in range(numbands):
             # use density of states effective mass
-            effmass[band] = np.power(
-                np.prod(np.abs(self.effmass[band])), 1.0 / 3.0)
+            effmass[band] = np.power(np.prod(np.abs(self.effmass[band])),
+                                     1.0 / 3.0)
             energy_shift = dos_energies - e0[band]
             status = self.status[band]
             # conduction
@@ -740,16 +630,9 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
                 tb_band.append(False)
                 band = band + 1
             else:
-                # the tight binding generation can of course
-                # generate more than one band, so we need to shift
-                # everything due to this
-                e, v = self.tight_binding_energies(band)
-                numtbands = e.shape[0]
-                energies[band:band + numtbands] = e[:]
-                if v is not None:
-                    velocities[band:band + numtbands] = v[:]
-                tb_band.extend([True] * numtbands)
-                band = band + numtbands
+                logger.error("The supplied band type of: %s is not supported",
+                             str(self.bandparams[band][0]))
+                sys.exit(1)
         energies = np.array(energies, dtype="double")
         velocities = np.array(velocities, dtype="double")
         # check Fermi level
@@ -830,20 +713,18 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
         k = self.lattice.fetch_kmesh(direct=False)
         if not band_function == 4:
             # first energy
-            energy = generate_energy(
-                k,
-                self.effmass[band],
-                self.a[band],
-                self.ascale[band],
-                e0=self.e0[band],
-                kshift=self.kshift[band])
+            energy = generate_energy(k,
+                                     self.effmass[band],
+                                     self.a[band],
+                                     self.ascale[band],
+                                     e0=self.e0[band],
+                                     kshift=self.kshift[band])
             # then velocity
-            vx, vy, vz = generate_velocity(
-                k,
-                self.effmass[band],
-                self.a[band],
-                self.ascale[band],
-                kshift=self.kshift[band])
+            vx, vy, vz = generate_velocity(k,
+                                           self.effmass[band],
+                                           self.a[band],
+                                           self.ascale[band],
+                                           kshift=self.kshift[band])
         ##################################################
         ##################################################
         # USE THIS SECTION TO MAKE CUSTIMIZED BANDS AND  #
@@ -857,13 +738,12 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             if quartic_onset:
                 # quartic band behavior at the onset
                 # first fetch quartic
-                energy_q = non_parabolic_energy_1(
-                    k,
-                    self.effmass[band],
-                    self.a[band],
-                    self.ascale[band],
-                    e0=self.e0[band],
-                    kshift=self.kshift[band])
+                energy_q = non_parabolic_energy_1(k,
+                                                  self.effmass[band],
+                                                  self.a[band],
+                                                  self.ascale[band],
+                                                  e0=self.e0[band],
+                                                  kshift=self.kshift[band])
                 # then velocity
                 vx_q, vy_q, vz_q = non_parabolic_velocity_1(
                     k,
@@ -876,13 +756,12 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
                 self.a[band] = [0.0, 0.0, 0.0]
                 self.effmass[band] = -2.0
                 self.e0[band] = 0.0
-                energy_p = non_parabolic_energy_1(
-                    k,
-                    self.effmass[band],
-                    self.a[band],
-                    self.ascale[band],
-                    e0=self.e0[band],
-                    kshift=self.kshift[band])
+                energy_p = non_parabolic_energy_1(k,
+                                                  self.effmass[band],
+                                                  self.a[band],
+                                                  self.ascale[band],
+                                                  e0=self.e0[band],
+                                                  kshift=self.kshift[band])
                 vx_p, vy_p, vz_p = non_parabolic_velocity_1(
                     k,
                     self.effmass[band],
@@ -908,13 +787,12 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
                 # quartic band behavior deep in band, parabolic onset
                 # quartic band behavior at the onset
                 # first fetch quartic
-                energy_q = non_parabolic_energy_1(
-                    k,
-                    self.effmass[band],
-                    self.a[band],
-                    self.ascale[band],
-                    e0=self.e0[band],
-                    kshift=self.kshift[band])
+                energy_q = non_parabolic_energy_1(k,
+                                                  self.effmass[band],
+                                                  self.a[band],
+                                                  self.ascale[band],
+                                                  e0=self.e0[band],
+                                                  kshift=self.kshift[band])
                 # then velocity
                 vx_q, vy_q, vz_q = non_parabolic_velocity_1(
                     k,
@@ -927,13 +805,12 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
                 self.a[band] = [0.0, 0.0, 0.0]
                 self.effmass[band] = -2.0
                 self.e0[band] = 0.0
-                energy_p = non_parabolic_energy_1(
-                    k,
-                    self.effmass[band],
-                    self.a[band],
-                    self.ascale[band],
-                    e0=self.e0[band],
-                    kshift=self.kshift[band])
+                energy_p = non_parabolic_energy_1(k,
+                                                  self.effmass[band],
+                                                  self.a[band],
+                                                  self.ascale[band],
+                                                  e0=self.e0[band],
+                                                  kshift=self.kshift[band])
                 vx_p, vy_p, vz_p = non_parabolic_velocity_1(
                     k,
                     self.effmass[band],
@@ -993,7 +870,7 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             The end k - point in cartesian coordinates.
         itype : string, optional
             | Can be any of:
-            | {"linearnd", "interpn", "rbf", "einspline", "wildmagic", "skw"}
+            | {"linearnd", "interpn", "rbf", "wildmagic", "skw"}
 
             The type of interpolate method to use. If not set, the parameter
             `dispersion_interpolate_method` in the general configuration
@@ -1003,11 +880,7 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             | {"nearest", "linear"}, when `itype` is set to `interpn`.
             | {"multiquadric", "inverse_multiquadric", "gaussian", "linear",
             | "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`
-            | and when the Scipy variety is used (the `alglib` variable set
-            | to False in the :func:`interpolate` function). If `alglib` is
-            | set to True (default), then `itype_sub` does not have to be set.
-            | {"natural", "flat", "periodic", "antiperiodic"}, when `itype`
-            | is set to `einspline`.
+            | and when the Scipy variety is used.
             | {"trilinear, tricubic_exact, tricubic_bspline, akima"},
             | when `itype` is set to `wildmagic`.
 
@@ -1054,8 +927,9 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             kend,
             self.param.dispersion_num_kpoints_along_line,
             direct=False)
-        velocities = self.fetch_velocities_at_kpoints(
-            kpts, itype=itype, itype_sub=itype_sub)
+        velocities = self.fetch_velocities_at_kpoints(kpts,
+                                                      itype=itype,
+                                                      itype_sub=itype_sub)
 
         return velocities, kpts
 
@@ -1074,7 +948,7 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             The k - point mesh for extraction in cartesian coordinates.
         itype : string, optional
             | Can be any of:
-            | {"linearnd", "interpn", "rbf", "einspline", "wildmagic", "skw"}
+            | {"linearnd", "interpn", "rbf", "wildmagic", "skw"}
 
             The type of interpolate method to use. If not set, the parameter
             `dispersion_interpolate_method` in the general configuration
@@ -1084,11 +958,7 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             | {"nearest", "linear"}, when `itype` is set to `interpn`.
             | {"multiquadric", "inverse_multiquadric", "gaussian", "linear",
             | "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`
-            | and when the Scipy variety is used (the `alglib` variable set
-            | to False in the :func:`interpolate` function). If `alglib` is
-            | set to True (default), then `itype_sub` does not have to be set.
-            | {"natural", "flat", "periodic", "antiperiodic"}, when `itype`
-            | is set to `einspline`.
+            | and when the Scipy variety is used.
             | {"trilinear, tricubic_exact, tricubic_bspline, akima"},
             | when `itype` is set to `wildmagic`.
 
@@ -1118,11 +988,10 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
         logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
         logger.debug("Running fetch_velocities_at_kpoints.")
 
-        dummy, velocities, dummy = self.interpolate(
-            kpoint_mesh=kpoint_mesh,
-            itype=itype,
-            itype_sub=itype_sub,
-            ivelocities=True)
+        dummy, velocities, dummy = self.interpolate(kpoint_mesh=kpoint_mesh,
+                                                    itype=itype,
+                                                    itype_sub=itype_sub,
+                                                    ivelocities=True)
         return velocities
 
     def fetch_energies_along_line(self,
@@ -1150,7 +1019,7 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             parameter in params.yml
         itype : string, optional
             | Can be any of:
-            | {"linearnd", "interpn", "rbf", "einspline", "wildmagic", "skw"}
+            | {"linearnd", "interpn", "rbf", "wildmagic", "skw"}
 
             The type of interpolate method to use. If not set, the parameter
             `dispersion_interpolate_method` in the general configuration
@@ -1160,11 +1029,7 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             | {"nearest", "linear"}, when `itype` is set to `interpn`.
             | {"multiquadric", "inverse_multiquadric", "gaussian", "linear",
             | "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`
-            | and when the Scipy variety is used (the `alglib` variable set
-            | to False in the :func:`interpolate` function). If `alglib` is
-            | set to True (default), then `itype_sub` does not have to be set.
-            | {"natural", "flat", "periodic", "antiperiodic"}, when `itype`
-            | is set to `einspline`.
+            | and when the Scipy variety is used.
             | {"trilinear, tricubic_exact, tricubic_bspline, akima"},
             | when `itype` is set to `wildmagic`.
 
@@ -1208,10 +1073,13 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
         if samplings is None:
             samplings = self.param.dispersion_num_kpoints_along_line
 
-        kpts = self.lattice.fetch_kpoints_along_line(
-            kstart, kend, samplings, direct=False)
-        energies = self.fetch_energies_at_kpoints(
-            kpoint_mesh=kpts, itype=itype, itype_sub=itype_sub)
+        kpts = self.lattice.fetch_kpoints_along_line(kstart,
+                                                     kend,
+                                                     samplings,
+                                                     direct=False)
+        energies = self.fetch_energies_at_kpoints(kpoint_mesh=kpts,
+                                                  itype=itype,
+                                                  itype_sub=itype_sub)
 
         return energies, kpts
 
@@ -1230,7 +1098,7 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             The N k - point coordinates in cartesian coordinates.
         itype : string, optional
             | Can be any of:
-            | {"linearnd", "interpn", "rbf", "einspline", "wildmagic", "skw"}
+            | {"linearnd", "interpn", "rbf", "wildmagic", "skw"}
 
             The type of interpolate method to use. If not set, the parameter
             `dispersion_interpolate_method` in the general configuration
@@ -1240,11 +1108,7 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             | {"nearest", "linear"}, when `itype` is set to `interpn`.
             | {"multiquadric", "inverse_multiquadric", "gaussian", "linear",
             | "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`
-            | and when the Scipy variety is used (the `alglib` variable set
-            | to False in the :func:`interpolate` function). If `alglib` is
-            | set to True (default), then `itype_sub` does not have to be set.
-            | {"natural", "flat", "periodic", "antiperiodic"}, when `itype`
-            | is set to `einspline`.
+            | and when the Scipy variety is used.
             | {"trilinear, tricubic_exact, tricubic_bspline, akima"},
             | when `itype` is set to `wildmagic`.
 
@@ -1273,8 +1137,9 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
         logger.debug("Running fetch_energies_at_kpoints.")
 
         # fetch points
-        energies, dummy, dummy = self.interpolate(
-            kpoint_mesh=kpoint_mesh, itype=itype, itype_sub=itype_sub)
+        energies, dummy, dummy = self.interpolate(kpoint_mesh=kpoint_mesh,
+                                                  itype=itype,
+                                                  itype_sub=itype_sub)
         return energies
 
     def calc_effective_mass(self):
@@ -1492,7 +1357,7 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             If True, interpolate the velocities, if not, do not
         itype : string, optional
             Can be any of:
-            {"linearnd", "interpn", "rbf", "einspline", "wildmagic", "skw"}
+            {"linearnd", "interpn", "rbf", "wildmagic", "skw"}
             The type of interpolate method to use. If not set, the parameter
             `dispersion_interpolate_method` in the general configuration file
             sets this.
@@ -1501,11 +1366,7 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             | {"nearest", "linear"}, when `itype` is set to `interpn`.
             | {"multiquadric", "inverse_multiquadric", "gaussian", "linear",
             | "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`
-            | and when the Scipy variety is used (the `alglib` variable set
-            | to False in the :func:`interpolate` function). If `alglib` is
-            | set to True (default), then `itype_sub` does not have to be set.
-            | {"natural", "flat", "periodic", "antiperiodic"}, when `itype`
-            | is set to `einspline`.
+            | and when the Scipy variety is used.
             | {"trilinear, tricubic_exact, tricubic_bspline, akima"},
             | when `itype` is set to `wildmagic`.
 
@@ -1563,10 +1424,10 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
         logger.debug("Running interpolate.")
 
         # this flag determines if we want to run the
-        # Wildmagic or Einspline interpolation on direct or
+        # Wildmagic interpolation on direct or
         # cartesian coordinates (does not matter for the energies)
         # this should always be set to False, except for testing
-        wildmagic_einspline_direct = False
+        wildmagic_direct = False
 
         if ienergies:
             if energies is None:
@@ -1595,7 +1456,7 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
         # set interpolate method from param file, if not supplied
         # also demand that is itype or itype_sub is supplied, the other
         # also has to be supplied
-        needs_sub = {"interpn", "rbf", "einspline", "wildmagic"}
+        needs_sub = {"interpn", "rbf", "wildmagic"}
         if (itype is None) and (itype_sub is None):
             itype = self.param.dispersion_interpolate_method
             itype_sub = self.param.dispersion_interpolate_type
@@ -1610,9 +1471,7 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
                 sys.exit(1)
 
         # now check for valid itype, itype_sub is done later
-        possible_itypes = {
-            "linearnd", "interpn", "rbf", "einspline", "wildmagic", "skw"
-        }
+        possible_itypes = {"linearnd", "interpn", "rbf", "wildmagic", "skw"}
         if itype not in possible_itypes:
             logger.error(
                 "The specified itype (or dispersion_interpolate_method "
@@ -1622,10 +1481,10 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
 
         gen_velocities = self.gen_velocities
         if gen_velocities and ivelocities:
-            if itype not in ("einspline", "wildmagic", "skw"):
+            if itype not in ("wildmagic", "skw"):
                 logger.error("Gradient extraction for the band "
                              "velocities are only supported for the "
-                             "einspline/wildmagic_akima/"
+                             "wildmagic_akima/"
                              "wildmagic_tricubic_bspline/"
                              "wildmagic_tricubic_exact/"
                              "wildmagic_trilinear/"
@@ -1669,13 +1528,13 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             sys.exit(1)
 
         # fetch old grid in cartesian (IBZ in direct for SKW)
-        if itype in ("skw", "wildmagic", "einspline"):
+        if itype in ("skw", "wildmagic"):
             if itype == "skw":
                 old_grid = self.lattice.fetch_kmesh(direct=True, ired=True)
             else:
                 # store old bz border to be used in the interpolation
                 # routines below
-                if wildmagic_einspline_direct:
+                if wildmagic_direct:
                     old_grid = self.lattice.fetch_kmesh(direct=True)
                     old_bz_border = self.lattice.fetch_bz_border(direct=True)
                 else:
@@ -1763,10 +1622,10 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
                 # sometimes the IBZ grid does not exist
                 if self.lattice.kmesh_ired is not None:
                     self.lattice.kmesh_ired = self.lattice.kmesh_ired * dvec
-                # use direct for Wildmagic and Einspline, cartesian
+                # use direct for Wildmagic, cartesian
                 # for the rest
-                if itype in ("wildmagic", "einspline"):
-                    if wildmagic_einspline_direct:
+                if itype == "wildmagic":
+                    if wildmagic_direct:
                         new_grid = self.lattice.fetch_kmesh(direct=True)
                     else:
                         new_grid = self.lattice.fetch_kmesh(direct=False)
@@ -1784,9 +1643,6 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             ivel1 = np.zeros((num_bands, num_new_kpoints), dtype=np.double)
             ivel2 = np.zeros((num_bands, num_new_kpoints), dtype=np.double)
             ivel3 = np.zeros((num_bands, num_new_kpoints), dtype=np.double)
-        # used to select rbf method (defaults later to True if RBF is
-        # selected)
-        alglib = False
         # loop bands for python stuff, otherwise do loop of bands inside C
         # routines
         if itype in ("linearnd", "interpn", "rbf"):  # pylint: disable=too-many-nested-blocks
@@ -1816,8 +1672,9 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
                     old_grid_unit_vecs = self.lattice.fetch_kmesh_unit_vecs(
                         direct=False)
                     kxp, kyp, kzp = old_grid_unit_vecs
-                    eshape = energies[band].reshape(
-                        ksampling_old[0], ksampling_old[1], ksampling_old[2])
+                    eshape = energies[band].reshape(ksampling_old[0],
+                                                    ksampling_old[1],
+                                                    ksampling_old[2])
                     possible_methods = ["nearest", "linear"]
                     if itype_sub not in possible_methods:
                         options = ', '.join(map(str, possible_methods))
@@ -1858,212 +1715,55 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
                             new_grid,
                             method=itype_sub)
                 if itype == "rbf":
-                    # lazy import of Alglib
-                    alglib = True
-                    try:
-                        import xalglib
-                    except ImportError:
-                        inputoutput.alglib_warning()
-                        alglib = False
-                    if alglib:
-                        logger.info("Interpolating using Alglib RBF.")
-                    else:
-                        logger.info("Interpolating using Scipy RBF.")
-                    if alglib:
-                        inter = xalglib.rbfcreate(3, 1)
-                        # data structure of Alglib is a bit different, pad
-                        # scalar at the end of coordinate values
-                        # TODO: Fix wrapper to avoid going through list pylint: disable=fixme
-                        kxkykzscalar = np.column_stack(
-                            (old_grid, energies[band])).tolist()
-                        # set the points
-                        xalglib.rbfsetpoints(inter, kxkykzscalar)
-                        # set type of rgf
-                        xalglib.rbfsetalgoqnn(inter)
-                        # rebuild model and change coefficients
-                        status = xalglib.rbfbuildmodel(inter)
-                        if status.terminationtype != 1:
-                            logger.error(
-                                "The call to rbfbuildmodel of Alglib "
-                                "returned: %s for the energies. Exiting.",
-                                str(status.terminationtype))
-                            sys.exit(1)
-                        # this is not good at all from a performance
-                        # perspective, but Alglib does not in its current
-                        # form accept broadcasting so this is going to be
-                        # slow.
-                        # make a C module or lift it into Cython in the future
-                        for k in range(num_new_kpoints):
-                            ien[band][k] = np.array(
-                                xalglib.rbfcalc3(inter, new_grid[k, 0],
-                                                 new_grid[k, 1],
-                                                 new_grid[k, 2]))
-                        if ivelocities:
-                            # do the same for the velocities
-                            # direction 1
-                            kxkykzscalar = np.column_stack(
-                                (old_grid, velocities[band][0])).tolist()
-                            xalglib.rbfsetpoints(inter, kxkykzscalar)
-                            xalglib.rbfsetalgoqnn(inter)
-                            status = xalglib.rbfbuildmodel(inter)
-                            if status.terminationtype != 1:
-                                logger.error(
-                                    "The call to rbfbuildmodel of "
-                                    "Alglib returned: %s for the velocities. Exiting.",
-                                    str(status.terminationtype))
-                                sys.exit(1)
-                            for k in range(num_new_kpoints):
-                                ivel1[band][k] = np.array(
-                                    xalglib.rbfcalc3(inter, new_grid[k, 0],
-                                                     new_grid[k, 1],
-                                                     new_grid[k, 2]))
-
-                            # direction 2
-                            kxkykzscalar = np.column_stack(
-                                (old_grid, velocities[band][1])).tolist()
-                            xalglib.rbfsetpoints(inter, kxkykzscalar)
-                            xalglib.rbfsetalgoqnn(inter)
-                            status = xalglib.rbfbuildmodel(inter)
-                            if status.terminationtype != 1:
-                                logger.error(
-                                    "The call to rbfbuildmodel of "
-                                    "Alglib returned: %s for the velocities. Exiting.",
-                                    str(status.terminationtype))
-                                sys.exit(1)
-                            for k in range(num_new_kpoints):
-                                ivel2[band][k] = np.array(
-                                    xalglib.rbfcalc3(inter, new_grid[k, 0],
-                                                     new_grid[k, 1],
-                                                     new_grid[k, 2]))
-
-                            # direction 3
-                            kxkykzscalar = np.column_stack(
-                                (old_grid, velocities[band][2])).tolist()
-                            xalglib.rbfsetpoints(inter, kxkykzscalar)
-                            xalglib.rbfsetalgoqnn(inter)
-                            status = xalglib.rbfbuildmodel(inter)
-                            if status.terminationtype != 1:
-                                logger.error(
-                                    "The call to rbfbuildmodel of "
-                                    "Alglib returned: %s for the velocities. Exiting.",
-                                    str(status.terminationtype))
-                                sys.exit(1)
-                            for k in range(num_new_kpoints):
-                                ivel3[band][k] = np.array(
-                                    xalglib.rbfcalc3(inter, new_grid[k, 0],
-                                                     new_grid[k, 1],
-                                                     new_grid[k, 2]))
-
-                    else:
-                        # this RBF routine uses crazy amounts of memory
-                        kx_old, ky_old, kz_old = old_grid.T
-                        kx_new, ky_new, kz_new = new_grid.T
-                        if itype_sub not in constants.rbf_functions:
-                            options = ', '.join(
-                                map(str, constants.rbf_functions))
-                            logger.error(
-                                "The specified itype_sub is not recognized "
-                                "by the Rbf method, please consult the Scipy "
-                                "documentation for valid flags. Possible flags "
-                                "for itype_sub are: %s. Exiting.", options)
-                        sys.exit(1)
-                        # force Rbf to go through the original points
-                        smooth = 0.0
-                        intere = scipy.interpolate.Rbf(
-                            kx_old,
-                            ky_old,
-                            kz_old,
-                            energies[band],
-                            function=itype_sub,
-                            smooth=smooth)
-                        ien_band = intere(kx_new, ky_new, kz_new)
-                        if ivelocities:
-                            intervel1 = scipy.interpolate.Rbf(
-                                kx_old,
-                                ky_old,
-                                kz_old,
-                                velocities[band][0],
-                                function=itype_sub,
-                                smooth=smooth)
-                            ivel1_band = intervel1(kx_new, ky_new, kz_new)
-                            intervel2 = scipy.interpolate.Rbf(
-                                kx_old,
-                                ky_old,
-                                kz_old,
-                                velocities[band][1],
-                                function=itype_sub,
-                                smooth=smooth)
-                            ivel2_band = intervel2(kx_new, ky_new, kz_new)
-                            intervel3 = scipy.interpolate.Rbf(
-                                kx_old,
-                                ky_old,
-                                kz_old,
-                                velocities[band][2],
-                                function=itype_sub,
-                                smooth=smooth)
-                            ivel3_band = intervel3(kx_new, ky_new, kz_new)
-                # we do this internally if alglib is True
-                if not alglib:
-                    ien[band] = ien_band
+                    logger.info("Interpolating using Scipy RBF.")
+                    # this RBF routine uses crazy amounts of memory
+                    kx_old, ky_old, kz_old = old_grid.T
+                    kx_new, ky_new, kz_new = new_grid.T
+                    if itype_sub not in constants.rbf_functions:
+                        options = ', '.join(map(str, constants.rbf_functions))
+                        logger.error(
+                            "The specified itype_sub is not recognized "
+                            "by the Rbf method, please consult the Scipy "
+                            "documentation for valid flags. Possible flags "
+                            "for itype_sub are: %s. Exiting.", options)
+                    sys.exit(1)
+                    # force Rbf to go through the original points
+                    smooth = 0.0
+                    intere = scipy.interpolate.Rbf(kx_old,
+                                                   ky_old,
+                                                   kz_old,
+                                                   energies[band],
+                                                   function=itype_sub,
+                                                   smooth=smooth)
+                    ien_band = intere(kx_new, ky_new, kz_new)
                     if ivelocities:
-                        ivel1[band] = ivel1_band
-                        ivel2[band] = ivel2_band
-                        ivel3[band] = ivel3_band
+                        intervel1 = scipy.interpolate.Rbf(kx_old,
+                                                          ky_old,
+                                                          kz_old,
+                                                          velocities[band][0],
+                                                          function=itype_sub,
+                                                          smooth=smooth)
+                        ivel1_band = intervel1(kx_new, ky_new, kz_new)
+                        intervel2 = scipy.interpolate.Rbf(kx_old,
+                                                          ky_old,
+                                                          kz_old,
+                                                          velocities[band][1],
+                                                          function=itype_sub,
+                                                          smooth=smooth)
+                        ivel2_band = intervel2(kx_new, ky_new, kz_new)
+                        intervel3 = scipy.interpolate.Rbf(kx_old,
+                                                          ky_old,
+                                                          kz_old,
+                                                          velocities[band][2],
+                                                          function=itype_sub,
+                                                          smooth=smooth)
+                        ivel3_band = intervel3(kx_new, ky_new, kz_new)
+                ien[band] = ien_band
+                if ivelocities:
+                    ivel1[band] = ivel1_band
+                    ivel2[band] = ivel2_band
+                    ivel3[band] = ivel3_band
 
-        # loop over bands in the C code
-        if itype == "einspline":
-            logger.info("Interpolating using Einspline.")
-
-            # lazy import of einspline (optional)
-            import t4me.einspline as einspline  # pylint: disable=import-error, no-name-in-module
-
-            bz_border = old_bz_border
-            domainx = np.array([bz_border[0], bz_border[1]], dtype=np.double)
-            domainy = np.array([bz_border[2], bz_border[3]], dtype=np.double)
-            domainz = np.array([bz_border[4], bz_border[5]], dtype=np.double)
-            domain_num_points = ksampling_old
-            ix = np.ascontiguousarray(new_grid.T[0], dtype=np.double)
-            iy = np.ascontiguousarray(new_grid.T[1], dtype=np.double)
-            iz = np.ascontiguousarray(new_grid.T[2], dtype=np.double)
-            if itype_sub not in constants.einspline_boundary_cond:
-                options = ', '.join(
-                    map(str, constants.einspline_boundary_cond))
-                logger.error(
-                    "The specified itype_sub is not recognized "
-                    "by the einspline method, please consult the "
-                    "einspline documentation for valid flags. "
-                    "Possible flags for itype_sub are: %s. Notice that the DERIV1 and DERIV2 flags are "
-                    "not available in this version of the "
-                    "interface. Exiting.", options)
-                sys.exit(1)
-
-            if gen_velocities and ivelocities:
-                einspline.einspline_execute_interface(
-                    domain_num_points, domainx, domainy, domainz,
-                    np.ascontiguousarray(energies, dtype="double"), ix, iy, iz,
-                    ien, ivel1, ivel2, ivel3, 1, itype_sub)
-            else:
-                # no velocities, just create some dummies of length one
-                dummy = np.zeros((num_bands, 1), dtype=np.double)
-                einspline.einspline_execute_interface(
-                    ksampling_old, domainx, domainy, domainz,
-                    np.ascontiguousarray(energies, dtype="double"), ix, iy, iz,
-                    ien, dummy, dummy, dummy, 0, itype_sub)
-            if ivelocities and not gen_velocities:
-                # create a dummy
-                dummy = np.zeros((num_bands, 1), dtype=np.double)
-                einspline.einspline_execute_interface(
-                    ksampling_old, domainx, domainy, domainz,
-                    np.ascontiguousarray(velocities[:, 0, :], dtype=np.double),
-                    ix, iy, iz, ivel1, dummy, dummy, dummy, 0, itype_sub)
-                einspline.einspline_execute_interface(
-                    ksampling_old, domainx, domainy, domainz,
-                    np.ascontiguousarray(velocities[:, 1, :], dtype=np.double),
-                    ix, iy, iz, ivel2, dummy, dummy, dummy, 0, itype_sub)
-                einspline.einspline_execute_interface(
-                    ksampling_old, domainx, domainy, domainz,
-                    np.ascontiguousarray(velocities[:, 2, :], dtype=np.double),
-                    ix, iy, iz, ivel3, dummy, dummy, dummy, 0, itype_sub)
         # again loop over bands in the C code
         if itype == "wildmagic":
             if itype_sub not in constants.wildmagic_methods:
@@ -2147,69 +1847,69 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
                 if itype_sub == "trilinear":
                     wildmagic.trilinear_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(
-                            velocities[:, 0, :], dtype=np.double), ix, iy, iz,
+                        np.ascontiguousarray(velocities[:, 0, :],
+                                             dtype=np.double), ix, iy, iz,
                         ivel1)
                     wildmagic.trilinear_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(
-                            velocities[:, 1, :], dtype=np.double), ix, iy, iz,
+                        np.ascontiguousarray(velocities[:, 1, :],
+                                             dtype=np.double), ix, iy, iz,
                         ivel2)
                     wildmagic.trilinear_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(
-                            velocities[:, 2, :], dtype=np.double), ix, iy, iz,
+                        np.ascontiguousarray(velocities[:, 2, :],
+                                             dtype=np.double), ix, iy, iz,
                         ivel3)
 
                 elif itype_sub == "tricubic_exact":
                     wildmagic.tricubic_exact_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(
-                            velocities[:, 0, :], dtype=np.double), ix, iy, iz,
+                        np.ascontiguousarray(velocities[:, 0, :],
+                                             dtype=np.double), ix, iy, iz,
                         ivel1)
                     wildmagic.tricubic_exact_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(
-                            velocities[:, 1, :], dtype=np.double), ix, iy, iz,
+                        np.ascontiguousarray(velocities[:, 1, :],
+                                             dtype=np.double), ix, iy, iz,
                         ivel2)
                     wildmagic.tricubic_exact_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(
-                            velocities[:, 2, :], dtype=np.double), ix, iy, iz,
+                        np.ascontiguousarray(velocities[:, 2, :],
+                                             dtype=np.double), ix, iy, iz,
                         ivel3)
 
                 elif itype_sub == "tricubic_bspline":
                     wildmagic.tricubic_bspline_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(
-                            velocities[:, 0, :], dtype=np.double), ix, iy, iz,
+                        np.ascontiguousarray(velocities[:, 0, :],
+                                             dtype=np.double), ix, iy, iz,
                         ivel1)
                     wildmagic.tricubic_bspline_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(
-                            velocities[:, 1, :], dtype=np.double), ix, iy, iz,
+                        np.ascontiguousarray(velocities[:, 1, :],
+                                             dtype=np.double), ix, iy, iz,
                         ivel2)
                     wildmagic.tricubic_bspline_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(
-                            velocities[:, 2, :], dtype=np.double), ix, iy, iz,
+                        np.ascontiguousarray(velocities[:, 2, :],
+                                             dtype=np.double), ix, iy, iz,
                         ivel3)
 
                 elif itype_sub == "akima":
                     wildmagic.akima_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(
-                            velocities[:, 0, :], dtype=np.double), ix, iy, iz,
+                        np.ascontiguousarray(velocities[:, 0, :],
+                                             dtype=np.double), ix, iy, iz,
                         ivel1)
                     wildmagic.akima_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(
-                            velocities[:, 1, :], dtype=np.double), ix, iy, iz,
+                        np.ascontiguousarray(velocities[:, 1, :],
+                                             dtype=np.double), ix, iy, iz,
                         ivel2)
                     wildmagic.akima_execute_interface(
                         ksampling_old, domainx, domainy, domainz,
-                        np.ascontiguousarray(
-                            velocities[:, 2, :], dtype=np.double), ix, iy, iz,
+                        np.ascontiguousarray(velocities[:, 2, :],
+                                             dtype=np.double), ix, iy, iz,
                         ivel3)
                 else:
                     logger.error("The specified itype_sub is not recognized "
@@ -2344,29 +2044,8 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
                       implemented in
                       `Spglib <https://atztogo.github.io/spglib/>`_
                       (up to version 1.7.4) by A. Togo.
-            | "cubature" cubature method, using the
-                         `Cubature <http://ab-initio.mit.edu/wiki/index.php/Cubature>`_
-                         packages written by Steven G. Johnson.
 
             If not supplied, set according to `dos_integrating_method` in
-            the general configuration file.
-        interpol_method : string, optional
-            The interpolation method used for the cubature method: (all
-            methods from the Wildmagic / GeometricTools package). Now, only
-            the option "wildmagic" is supported.
-            If not supplied, set according to dos_interpolate_method in
-            the general configuration file.
-        interpol_type : string, optional
-            The interpolation method used for the cubature method (all
-            methods rely on the `GeometricTools <https://www.geometrictools.com/>`_ package):
-
-            | "akima" `Akima <https://www.geometrictools.com/Documentation/AkimaInterpolation.pdf>`_
-                      interpolation method
-            | "trilinear" trilinear interpolation method
-            | "tricubic_exact" exact analytic tricubic interpolation method
-            | "tricubic_bspline" bspline tricubic interpolation method
-
-            If not supplied, set according to `dos_interpolate_method` in
             the general configuration file.
 
         Returns
@@ -2413,9 +2092,15 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
         if integral_method is None:
             integral_method = self.param.dos_integrating_method
         if interpol_method is None:
-            interpol_method = self.param.dos_interpolate_method
+            try:
+                interpol_method = self.param.dos_interpolate_method
+            except AttributeError:
+                pass
         if interpol_type is None:
-            interpol_type = self.param.dos_interpolate_type
+            try:
+                interpol_type = self.param.dos_interpolate_type
+            except AttributeError:
+                pass
         # now, determine if the dos is to be used for transport
         if transport:
             logger.info("Adjusting the density of states energy "
@@ -2465,89 +2150,19 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
                 logger.debug("Running smearing method.")
             # here we call the weighted DOS routine (accepts IBZ
             # data)
-            energies_ibz = np.take(
-                self.energies, self.lattice.mapping_ibz_to_bz, axis=1)
+            energies_ibz = np.take(self.energies,
+                                   self.lattice.mapping_ibz_to_bz,
+                                   axis=1)
             spglib_interface.calc_density_of_states_interface(
                 energies_ibz, self.lattice.spg_kmesh,
-                np.ascontiguousarray(
-                    self.lattice.mapping_bz_to_ibz, dtype='intc'),
-                np.ascontiguousarray(
-                    self.lattice.mapping_ibz_to_bz, dtype='intc'),
+                np.ascontiguousarray(self.lattice.mapping_bz_to_ibz,
+                                     dtype='intc'),
+                np.ascontiguousarray(self.lattice.mapping_ibz_to_bz,
+                                     dtype='intc'),
                 np.ascontiguousarray(self.lattice.ibz_weights, dtype='intc'),
                 self.lattice.ksampling, self.lattice.runitcell, dos_energies,
                 num_samples, num_bands, num_kpoints_ibz, self.spin_degen,
                 volume, volume_bz, weight_type, smearing, dos, int_dos)
-        elif integral_method == 'cubature':
-            logger.debug("Running cubature method.")
-            # lazy import of cubature_wildmagic (optional)
-            import t4me.cubature_wildmagic as cubature_wildmagic  # pylint: disable=import-error, no-name-in-module
-
-            # here we call the cubature DOS routine with on the fly
-            # interpolation
-            num_points = np.ascontiguousarray(
-                self.lattice.ksampling, dtype=np.intc)
-            # set boundary conditions (luckily we work in direct
-            # coordinates)
-            bz_border = self.lattice.fetch_bz_border(direct=False)
-            domainx = np.ascontiguousarray(
-                np.array([bz_border[0], bz_border[1]], dtype=np.double))
-            domainy = np.ascontiguousarray(
-                np.array([bz_border[2], bz_border[3]], dtype=np.double))
-            domainz = np.ascontiguousarray(
-                np.array([bz_border[4], bz_border[5]], dtype=np.double))
-            max_it = self.param.cubature_max_it
-            abs_err = self.param.cubature_abs_err
-            rel_err = self.param.cubature_rel_err
-            h = self.param.cubature_h
-            # somethimes we do not want to print library output
-            info = self.param.libinfo
-            if interpol_method == "wildmagic":
-                # testing parameter
-                smear_then_interpolate = False
-                if interpol_type not in constants.wildmagic_methods:
-                    options = ', '.join(map(str, constants.wildmagic_methods))
-                    logger.error(
-                        "The specified interpol_type is not "
-                        "recognized by the Wildmagic method, "
-                        "please consult the Wildmagic documentation "
-                        "for valid flags. Possible flags for "
-                        "itype_sub are: %s. Exiting.", options)
-                    sys.exit(1)
-                if interpol_type == "akima":
-                    cubature_wildmagic.calc_density_of_states_interface(
-                        num_points, domainx, domainy, domainz, self.energies,
-                        dos_energies, self.spin_degen, num_samples, num_bands,
-                        self.param.dos_smearing, 3, smear_then_interpolate,
-                        volume, volume_bz, max_it, abs_err, rel_err, h, info,
-                        dos, int_dos)
-                elif interpol_method == "trilinear":
-                    cubature_wildmagic.calc_density_of_states_interface(
-                        num_points, domainx, domainy, domainz, self.energies,
-                        dos_energies, self.spin_degen, num_samples, num_bands,
-                        self.param.dos_smearing, 0, smear_then_interpolate,
-                        volume, volume_bz, max_it, abs_err, rel_err, h, info,
-                        dos, int_dos)
-                elif interpol_method == "tricubic_exact":
-                    cubature_wildmagic.calc_density_of_states_interface(
-                        num_points, domainx, domainy, domainz, self.energies,
-                        dos_energies, self.spin_degen, num_samples, num_bands,
-                        self.param.dos_smearing, 1, smear_then_interpolate,
-                        volume, volume_bz, max_it, abs_err, rel_err, h, info,
-                        dos, int_dos)
-                elif interpol_method == "tricubic_bspline":
-                    cubature_wildmagic.calc_density_of_states_interface(
-                        num_points, domainx, domainy, domainz, self.energies,
-                        dos_energies, self.spin_degen, num_samples, num_bands,
-                        self.param.dos_smearing, 2, smear_then_interpolate,
-                        volume, volume_bz, max_it, abs_err, rel_err, h, info,
-                        dos, int_dos)
-            else:
-                logger.error(
-                    "Currently, only interpol_method of 'wildmagic' is "
-                    "supported when executing the cubature interpolation "
-                    "routines. Also remember to set interpol_type accordingly. "
-                    "Exiting.")
-                sys.exit(1)
         elif integral_method in ("trapz", "simps", "romb"):
             logger.debug(
                 "Running trapeziodal, simpson or romberg integration.")
@@ -2611,7 +2226,7 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
 
         else:
             logger.error("The supplied integral_method is not supported. "
-                         "Use: 'tetra', 'cubature','trapz','simps' or 'romb'. "
+                         "Use: 'tetra', 'trapz','simps' or 'romb'. "
                          "Exiting.")
             sys.exit(1)
 
@@ -3362,9 +2977,9 @@ def non_parabolic_energy_2(k, effmass, a):
         last_valid_k2 = -effmass / \
             (4 * a * constants.bandunit) - constants.zerocut
         last_valid_energy = (
-            -1.0 + np.sqrt(1 + 4 * a *
-                           (constants.bandunit * last_valid_k2 / effmass))) / (
-                               2 * a)
+            -1.0 +
+            np.sqrt(1 + 4 * a *
+                    (constants.bandunit * last_valid_k2 / effmass))) / (2 * a)
         logger.warning(
             "The product of the effective mass "
             "and non parabolic correction factor "
@@ -3441,9 +3056,9 @@ def non_parabolic_velocity_2(k, effmass, a):
             (4 * a * constants.bandunit)
         energy = constants.bandunit * k2 / effmass
         last_valid_energy = (
-            -1.0 + np.sqrt(1 + 4 * a *
-                           (constants.bandunit * last_valid_k2 / effmass))) / (
-                               2 * a)
+            -1.0 +
+            np.sqrt(1 + 4 * a *
+                    (constants.bandunit * last_valid_k2 / effmass))) / (2 * a)
         # need to loop manually to fill the array outside the
         # valid range
         for i in range(k2.shape[0]):
@@ -3484,9 +3099,8 @@ def parabolic_effective_mass(effmass_t):
     logger.debug("Running parabolic_effective_mass.")
 
     effmass = effmass_t[0]
-    if not np.allclose(
-            np.array([effmass, effmass, effmass]),
-            effmass_t,
-            atol=constants.zerocut):
+    if not np.allclose(np.array([effmass, effmass, effmass]),
+                       effmass_t,
+                       atol=constants.zerocut):
         return False
     return True

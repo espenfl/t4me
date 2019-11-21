@@ -92,13 +92,6 @@ transport_integration_spectral_density: 1000 # n/a
 # max values do you want to truncate the spectral
 # sampling?
 transport_integration_spectral_energy_cutoff: 1.0 # eV
-# What type of interpolation method to use when
-# running on-the-fly interpolation during integration
-# (only "wildmagic" is currently implemented and this
-# only works if the integration method is "cubature")?
-transport_interpolate_method: "wildmagic" # n/a
-# What type of sub method to use?
-transport_interpolate_type: "akima" # n/a
 # The minimum chemical potential:
 transport_chempot_min: -0.4 # eV
 # The maximum chemical potential:
@@ -144,12 +137,6 @@ dos_num_samples: 1000 # n/a
 # The Gaussian smearing (if "smeared", "trapz", "simps"
 # or "romb" is used)
 dos_smearing: 0.1 # eV
-# What on-the-fly interpolation method to use during
-# integration (only "wildmagic" is available and the
-# integration method have to be "cubature").
-dos_interpolate_method: "wildmagic" # n/a
-# What sub method to use?
-dos_interpolate_type: "akima" # n/a
 # What type of integration method to use?
 dos_integrating_method: "trapz" # n/a
 # This is a bit redundant, users please leave this
@@ -195,19 +182,6 @@ e_vbm: False # n/a
 # Shift the whole electron energy dispersion by the
 # following amount:
 e_shift: 0.0 # eV
-# Use h cubature? If False, p cubature is used instead.
-cubature_h: False  # n/a
-# The number of iterations in the cubature routines
-cubature_max_it: 0 # n/a
-# The absolute error when the cubature refinement is
-# truncated
-cubature_abs_err: 0.0 # n/a
-# The relative error when the cubature refinement is
-# truncated. Beware that due to small values, it is
-# difficult to use this is general. A combination of
-# this and the max_it is recommended. Please check for
-# convergence.
-cubature_rel_err: 0.01 # n/a
 # The carrier valence energy:
 carrier_valence_energy: 0.0 # eV
 # The carrier conduction energy:

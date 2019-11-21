@@ -1,24 +1,14 @@
 # Copyright 2016 Espen Flage-Larsen
 #
-#    This file is part of T4ME.
+#    This file is part of T4ME and covered by the BSD 3-clause license.
 #
-#    T4ME is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    T4ME is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with T4ME.  If not, see <http://www.gnu.org/licenses/>.
+#    You should have received a copy of the BSD 3-clause license
+#    along with T4ME.  If not, see <https://opensource.org/licenses/BSD-3-Clause/>.
 
 #!/usr/local/bin/python
 """Contains various input and output routines for T4ME."""
 
-# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements, too-many-lines, global-statement
+# pylint: disable=useless-import-alias, too-many-arguments, invalid-name, too-many-statements, too-many-lines, global-statement, no-name-in-module
 
 import os
 import sys
@@ -29,12 +19,8 @@ import yaml
 import t4me.constants as constants
 
 # global variables
-pythtb_warning_printed = False
 skw_warning_printed = False
 wildmagic_warning_printed = False
-cubature_warning_printed = False
-einspline_warning_printed = False
-alglib_warning_printed = False
 mpi4py_message_printed = False
 
 # errors that cause exits
@@ -51,42 +37,6 @@ def spglib_error():
 
 
 # warnings
-
-
-def gsl_warning():
-    """An error for missing GNU GSL interface."""
-    # set logger
-    logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
-    logger.warning("Could not locate the GSL interface. Please "
-                   "do not use this functionality. Continuing.")
-
-
-def alglib_warning():
-    """An error for missing Alglib."""
-    global alglib_warning_printed
-    if not alglib_warning_printed:
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
-        logger.warning("Could not load the Alglib package. Using "
-                       "the Rbf function in SciPy instead. "
-                       "This is extremely memory consuming, please "
-                       "install the Alglib package properly of you "
-                       "want to utilize RBF interpolation. "
-                       "Continuing.")
-        alglib_warning_printed = True
-
-
-def pythtb_warning():
-    """An error for missing PythTB."""
-    global pythtb_warning_printed
-    if not pythtb_warning_printed:
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
-        logger.warning("Could not locate PythTB. PythTB calls will "
-                       "give errors. Please do not set type: 3 in "
-                       "bandparams.yml to generating TB bands "
-                       "(use PythTB interface). Continuing.")
-        pythtb_warning_printed = True
 
 
 def skw_warning():
@@ -113,30 +63,6 @@ def wildmagic_warning():
         wildmagic_warning_printed = True
 
 
-def cubature_warning():
-    """An error for a missing Cubature-GeometricTools interface."""
-    global cubature_warning_printed
-    if not cubature_warning_printed:
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
-        logger.warning("Could not locate the Cubature-WildMagic "
-                       "interface. Make sure you do not call any of its "
-                       "functions as this will yield errors. Continuing.")
-        cubature_warning_printed = True
-
-
-def einspline_warning():
-    """An error for a missing Einspline interface"""
-    global einspline_warning_printed
-    if not einspline_warning_printed:
-        # set logger
-        logger = logging.getLogger(sys._getframe().f_code.co_name)  # pylint: disable=protected-access
-        logger.warning("Could not locate the Einspline interpolation "
-                       "interface. Make sure you do not call any of its "
-                       "functions as this will yield errors. Continuing.")
-        einspline_warning_printed = True
-
-
 class Param():  # pylint: disable=too-few-public-methods
     """
     YAML reader for the input paramters.
@@ -152,7 +78,6 @@ class Param():  # pylint: disable=too-few-public-methods
     Read a YAML paramter file.
 
     """
-
     def __init__(self, data):
         for name, value in list(data.items()):
             setattr(self, name, self._wrap(value))
@@ -898,17 +823,17 @@ def dump_transport_coefficients(tr, filename_tag=None):  # pylint: disable=too-m
                     tr.seebeck[t, e, 0, 2], tr.seebeck[t, e, 1, 0],
                     tr.seebeck[t, e, 1, 2], tr.seebeck[t, e, 2, 0],
                     tr.seebeck[t, e, 2, 1]))
-            lorenz_file.write(
-                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
-                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
-                "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
-                "{:>17.8e}\n".format(
-                    chempot, eta, tr.ccn[t, e, 0, 0], tr.ccp[t, e, 0, 0],
-                    tr.lorenz[t, e, 0, 0], tr.lorenz[t, e, 1, 1],
-                    tr.lorenz[t, e, 2, 2], tr.lorenz[t, e, 0, 1],
-                    tr.lorenz[t, e, 0, 2], tr.lorenz[t, e, 1, 0],
-                    tr.lorenz[t, e, 1, 2], tr.lorenz[t, e, 2, 0],
-                    tr.lorenz[t, e, 2, 1]))
+            lorenz_file.write("{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                              "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                              "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
+                              "{:>17.8e}\n".format(
+                                  chempot, eta, tr.ccn[t, e, 0, 0],
+                                  tr.ccp[t, e, 0, 0], tr.lorenz[t, e, 0, 0],
+                                  tr.lorenz[t, e, 1, 1], tr.lorenz[t, e, 2, 2],
+                                  tr.lorenz[t, e, 0, 1], tr.lorenz[t, e, 0, 2],
+                                  tr.lorenz[t, e, 1, 0], tr.lorenz[t, e, 1, 2],
+                                  tr.lorenz[t, e, 2, 0],
+                                  tr.lorenz[t, e, 2, 1]))
             kappae_file.write(
                 "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
                 "{:>17.8e}{:>17.8e}{:>17.8e}{:>17.8e}"
@@ -1028,8 +953,8 @@ def dump_relaxation_time(tr, filename=None):  # pylint: disable=too-many-branche
         for band in range(tr.scattering_total_inv[0].shape[0]):
             filename_band = filename + "_band_" + str(band + 1)
             # open
-            scattering_file = file_handler(
-                "output/" + filename_band, status='w')
+            scattering_file = file_handler("output/" + filename_band,
+                                           status='w')
             scattering_file.write(
                 "##########################################################\n")
             scattering_file.write(
@@ -1212,7 +1137,7 @@ def dump_bandstruct_line(bs,
         Selects to write energy dispersions ("e") or velocity dispersions ("v").
     itype : string, optional
         | Can be any of:
-        | {"linearnd", "interpn", "rbf", "einspline", "wildmagic", "skw"}
+        | {"linearnd", "interpn", "rbf", "wildmagic", "skw"}
 
         The type of interpolate method to use. If not set, the parameter
         `dispersion_interpolate_method` in param.yml sets this.
@@ -1221,11 +1146,7 @@ def dump_bandstruct_line(bs,
         | {"nearest", "linear"}, when `itype` is set to `interpn`.
         | {"multiquadric", "inverse_multiquadric", "gaussian", "linear",
         | "cubic", "quintic", "thin_plate"}, when `itype` is set to `rbf`
-        | and when the Scipy variety is used (the `alglib` variable set
-        | to False in the :func:`interpolate` function). If `alglib` is
-        | set to True (default), then `itype_sub` does not have to be set.
-        | {"natural", "flat", "periodic", "antiperiodic"}, when `itype`
-        | is set to `einspline`.
+        | and when the Scipy variety is used.
         | {"trilinear, tricubic_exact, tricubic_bspline, akima"},
         | when `itype` is set to `wildmagic`.
 
@@ -1251,8 +1172,10 @@ def dump_bandstruct_line(bs,
 
     if datatype == "e":
         # fetch energies and kpts
-        e, kpts = bs.fetch_energies_along_line(
-            ks, ke, itype=itype, itype_sub=itype_sub)
+        e, kpts = bs.fetch_energies_along_line(ks,
+                                               ke,
+                                               itype=itype,
+                                               itype_sub=itype_sub)
         kpoint_length = np.linalg.norm(kpts - kpts[0], axis=1)
         bands_file = file_handler("output/" + filename, status='w')
         bands_file.write(
@@ -1311,8 +1234,10 @@ def dump_bandstruct_line(bs,
         file_handler(filename, bands_file)
 
     if datatype == "v":
-        vel, kpts = bs.fetch_velocities_along_line(
-            ks, ke, itype=itype, itype_sub=itype_sub)
+        vel, kpts = bs.fetch_velocities_along_line(ks,
+                                                   ke,
+                                                   itype=itype,
+                                                   itype_sub=itype_sub)
         kpoint_length = np.linalg.norm(kpts - kpts[0], axis=1)
         bands_file = file_handler("output/" + filename, status='w')
         bands_file.write(
@@ -1368,10 +1293,12 @@ def dump_bandstruct_line(bs,
         for kpoint in range(kpts.shape[0]):
             bands_file.write("{:>7.4f}".format(kpoint_length[kpoint]))
             for band in range(vel.shape[0]):
-                bands_file.write(
-                    " " + "{:>16.4e}".format(vel[band, 0, kpoint]) + " " +
-                    "{:>16.4e}".format(vel[band, 1, kpoint]) + " " +
-                    "{:>16.4e}".format(vel[band, 2, kpoint]))
+                bands_file.write(" " +
+                                 "{:>16.4e}".format(vel[band, 0, kpoint]) +
+                                 " " +
+                                 "{:>16.4e}".format(vel[band, 1, kpoint]) +
+                                 " " +
+                                 "{:>16.4e}".format(vel[band, 2, kpoint]))
             bands_file.write("\n")
         file_handler(filename, bands_file)
 
@@ -1435,7 +1362,7 @@ def start_message():
         "Starting T4ME. %s\n"
         "T4ME - Transport for Materials\n"
         "Version: %s\n"
-        "License: GNU GPL v3\n"
+        "License: BSD 3-clause\n"
         "Documentation: https://espenfl.github.io/t4me \n"
         "Git repo: git@github.com:espenfl/t4me.git\n"
         "Developed by: Espen Flage-Larsen\n"

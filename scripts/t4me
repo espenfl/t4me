@@ -55,23 +55,11 @@ def main():  # noqa: MC0001
     # a warning and later we just load the module in a subroutine
     # and assume the user knows that is going on
 
-    # check GSL and load
-    try:
-        import t4me.gsl
-    except ImportError:
-        inputoutput.gsl_warning()
-
     # check spglib and load
     try:
         import t4me.spglib_interface
     except ImportError:
         inputoutput.spglib_error()
-
-    # check PythTB and load
-    try:
-        import t4me.pythtb
-    except ImportError:
-        inputoutput.pythtb_warning()
 
     # check skw_interface and load
     try:
@@ -84,18 +72,6 @@ def main():  # noqa: MC0001
         import t4me.wildmagic
     except ImportError:
         inputoutput.wildmagic_warning()
-
-    # check einspline and load
-    try:
-        import t4me.einspline
-    except ImportError:
-        inputoutput.einspline_warning()
-
-    # check cubature_wildmagic and load
-    try:
-        import t4me.cubature_wildmagic
-    except ImportError:
-        inputoutput.cubature_warning()
 
     # read param file
     param = inputoutput.Param(inputoutput.readparam())
@@ -111,15 +87,14 @@ def main():  # noqa: MC0001
 
     # dump the dispersions?
     if param.dispersion_write_preinter:
-        inputoutput.dump_bandstruct_line(
-            bs,
-            param.dispersion_write_start,
-            param.dispersion_write_end,
-            datatype="e",
-            filename="bands",
-            k_direct=True,
-            itype="linearnd",
-            itype_sub="linear")
+        inputoutput.dump_bandstruct_line(bs,
+                                         param.dispersion_write_start,
+                                         param.dispersion_write_end,
+                                         datatype="e",
+                                         filename="bands",
+                                         k_direct=True,
+                                         itype="linearnd",
+                                         itype_sub="linear")
         # same as above just for the velocities
         # check if the velocities exists, if not print a message and
         # continue
@@ -128,15 +103,14 @@ def main():  # noqa: MC0001
                         "Skipping writing the band velocities to file "
                         "and continuing.")
         else:
-            inputoutput.dump_bandstruct_line(
-                bs,
-                param.dispersion_write_start,
-                param.dispersion_write_end,
-                datatype="v",
-                filename="velocities",
-                k_direct=True,
-                itype="linearnd",
-                itype_sub="linear")
+            inputoutput.dump_bandstruct_line(bs,
+                                             param.dispersion_write_start,
+                                             param.dispersion_write_end,
+                                             datatype="v",
+                                             filename="velocities",
+                                             k_direct=True,
+                                             itype="linearnd",
+                                             itype_sub="linear")
 
     # maybe the user wants to pre-interpolate?
     # but do not to this for tight binding stuff
@@ -176,30 +150,28 @@ def main():  # noqa: MC0001
 
         # dump the dispersions after interpolations?
         if param.dispersion_write_postinter:
-            inputoutput.dump_bandstruct_line(
-                bs,
-                param.dispersion_write_start,
-                param.dispersion_write_end,
-                datatype="e",
-                filename="bands_inter",
-                k_direct=True,
-                itype="linearnd",
-                itype_sub="linear")
+            inputoutput.dump_bandstruct_line(bs,
+                                             param.dispersion_write_start,
+                                             param.dispersion_write_end,
+                                             datatype="e",
+                                             filename="bands_inter",
+                                             k_direct=True,
+                                             itype="linearnd",
+                                             itype_sub="linear")
             # same as above just for the velocities
             if bs.gen_velocities:
                 logger.info("Data for the band velocities does not exist. "
                             "Skipping writing the band velocities to file "
                             "and continuing.")
             else:
-                inputoutput.dump_bandstruct_line(
-                    bs,
-                    param.dispersion_write_start,
-                    param.dispersion_write_end,
-                    datatype="v",
-                    filename="velocities_inter",
-                    k_direct=True,
-                    itype="linearnd",
-                    itype_sub="linear")
+                inputoutput.dump_bandstruct_line(bs,
+                                                 param.dispersion_write_start,
+                                                 param.dispersion_write_end,
+                                                 datatype="v",
+                                                 filename="velocities_inter",
+                                                 k_direct=True,
+                                                 itype="linearnd",
+                                                 itype_sub="linear")
     # do the user want effective mass data?
     if param.dispersion_effmass:
         # calculate effective mass

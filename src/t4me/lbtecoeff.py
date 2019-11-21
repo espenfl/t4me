@@ -96,7 +96,7 @@ def parabolice(tr, eta, temperature, bs, tau0, method):
 
 def parabolic_closed(tr, eta, bs, tau0_t, temperature):  # pylint: disable=too-many-locals
     r"""
-    Calculates the parabolic and parabolic Fermi integrals for the transport coefficients.
+    Calculates the parabolic Fermi integrals for the transport coefficients.
 
     Parameters
     ----------
@@ -176,9 +176,9 @@ def parabolic_closed(tr, eta, bs, tau0_t, temperature):  # pylint: disable=too-m
 
     See Also
     --------
-    setup_scattering()
-    find_r_from_tau0()
-    parabolic_numeric()
+    setup_scattering
+    find_r_from_tau0
+    parabolic_numeric
 
     """
 
@@ -426,12 +426,6 @@ def parabolic_numeric(tr, eta, bs, tau0_t, temperature):  # pylint: disable=too-
 
     .. todo:: ADD POSIBILITY TO USE DIFFERENT EFFECTIVE MASSES ALONG
               DIFFERENT DIRECTIONS
-
-    .. rubric:: References
-
-    .. bibliography:: references.bib
-        :style: unsrt
-        :filter: docname in docnames
 
     """
     # set logger

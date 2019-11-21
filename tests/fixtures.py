@@ -50,8 +50,9 @@ def may_data():
     data : ndarray
         | Dimension: (11,5)
 
-        Contains the data from Table 11.1 in
-        Ref.:cite:`rowe_2012_mpacit_may`. With 11 entries
+        Contains the data from Table 11.1 in Andrew F. May and G. Jeffrey Snyder, 
+        Introduction to Modelling Thermoelectric Transport at High Temperature, 
+        Taylor \& Francis Inc, 2012, Chapter 11. With 11 entries
         of different unitless chemical potentials (first index
         of the second axis). The remaining 4 indexes of the
         second axis contains the Seebeck coefficient, Lorenz
@@ -68,7 +69,7 @@ def may_data():
     Fermi-Dirac integrals. The data given by may is converted to
     a conduction band and thus the Seebeck should be
     negative. Otherwise the values entered should be precicely the
-    same as in Ref.:cite:`rowe_2012_mpacit_may`.
+    same as in the reference given above.
 
     """
     data = np.zeros((11, 5))

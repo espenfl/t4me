@@ -109,10 +109,7 @@ def scattering_dos(tr, dos, energies, select_scattering):  # pylint: disable=too
 
     Only the acoustic phonon scattering has been tested.
 
-    Please consult the book of C. Jacoboni :cite:`jacoboni_2010_toetis` and the
-    publication concerning this software by
-    E. Flage-Larsen :cite:`t4me` for additional details
-    on the involved parameters. Also consult the bandstructure
+    Consult the bandstructure
     configuration file for the respective constants that have to
     be set besides `select_scattering` and their units.
 
@@ -477,21 +474,12 @@ def scattering_parabolic(tr, energies, select_scattering, use_eonk=False):  # py
     12                        Constant (energy and k-point independent)
     ========================= ====================
 
-    Please consult the book of C. Jacoboni :cite:`jacoboni_2010_toetis` and the
-    publication concerning this software by
-    E. Flage-Larsen :cite:`t4me` for additional details
-    on the involved parameters. Also consult the bandstructure
+    Also consult the bandstructure
     configuration file for the respective constants that have to
     be set besides `select_scattering` and their units.
 
     .. todo:: Add more extensive documentation for the different scattering
               mechanisms.
-
-    .. rubric:: References
-
-    .. bibliography:: references.bib
-        :style: unsrt
-        :filter: docname in docnames
 
     """
     # set logger

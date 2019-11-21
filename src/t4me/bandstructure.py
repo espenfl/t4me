@@ -904,12 +904,11 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
         The :func:`interpolate` is used to perform the interpolation
         of the data along the line.
 
+        .. warning:: The factor :math:`\\hbar^{-1}` is not returned and need to be included externally.
+
         See Also
         --------
         interpolate
-
-        .. warning:: The factor : math: `\\hbar^{-1}` is not returned
-                      and need to be included externally.
 
         """
         # set logger
@@ -976,12 +975,11 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
         -----
         The :func:`interpolate` is used to perform the interpolation.
 
+        .. warning:: The factor :math:`\\hbar^{-1}` is not returned and need to be included externally.
+
         See Also
         --------
         interpolate
-
-        .. warning:: The factor : math: `\\hbar^{-1}` is not returned
-                      and need to be included externally.
 
         """
         # set logger
@@ -1408,14 +1406,17 @@ class Bandstructure():  # pylint: disable=too-many-instance-attributes, too-many
             if `velocities` is not supplied or `gen_velocities` is
             set to False.
 
+
+        Notes
+        -----
+        .. todo:: DOCUMENT THE DIFFERENT INTERPOLATION SCHEMES,
+                  OR AT LEAST ADD PROPER REFERENCES.
+
         See Also
         --------
         linearnd
         interpn
         rbf
-
-        .. todo:: DOCUMENT THE DIFFERENT INTERPOLATION SCHEMES,
-                  OR AT LEAST ADD PROPER REFERENCES.
 
         """
 
@@ -3039,8 +3040,7 @@ def non_parabolic_velocity_2(k, effmass, a):
     -----
     Consult comments in :func:`non_parabolic_energy_1`
 
-    .. warning:: The factor :math:`\\hbar^{-1}` is not returned
-                 and need to be included externally.
+    .. warning:: The factor :math:`\\hbar^{-1}` is not returned and need to be included externally.
 
     """
 

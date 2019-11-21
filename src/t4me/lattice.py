@@ -825,14 +825,7 @@ class Lattice():  # pylint: disable=too-many-instance-attributes
 
         Notes
         -----
-        This routines use spglib, an excellent tool written by A. Togo
-        : cite: `spglib`
-
-        .. rubric: : References
-
-        .. bibliography: : references.bib
-           : style: unsrt
-           : filter: docname in docnames
+        This routines use spglib, an excellent tool written by A. Togo.
 
         """
 

@@ -24,7 +24,7 @@ using the linearized Boltzmann Transport Equations (BTE)
 in the Relaxtion-Time-Approximation (RTA).
 
 Please go to the
-`T4ME <https://espenfl.github.io/t4me/>`_
+`T4ME at Github Pages<https://espenfl.github.io/t4me/>`_ or `T4ME at RTD<https://t4me.readthedocs.io/en/latest/>`_
 website for more extensive documentation and
 information regarding usage.
 

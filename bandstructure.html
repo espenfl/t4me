@@ -1,0 +1,2326 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>bandstructure module &#8212; T4ME 1.1.1 documentation</title>
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="inputoutput module" href="inputoutput.html" />
+    <link rel="prev" title="lattice module" href="lattice.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          T4ME</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Custom interfaces</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">bandstructure module</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="lattice.html" title="Previous Chapter: lattice module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; lattice module</span>
+    </a>
+  </li>
+  <li>
+    <a href="inputoutput.html" title="Next Chapter: inputoutput module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">inputoutput module &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/bandstructure.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="bandstructure-module">
+<h1>bandstructure module<a class="headerlink" href="#bandstructure-module" title="Permalink to this headline">¶</a></h1>
+<p>This module, <code class="file docutils literal notranslate"><span class="pre">bandstructure.py</span></code> contains the setup
+and calculation of bandstructure related properties. This
+also include for instance the calculation of the
+density of states.</p>
+<span class="target" id="module-bandstructure"></span><p>Contains routines to set up the bandstructure.</p>
+<dl class="class">
+<dt id="bandstructure.Bandstructure">
+<em class="property">class </em><code class="sig-prename descclassname">bandstructure.</code><code class="sig-name descname">Bandstructure</code><span class="sig-paren">(</span><em class="sig-param">lattice</em>, <em class="sig-param">param</em>, <em class="sig-param">location=None</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Handles the read in, generation and storrage of the bandstructure and its relevant parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lattice</strong><span class="classifier">object</span></dt><dd><p>A <cite>Lattice()</cite> object.</p>
+</dd>
+<dt><strong>param</strong><span class="classifier">object</span></dt><dd><p>A <cite>Param()</cite> object.</p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">string, optional</span></dt><dd><p>Filename and relative path for the input file that is
+to be read.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The YAML general and bandstructure configuration (param.yml
+and bandparams.yml, respectively by default) files are read and
+the setup of the bandstructure is determined from these files.</p>
+<p>If an external band structure is supplied, i.e. from VASP
+(vasprun.xml is sufficient) the bandparams file is still needed as
+it contains parameters used to set up the scattering properties
+etc. at a later stage.</p>
+<p>Presently the following combination is possible:</p>
+<ul class="simple">
+<li><p>Parametrized bands (parabolic, non-parabolic, Kane and
+a k^4 model)</p></li>
+<li><p>VASP input from the VASP XML file (only this file is needed)</p></li>
+<li><p>Numpy input files</p></li>
+</ul>
+<p>A combination of parametrized and tight binding bands is possible.</p>
+<p>If another code is to be used to provide the bandstructure
+parameters, please consult <a class="reference internal" href="interface.html#module-interface" title="interface"><code class="xref py py-mod docutils literal notranslate"><span class="pre">interface</span></code></a> and use that as a
+base to write a new <cite>bandstructure_yourcode</cite> function in that
+module and include a call to this function in the initializer below.</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Add the posibility to add parameterized bands
+to the e.g. VASP bandstructure. Usefull for instance to
+investigate defects etc. that was not included in the
+calculation.</p>
+</div>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>Add interfaces to other first principle codes.</p>
+</div>
+<dl class="method">
+<dt id="bandstructure.Bandstructure.apply_scissor_operator">
+<code class="sig-name descname">apply_scissor_operator</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">energies=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.apply_scissor_operator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply scissor operator to blue or redshift the conduction band energies.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>energies</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M)</div>
+</div>
+<p>The energy dispersion for N bands at M k-points. Defaults
+to the <cite>energies</cite> stored in the current <cite>Bandstructure()</cite>
+object.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Please beware that this is a rather brutal (but usefull)
+operation. Make sure that the valence band maximum and
+conduction band minimum is fetched correctly. One way to
+check that this works is to plot the energies along a
+representative direction before and after the scissor
+operator have been executed.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.calc_density_of_states">
+<code class="sig-name descname">calc_density_of_states</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">return_data=False</em>, <em class="sig-param">num_samples=None</em>, <em class="sig-param">auto_scale=False</em>, <em class="sig-param">transport=False</em>, <em class="sig-param">integral_method=None</em>, <em class="sig-param">interpol_method=None</em>, <em class="sig-param">interpol_type=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.calc_density_of_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the density of states.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>return_data</strong><span class="classifier">boolean, optional</span></dt><dd><p>If True, return the density of states data instead of
+storing it in the current <cite>Bandstructure()</cite> object.  If False, set
+<cite>dos_energies</cite>, <cite>dos_partial</cite> and <cite>dos_total</cite> in the current
+<cite>Bandstructure()</cite> object.</p>
+</dd>
+<dt><strong>num_samples</strong><span class="classifier">integers, optional</span></dt><dd><p>Number of energy samples. Necessary if auto_scale
+is set. Otherwise the <cite>dos_num_samples</cite> in the parameter file
+is used.</p>
+</dd>
+<dt><strong>auto_scale</strong><span class="classifier">boolean, optional</span></dt><dd><p>If True, auto scale the energy axis to cover the supplied
+band structure. Otherwise the <cite>dos_e_min</cite> and <cite>dos_e_max</cite> from
+the parameter file is used to set up the energy range unless
+<cite>transport</cite> is set which overrides this.</p>
+</dd>
+<dt><strong>transport</strong><span class="classifier">bool, optional</span></dt><dd><p>Set to True if the density of states calculated are to be
+used in transport calculations (i.e. to set up the scattering).
+This ensures that the energy range covers the requested
+range of chemical potential pluss / minus
+‘transport_energycutband’ and is then padded with zeros
+for the remaining values down and up to the minimum and
+maximum values present in the <cite>energies</cite> entry of the
+<cite>Bandstructure()</cite> object. Using this option make it possible
+to calculate the density of states on a fine grid in the
+relevant transport region.</p>
+</dd>
+<dt><strong>integral_method</strong><span class="classifier">string, optional</span></dt><dd><p>The integration method used to calculate the DOS:</p>
+<div class="line-block">
+<div class="line">“trapz” trapeziodal integration, uses <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.trapz.html#scipy.integrate.trapz" title="(in SciPy v1.3.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.integrate.trapz()</span></code></a></div>
+<div class="line">“simps” simpson integration, uses <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.simps.html#scipy.integrate.simps" title="(in SciPy v1.3.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.integrate.simps()</span></code></a></div>
+<div class="line">“romb” romberb integration, uses <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.romb.html#scipy.integrate.romb" title="(in SciPy v1.3.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.integrate.romb()</span></code></a></div>
+<div class="line">“tetra” tetrahedron method, uses the linear tetrahedron method
+implemented in
+<a class="reference external" href="https://atztogo.github.io/spglib/">Spglib</a>
+(up to version 1.7.4) by A. Togo.</div>
+</div>
+<p>If not supplied, set according to <cite>dos_integrating_method</cite> in
+the general configuration file.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>dos_energies</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N)</div>
+</div>
+<p>Array containing the density of states energies, where N is
+num_samples or set by the sampling determined in the
+general configuration file if <cite>auto_scale</cite> is set to False.</p>
+</dd>
+<dt><strong>dos_total</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N)</div>
+</div>
+<p>Array containing the total density of states per volume unit (units
+1 / eV / AA ^ 3) at N sampled energy points, where N is determined
+from dos_energies.</p>
+</dd>
+<dt><strong>dos_partial</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (M, N)</div>
+</div>
+<p>Array containing the partial (for each band index M) density
+of states per volume unit (1 / eV / AA ^ 3) at N sampled energy
+points, where N is determined from dos_energies.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.trapz.html#scipy.integrate.trapz" title="(in SciPy v1.3.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.integrate.trapz</span></code></a></dt><dd></dd>
+<dt><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.simps.html#scipy.integrate.simps" title="(in SciPy v1.3.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.integrate.simps</span></code></a></dt><dd></dd>
+<dt><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.romb.html#scipy.integrate.romb" title="(in SciPy v1.3.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.integrate.romb</span></code></a></dt><dd></dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.calc_effective_mass">
+<code class="sig-name descname">calc_effective_mass</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.calc_effective_mass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the effective mass tensor. Currently the effective mass tensor is not diagonalized.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Upon complettion the effective mass is stored in the
+current <cite>Bandstructure()</cite> object.</p>
+<p>Also, the velocities have to be precalculated before
+calling this routine.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.calc_velocities">
+<code class="sig-name descname">calc_velocities</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">velocities=None</em>, <em class="sig-param">store=True</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.calc_velocities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the electron group velocities from the electron energy dispersion</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>velocities</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N, M)</div>
+</div>
+<p>Contains the group velocity along a specific direction
+for N bands and M k-points. If supplied the velocities
+of the velocities are calculated, or more specifically
+the inverse effective mass tensor (without prefactor)</p>
+</dd>
+<dt><strong>store</strong><span class="classifier">boolean, optional</span></dt><dd><p>If True, store the calculated velocities in the
+active <cite>Bandstructure()</cite> object, else return the
+velocity array. Defaults to True.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>velocities</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N, 3, M)</div>
+</div>
+<p>The velocities of the velocity. Only returned if
+<cite>store</cite> is set to False.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Does not call any interpolation routines such
+that the velocities can be extracted directly from the
+electron energy dispersion by numerical differentiation.
+Uses the <code class="xref py py-func docutils literal notranslate"><span class="pre">gradient()</span></code> from NumPy.</p>
+<p>Overwrites any entry of exising <cite>velocities</cite> in <cite>bs</cite>
+and sets <cite>gen_velocities</cite> to False if <cite>velocities</cite> is
+not supplied.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.check_dos_energy_range">
+<code class="sig-name descname">check_dos_energy_range</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">remin</em>, <em class="sig-param">remax</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.check_dos_energy_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that the energy grid of the density of states covers the range of the supplied paramters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>remin</strong><span class="classifier">float</span></dt><dd><p>The energy in eV for the lowest requested energy.</p>
+</dd>
+<dt><strong>remax</strong><span class="classifier">float</span></dt><dd><p>The energy in eV for the highest requested energy.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>within</strong><span class="classifier">boolean</span></dt><dd><p>True if the endpoints are within the energy range of the stored
+density of states, False ortherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.check_energyshifts">
+<code class="sig-name descname">check_energyshifts</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.check_energyshifts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the energy shift parameters in the parameter file for consistency.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.check_velocities">
+<code class="sig-name descname">check_velocities</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">cutoff=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.check_velocities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that there exists realistic values for the band velocities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>cutoff</strong><span class="classifier">float, optional</span></dt><dd><p>Cutoff value for the test in eVAA units. Defaults to 0.01.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>boolean</dt><dd><p>True if values are above <cite>cutoff</cite>, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.fetch_dos_energies">
+<code class="sig-name descname">fetch_dos_energies</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">e_min=None</em>, <em class="sig-param">e_max=None</em>, <em class="sig-param">num_samples=None</em>, <em class="sig-param">auto_scale=False</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.fetch_dos_energies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the energy array for density of states calculations.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>e_min</strong><span class="classifier">float</span></dt><dd><p>The mininum energy in eV.</p>
+</dd>
+<dt><strong>e_max</strong><span class="classifier">float</span></dt><dd><p>The maximum energy in eV.</p>
+</dd>
+<dt><strong>num_samples</strong><span class="classifier">integer</span></dt><dd><p>The N number of samples between <cite>e_min</cite> and <cite>e_max</cite>.</p>
+</dd>
+<dt><strong>auto_scale</strong><span class="classifier">boolean</span></dt><dd><p>If True, set the energy scale from the supplied band
+structure, otherwise set the scale according to <cite>e_min</cite> and
+<cite>e_max</cite>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (N)</div>
+</div>
+<p>The N energies in eV where density of states calculations
+are to be performed.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.fetch_energies_along_line">
+<code class="sig-name descname">fetch_energies_along_line</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">kstart</em>, <em class="sig-param">kend</em>, <em class="sig-param">samplings=None</em>, <em class="sig-param">itype=None</em>, <em class="sig-param">itype_sub=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.fetch_energies_along_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the energy dispersions along specific k - points.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>kstart</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>Direct k - point coordinate of the start point of line extraction.</p>
+</dd>
+<dt><strong>kend</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>Direct k - point coordinate of the end point of line extraction.</p>
+</dd>
+<dt><strong>samplings</strong><span class="classifier">int, optional</span></dt><dd><p>The number of N samples along the line. If not specified the
+variable is set to the the <cite>num_kpoints_along_line</cite>
+parameter in params.yml</p>
+</dd>
+<dt><strong>itype</strong><span class="classifier">string, optional</span></dt><dd><div class="line-block">
+<div class="line">Can be any of:</div>
+<div class="line">{“linearnd”, “interpn”, “rbf”, “wildmagic”, “skw”}</div>
+</div>
+<p>The type of interpolate method to use. If not set, the parameter
+<cite>dispersion_interpolate_method</cite> in the general configuration
+file sets this.</p>
+</dd>
+<dt><strong>itype_sub</strong><span class="classifier">string, optional</span></dt><dd><div class="line-block">
+<div class="line">Can be any of:</div>
+<div class="line">{“nearest”, “linear”}, when <cite>itype</cite> is set to <cite>interpn</cite>.</div>
+<div class="line">{“multiquadric”, “inverse_multiquadric”, “gaussian”, “linear”,</div>
+<div class="line">“cubic”, “quintic”, “thin_plate”}, when <cite>itype</cite> is set to <cite>rbf</cite></div>
+<div class="line">and when the Scipy variety is used.</div>
+<div class="line">{“trilinear, tricubic_exact, tricubic_bspline, akima”},</div>
+<div class="line">when <cite>itype</cite> is set to <cite>wildmagic</cite>.</div>
+</div>
+<p>The subtype of the interpolation method.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>energies</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N, M)</div>
+</div>
+<p>The energy dispersions in eV along a line for N bands and M
+k - points, defined by the <cite>num_kpoints_along_line</cite>
+in the general configuration file.</p>
+</dd>
+<dt><strong>kpts</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N, 3)</div>
+</div>
+<p>The k - point mesh for the line extraction in cartesian
+coordinates.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#bandstructure.Bandstructure.interpolate" title="bandstructure.Bandstructure.interpolate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate</span></code></a></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>The routine <a class="reference internal" href="#bandstructure.Bandstructure.interpolate" title="bandstructure.Bandstructure.interpolate"><code class="xref py py-func docutils literal notranslate"><span class="pre">interpolate()</span></code></a> is used to perform the
+interpolation of the data along the line.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.fetch_energies_at_kpoints">
+<code class="sig-name descname">fetch_energies_at_kpoints</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">kpoint_mesh</em>, <em class="sig-param">itype=None</em>, <em class="sig-param">itype_sub=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.fetch_energies_at_kpoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the energy dispersions at specific k - points by interpolation.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>kpoint_mesh</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N, 3)</div>
+</div>
+<p>The N k - point coordinates in cartesian coordinates.</p>
+</dd>
+<dt><strong>itype</strong><span class="classifier">string, optional</span></dt><dd><div class="line-block">
+<div class="line">Can be any of:</div>
+<div class="line">{“linearnd”, “interpn”, “rbf”, “wildmagic”, “skw”}</div>
+</div>
+<p>The type of interpolate method to use. If not set, the parameter
+<cite>dispersion_interpolate_method</cite> in the general configuration
+file sets this.</p>
+</dd>
+<dt><strong>itype_sub</strong><span class="classifier">string, optional</span></dt><dd><div class="line-block">
+<div class="line">Can be any of:</div>
+<div class="line">{“nearest”, “linear”}, when <cite>itype</cite> is set to <cite>interpn</cite>.</div>
+<div class="line">{“multiquadric”, “inverse_multiquadric”, “gaussian”, “linear”,</div>
+<div class="line">“cubic”, “quintic”, “thin_plate”}, when <cite>itype</cite> is set to <cite>rbf</cite></div>
+<div class="line">and when the Scipy variety is used.</div>
+<div class="line">{“trilinear, tricubic_exact, tricubic_bspline, akima”},</div>
+<div class="line">when <cite>itype</cite> is set to <cite>wildmagic</cite>.</div>
+</div>
+<p>The subtype of the interpolation method.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>energies</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N, M)</div>
+</div>
+<p>The energies in eV for each of the N bands and M k - points.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#bandstructure.Bandstructure.interpolate" title="bandstructure.Bandstructure.interpolate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate</span></code></a></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>The routine <a class="reference internal" href="#bandstructure.Bandstructure.interpolate" title="bandstructure.Bandstructure.interpolate"><code class="xref py py-func docutils literal notranslate"><span class="pre">interpolate()</span></code></a> is used to perform the
+interpolation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.fetch_min_max_energy">
+<code class="sig-name descname">fetch_min_max_energy</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.fetch_min_max_energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the min and max of the energy in the current <cite>Bandstructure()</cite> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>emin</strong><span class="classifier">float</span></dt><dd><p>The minimum energy in eV located in the current <cite>Bandstructure()</cite>
+object.</p>
+</dd>
+<dt><strong>emax</strong><span class="classifier">float</span></dt><dd><p>The maximum energy in eV located in the current <cite>Bandstructure()</cite>
+object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.fetch_velocities_along_line">
+<code class="sig-name descname">fetch_velocities_along_line</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">kstart</em>, <em class="sig-param">kend</em>, <em class="sig-param">itype=None</em>, <em class="sig-param">itype_sub=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.fetch_velocities_along_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the velocity dispersion along a line in reciprocal space.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>kstart</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The start k - point in cartesian coordinates.</p>
+</dd>
+<dt><strong>kend</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The end k - point in cartesian coordinates.</p>
+</dd>
+<dt><strong>itype</strong><span class="classifier">string, optional</span></dt><dd><div class="line-block">
+<div class="line">Can be any of:</div>
+<div class="line">{“linearnd”, “interpn”, “rbf”, “wildmagic”, “skw”}</div>
+</div>
+<p>The type of interpolate method to use. If not set, the parameter
+<cite>dispersion_interpolate_method</cite> in the general configuration
+file sets this.</p>
+</dd>
+<dt><strong>itype_sub</strong><span class="classifier">string, optional</span></dt><dd><div class="line-block">
+<div class="line">Can be any of:</div>
+<div class="line">{“nearest”, “linear”}, when <cite>itype</cite> is set to <cite>interpn</cite>.</div>
+<div class="line">{“multiquadric”, “inverse_multiquadric”, “gaussian”, “linear”,</div>
+<div class="line">“cubic”, “quintic”, “thin_plate”}, when <cite>itype</cite> is set to <cite>rbf</cite></div>
+<div class="line">and when the Scipy variety is used.</div>
+<div class="line">{“trilinear, tricubic_exact, tricubic_bspline, akima”},</div>
+<div class="line">when <cite>itype</cite> is set to <cite>wildmagic</cite>.</div>
+</div>
+<p>The subtype of the interpolation method.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>velocities</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N, 3, M)</div>
+</div>
+<p>The group velocity in units of eVAA along a line for N
+bands and M k - points, defined by the
+<cite>num_kpoints_along_line</cite> in the general configuration file.</p>
+</dd>
+<dt><strong>kpts</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (M, 3)</div>
+</div>
+<p>The kpoints where the group velocity was calculated.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#bandstructure.Bandstructure.interpolate" title="bandstructure.Bandstructure.interpolate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate</span></code></a></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>The <a class="reference internal" href="#bandstructure.Bandstructure.interpolate" title="bandstructure.Bandstructure.interpolate"><code class="xref py py-func docutils literal notranslate"><span class="pre">interpolate()</span></code></a> is used to perform the interpolation
+of the data along the line.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The factor <img class="math" src="_images/math/57c33d1cb119dfb4e08d3ff6ccdd392ed6b275cd.png" alt="\\hbar^{-1}"/> is not returned and need to be included externally.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.fetch_velocities_at_kpoints">
+<code class="sig-name descname">fetch_velocities_at_kpoints</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">kpoint_mesh</em>, <em class="sig-param">itype=None</em>, <em class="sig-param">itype_sub=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.fetch_velocities_at_kpoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the velocity dispersions at specific k - points.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>kpoint_mesh</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N, 3)</div>
+</div>
+<p>The k - point mesh for extraction in cartesian coordinates.</p>
+</dd>
+<dt><strong>itype</strong><span class="classifier">string, optional</span></dt><dd><div class="line-block">
+<div class="line">Can be any of:</div>
+<div class="line">{“linearnd”, “interpn”, “rbf”, “wildmagic”, “skw”}</div>
+</div>
+<p>The type of interpolate method to use. If not set, the parameter
+<cite>dispersion_interpolate_method</cite> in the general configuration
+file sets this.</p>
+</dd>
+<dt><strong>itype_sub</strong><span class="classifier">string, optional</span></dt><dd><div class="line-block">
+<div class="line">Can be any of:</div>
+<div class="line">{“nearest”, “linear”}, when <cite>itype</cite> is set to <cite>interpn</cite>.</div>
+<div class="line">{“multiquadric”, “inverse_multiquadric”, “gaussian”, “linear”,</div>
+<div class="line">“cubic”, “quintic”, “thin_plate”}, when <cite>itype</cite> is set to <cite>rbf</cite></div>
+<div class="line">and when the Scipy variety is used.</div>
+<div class="line">{“trilinear, tricubic_exact, tricubic_bspline, akima”},</div>
+<div class="line">when <cite>itype</cite> is set to <cite>wildmagic</cite>.</div>
+</div>
+<p>The subtype of the interpolation method.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>velocities</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N, 3, M)</div>
+</div>
+<p>The group velocity in units of eVAA at the N bands for M
+k - points.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#bandstructure.Bandstructure.interpolate" title="bandstructure.Bandstructure.interpolate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate</span></code></a></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>The <a class="reference internal" href="#bandstructure.Bandstructure.interpolate" title="bandstructure.Bandstructure.interpolate"><code class="xref py py-func docutils literal notranslate"><span class="pre">interpolate()</span></code></a> is used to perform the interpolation.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The factor <img class="math" src="_images/math/57c33d1cb119dfb4e08d3ff6ccdd392ed6b275cd.png" alt="\\hbar^{-1}"/> is not returned and need to be included externally.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.gen_analytic_band">
+<code class="sig-name descname">gen_analytic_band</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">band</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.gen_analytic_band" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate an analytical energy and velocity dispersion.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>band</strong><span class="classifier">int</span></dt><dd><p>The band index used to fetch band parameters in
+bandparams.yml.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>energy</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (M)</div>
+</div>
+<p>The energy dispersion in eV at M k-points.</p>
+</dd>
+<dt><strong>velocity</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (M,3)</div>
+</div>
+<p>The group velocity in eVAA of the energy dispersion (without
+the <img class="math" src="_images/math/57c33d1cb119dfb4e08d3ff6ccdd392ed6b275cd.png" alt="\\hbar^{-1}"/> factor).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.gen_bands">
+<code class="sig-name descname">gen_bands</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.gen_bands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the set of energy and velocity dispersions.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>energies</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M)</div>
+</div>
+<p>Contains the energy dispersions in eV for N bands
+at M k-points.</p>
+</dd>
+<dt><strong>velocities</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M,3)</div>
+</div>
+<p>Contains the group velocities in eVAA of the energy
+dispersions (without the <img class="math" src="_images/math/57c33d1cb119dfb4e08d3ff6ccdd392ed6b275cd.png" alt="\\hbar^{-1}"/> factor).</p>
+</dd>
+<dt><strong>tb_band</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N)</div>
+</div>
+<p>Contains boolean values of True for band indexes
+that are tight binding bands, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.gen_dos">
+<code class="sig-name descname">gen_dos</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.gen_dos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the density of states for the analytic models</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>dos</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N, M)</div>
+</div>
+<p>Contains the density of states for N bands at M
+<cite>dos_num_samples</cite> from <cite>dos_e_min</cite> to <cite>dos_e_max</cite>.
+The number of samplings and their range is set it
+general configuration file. Units are per volume
+unit, 1/eV/AA^3.</p>
+</dd>
+<dt><strong>dos_energies</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (M)</div>
+</div>
+<p>Contains the energy samplings of which <cite>dos</cite> was
+calculated in units of eV.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Currently only the parabolic models are
+implemented.</p>
+<div class="admonition-todo admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<p>Also implement the non-parabolic alpha models</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.interpolate">
+<code class="sig-name descname">interpolate</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">iksampling=None</em>, <em class="sig-param">ienergies=True</em>, <em class="sig-param">ivelocities=False</em>, <em class="sig-param">itype=None</em>, <em class="sig-param">itype_sub=None</em>, <em class="sig-param">kpoint_mesh=None</em>, <em class="sig-param">store_inter=False</em>, <em class="sig-param">energies=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.interpolate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolates the energies and velocity dispersion.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>iksampling</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>Contains the interpolated k - point mesh sampling values.
+Does not have to be set if line extraction performed
+(full grid is instead supplied in line_mesh).</p>
+</dd>
+<dt><strong>ienergies</strong><span class="classifier">boolean</span></dt><dd><p>If True, interpolate the energies, if not, do not.</p>
+</dd>
+<dt><strong>ivelocities</strong><span class="classifier">boolean</span></dt><dd><p>If True, interpolate the velocities, if not, do not</p>
+</dd>
+<dt><strong>itype</strong><span class="classifier">string, optional</span></dt><dd><p>Can be any of:
+{“linearnd”, “interpn”, “rbf”, “wildmagic”, “skw”}
+The type of interpolate method to use. If not set, the parameter
+<cite>dispersion_interpolate_method</cite> in the general configuration file
+sets this.</p>
+</dd>
+<dt><strong>itype_sub</strong><span class="classifier">string, optional</span></dt><dd><div class="line-block">
+<div class="line">Can be any of:</div>
+<div class="line">{“nearest”, “linear”}, when <cite>itype</cite> is set to <cite>interpn</cite>.</div>
+<div class="line">{“multiquadric”, “inverse_multiquadric”, “gaussian”, “linear”,</div>
+<div class="line">“cubic”, “quintic”, “thin_plate”}, when <cite>itype</cite> is set to <cite>rbf</cite></div>
+<div class="line">and when the Scipy variety is used.</div>
+<div class="line">{“trilinear, tricubic_exact, tricubic_bspline, akima”},</div>
+<div class="line">when <cite>itype</cite> is set to <cite>wildmagic</cite>.</div>
+</div>
+<p>The subtype of the interpolation method.</p>
+</dd>
+<dt><strong>kpoint_mesh</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (M, 3)</div>
+</div>
+<p>Supplied k - point grid for extraction as an alternative
+to iksampling. Should be supplied in cartesian coordinates
+and should not extend the border of the original grid.
+Usefull for line extraction etc.</p>
+</dd>
+<dt><strong>store_inter</strong><span class="classifier">boolean, optional</span></dt><dd><p>Store the new interpolated energies and velocities in
+the supplied object. Also modifies the current <cite>Lattice()</cite> object
+with the new grid etc. if that has been modified.
+Defaults to False.</p>
+</dd>
+<dt><strong>energies</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,J)</div>
+</div>
+<p>An input array containing the energies (or some other)
+quantity that can fly through with the same structure, e.g.
+the velocities along a certain direction for N bands and J
+k-points.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>ien, ivel</strong><span class="classifier">ndarray, ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M), (N,3,M)</div>
+</div>
+<p>The energy dispersions in eV, and group velocities in eVAA
+along indexes each axis of the reciprocal basis are returned
+for N bands and M new k - points if velocities is supplied,
+or if the <cite>gen_velocities</cite> tag is set to True in the current
+<cite>Bandstructure()</cite> object.</p>
+</dd>
+<dt><strong>ien, False, False, False</strong><span class="classifier">ndarray, boolean, boolean, boolean</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M)</div>
+</div>
+<p>The energy dispersions in eV for N bands and M new k-points
+if <cite>velocities</cite> is not supplied or <cite>gen_velocities</cite> is
+set to False.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">linearnd</span></code></dt><dd></dd>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpn</span></code></dt><dd></dd>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">rbf</span></code></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<div class="admonition-todo admonition" id="id4">
+<p class="admonition-title">Todo</p>
+<p>DOCUMENT THE DIFFERENT INTERPOLATION SCHEMES,
+OR AT LEAST ADD PROPER REFERENCES.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.locate_band_gap">
+<code class="sig-name descname">locate_band_gap</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.locate_band_gap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the band gap.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>float</dt><dd><p>The band gap in eV</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.locate_bandgap">
+<code class="sig-name descname">locate_bandgap</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">energies=None</em>, <em class="sig-param">occ=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.locate_bandgap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Locate the band gap.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>energies</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M)</div>
+</div>
+<p>The energy dispersion in eV for N bands at M k-points.
+Defaults to the <cite>energies</cite> stored in the current
+<cite>Bandstructure()</cite> object.</p>
+</dd>
+<dt><strong>occ</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M)</div>
+</div>
+<p>The occupancy for N bands at M k-points. Defaults
+to the <cite>occ</cite> stored in the current <cite>Bandstructure()</cite> object.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>vbm_energy</strong><span class="classifier">float</span></dt><dd><p>The valence band maximum in eV.</p>
+</dd>
+<dt><strong>bandgap</strong><span class="classifier">float</span></dt><dd><p>The band gap in eV.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.locate_cbm">
+<code class="sig-name descname">locate_cbm</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">energies</em>, <em class="sig-param">occ</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.locate_cbm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Locate the conduction band minimum.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>energies</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M)</div>
+</div>
+<p>The energy dispersion in eV for N bands at M k-points.</p>
+</dd>
+<dt><strong>occ</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M)</div>
+</div>
+<p>The occupancy for N bands at M k-points.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>energy</strong><span class="classifier">float</span></dt><dd><p>The conduction band minimum in eV.</p>
+</dd>
+<dt><strong>band</strong><span class="classifier">int</span></dt><dd><p>The band index of the conduction band minimum.</p>
+</dd>
+<dt><strong>kpoint</strong><span class="classifier">int</span></dt><dd><p>The kpoint index of the conduction band minimum.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="bandstructure.Bandstructure.locate_vbm">
+<code class="sig-name descname">locate_vbm</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">energies</em>, <em class="sig-param">occ</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.Bandstructure.locate_vbm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Locate the valence band maximum.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>energies</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M)</div>
+</div>
+<p>The energy dispersion in eV for N bands at M k-points.</p>
+</dd>
+<dt><strong>occ</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M)</div>
+</div>
+<p>The occupancy for N bands at M k-points.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>energy</strong><span class="classifier">float</span></dt><dd><p>The valence band maximum in eV</p>
+</dd>
+<dt><strong>band</strong><span class="classifier">int</span></dt><dd><p>The band index of the valence band maximum.</p>
+</dd>
+<dt><strong>kpoint</strong><span class="classifier">int</span></dt><dd><p>The kpoint index of the valence band maximum.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="bandstructure.gaussian">
+<code class="sig-prename descclassname">bandstructure.</code><code class="sig-name descname">gaussian</code><span class="sig-paren">(</span><em class="sig-param">energy</em>, <em class="sig-param">energy_ref</em>, <em class="sig-param">smearing</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.gaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value of a Gaussian function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>energy</strong><span class="classifier">float</span></dt><dd><p>The energy in eV.</p>
+</dd>
+<dt><strong>energy_ref</strong><span class="classifier">float</span></dt><dd><p>The reference energy in eV.</p>
+</dd>
+<dt><strong>smearing</strong><span class="classifier">float</span></dt><dd><p>The smearing factor in eV.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>float</dt><dd><p>The value in eV.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="bandstructure.non_parabolic_energy_1">
+<code class="sig-prename descclassname">bandstructure.</code><code class="sig-name descname">non_parabolic_energy_1</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">effmass</em>, <em class="sig-param">a</em>, <em class="sig-param">scale</em>, <em class="sig-param">e0=0.0</em>, <em class="sig-param">kshift=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.non_parabolic_energy_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates a energy dispersion, both parabolic and non-parabolic.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>k</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,3)</div>
+</div>
+<p>Contains the N k-point coordinates (cartesian) where the
+dispersion is to be evaluated.</p>
+</dd>
+<dt><strong>effmass</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>Contains the effective mass along the three k-point
+directions. Only the diagonal components of the effective
+mass tensor is used. In units of the free electron mass.</p>
+</dd>
+<dt><strong>a</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The non parabolic coefficients in front of each <img class="math" src="_images/math/4c9236844f35cbe4cc42d35caa6301c9ed2bf7aa.png" alt="k^2"/>
+direction which translates to <img class="math" src="_images/math/17a9a554752a841c5a9374960690c0da2fe1a759.png" alt="a^2k^4"/> in the one
+dimensional case.</p>
+</dd>
+<dt><strong>scale</strong><span class="classifier">float</span></dt><dd><p>The scale factor in front of the non-parabolic correction</p>
+</dd>
+<dt><strong>e0</strong><span class="classifier">float, optional</span></dt><dd><p>Shift of the energy scale in eV.</p>
+</dd>
+<dt><strong>kshift</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The shift along the respective k-point vectors in
+cartesian coordinates.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (N)</div>
+</div>
+<p>Contains the energy dispersion in eV at each N k-points.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This routines calculates the energy dispersion according to</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">E=\\frac{\\hbar^2 k^2}{2m}+ak^4.
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...=\\frac{\\hbar^2 k^2}{2m}+ak^4.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...=\\frac{\\hbar^2 k^2}{2m}+ak^4.\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...=\\frac{\\hbar^2 k^2}{2m}+ak^4.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...=\\frac{\\hbar^2 k^2}{2m}+ak^4.\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 444 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>Setting <img class="math" src="_images/math/b3e65e3b6408fcfa00452530b73f55d1755f9965.png" alt="a"/> to zero yields a parabolic
+dispersion.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bandstructure.non_parabolic_energy_2">
+<code class="sig-prename descclassname">bandstructure.</code><code class="sig-name descname">non_parabolic_energy_2</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">effmass</em>, <em class="sig-param">a</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.non_parabolic_energy_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates a non-parabolic energy dispersion.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>k</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,3)</div>
+</div>
+<p>Contains the N k-point cartesian coordinates where the
+dispersion is to be evaluated.</p>
+</dd>
+<dt><strong>effmass</strong><span class="classifier">float</span></dt><dd><p>The effective mass in units of the free electron mass.</p>
+</dd>
+<dt><strong>a</strong><span class="classifier">float</span></dt><dd><p>The <img class="math" src="_images/math/3ebd02270eed8e22d1d33fcc8b606dfb6a2cf77b.png" alt="\\alpha"/> factor.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (N)</div>
+</div>
+<p>Contains the energy in eV at each N k-points for each
+direction defined by the direction of the k-point unit axis.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This routine calculates the energy dispersion according to</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">E(1+\\alpha E)=\\frac{\\hbar^2k^2}{2m},
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...pha E)=\\frac{\\hbar^2k^2}{2m},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...pha E)=\\frac{\\hbar^2k^2}{2m},\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...pha E)=\\frac{\\hbar^2k^2}{2m},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...pha E)=\\frac{\\hbar^2k^2}{2m},\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 456 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>where <img class="math" src="_images/math/3ebd02270eed8e22d1d33fcc8b606dfb6a2cf77b.png" alt="\\alpha"/> is a parameter that adjust the
+non-parabolicity</p>
+<p>Note that if <img class="math" src="_images/math/e9bc7da808d33a16a8347f27a519bd067186aa66.png" alt="m"/> is negative (valence bands), the square
+root is undefined for <img class="math" src="_images/math/3a65d3e7edc7cdb8727764b399a38f693ea5865d.png" alt="k^2&gt;=m/(2\\alpha \\hbar)"/>, which is
+a rather limited k-space volume. Consider (either <img class="math" src="_images/math/e9bc7da808d33a16a8347f27a519bd067186aa66.png" alt="m"/> or
+<img class="math" src="_images/math/3ebd02270eed8e22d1d33fcc8b606dfb6a2cf77b.png" alt="\\alpha"/> negative).</p>
+<div class="math">
+<p><img src="_images/math/5a6612d51187bbbf1d5530f1924dc15efaad95f9.png" alt="m=m_e, \\alpha=1.0 (E_g=1.0 \\mathrm{eV})
+\\rightarrow |\\vec{k}| \\geq 0.26 \\mathrm{AA^{-1}}"/></p>
+</div><div class="math">
+<p><img src="_images/math/cdbc0ba4be3a3d53b583e3664aae1ace1bd4b54c.png" alt="m=0.1m_e, \\alpha=1.0 \\rightarrow |\\vec{k}|
+\\geq 0.081 \\mathrm{AA^{-1}}"/></p>
+</div><div class="math">
+<p><img src="_images/math/7ec108c693e996453ba8159a675ef93a9334f9f1.png" alt="m=10m_e, \\alpha=1.0 \\rightarrow |\\vec{k}|
+\\geq 0.81 \\mathrm{AA^{-1}}"/></p>
+</div><div class="math">
+<p><img src="_images/math/a174f259b56fdaf562a052e91b063fb2c702b049.png" alt="m=m_e, \\alpha=10.0 (E_g=0.1 \\mathrm{eV})
+\\rightarrow |\\vec{k}| \\geq 0.81 \\mathrm{AA^{-1}}"/></p>
+</div><div class="math">
+<p><img src="_images/math/1e108430bb923b10e219e59bc336e5194de4784c.png" alt="m=m_e, \\alpha=0.1 (E_g=10 \\mathrm{eV})
+\\rightarrow |\\vec{k}| \\geq 0.081 \\mathrm{AA^{-1}}"/></p>
+</div><p>For a simple cell of 10 <img class="math" src="_images/math/1eb85ce7f84fe270ca2c5d90168ed62091ebccd3.png" alt="\\mathrm{AA}"/>, the BZ border is
+typically at 0.31 <img class="math" src="_images/math/f02187cbadf84d11c3dfada1ba697111aa191411.png" alt="\\mathrm{AA^{-1}}"/> and for a smaller
+cell, e.g. 3.1 <img class="math" src="_images/math/1eb85ce7f84fe270ca2c5d90168ed62091ebccd3.png" alt="\\mathrm{AA}"/>, the BZ border is here
+at 1.0 <img class="math" src="_images/math/f02187cbadf84d11c3dfada1ba697111aa191411.png" alt="\\mathrm{AA^{-1}}"/>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In order to be able to use all values of
+<img class="math" src="_images/math/b3e65e3b6408fcfa00452530b73f55d1755f9965.png" alt="a"/>, we return a linear <img class="math" src="_images/math/ccc438d9b50b64abd5cdb3d8eea7159a9894d2f8.png" alt="E(\\vec{k})"/>
+in the undefined region (the last defined value
+of <img class="math" src="_images/math/ccc438d9b50b64abd5cdb3d8eea7159a9894d2f8.png" alt="E(\\vec{k})"/> is used). This is highly
+unphysical, so we print a warning to notice the user</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="bandstructure.non_parabolic_energy_3">
+<code class="sig-prename descclassname">bandstructure.</code><code class="sig-name descname">non_parabolic_energy_3</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">effmass</em>, <em class="sig-param">a</em>, <em class="sig-param">scale</em>, <em class="sig-param">e0=0.0</em>, <em class="sig-param">kshift=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.non_parabolic_energy_3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates a k^2 + k^6 energy dispersion.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>k</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,3)</div>
+</div>
+<p>Contains the N k-point coordinates (cartesian) where the
+dispersion is to be evaluated.</p>
+</dd>
+<dt><strong>effmass</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>Contains the effective mass along the three k-point
+directions. Only the diagonal components of the effective
+mass tensor is used. In units of the free electron mass.</p>
+</dd>
+<dt><strong>a</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The non parabolic coefficients in front of each <img class="math" src="_images/math/4c9236844f35cbe4cc42d35caa6301c9ed2bf7aa.png" alt="k^2"/>
+direction which translates to <img class="math" src="_images/math/30209eafd5912f088a9c04527ce054a6d05f153b.png" alt="a^4k^8"/> in the one
+dimensional case.</p>
+</dd>
+<dt><strong>scale</strong><span class="classifier">float</span></dt><dd><p>The scale factor in front of the non-parabolic correction</p>
+</dd>
+<dt><strong>e0</strong><span class="classifier">float, optional</span></dt><dd><p>Shift of the energy scale in eV.</p>
+</dd>
+<dt><strong>kshift</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The shift along the respective k-point vectors in
+cartesian coordinates.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (N)</div>
+</div>
+<p>Contains the energy dispersion in eV at each N k-points.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This routines calculates the energy dispersion according to</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">E=\\frac{\\hbar^2 k^2}{2m}+a^3k^6.
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...\frac{\\hbar^2 k^2}{2m}+a^3k^6.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...\frac{\\hbar^2 k^2}{2m}+a^3k^6.\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...\frac{\\hbar^2 k^2}{2m}+a^3k^6.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...\frac{\\hbar^2 k^2}{2m}+a^3k^6.\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 460 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>Setting <img class="math" src="_images/math/b3e65e3b6408fcfa00452530b73f55d1755f9965.png" alt="a"/> to zero yields a parabolic
+dispersion.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bandstructure.non_parabolic_energy_4">
+<code class="sig-prename descclassname">bandstructure.</code><code class="sig-name descname">non_parabolic_energy_4</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">effmass</em>, <em class="sig-param">a</em>, <em class="sig-param">scale</em>, <em class="sig-param">e0=0.0</em>, <em class="sig-param">kshift=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.non_parabolic_energy_4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates a k^2 + k^8 energy dispersion.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>k</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,3)</div>
+</div>
+<p>Contains the N k-point coordinates (cartesian) where the
+dispersion is to be evaluated.</p>
+</dd>
+<dt><strong>effmass</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>Contains the effective mass along the three k-point
+directions. Only the diagonal components of the effective
+mass tensor is used. In units of the free electron mass.</p>
+</dd>
+<dt><strong>a</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The non parabolic coefficients in front of each <img class="math" src="_images/math/4c9236844f35cbe4cc42d35caa6301c9ed2bf7aa.png" alt="k^2"/>
+direction which translates to <img class="math" src="_images/math/30209eafd5912f088a9c04527ce054a6d05f153b.png" alt="a^4k^8"/> in the one
+dimensional case.</p>
+</dd>
+<dt><strong>scale</strong><span class="classifier">float</span></dt><dd><p>The scale factor in front of the non-parabolic correction</p>
+</dd>
+<dt><strong>e0</strong><span class="classifier">float, optional</span></dt><dd><p>Shift of the energy scale in eV.</p>
+</dd>
+<dt><strong>kshift</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The shift along the respective k-point vectors in
+cartesian coordinates.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (N)</div>
+</div>
+<p>Contains the energy dispersion in eV at each N k-points.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This routines calculates the energy dispersion according to</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">E=\\frac{\\hbar^2 k^2}{2m}+a^4k^8.
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...\frac{\\hbar^2 k^2}{2m}+a^4k^8.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...\frac{\\hbar^2 k^2}{2m}+a^4k^8.\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...\frac{\\hbar^2 k^2}{2m}+a^4k^8.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...\frac{\\hbar^2 k^2}{2m}+a^4k^8.\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 460 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>Setting <img class="math" src="_images/math/b3e65e3b6408fcfa00452530b73f55d1755f9965.png" alt="a"/> to zero yields a parabolic
+dispersion.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bandstructure.non_parabolic_energy_5">
+<code class="sig-prename descclassname">bandstructure.</code><code class="sig-name descname">non_parabolic_energy_5</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">_</em>, <em class="sig-param">a</em>, <em class="sig-param">scale</em>, <em class="sig-param">e0=0.0</em>, <em class="sig-param">kshift=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.non_parabolic_energy_5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates a linear energy dispersion.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>k</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,3)</div>
+</div>
+<p>Contains the N k-point coordinates (cartesian) where the
+dispersion is to be evaluated.</p>
+</dd>
+<dt><strong>_</strong><span class="classifier">A dummy.</span></dt><dd></dd>
+<dt><strong>a</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The coefficients in front of each <img class="math" src="_images/math/4c9236844f35cbe4cc42d35caa6301c9ed2bf7aa.png" alt="k^2"/>
+direction which translates to <img class="math" src="_images/math/811735249c27f483bc08bff30a6d7c5a9cb91aa5.png" alt="\\sqrt(a)k"/> in the one
+dimensional case.</p>
+</dd>
+<dt><strong>scale</strong><span class="classifier">float</span></dt><dd><p>The scale factor in front of the linear expression.</p>
+</dd>
+<dt><strong>e0</strong><span class="classifier">float, optional</span></dt><dd><p>Shift of the energy scale in eV.</p>
+</dd>
+<dt><strong>kshift</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The shift along the respective k-point vectors in
+cartesian coordinates.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (N)</div>
+</div>
+<p>Contains the energy dispersion in eV at each N k-points.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This routines calculates the energy dispersion according to
+(in one dimension)</p>
+<div class="math">
+<p><img src="_images/math/1e29cc87052142e4e03ac76c4bbeae471f38f00d.png" alt="E=a\\sqrt(k^2)."/></p>
+</div><p>Multiplied by the scale factor in front of this.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bandstructure.non_parabolic_velocity_1">
+<code class="sig-prename descclassname">bandstructure.</code><code class="sig-name descname">non_parabolic_velocity_1</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">effmass</em>, <em class="sig-param">a</em>, <em class="sig-param">scale</em>, <em class="sig-param">kshift=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.non_parabolic_velocity_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the group velocity for the energy dispersion generated in <a class="reference internal" href="#bandstructure.non_parabolic_energy_1" title="bandstructure.non_parabolic_energy_1"><code class="xref py py-func docutils literal notranslate"><span class="pre">non_parabolic_energy_1()</span></code></a>.</p>
+<p>For both parabolic and non-parabolic bands.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>k</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,3)</div>
+</div>
+<p>Contains the N k-point in cartesian coordinates where
+the dispersion is to be evaluated.</p>
+</dd>
+<dt><strong>effmass</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>Contains the effective mass along the three k-point
+directions. Only the diagonal components of the effective
+mass tensor is used. In units of the free electron mass.</p>
+</dd>
+<dt><strong>a</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The non parabolic coefficients in front of each <img class="math" src="_images/math/4c9236844f35cbe4cc42d35caa6301c9ed2bf7aa.png" alt="k^2"/>
+direction which translates to <img class="math" src="_images/math/17a9a554752a841c5a9374960690c0da2fe1a759.png" alt="a^2k^4"/> in the one
+dimensional case.</p>
+</dd>
+<dt><strong>scale</strong><span class="classifier">float</span></dt><dd><p>The scale factor in front of the non-parabolic correction</p>
+</dd>
+<dt><strong>kshift</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The shift along the respective k-point vectors in
+cartesian coordinates.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>vx, vy, vz</strong><span class="classifier">ndarray, ndarray, ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N),(N),(N)</div>
+</div>
+<p>Contains the group velocity at each N k-points
+for each direction defined by the direction of the k-point
+unit axis. Units of eVAA.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This routines calculates the group velocity according to</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">v=\\frac{\\partial E}{\\partial \\vec{k}},
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...partial E}{\\partial \\vec{k}},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...partial E}{\\partial \\vec{k}},\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...partial E}{\\partial \\vec{k}},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...partial E}{\\partial \\vec{k}},\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 388 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>where</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">E=\\frac{\\hbar^2 k^2}{2m}+ak^4.
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...=\\frac{\\hbar^2 k^2}{2m}+ak^4.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...=\\frac{\\hbar^2 k^2}{2m}+ak^4.\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...=\\frac{\\hbar^2 k^2}{2m}+ak^4.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...=\\frac{\\hbar^2 k^2}{2m}+ak^4.\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 444 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>Setting <img class="math" src="_images/math/b3e65e3b6408fcfa00452530b73f55d1755f9965.png" alt="a"/> to zero yields a parabolic dispersion
+and thus its group velocity.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The factor <img class="math" src="_images/math/57c33d1cb119dfb4e08d3ff6ccdd392ed6b275cd.png" alt="\\hbar^{-1}"/> is not returned and need to be included externally.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="bandstructure.non_parabolic_velocity_2">
+<code class="sig-prename descclassname">bandstructure.</code><code class="sig-name descname">non_parabolic_velocity_2</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">effmass</em>, <em class="sig-param">a</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.non_parabolic_velocity_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the group velocity for the energy dispersion generated in <a class="reference internal" href="#bandstructure.non_parabolic_energy_2" title="bandstructure.non_parabolic_energy_2"><code class="xref py py-func docutils literal notranslate"><span class="pre">non_parabolic_energy_2()</span></code></a>.</p>
+<p>For both parabolic and non-parabolic.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>k</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,3)</div>
+</div>
+<p>Contains the N k-point in cartesian coordinates where
+the dispersion is to be evaluated.</p>
+</dd>
+<dt><strong>effmass</strong><span class="classifier">float</span></dt><dd><p>The effective mass in units of the free electron mass.</p>
+</dd>
+<dt><strong>a</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The <img class="math" src="_images/math/3ebd02270eed8e22d1d33fcc8b606dfb6a2cf77b.png" alt="\\alpha"/> factor.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>vx, vy, vz</strong><span class="classifier">ndarray, ndarray, ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N), (N), (N)</div>
+</div>
+<p>The group velocity along each axis in the reciprocal
+unit cell. In units of eVAA.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Consult comments in <a class="reference internal" href="#bandstructure.non_parabolic_energy_1" title="bandstructure.non_parabolic_energy_1"><code class="xref py py-func docutils literal notranslate"><span class="pre">non_parabolic_energy_1()</span></code></a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The factor <img class="math" src="_images/math/57c33d1cb119dfb4e08d3ff6ccdd392ed6b275cd.png" alt="\\hbar^{-1}"/> is not returned and need to be included externally.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="bandstructure.non_parabolic_velocity_3">
+<code class="sig-prename descclassname">bandstructure.</code><code class="sig-name descname">non_parabolic_velocity_3</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">effmass</em>, <em class="sig-param">a</em>, <em class="sig-param">scale</em>, <em class="sig-param">kshift=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.non_parabolic_velocity_3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the group velocity for the energy dispersion generated in <a class="reference internal" href="#bandstructure.non_parabolic_energy_3" title="bandstructure.non_parabolic_energy_3"><code class="xref py py-func docutils literal notranslate"><span class="pre">non_parabolic_energy_3()</span></code></a>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>k</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,3)</div>
+</div>
+<p>Contains the N k-point in cartesian coordinates where
+the dispersion is to be evaluated.</p>
+</dd>
+<dt><strong>effmass</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>Contains the effective mass along the three k-point
+directions. Only the diagonal components of the effective
+mass tensor is used. In units of the free electron mass.</p>
+</dd>
+<dt><strong>a</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The non parabolic coefficients in front of each <img class="math" src="_images/math/4c9236844f35cbe4cc42d35caa6301c9ed2bf7aa.png" alt="k^2"/>
+direction which translates to <img class="math" src="_images/math/30209eafd5912f088a9c04527ce054a6d05f153b.png" alt="a^4k^8"/> in the one
+dimensional case.</p>
+</dd>
+<dt><strong>scale</strong><span class="classifier">float</span></dt><dd><p>The scale factor in front of the non-parabolic correction</p>
+</dd>
+<dt><strong>kshift</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The shift along the respective k-point vectors in
+cartesian coordinates.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>vx, vy, vz</strong><span class="classifier">ndarray, ndarray, ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N),(N),(N)</div>
+</div>
+<p>Contains the group velocity at each N k-points
+for each direction defined by the direction of the k-point
+unit axis. Units of eVAA.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This routines calculates the group velocity according to</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">v=\\frac{\\partial E}{\\partial \\vec{k}},
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...partial E}{\\partial \\vec{k}},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...partial E}{\\partial \\vec{k}},\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...partial E}{\\partial \\vec{k}},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...partial E}{\\partial \\vec{k}},\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 388 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>where</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">E=\\frac{\\hbar^2 k^2}{2m}+a^3k^6.
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...\frac{\\hbar^2 k^2}{2m}+a^3k^6.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...\frac{\\hbar^2 k^2}{2m}+a^3k^6.\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...\frac{\\hbar^2 k^2}{2m}+a^3k^6.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...\frac{\\hbar^2 k^2}{2m}+a^3k^6.\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 460 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>Setting <img class="math" src="_images/math/b3e65e3b6408fcfa00452530b73f55d1755f9965.png" alt="a"/> to zero yields a parabolic dispersion
+and thus its group velocity.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The factor <img class="math" src="_images/math/57c33d1cb119dfb4e08d3ff6ccdd392ed6b275cd.png" alt="\\hbar^{-1}"/> is not returned and need to be included externally.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="bandstructure.non_parabolic_velocity_4">
+<code class="sig-prename descclassname">bandstructure.</code><code class="sig-name descname">non_parabolic_velocity_4</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">effmass</em>, <em class="sig-param">a</em>, <em class="sig-param">scale</em>, <em class="sig-param">kshift=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.non_parabolic_velocity_4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the group velocity for the energy dispersion generated in <a class="reference internal" href="#bandstructure.non_parabolic_energy_4" title="bandstructure.non_parabolic_energy_4"><code class="xref py py-func docutils literal notranslate"><span class="pre">non_parabolic_energy_4()</span></code></a>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>k</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,3)</div>
+</div>
+<p>Contains the N k-point in cartesian coordinates where
+the dispersion is to be evaluated.</p>
+</dd>
+<dt><strong>effmass</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>Contains the effective mass along the three k-point
+directions. Only the diagonal components of the effective
+mass tensor is used. In units of the free electron mass.</p>
+</dd>
+<dt><strong>a</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The non parabolic coefficients in front of each <img class="math" src="_images/math/4c9236844f35cbe4cc42d35caa6301c9ed2bf7aa.png" alt="k^2"/>
+direction which translates to <img class="math" src="_images/math/30209eafd5912f088a9c04527ce054a6d05f153b.png" alt="a^4k^8"/> in the one
+dimensional case.</p>
+</dd>
+<dt><strong>scale</strong><span class="classifier">float</span></dt><dd><p>The scale factor in front of the non-parabolic correction</p>
+</dd>
+<dt><strong>kshift</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The shift along the respective k-point vectors in
+cartesian coordinates.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>vx, vy, vz</strong><span class="classifier">ndarray, ndarray, ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N),(N),(N)</div>
+</div>
+<p>Contains the group velocity at each N k-points
+for each direction defined by the direction of the k-point
+unit axis. Units of eVAA.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This routines calculates the group velocity according to</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">v=\\frac{\\partial E}{\\partial \\vec{k}},
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...partial E}{\\partial \\vec{k}},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...partial E}{\\partial \\vec{k}},\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...partial E}{\\partial \\vec{k}},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...partial E}{\\partial \\vec{k}},\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 388 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>where</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">E=\\frac{\\hbar^2 k^2}{2m}+a^4k^8.
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...\frac{\\hbar^2 k^2}{2m}+a^4k^8.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...\frac{\\hbar^2 k^2}{2m}+a^4k^8.\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...\frac{\\hbar^2 k^2}{2m}+a^4k^8.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...\frac{\\hbar^2 k^2}{2m}+a^4k^8.\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 460 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>Setting <img class="math" src="_images/math/b3e65e3b6408fcfa00452530b73f55d1755f9965.png" alt="a"/> to zero yields a parabolic dispersion
+and thus its group velocity.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The factor <img class="math" src="_images/math/57c33d1cb119dfb4e08d3ff6ccdd392ed6b275cd.png" alt="\\hbar^{-1}"/> is not returned and need to be included externally.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="bandstructure.non_parabolic_velocity_5">
+<code class="sig-prename descclassname">bandstructure.</code><code class="sig-name descname">non_parabolic_velocity_5</code><span class="sig-paren">(</span><em class="sig-param">k</em>, <em class="sig-param">_</em>, <em class="sig-param">a</em>, <em class="sig-param">scale</em>, <em class="sig-param">kshift=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.non_parabolic_velocity_5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the group velocity for the energy dispersion generated in <a class="reference internal" href="#bandstructure.non_parabolic_energy_5" title="bandstructure.non_parabolic_energy_5"><code class="xref py py-func docutils literal notranslate"><span class="pre">non_parabolic_energy_5()</span></code></a>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>k</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,3)</div>
+</div>
+<p>Contains the N k-point in cartesian coordinates where
+the dispersion is to be evaluated.</p>
+</dd>
+<dt><strong>_</strong><span class="classifier">A dummy.</span></dt><dd></dd>
+<dt><strong>a</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The coefficients in front of each <img class="math" src="_images/math/4c9236844f35cbe4cc42d35caa6301c9ed2bf7aa.png" alt="k^2"/>
+direction which translates to <img class="math" src="_images/math/811735249c27f483bc08bff30a6d7c5a9cb91aa5.png" alt="\\sqrt(a)k"/> in the one
+dimensional case.</p>
+</dd>
+<dt><strong>scale</strong><span class="classifier">float</span></dt><dd><p>The scale factor in front of the linear expression.</p>
+</dd>
+<dt><strong>kshift</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The shift along the respective k-point vectors in
+cartesian coordinates.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>vx, vy, vz</strong><span class="classifier">ndarray, ndarray, ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N),(N),(N)</div>
+</div>
+<p>Contains the group velocity at each N k-points
+for each direction defined by the direction of the k-point
+unit axis. Units of eVAA.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This routines calculates the group velocity according to</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">v=\\frac{\\partial E}{\\partial \\vec{k}},
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...partial E}{\\partial \\vec{k}},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...partial E}{\\partial \\vec{k}},\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...partial E}{\\partial \\vec{k}},\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...partial E}{\\partial \\vec{k}},\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 388 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>where</p>
+<div class="math">
+<p><img src="_images/math/1e29cc87052142e4e03ac76c4bbeae471f38f00d.png" alt="E=a\\sqrt(k^2)."/></p>
+</div><p>Multiplied by the scale factor in front of this.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The factor <img class="math" src="_images/math/57c33d1cb119dfb4e08d3ff6ccdd392ed6b275cd.png" alt="\\hbar^{-1}"/> is not returned and need to be included externally.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="bandstructure.parabolic_effective_mass">
+<code class="sig-prename descclassname">bandstructure.</code><code class="sig-name descname">parabolic_effective_mass</code><span class="sig-paren">(</span><em class="sig-param">effmass_t</em><span class="sig-paren">)</span><a class="headerlink" href="#bandstructure.parabolic_effective_mass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the supplied effective mass array is parabolic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>effmass_t</strong><span class="classifier">ndarray</span></dt><dd><p>The effective mass tensor in units of the free
+electron mass.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>boolean</dt><dd><p>True if parabolic tensors, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, Espen Flage-Larsen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

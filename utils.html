@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>utils module &#8212; T4ME 1.1.1 documentation</title>
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="interface module" href="interface.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          T4ME</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Custom interfaces</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">utils module</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="interface.html" title="Previous Chapter: interface module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; interface module</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/utils.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="utils-module">
+<h1>utils module<a class="headerlink" href="#utils-module" title="Permalink to this headline">¶</a></h1>
+<p>This module, <code class="file docutils literal notranslate"><span class="pre">utils.py</span></code> contains general
+routines.</p>
+<span class="target" id="module-utils"></span><p>Containing utilitary functions for T4ME.</p>
+<dl class="function">
+<dt id="utils.check_directory">
+<code class="sig-prename descclassname">utils.</code><code class="sig-name descname">check_directory</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">create=False</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.check_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that a directory exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>path</strong><span class="classifier">string</span></dt><dd><p>The path to the directory to be checked.</p>
+</dd>
+<dt><strong>create</strong><span class="classifier">boolean, optional</span></dt><dd><p>If set to True create the directory if it
+does not exist. Defaults to False and in this
+case an error is printed if the directory is
+not found.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.check_file">
+<code class="sig-prename descclassname">utils.</code><code class="sig-name descname">check_file</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.check_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a file exists</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">string</span></dt><dd><p>The location and filename of the file to be checked.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.clean_directory">
+<code class="sig-prename descclassname">utils.</code><code class="sig-name descname">clean_directory</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.clean_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean a directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>path</strong><span class="classifier">string</span></dt><dd><p>The path to the directory to be cleaned.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.config_logger">
+<code class="sig-prename descclassname">utils.</code><code class="sig-name descname">config_logger</code><span class="sig-paren">(</span><em class="sig-param">filename='/logging.yaml'</em>, <em class="sig-param">level=None</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.config_logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the main logger.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">string, optional</span></dt><dd><p>The filename for the logging configuration
+file. Defaults to “logging.yaml” in the current
+working directory.</p>
+</dd>
+<dt><strong>level</strong><span class="classifier">object</span></dt><dd><p>Sets the logging level of the Python logger.
+Defaults to <cite>INFO</cite> if the configuration file is
+not found.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.create_directory">
+<code class="sig-prename descclassname">utils.</code><code class="sig-name descname">create_directory</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.create_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that the directory exists</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>path</strong><span class="classifier">string</span></dt><dd><p>The path to the directory to be checked.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.fetch_sorting_indexes">
+<code class="sig-prename descclassname">utils.</code><code class="sig-name descname">fetch_sorting_indexes</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">order='C'</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.fetch_sorting_indexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the sorting indexes to sort an array to either column or row order.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>data</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M)</div>
+</div>
+<p>The input data array to be sorted.</p>
+</dd>
+<dt><strong>order</strong><span class="classifier">{“C”, “F”}</span></dt><dd><p>The sort order.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>sort_index</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M)</div>
+</div>
+<p>The sorting indexes that can be used to order the array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.invert_matrix">
+<code class="sig-prename descclassname">utils.</code><code class="sig-name descname">invert_matrix</code><span class="sig-paren">(</span><em class="sig-param">matrix</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.invert_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inverts a matrix and checks for ill-conditions</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>matrix</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,N)</div>
+</div>
+<p>The input matrix to be inverted.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>inv_matrix</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,N)</div>
+</div>
+<p>The inverted matrix. If <cite>matrix</cite> is ill-conditioned, nan
+values are filled in the matrix.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.is_even">
+<code class="sig-prename descclassname">utils.</code><code class="sig-name descname">is_even</code><span class="sig-paren">(</span><em class="sig-param">number</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.is_even" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if <cite>number</cite> is even.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>number</strong><span class="classifier">integer</span></dt><dd><p>The integer to be checked</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>boolean</dt><dd><p>Returns True of <cite>number</cite> is even, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.is_number">
+<code class="sig-prename descclassname">utils.</code><code class="sig-name descname">is_number</code><span class="sig-paren">(</span><em class="sig-param">something</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.is_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if <cite>something</cite> is a number.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>something</strong><span class="classifier">anything</span></dt><dd><p>Something to be checked.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>boolean</dt><dd><p>True if <cite>something</cite> is a number. False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.is_power_of_two">
+<code class="sig-prename descclassname">utils.</code><code class="sig-name descname">is_power_of_two</code><span class="sig-paren">(</span><em class="sig-param">number</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.is_power_of_two" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that if a number is a power of two.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>number</strong><span class="classifier">float</span></dt><dd><p>The supplied number to be checked.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>boolean</dt><dd><p>Returns True of <cite>number</cite> is power of two, False
+otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.pull_points_back_into_zone">
+<code class="sig-prename descclassname">utils.</code><code class="sig-name descname">pull_points_back_into_zone</code><span class="sig-paren">(</span><em class="sig-param">points</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.pull_points_back_into_zone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pulls all points outside [-0.5,0.5] in direct coordinates back into [-0.5, 0.5].</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>points</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N, 3)</div>
+</div>
+<p>The N points to be checked and thrown back into
+the zone (between [-0.5, 0.5]). Should be in direct coordinates.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.pull_vecs_inside_boundary">
+<code class="sig-prename descclassname">utils.</code><code class="sig-name descname">pull_vecs_inside_boundary</code><span class="sig-paren">(</span><em class="sig-param">vecs</em>, <em class="sig-param">border</em>, <em class="sig-param">shift=None</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.pull_vecs_inside_boundary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pulls vectors into a given cubic boundary box.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>vecs</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,3)</div>
+</div>
+<p>Contains N vectors.</p>
+</dd>
+<dt><strong>border</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (6)</div>
+</div>
+<p>Contains the entries x_min, x_max, y_min, y_max, z_min and z_max,
+respectively of the indexes to be modified, typically the border
+elements.</p>
+</dd>
+<dt><strong>shift</strong><span class="classifier">float, optional</span></dt><dd><p>An optional shift value which brings the vectors shift more inside
+the boundary box supplied in <cite>border</cite>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, Espen Flage-Larsen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

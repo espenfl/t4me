@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>lattice module &#8212; T4ME 1.1.1 documentation</title>
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="bandstructure module" href="bandstructure.html" />
+    <link rel="prev" title="lbtecoeff module" href="lbtecoeff.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          T4ME</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Custom interfaces</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">lattice module</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="lbtecoeff.html" title="Previous Chapter: lbtecoeff module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; lbtecoeff module</span>
+    </a>
+  </li>
+  <li>
+    <a href="bandstructure.html" title="Next Chapter: bandstructure module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">bandstructure module &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/lattice.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="lattice-module">
+<h1>lattice module<a class="headerlink" href="#lattice-module" title="Permalink to this headline">¶</a></h1>
+<p>This module, <code class="file docutils literal notranslate"><span class="pre">lattice.py</span></code> contains the setup
+and lattice related routines, including both the real and
+reciprocal part of it.</p>
+<span class="target" id="module-lattice"></span><p>Contains routines to setup the lattice.</p>
+<dl class="class">
+<dt id="lattice.Lattice">
+<em class="property">class </em><code class="sig-prename descclassname">lattice.</code><code class="sig-name descname">Lattice</code><span class="sig-paren">(</span><em class="sig-param">param</em>, <em class="sig-param">location=None</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Contains routines to set up the system atmosphere.</p>
+<p>This includes the unit cell, the BZ and IBZ k-point mesh etc.</p>
+<p>Read the YAML cell configuration file (cellparams.yml by
+default is used to read basic cell parameters if for instance
+this is not set up by other inputs in the <a class="reference internal" href="interface.html#module-interface" title="interface"><code class="xref py py-mod docutils literal notranslate"><span class="pre">interface</span></code></a>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>param</strong><span class="classifier">object</span></dt><dd><p>A <cite>Param()</cite> object containing the parameters of the
+general configuration file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="class">
+<dt id="lattice.Lattice.Kmesh">
+<em class="property">class </em><code class="sig-name descname">Kmesh</code><a class="headerlink" href="#lattice.Lattice.Kmesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Data container for the k-point mesh generation.</p>
+<p>Currently not used throughout the program, only for the intial setup.</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Incorporate this class into the whole program.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.cart_to_dir">
+<code class="sig-name descname">cart_to_dir</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">v</em>, <em class="sig-param">real=False</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.cart_to_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the direct vector if the input is a vector in cartesian coordinates.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>v: ndarray</strong></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The input direct vector.</p>
+</dd>
+<dt><strong>real: boolean</strong></dt><dd><p>If set to False, the reciprocal unitcell is used,
+is set to True, the unitcell is used.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The cartesian vector.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Typically the transformation in reciprocal space is</p>
+<p>where <img class="math" src="_images/math/9609f28133486a99ab2a9ff756a7a4e7f9d593e5.png" alt="\\vec{k}"/> and <img class="math" src="_images/math/8ced33a3cc03fae20d93e2c25a3f2ef039361b32.png" alt="\\vec{k}'"/> is the
+reciprocal vector in direct and cartesian coordinate
+systems, respectively. Here, B is the reciprocal unit
+cell.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.check_for_duplicate_points">
+<code class="sig-name descname">check_for_duplicate_points</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.check_for_duplicate_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks for duplicate k-points. This is currently not supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.check_lattice">
+<code class="sig-name descname">check_lattice</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.check_lattice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the celldata is present and that the most important parameters are defined.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.check_mesh">
+<code class="sig-name descname">check_mesh</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.check_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks that the most important parameters for the k-point mesh have been set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.create_kmesh">
+<code class="sig-name descname">create_kmesh</code><span class="sig-paren">(</span><em class="sig-param">self, ksampling=None, shift=array([0, 0, 0], dtype=int32), halfscale=True, borderless=False</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.create_kmesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the k point mesh.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>ksampling: ndarray, optional</strong></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>Contains the k - point sampling points along each direction.
+If not supplied the <cite>ksampling</cite> of the current <cite>Lattice()</cite>
+object is used.</p>
+</dd>
+<dt><strong>shift: ndarray, optional</strong></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>Contains the shift for the k - point mesh generation.
+If not supplied the default is set to[0.0, 0.0, 0.0]</p>
+</dd>
+<dt><strong>halfscale: boolean</strong></dt><dd><p>Selects if the BZ mesh should go from -0.5 to 0.5 or
+-1.0 to 1.0. If not supplied, the default is set to True.</p>
+</dd>
+<dt><strong>borderless: boolean</strong></dt><dd><p>Selects if the BZ border points should be included in
+the mesh generation. True selects borderless, e.g.
+-0.5, 0.5 etc. are excluded.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>mapping_bz_to_ibz: ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (N, 3)</div>
+</div>
+<p>Contains a mapping table such that it is possible to go
+from the BZ to the IBZ mesh. Stored in the current
+<cite>Lattice()</cite> object.</p>
+</dd>
+<dt>mapping_ibz_to_bz: ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (M, 3)</div>
+</div>
+<p>Contains a mapping table such that it is possible to go
+from the IBZ to the BZ mesh. Stored in the current
+<cite>Lattice()</cite> object.</p>
+</dd>
+<dt>kmesh: ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (N, 3)</div>
+</div>
+<p>The k - point mesh in the full BZ for N sampling points
+determined by the multiplication of the content of
+<cite>ksampling</cite>. Stored in the current <cite>Lattice()</cite> object.</p>
+</dd>
+<dt>kmesh_ibz: ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (M, 3)</div>
+</div>
+<p>The k - point mesh in the irreducible BZ. The number of
+points M is dependent on the symmetry. Usually M &lt; N.
+Stored in the current <cite>Lattice()</cite> object.</p>
+</dd>
+<dt>ksampling: ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The full BZ k - point sampling in each direction.
+Stored in the current <cite>Lattice()</cite> object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This routines use spglib, an excellent tool written by A. Togo.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.dir_to_cart">
+<code class="sig-name descname">dir_to_cart</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">v</em>, <em class="sig-param">real=False</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.dir_to_cart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the cartesian vector if the input is a vector in direct coordinates.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>v: ndarray</strong></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The supplied cartesian vector.</p>
+</dd>
+<dt><strong>real: boolean</strong></dt><dd><p>If set to False, the reciprocal unitcell is used,
+is set to True, the unitcell is used.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The direct vector.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Typically the transformation in reciprocal space is</p>
+<p>where <img class="math" src="_images/math/9609f28133486a99ab2a9ff756a7a4e7f9d593e5.png" alt="\\vec{k}"/> and <img class="math" src="_images/math/8ced33a3cc03fae20d93e2c25a3f2ef039361b32.png" alt="\\vec{k}'"/> is the
+reciprocal vector in direct and cartesian coordinate
+systems, respectively. Here, B is the reciprocal unit
+cell.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.fetch_bz_border">
+<code class="sig-name descname">fetch_bz_border</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">kmesh=None</em>, <em class="sig-param">direct=True</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.fetch_bz_border" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the BZ border in direct or cartesian coordinates</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>kmesh: ndarray, optional</strong></dt><dd><div class="line-block">
+<div class="line">Dimension: (N, 3)</div>
+</div>
+<p>The k - point mesh for N k - points. If not supplied,
+the value of the current <cite>Lattice()</cite> is used.</p>
+</dd>
+<dt><strong>direct: boolean, optional</strong></dt><dd><p>Selects if direct coordinates are to be returned
+(True, default) or cartesian(False).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>Contains the BZ border points(largest coordinate along
+each axis).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.fetch_iksampling">
+<code class="sig-name descname">fetch_iksampling</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.fetch_iksampling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches the a denser k-point sampling which is for instance used when one would like to interpolate</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>iksampling</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The number of requested k-point sampling along each
+reciprocal unit vector.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.fetch_kmesh">
+<code class="sig-name descname">fetch_kmesh</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">direct=True</em>, <em class="sig-param">ired=False</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.fetch_kmesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the k point mesh in direct or cartersian coordinates.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>direct</strong><span class="classifier">boolean</span></dt><dd><p>Selects the k-point grid in direct (True) or cartesian
+coordinates (False)</p>
+</dd>
+<dt><strong>ired</strong><span class="classifier">boolean</span></dt><dd><p>Selects the ireducible k-point grid (True),
+or the full grid (False)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (M,3)</div>
+</div>
+<p>Contains M k-points representing the k-point mesh.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.fetch_kmesh_step_size">
+<code class="sig-name descname">fetch_kmesh_step_size</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">direct=False</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.fetch_kmesh_step_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the step size along each direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>direct</strong><span class="classifier">boolean, optional</span></dt><dd><p>If True the step size is returned in direct coordinates,
+otherwise it is returned in AA^{-1} units. Defaults to
+False.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>stepx, stepy, stepz</strong><span class="classifier">float, float, float</span></dt><dd><p>The step size along each reciprocal lattice vector.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Regularly spaced and ordered grids are assumed. Also, the
+step size returned is with respect to the reciprocal unit
+cells unit vectors. If <cite>direct</cite> is True the step size between
+0 and 1 is returned, while for False, this step size is
+scaled by the length of the reciprocal unit vectors
+in <img class="math" src="_images/math/499b75fd472bd57aef58ccdc0bc9ddb39fe4fcd1.png" alt="AA^{-1}"/>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.fetch_kmesh_unit_vecs">
+<code class="sig-name descname">fetch_kmesh_unit_vecs</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">direct=True</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.fetch_kmesh_unit_vecs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the k-point mesh sampling points along the unit vectors.</p>
+<p>Works in direct or cartesian coordinates.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>direct</strong><span class="classifier">boolean</span></dt><dd><p>Selects to return direct (True) or cartesian
+(False) unit vectors.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The unit vectors of the k-point mesh.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.fetch_kpoints_along_line">
+<code class="sig-name descname">fetch_kpoints_along_line</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">kstart</em>, <em class="sig-param">kend</em>, <em class="sig-param">stepping</em>, <em class="sig-param">direct=True</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.fetch_kpoints_along_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the k - points along a line in the full BZ k - point mesh</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>kstart: ndarray</strong></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The start k - point in direct coordinates.</p>
+</dd>
+<dt><strong>kend: ndarray</strong></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The end k - point in direct coordinates.</p>
+</dd>
+<dt><strong>stepping: int</strong></dt><dd><p>The N number of steps along the line.</p>
+</dd>
+<dt><strong>direct: boolean</strong></dt><dd><p>If True direct coordinates are returned, else
+cartesian coordinates are returned.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (N)</div>
+</div>
+<p>The N number of k - point cartesian coordinates
+along the line.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.fetch_ksampling_from_stepsize">
+<code class="sig-name descname">fetch_ksampling_from_stepsize</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">step_sizes</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.fetch_ksampling_from_stepsize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the ksampling based on the step size.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>step_sizes</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The step size along each reciprocal unit vector</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>ksampling</strong><span class="classifier">float, float, float</span></dt><dd><p>The suggested sampling along each reciprocal unit vector</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.fetch_length_runitcell_vecs">
+<code class="sig-name descname">fetch_length_runitcell_vecs</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.fetch_length_runitcell_vecs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the length of each reciprocal lattice vector.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The lenght of each reciprocal lattice vector in
+inverse AA.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.generate_consistent_mesh">
+<code class="sig-name descname">generate_consistent_mesh</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.generate_consistent_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the k-point mesh and sets up proper mapping.</p>
+<p>Also makes sure the IBZ or BZ supplied is similar to
+the one generated by spglib given the symmetry used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This should be reconsidered in the future as this is
+bound to give the user problems. Consider writing an
+interface which can accept the symmetry operators and use
+these directly.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.real_to_rec">
+<code class="sig-name descname">real_to_rec</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">unitcell=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.real_to_rec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the reciprocal unitcell from the real unitcell.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>unitcell: ndarray, optional</strong></dt><dd><div class="line-block">
+<div class="line">Dimension: (3, 3)</div>
+</div>
+<p>A real unitcell. Defaults to the unitcell for the
+current <cite>Lattice()</cite> object.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (3, 3)</div>
+</div>
+<p>The reciprocal unitcell, with: math: <cite>\vec{b_1}</cite> = [0][:]
+etc.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.rec_to_real">
+<code class="sig-name descname">rec_to_real</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">unitcell=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.rec_to_real" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the real unitcell from the reciprocal unitcell.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>unitcell: ndarray, optional</strong></dt><dd><div class="line-block">
+<div class="line">Dimension: (3, 3)</div>
+</div>
+<p>A reciprocal unitcell. Defaults to the internal
+runitcell for the current <cite>Lattice()</cite> object.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (3, 3)</div>
+</div>
+<p>The real unitcell, with: math: <cite>\vec{a_1}</cite> = [0][:] etc.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lattice.Lattice.regularcell">
+<code class="sig-name descname">regularcell</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.Lattice.regularcell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks that all the vectors in the unit cell is orthogonal and thus if the cell is regular.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>regular: boolean</dt><dd><p>True if regular, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="lattice.calculate_cell_volume">
+<code class="sig-prename descclassname">lattice.</code><code class="sig-name descname">calculate_cell_volume</code><span class="sig-paren">(</span><em class="sig-param">cell</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.calculate_cell_volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the cell volume.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>cell</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3,3)</div>
+</div>
+<p>Contains the i basis vectors of the cell, [i,:].</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>volume</strong><span class="classifier">float</span></dt><dd><p>The volume of the cell in units of the units along
+the input axis cubed.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="lattice.check_sensible_ksampling">
+<code class="sig-prename descclassname">lattice.</code><code class="sig-name descname">check_sensible_ksampling</code><span class="sig-paren">(</span><em class="sig-param">ksampling</em><span class="sig-paren">)</span><a class="headerlink" href="#lattice.check_sensible_ksampling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the ksampling is sensible.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>ksampling</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The k-point sampling along each reciprocal lattice vector.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, Espen Flage-Larsen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

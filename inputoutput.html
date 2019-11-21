@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>inputoutput module &#8212; T4ME 1.1.1 documentation</title>
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="interface module" href="interface.html" />
+    <link rel="prev" title="bandstructure module" href="bandstructure.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          T4ME</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Custom interfaces</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">inputoutput module</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="bandstructure.html" title="Previous Chapter: bandstructure module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; bandstructure module</span>
+    </a>
+  </li>
+  <li>
+    <a href="interface.html" title="Next Chapter: interface module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">interface module &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/inputoutput.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="inputoutput-module">
+<h1>inputoutput module<a class="headerlink" href="#inputoutput-module" title="Permalink to this headline">¶</a></h1>
+<p>This module, <code class="file docutils literal notranslate"><span class="pre">inputoutput.py</span></code> handles input and
+output related acitivites.</p>
+<span class="target" id="module-inputoutput"></span><p>Contains various input and output routines for T4ME.</p>
+<dl class="class">
+<dt id="inputoutput.Param">
+<em class="property">class </em><code class="sig-prename descclassname">inputoutput.</code><code class="sig-name descname">Param</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.Param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>YAML reader for the input paramters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">iterable</span></dt><dd><p>yaml load (typically safe_load(open(yamlfilename),”r”)).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Read a YAML paramter file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inputoutput.dump_bandstruct_line">
+<code class="sig-prename descclassname">inputoutput.</code><code class="sig-name descname">dump_bandstruct_line</code><span class="sig-paren">(</span><em class="sig-param">bs</em>, <em class="sig-param">kstart</em>, <em class="sig-param">kend</em>, <em class="sig-param">filename='band'</em>, <em class="sig-param">datatype='e'</em>, <em class="sig-param">k_direct=True</em>, <em class="sig-param">itype=None</em>, <em class="sig-param">itype_sub=None</em><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.dump_bandstruct_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the energy or velocity dispersions extracted along a line to a file.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>bs</strong><span class="classifier">object</span></dt><dd><p>A <cite>Band()</cite> object containing the energies and velocity dispersions.</p>
+</dd>
+<dt><strong>kstart</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The start k-point vector in cartesian coordinates.</p>
+</dd>
+<dt><strong>kend</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>The end k-point vector in cartesian coordinates.</p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">string, optional</span></dt><dd><p>The filename used to write the energy or velocity dispersions.
+Defaults to “band”.</p>
+</dd>
+<dt><strong>datatype</strong><span class="classifier">{“e”,”v”}</span></dt><dd><p>Selects to write energy dispersions (“e”) or velocity dispersions (“v”).</p>
+</dd>
+<dt><strong>itype</strong><span class="classifier">string, optional</span></dt><dd><div class="line-block">
+<div class="line">Can be any of:</div>
+<div class="line">{“linearnd”, “interpn”, “rbf”, “wildmagic”, “skw”}</div>
+</div>
+<p>The type of interpolate method to use. If not set, the parameter
+<cite>dispersion_interpolate_method</cite> in param.yml sets this.</p>
+</dd>
+<dt><strong>itype_sub</strong><span class="classifier">string, optional</span></dt><dd><div class="line-block">
+<div class="line">Can be any of:</div>
+<div class="line">{“nearest”, “linear”}, when <cite>itype</cite> is set to <cite>interpn</cite>.</div>
+<div class="line">{“multiquadric”, “inverse_multiquadric”, “gaussian”, “linear”,</div>
+<div class="line">“cubic”, “quintic”, “thin_plate”}, when <cite>itype</cite> is set to <cite>rbf</cite></div>
+<div class="line">and when the Scipy variety is used.</div>
+<div class="line">{“trilinear, tricubic_exact, tricubic_bspline, akima”},</div>
+<div class="line">when <cite>itype</cite> is set to <cite>wildmagic</cite>.</div>
+</div>
+<p>The subtype of the interpolation method.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="inputoutput.dump_density_of_states">
+<code class="sig-prename descclassname">inputoutput.</code><code class="sig-name descname">dump_density_of_states</code><span class="sig-paren">(</span><em class="sig-param">bs</em>, <em class="sig-param">dos=None</em>, <em class="sig-param">dos_energies=None</em>, <em class="sig-param">filename='dos'</em><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.dump_density_of_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the density of states to file.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>bs</strong><span class="classifier">object</span></dt><dd><p>A <cite>Bandstructure()</cite> object.</p>
+</dd>
+<dt><strong>dos</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M)</div>
+</div>
+<p>The density of states for N bands at M energy samplings
+If not supplied, set to <cite>bs.dos</cite>.</p>
+</dd>
+<dt><strong>dos_energies</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (M)</div>
+</div>
+<p>The M energy samples used for the density of state
+If not supplied, set to <cite>bs.dos_energies</cite></p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">string, optional</span></dt><dd><p>The filename used to write the density of states.
+Default is “dos”.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="inputoutput.dump_relaxation_time">
+<code class="sig-prename descclassname">inputoutput.</code><code class="sig-name descname">dump_relaxation_time</code><span class="sig-paren">(</span><em class="sig-param">tr</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.dump_relaxation_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the relaxation time to file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>tr</strong><span class="classifier">object</span></dt><dd><p>A <cite>Transport()</cite> object containing the relaxation time and
+other details related to the carrier transport.</p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">string, optional</span></dt><dd><p>The output filename, default is “scattering”. The string
+“_band_N” is added to this string, where N is the band number.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>One file per band, filename “scattering_band_x”, where
+x is the band number. In each file the temperature dependence is
+blocked, while the carrier energy, total relaxation time
+and each individual relaxation times follow as columns for each block.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inputoutput.dump_transport_coefficients">
+<code class="sig-prename descclassname">inputoutput.</code><code class="sig-name descname">dump_transport_coefficients</code><span class="sig-paren">(</span><em class="sig-param">tr</em>, <em class="sig-param">filename_tag=None</em><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.dump_transport_coefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the transport coefficients to files</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>tr</strong><span class="classifier">object</span></dt><dd><p>A <cite>Transport()</cite> object that contains the transport coefficients</p>
+</dd>
+<dt><strong>filename_tag</strong><span class="classifier">string, optional</span></dt><dd><div class="line-block">
+<div class="line">If <cite>filename_tag</cite> is not an empty string, but a string <cite>x</cite>, the</div>
+<div class="line">output filenames are:</div>
+<div class="line">sigma_x: contains the electrical conductivity in units of</div>
+<div class="line"><img class="math" src="_images/math/4efd21239fdc6992d7f394e26f697e28ba93dd23.png" alt="\\mathrm{S}/\\mathrm{m}"/></div>
+<div class="line">seebeck_x:  contains the Seebeck coefficiens in units of</div>
+<div class="line"><img class="math" src="_images/math/3d741276856de5409d03edec9f88fbf7abd4618a.png" alt="\\mu \\mathrm{V}/\\mathrm{K}"/></div>
+<div class="line">lorenz_x:  contains the Lorenz number in units of</div>
+<div class="line"><img class="math" src="_images/math/22362564f65c5bf5e8aba3ad5fdee55f14056014.png" alt="10^{-8} \\mathrm{V^2}/\\mathrm{K^2}"/></div>
+<div class="line">kappa_x:  contains the Seebeck coefficiens in units of</div>
+<div class="line"><img class="math" src="_images/math/b7f4e537ac270318a4a5c4667fbc6642b381ec42.png" alt="\\mu \\mathrm{W}/\\mathrm{mK}"/></div>
+<div class="line">hall_x:  the Hall coefficient (big R) in units of</div>
+<div class="line"><img class="math" src="_images/math/6dd3af8328cc622faf2fa6dff19b70e87743a84a.png" alt="\\mathrm{cm^{3}}/\\mathrm{C}"/></div>
+<div class="line">cc_x: the carrier concentration in units of</div>
+<div class="line"><img class="math" src="_images/math/aa97945991744d674a8d9e847058370c4e3d31d1.png" alt="10^{21} \\mathrm{cm^{-3}}"/></div>
+</div>
+<p>The default is to write the files without the tag on the end.
+Consult header of the files for the ordering.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Each temperature steps have its own block.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inputoutput.end_message">
+<code class="sig-prename descclassname">inputoutput.</code><code class="sig-name descname">end_message</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.end_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints an end message to the log file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="inputoutput.file_handler">
+<code class="sig-prename descclassname">inputoutput.</code><code class="sig-name descname">file_handler</code><span class="sig-paren">(</span><em class="sig-param">filename=''</em>, <em class="sig-param">handler=None</em>, <em class="sig-param">status=None</em><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.file_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open and close files</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">string</span></dt><dd><p>Filename to be handled</p>
+</dd>
+<dt><strong>handler</strong><span class="classifier">object, optional</span></dt><dd><p>A file object. If provided, this routine closes the file</p>
+</dd>
+<dt><strong>status</strong><span class="classifier">{“w”, “r”, “a”}</span></dt><dd><p>The status, e.g. write, read, append etc.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>file_handler</strong><span class="classifier">object</span></dt><dd><p>A file object</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="inputoutput.readbandparam">
+<code class="sig-prename descclassname">inputoutput.</code><code class="sig-name descname">readbandparam</code><span class="sig-paren">(</span><em class="sig-param">location=None</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.readbandparam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the parameters in the bandstructure configuration file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>location</strong><span class="classifier">string, optional</span></dt><dd><p>The location of the bandstructure configuration file.
+Defaults to “input” directory in the current working
+directory.</p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">string, optional</span></dt><dd><p>The filename for the bandstructure configuration file.
+Defaults to “bandparam.yml”.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>iterable</dt><dd><p>An iterable YAML object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The current working directory is padded in front of
+any supplied location (or if path is given in the filename).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inputoutput.readcellparam">
+<code class="sig-prename descclassname">inputoutput.</code><code class="sig-name descname">readcellparam</code><span class="sig-paren">(</span><em class="sig-param">location=None</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.readcellparam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the parameters in the cell configuration file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>location</strong><span class="classifier">string, optional</span></dt><dd><p>The location of the cell configuration file.
+Defaults to the “input” directory in the
+current working directory.</p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">string, optional</span></dt><dd><p>The filename for the cell configuration file.
+Defaults to “cellparam.yml”.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>iterable</dt><dd><p>An iterable YAML object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The current working directory is padded in front of
+any supplied location (or if path is given in the filename).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inputoutput.readparam">
+<code class="sig-prename descclassname">inputoutput.</code><code class="sig-name descname">readparam</code><span class="sig-paren">(</span><em class="sig-param">location=None</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.readparam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the parameters in the general configuration file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>location</strong><span class="classifier">string, optional</span></dt><dd><p>The location of the general configuration file.
+Defaults to the “input” directory in the
+current working directory.</p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">string, optional</span></dt><dd><p>The filename for the general configuration file.
+Defaults to “param.yml”.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>iterable</dt><dd><p>An iterable YAML object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The current working directory is padded in front of
+any supplied location (or if path is given in the filename).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inputoutput.skw_warning">
+<code class="sig-prename descclassname">inputoutput.</code><code class="sig-name descname">skw_warning</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.skw_warning" title="Permalink to this definition">¶</a></dt>
+<dd><p>An error for missing SKW.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inputoutput.spglib_error">
+<code class="sig-prename descclassname">inputoutput.</code><code class="sig-name descname">spglib_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.spglib_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>An error for missing Spglib interface.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="inputoutput.start_message">
+<code class="sig-prename descclassname">inputoutput.</code><code class="sig-name descname">start_message</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.start_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints a startup message to the log file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="inputoutput.wildmagic_warning">
+<code class="sig-prename descclassname">inputoutput.</code><code class="sig-name descname">wildmagic_warning</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inputoutput.wildmagic_warning" title="Permalink to this definition">¶</a></dt>
+<dd><p>An error for a missing GeometricTools interface.</p>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, Espen Flage-Larsen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Installing &#8212; T4ME 1.1.1 documentation</title>
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Running tests" href="tests.html" />
+    <link rel="prev" title="Download" href="download.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          T4ME</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Custom interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Installing</a><ul>
+<li><a class="reference internal" href="#basic-install">Basic install</a></li>
+<li><a class="reference internal" href="#advanced-install">Advanced install</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="download.html" title="Previous Chapter: Download"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Download</span>
+    </a>
+  </li>
+  <li>
+    <a href="tests.html" title="Next Chapter: Running tests"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Running tests &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/install.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="installing">
+<h1>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basic-install">
+<h2>Basic install<a class="headerlink" href="#basic-install" title="Permalink to this headline">¶</a></h2>
+<p>First make sure Spglib is installed</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">spglib</span>
+</pre></div>
+</div>
+<p>Then install T4ME by executing the command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">T4ME</span>
+</pre></div>
+</div>
+<p>This will give the user the posibility to calculate the transport coefficients
+using integration routines in SciPy. For other integration and interpolation routines
+the user needs to follow the following recipe.</p>
+</div>
+<div class="section" id="advanced-install">
+<h2>Advanced install<a class="headerlink" href="#advanced-install" title="Permalink to this headline">¶</a></h2>
+<p>For more advanced functionality (interpolation and other integration routines) the
+user should determine which external libraries are needed and install them based
+on their respective documentation. Please also fetch the repository from github and work from its
+base directory when executing the following commands.</p>
+<p>The <code class="file docutils literal notranslate"><span class="pre">setup.py</span></code> file assume in its supplied form that the user installs the libraries
+in the standard folders, e.g. <cite>$HOME/include</cite> and <cite>$HOME/lib</cite> for the include and library
+files, respectively. If other locations are needed, please adapt the <code class="file docutils literal notranslate"><span class="pre">setup.py</span></code>
+file.</p>
+<p>As an example, we want to enable the tetrahedron integration. A Spglib interface needs to be compiled.
+This can be build with the included <code class="file docutils literal notranslate"><span class="pre">build_spglib</span></code> file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build_spglib</span>
+</pre></div>
+</div>
+<p>If that was successfull, T4ME can then be built by issuing the following command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Another example. We want to enable SKW interpolation. The SKW routines can be built (assuming Intel MKL is installed) by issuing</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build_skw</span>
+</pre></div>
+</div>
+<p>If successfull, T4ME can then be installed by issuing one of the two commands listed above. If other FFT routines are to be used, please modify <code class="file docutils literal notranslate"><span class="pre">skw/Makefile</span></code>.</p>
+<p>All other libraries need to be built externally and linked in.</p>
+<p>Upon successfull completion of the installation, T4ME is executed with the command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">t4me</span>
+</pre></div>
+</div>
+<p>An <cite>input</cite> directory is needed which should contain the input files.</p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, Espen Flage-Larsen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

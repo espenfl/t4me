@@ -1,0 +1,2349 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>lbtecoeff module &#8212; T4ME 1.1.1 documentation</title>
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="lattice module" href="lattice.html" />
+    <link rel="prev" title="lbteint module" href="lbteint.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          T4ME</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Custom interfaces</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">lbtecoeff module</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="lbteint.html" title="Previous Chapter: lbteint module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; lbteint module</span>
+    </a>
+  </li>
+  <li>
+    <a href="lattice.html" title="Next Chapter: lattice module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">lattice module &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/lbtecoeff.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="lbtecoeff-module">
+<h1>lbtecoeff module<a class="headerlink" href="#lbtecoeff-module" title="Permalink to this headline">¶</a></h1>
+<p>This module, <code class="file docutils literal notranslate"><span class="pre">lbtecoeff.py</span></code> contains the setup and calls
+to the integral solvers and possible also external integral
+solvers such that the linearlized Boltzmann Transport Equations
+might be solved.</p>
+<span class="target" id="module-lbtecoeff"></span><p>Contains routines that sets up and selects the integral functions to be called.</p>
+<dl class="function">
+<dt id="lbtecoeff.calculate_hall_carrier_concentration">
+<code class="sig-prename descclassname">lbtecoeff.</code><code class="sig-name descname">calculate_hall_carrier_concentration</code><span class="sig-paren">(</span><em class="sig-param">hall</em><span class="sig-paren">)</span><a class="headerlink" href="#lbtecoeff.calculate_hall_carrier_concentration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the Hall carrier concentration <img class="math" src="_images/math/69467b9bed86a255f96fa9c41795bee126a06eeb.png" alt="n_h=(\\mathrm{e}R_h)^{-1}"/>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>hall</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M,3,3)</div>
+</div>
+<p>The Hall tensor <img class="math" src="_images/math/ce68cda7b73bb95c80d056b15b90a6766a2d923c.png" alt="R_h"/> in units of
+<img class="math" src="_images/math/65fa0a93810a2bcc3ef313dcae977257f8d4cbca.png" alt="\\mathrm{cm^3}/\\mathrm{C}"/> for
+N temperature and M chemical potential samplings.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M,3,3)</div>
+</div>
+<p>The Hall carrier concentration in units of
+<img class="math" src="_images/math/350a80784ad015304bd43f9e38a5b644fb633f1e.png" alt="10^{-21} \mathrm{cm}^{-3}"/></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="lbtecoeff.calculate_hall_factor">
+<code class="sig-prename descclassname">lbtecoeff.</code><code class="sig-name descname">calculate_hall_factor</code><span class="sig-paren">(</span><em class="sig-param">n</em>, <em class="sig-param">nh</em><span class="sig-paren">)</span><a class="headerlink" href="#lbtecoeff.calculate_hall_factor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the Hall factor <img class="math" src="_images/math/8820feb7e9f691c7b3ddb568a943360f9448853f.png" alt="r_h=n/n_h"/></p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>n</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M,3,3)</div>
+</div>
+<p>The calcalated carrier concentration in for N
+temperature and M chemical potential
+samplings in units of <img class="math" src="_images/math/fd478728f7a8cc288a22f601590e3824cc4784b9.png" alt="10^{21} \\mathrm{cm}^{-3}"/>.</p>
+</dd>
+<dt><strong>n</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M,3,3)</div>
+</div>
+<p>The Hall carrier concentration in for N temperature
+and M chemical potential
+samplings in units of <img class="math" src="_images/math/fd478728f7a8cc288a22f601590e3824cc4784b9.png" alt="10^{21} \\mathrm{cm}^{-3}"/>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (N,M,3,3)</div>
+</div>
+<p>The Hall factor.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="lbtecoeff.numerick">
+<code class="sig-prename descclassname">lbtecoeff.</code><code class="sig-name descname">numerick</code><span class="sig-paren">(</span><em class="sig-param">tr</em>, <em class="sig-param">chempots</em>, <em class="sig-param">temperatures</em>, <em class="sig-param">bs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lbtecoeff.numerick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the transport coefficients according to the tensors defined in <code class="xref py py-func docutils literal notranslate"><span class="pre">full_k_space_analytic()</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>tr</strong><span class="classifier">object</span></dt><dd><p>A <cite>Transport()</cite> object.</p>
+</dd>
+<dt><strong>chempots</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N)</div>
+</div>
+<p>The N chemical potentials in eV on which to calculate
+the transport coefficients.</p>
+</dd>
+<dt><strong>temperature</strong><span class="classifier">float</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (M)</div>
+</div>
+<p>The M temperatutes in K.</p>
+</dd>
+<dt><strong>bs</strong><span class="classifier">ndarray, optional</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (I,J)</div>
+</div>
+<p>The energy dispersion in eV for the charge carriers for I bands
+and J k-points. If not given, it defaults to the <cite>Bandstructure()</cite>
+object stored in <cite>tr</cite>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>sigma, seebeck, lorenz</strong><span class="classifier">ndarray, ndarray, ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (M,N,3,3)</div>
+</div>
+<p>Returns the electrical condcutivity, Seebeck coefficient
+and Lorenz tensor for M temperature and N chemical potential
+steps in units of <img class="math" src="_images/math/4efd21239fdc6992d7f394e26f697e28ba93dd23.png" alt="\\mathrm{S}/\\mathrm{m}"/>,
+<img class="math" src="_images/math/3d741276856de5409d03edec9f88fbf7abd4618a.png" alt="\\mu \\mathrm{V}/\\mathrm{K}"/>,
+<img class="math" src="_images/math/b969fe800e60a7d499c1223e68ed484ff47ae478.png" alt="\\mathrm{V^2}/\\mathrm{K^2}"/>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This routine accepts a predetermined array containg the
+relaxation time sampled at different carrier energy steps.
+When the evaluation of the intergrals are executed the carrier
+energy dispersion, velocity and scattering array are interpolated on
+all energies stored in <cite>bs</cite>
+and then the integrals are evaluated statically
+(if <cite>transport_integration_method</cite> is “trapz”, “simps”, “romb”,
+“tetra” or “smeared”). The former method can also be used in the case
+where the scattering array is pretetermined by setting
+<cite>transport_use_scattering_ontfly</cite> in the general
+configuration file to True.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lbtecoeff.parabolic_closed">
+<code class="sig-prename descclassname">lbtecoeff.</code><code class="sig-name descname">parabolic_closed</code><span class="sig-paren">(</span><em class="sig-param">tr</em>, <em class="sig-param">eta</em>, <em class="sig-param">bs</em>, <em class="sig-param">tau0_t</em>, <em class="sig-param">temperature</em><span class="sig-paren">)</span><a class="headerlink" href="#lbtecoeff.parabolic_closed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the parabolic Fermi integrals for the transport coefficients.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>tr</strong><span class="classifier">object</span></dt><dd><p>A <cite>Transport()</cite> object</p>
+</dd>
+<dt><strong>eta</strong><span class="classifier">float</span></dt><dd><p>The reduced chemical potential</p>
+</dd>
+<dt><strong>bs</strong><span class="classifier">object</span></dt><dd><p>A <cite>Bandstructure()</cite> object containing the dispersion
+relations of the N included bands</p>
+</dd>
+<dt><strong>tau0_t</strong><span class="classifier">(N,M) ndarray</span></dt><dd><p>The relaxation time approximation (RTA) prefactors (tau0) in
+units of fs for the N bands and M defined scattering
+mechanisms. This is converted to the r factor in order
+to use the closed Fermi integrals from tau0</p>
+</dd>
+<dt><strong>temperature</strong><span class="classifier">float</span></dt><dd><p>The temperature in K.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>tupple</strong><span class="classifier">ndarray, ndarray, ndarray, ndarray, ndarray, ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3,3), (3,3), (3,3), (3,3), (3,3), (3,3)</div>
+</div>
+<p>The electrical conductivity, Seebeck coefficient, Lorenz number,
+Hall coefficient (big R, where the small Hall factor is
+divided by the charge carrier concentration) and charge
+carrier concentration for n and ptype carriers in units
+of</p>
+<div class="math">
+<p><img src="_images/math/65d64cc1f42a55d38c23138cf4431cd0f0c8e376.png" alt="\\mathrm{S}/\\mathrm{m}, \\mu \\mathrm{V}/\\mathrm{K},
+10^{-8}\\mathrm{V}^2/\\mathrm{K}^2,
+\\mathrm{cm}^3/\\mathrm{C},
+10^{21} \\mathrm{cm}^{-3}, respectively."/></p>
+</div></dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_scattering</span></code></dt><dd></dd>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_r_from_tau0</span></code></dt><dd></dd>
+<dt><a class="reference internal" href="#lbtecoeff.parabolic_numeric" title="lbtecoeff.parabolic_numeric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parabolic_numeric</span></code></a></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>The closed equations for the Fermi integrals can easily be
+developed from the following equaion from <a class="reference internal" href="#lbtecoeff.parabolic_numeric" title="lbtecoeff.parabolic_numeric"><code class="xref py py-func docutils literal notranslate"><span class="pre">parabolic_numeric()</span></code></a></p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">\\Sigma^i_{lm}=-\\frac{4e^2\\sqrt{m}}{3\\sqrt{2}\\pi^2
+\\hbar^3}\\int \\tau(E) E^{3/2}(E-\\mu)^i
+\\frac{\\partial f_0}{\\partial E} dE.
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.16 ...\\partial f_0}{\\partial E} dE.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.16 ...\\partial f_0}{\\partial E} dE.\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.16 ...\\partial f_0}{\\partial E} dE.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.16 ...\\partial f_0}{\\partial E} dE.\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.16 ...\\partial f_0}{\\partial E} dE.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.16 ...\\partial f_0}{\\partial E} dE.\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.16 ...\\partial f_0}{\\partial E} dE.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.16 ...\\partial f_0}{\\partial E} dE.\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 804 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>We now chose the <img class="math" src="_images/math/5aa339d4daf45a810dda332e3c80a0698e526e04.png" alt="i"/> for the given tensor and enforce a
+scattering model of the form <img class="math" src="_images/math/286f9053bf92a0554e97db25354bd1d13fb385c0.png" alt="\\tau=\\tau_0E^{r-1/2}"/>,
+where <img class="math" src="_images/math/a48b4466574bbf396b58fa46653d3f9d5c40fbde.png" alt="\\tau_0"/> is constant in energy. Finally we use the
+product rule and expand the integral. This yields</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">\\Sigma^0=\\frac{4e^2\\sqrt{m}}{3\\sqrt{2}\\pi^2
+\\hbar^3}(r+1)F_r(E),
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.15 \\hbar^3}(r+1)F_r(E),\end{split}
+                                     
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.15 \\hbar^3}(r+1)F_r(E),\end{split}
+                                     
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.15 \\hbar^3}(r+1)F_r(E),\end{split}
+                                     
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.15 \\hbar^3}(r+1)F_r(E),\end{split}
+                                     
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 592 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">\\Sigma^1=\\frac{k_n}{e_n}\\left(\\frac{(r+2)
+F_{r+1}(E)}{(r+1)F_r(E)-\\mu} \\right),
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.15 ...E)}{(r+1)F_r(E)-\\mu} \\right),\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.15 ...E)}{(r+1)F_r(E)-\\mu} \\right),\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.15 ...E)}{(r+1)F_r(E)-\\mu} \\right),\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.15 ...E)}{(r+1)F_r(E)-\\mu} \\right),\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 680 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<div class="math">
+<p><img src="_images/math/49481fd57e993758f4eb1fc32464e3d447ba8105.png" alt="\\Sigma^2=\\left(\\frac{k_n}{e_n}\\right)^2\\left(
+\\frac{(r+3)F_{r+2}(E)}{(r+1)F_r(E)} -
+\\frac{(r+2)F_{r+1}(E)}{(r+1)F_r(E)} \\right),"/></p>
+</div><p>where <img class="math" src="_images/math/6278f69e46c41186d512a5cbc9ab8964ad756f0a.png" alt="F_i(E)"/> is the famous Fermi integrals</p>
+<div class="math">
+<p><img src="_images/math/6f37ed86c91a5b0d0daaf0796e739e8e8f8724df.png" alt="F_i(E)=\\int f_0 E^i dE."/></p>
+</div><p>It is customary to introduce the dimensionless energy
+<img class="math" src="_images/math/8aa55b9c7110cb487298076c51ef29ca4a4633e5.png" alt="\\epsilon=E/k_bT"/> and chemical potential
+<img class="math" src="_images/math/c02b09414403d39aa8e43c21ce73a98e13aca1cb.png" alt="\\eta=\\mu/k_bT"/>. We have the general relation</p>
+<div class="math">
+<p><img src="_images/math/d394d59a2f865f74ac781014b3a04475b889b937.png" alt="F_i(E)=\\beta^{-(i+1)}F_i(\\epsilon),"/></p>
+</div><p>and the <img class="math" src="_images/math/e308d9ead56ecdc0dd6d73bcedb8b83fd8a7d12b.png" alt="\\Sigma"/> coefficients can be easily transformed.
+Please consult <a class="reference internal" href="#lbtecoeff.parabolic_numeric" title="lbtecoeff.parabolic_numeric"><code class="xref py py-func docutils literal notranslate"><span class="pre">parabolic_numeric()</span></code></a> for the specific
+transport tensors and units used.</p>
+<p>The execution of this method needs currently needs the effective
+mass tensor to be isotropic and only one scattering mechanism can
+be used per band. This method is selected by setting
+<cite>transport_method</cite> to “closed” in the general configuration file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lbtecoeff.parabolic_numeric">
+<code class="sig-prename descclassname">lbtecoeff.</code><code class="sig-name descname">parabolic_numeric</code><span class="sig-paren">(</span><em class="sig-param">tr</em>, <em class="sig-param">eta</em>, <em class="sig-param">bs</em>, <em class="sig-param">tau0_t</em>, <em class="sig-param">temperature</em><span class="sig-paren">)</span><a class="headerlink" href="#lbtecoeff.parabolic_numeric" title="Permalink to this definition">¶</a></dt>
+<dd><p>The solution of the energy integrals for the BTE RTA for a parabolic dispersion.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>tr</strong><span class="classifier">object</span></dt><dd><p>A <cite>Transport()</cite> object.</p>
+</dd>
+<dt><strong>eta</strong><span class="classifier">float</span></dt><dd><p>The reduced chemical potential.</p>
+</dd>
+<dt><strong>bs</strong><span class="classifier">object</span></dt><dd><p>A <cite>Bandstructure()</cite> object containing the energy dispersions
+for the N bands.</p>
+</dd>
+<dt><strong>tau0_t</strong><span class="classifier">(N,M) ndarray</span></dt><dd><p>The relaxation time approximation (RTA) prefactors (tau0)
+in units of fs for the N bands and M defined scattering mechanisms.</p>
+</dd>
+<dt><strong>temperature</strong><span class="classifier">float</span></dt><dd><p>The temperature in K.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>tupple, ndarray, ndarray, ndarray, ndarray, ndarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (3,3), (3,3), (3,3), (3,3), (3,3), (3,3)</div>
+</div>
+<p>The electrical conductivity, Seebeck coefficient, Lorenz number,
+Hall coefficient (big R, where the small Hall factor is
+divided by the charge carrier concentration) and charge carrier
+concentration for n and ptype carriers in units of</p>
+<div class="math">
+<p><img src="_images/math/d72a4f2499ad4c04bef71cedf0e6f2f177366536.png" alt="S/m, \\mu \mathrm{V}/\mathrm{K},
+10^{-8}\mathrm{V}^2/\mathrm{K}^2,
+\mathrm{cm}^3/\mathrm{C},
+10^{21} \mathrm{cm}^{-3}`,"/></p>
+</div><p>respectively.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This routine is the same as <a class="reference internal" href="#lbtecoeff.parabolic_closed" title="lbtecoeff.parabolic_closed"><code class="xref py py-func docutils literal notranslate"><span class="pre">parabolic_closed()</span></code></a> except
+here we solve the Fermi intergrals numerically. This allows to
+use concatenated scattering mechanisms for each band. Otherwise
+the approximations and requirements are similar. The method
+is selected by setting <cite>transport_method</cite> to “numeric”.</p>
+<p>The transport coefficients are defined as</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">\\Sigma^i_{lm}=-s\\frac{e^2}{8\\pi^3}\\int
+\\tau(E(\\vec{k}))v_l(E(\\vec{k}))
+v_m(E(\\vec{k}))(E(\\vec{k})-\\mu)^i
+\\frac{\\partial f_0}{\\partial
+E(\\vec{k})} d\\vec{k}.
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 E(\\vec{k})} d\\vec{k}.\end{split}
+                                       
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 E(\\vec{k})} d\\vec{k}.\end{split}
+                                       
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 E(\\vec{k})} d\\vec{k}.\end{split}
+                                       
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 E(\\vec{k})} d\\vec{k}.\end{split}
+                                       
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 E(\\vec{k})} d\\vec{k}.\end{split}
+                                       
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 E(\\vec{k})} d\\vec{k}.\end{split}
+                                       
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 E(\\vec{k})} d\\vec{k}.\end{split}
+                                       
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 E(\\vec{k})} d\\vec{k}.\end{split}
+                                       
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 904 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>Using the fact that <img class="math" src="_images/math/43b4ee89ac2efc77e1004e981e252c9c93040985.png" alt="d\\vec{k}=k^2\\sin(\\theta)
+d\\theta d\\phi"/> we get</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">\\Sigma^i_{lm}=-s\\frac{e^2}{2\\pi^2}\\int
+k^2 \\tau(E(\\vec{k}))v_l(E(\\vec{k}))
+v_m(E(\\vec{k}))(E(\\vec{k})-\\mu)^i
+\\frac{\\partial f_0}{\\partial E(\\vec{k})} dk.
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.17 ...f_0}{\\partial E(\\vec{k})} dk.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.17 ...f_0}{\\partial E(\\vec{k})} dk.\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.17 ...f_0}{\\partial E(\\vec{k})} dk.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.17 ...f_0}{\\partial E(\\vec{k})} dk.\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.17 ...f_0}{\\partial E(\\vec{k})} dk.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.17 ...f_0}{\\partial E(\\vec{k})} dk.\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.17 ...f_0}{\\partial E(\\vec{k})} dk.\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.17 ...f_0}{\\partial E(\\vec{k})} dk.\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 900 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>For parabolic bands <img class="math" src="_images/math/88b36cba2ef66fa2c0f63010de96cd91326ba956.png" alt="E=\\hbar^2 k^2/2m"/>. We also use
+<img class="math" src="_images/math/0a27e8b7b54a70d1fd3ee7a513243c4a57d3ce75.png" alt="E=mv^2/2"/>. Furthermore we assume that our crystal is
+isotropic and cubic, such that <img class="math" src="_images/math/7869af96196a3055ccbeba35f8777f0150d0eb7f.png" alt="\\Sigma=\\Sigma_{00}"/>.
+Then <img class="math" src="_images/math/50132a09f1754f4043c3ce198628640a8431078e.png" alt="v_i^2=(v_{xx}+v_{yy}+v_{zz})/3=v^2/3"/> and the
+expression above simplifies to</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">\\Sigma^i=-s\\frac{\\sqrt{2}e^2\\sqrt{m}}{3\\pi^2
+\\hbar^3}\\int \\tau(E) E^{3/2}(E-\\mu)^i
+\\frac{\\partial f_0}{\\partial E} dE
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.16 ...{\\partial f_0}{\\partial E} dE\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.16 ...{\\partial f_0}{\\partial E} dE\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.16 ...{\\partial f_0}{\\partial E} dE\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.16 ...{\\partial f_0}{\\partial E} dE\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.16 ...{\\partial f_0}{\\partial E} dE\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.16 ...{\\partial f_0}{\\partial E} dE\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.16 ...{\\partial f_0}{\\partial E} dE\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.16 ...{\\partial f_0}{\\partial E} dE\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 784 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>And we have a very manageble integral over energy. Here, we
+have assumed that <img class="math" src="_images/math/bbfebfb6602ca200cd0a1683a6c69ec20fde14b9.png" alt="\\tau"/> can be expressed in terms of
+energy instead of the wave vector. A similar procedure can be
+used to obtain energy integrals for other dispersion relations
+than parabolic. As opposed to <a class="reference internal" href="#lbtecoeff.parabolic_closed" title="lbtecoeff.parabolic_closed"><code class="xref py py-func docutils literal notranslate"><span class="pre">parabolic_closed()</span></code></a> we here
+want to solve the integrals numerically (in order to be able
+to use composite <img class="math" src="_images/math/bbfebfb6602ca200cd0a1683a6c69ec20fde14b9.png" alt="\\tau"/>) and thus want to simplify
+the mathematical operations in the integrands as much
+as possible. Since</p>
+<div class="math">
+<p><img src="_images/math/e5b1ede6e7aa37f3aff6c8304d15f031e1e26d51.png" alt="\\partial f_0/\\partial
+E=-\\beta/(2(1+\\cosh(\\beta(E-\\mu)))),"/></p>
+</div><p>where <img class="math" src="_images/math/32687c2ad3ffee639badf802e24ffc862655e588.png" alt="\\beta=(k_bT)^{-1}"/> we get</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">\\Sigma^i=s\\frac{\\sqrt{2m}e^2\\beta}{6\\pi^2
+\\hbar^3}\\int \\frac{\\tau(E) E^{3/2}(E-\\mu)^i}
+{1+\\cosh(\\beta(E-\\mu))} dE
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.16 {1+\\cosh(\\beta(E-\\mu))} dE\end{split}
+                                             
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.16 {1+\\cosh(\\beta(E-\\mu))} dE\end{split}
+                                             
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.16 {1+\\cosh(\\beta(E-\\mu))} dE\end{split}
+                                             
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.16 {1+\\cosh(\\beta(E-\\mu))} dE\end{split}
+                                             
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.16 {1+\\cosh(\\beta(E-\\mu))} dE\end{split}
+                                             
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.16 {1+\\cosh(\\beta(E-\\mu))} dE\end{split}
+                                             
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.16 {1+\\cosh(\\beta(E-\\mu))} dE\end{split}
+                                             
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.16 {1+\\cosh(\\beta(E-\\mu))} dE\end{split}
+                                             
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 796 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>Notice now that there is a factor of 1/2 difference in front of
+these integrals compared to the ones in <a class="reference internal" href="#lbtecoeff.parabolic_closed" title="lbtecoeff.parabolic_closed"><code class="xref py py-func docutils literal notranslate"><span class="pre">parabolic_closed()</span></code></a>
+due to the expansion of the derivative of the Fermi function
+with respect to energy. The factor <img class="math" src="_images/math/3bafa9c9f13c834dd68a79da1a6ef55094d46b2c.png" alt="s=2"/> accounts for
+spin degeneracy, otherwise <img class="math" src="_images/math/3e5bc32502205f1d1c5c991d37978bc7c2d0f34f.png" alt="s=1"/> and is set to True or False
+for each band with the parameter <cite>spin_deg</cite> in the bandstructure
+configuration file.</p>
+<p>It is customary to introduce the dimensionless energy
+<img class="math" src="_images/math/8aa55b9c7110cb487298076c51ef29ca4a4633e5.png" alt="\\epsilon=E/k_bT"/> and chemical potential
+<img class="math" src="_images/math/c02b09414403d39aa8e43c21ce73a98e13aca1cb.png" alt="\\eta=\\mu/k_bT"/>. Doing this we obtain</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">\\Sigma^i=s\\frac{\\sqrt{2\\mathrm{m}}\\mathrm{e}^2}
+{6\\mathrm{\\hbar}^3 \\pi^2 \\beta^{i+3/2}}\\int
+\\frac{(\\epsilon-\\eta)^i\\tau(\\epsilon/\\beta)
+\\epsilon^{3/2}}{1+\\cosh(\\epsilon-\\eta)}d\\epsilon
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.17 ...osh(\\epsilon-\\eta)}d\\epsilon\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.17 ...osh(\\epsilon-\\eta)}d\\epsilon\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.17 ...osh(\\epsilon-\\eta)}d\\epsilon\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.17 ...osh(\\epsilon-\\eta)}d\\epsilon\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.17 ...osh(\\epsilon-\\eta)}d\\epsilon\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.17 ...osh(\\epsilon-\\eta)}d\\epsilon\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.17 ...osh(\\epsilon-\\eta)}d\\epsilon\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.17 ...osh(\\epsilon-\\eta)}d\\epsilon\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.17 ...osh(\\epsilon-\\eta)}d\\epsilon\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.17 ...osh(\\epsilon-\\eta)}d\\epsilon\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.17 ...osh(\\epsilon-\\eta)}d\\epsilon\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.17 ...osh(\\epsilon-\\eta)}d\\epsilon\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.17 ...osh(\\epsilon-\\eta)}d\\epsilon\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.17 ...osh(\\epsilon-\\eta)}d\\epsilon\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.17 ...osh(\\epsilon-\\eta)}d\\epsilon\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.17 ...osh(\\epsilon-\\eta)}d\\epsilon\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 964 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>The carrier density <img class="math" src="_images/math/5a939c5280da7202ca4531f175a7780ad5e1f80a.png" alt="n"/> can be calculated using</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">n=s\\frac{1}{8\\pi^3}\\int f_0 d\\vec{k}
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...{1}{8\\pi^3}\\int f_0 d\\vec{k}\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...{1}{8\\pi^3}\\int f_0 d\\vec{k}\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.14 ...{1}{8\\pi^3}\\int f_0 d\\vec{k}\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.14 ...{1}{8\\pi^3}\\int f_0 d\\vec{k}\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 436 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>Depending on what kind of scattering models that is chosen,
+the rescaling of <img class="math" src="_images/math/bbfebfb6602ca200cd0a1683a6c69ec20fde14b9.png" alt="\\tau"/> needs to be performed for a
+particular scattering model in order to pull the correct
+<img class="math" src="_images/math/7c613361a335202f0d34e09a5c162dae15e96a4a.png" alt="\\beta"/> factor outside the integral.</p>
+<p>In order to obtain the correct units the equation above for
+each transport coefficient have been implemented as</p>
+<p>Electrical conductivity:</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">\\frac{s\\sqrt{20}}{6\\pi}G\\frac{\\sqrt{m_c}}{\hbar_c
+\\tilde{\hbar}}k^{3/2}a^{1/2}T^{3/2}
+\\int_0^{\\infty}\\frac{\\tau(\\epsilon/\\beta)
+\\epsilon^{3/2}}{1+\\cosh(\\epsilon-\\eta)}
+d\\epsilon \\left[ \\frac{\\mathrm{S}}{\\mathrm{m}}\\right].
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...athrm{S}}{\\mathrm{m}}\\right].\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 1072 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>One usually set <img class="math" src="_images/math/3bafa9c9f13c834dd68a79da1a6ef55094d46b2c.png" alt="s=2"/>.
+Seebeck coefficient:</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">\\alpha=10^2\\frac{k_n}{e_n}\\frac{\\int_0^{\\infty}
+\\frac{\\tau(\\epsilon/\\beta)(\\epsilon-\\eta)
+\\epsilon^{3/2}}{1+\\cosh(\\epsilon-\\eta)}
+d\\epsilon}{\\int_0^{\\infty}
+\\frac{\\tau(\\epsilon/\\beta)\\epsilon^{3/2}}
+{1+\\cosh(\\epsilon-\\eta)}d\\epsilon}
+\\left[ \\frac{\\mu \mathrm{V}}{\mathrm{K}} \\right].
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.20 ...athrm{V}}{\mathrm{K}} \\right].\end{split}
+                                                  
+[1]
+Overfull \vbox (10.11978pt too high) has occurred while \output is active
+[2] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (2 pages, 1256 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>Lorenz number:</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">L=\\left(\\frac{k_n}{e_n}\\right)^2\\left(
+\\frac{\\int_0^{\\infty}\\frac{
+\\tau(\\epsilon/\\beta)(\\epsilon-\\eta)^2
+\\epsilon^{3/2}}{1+\\cosh(\\epsilon-\\eta)}
+d\\epsilon}{\\int_0^{\\infty} \\frac{
+\\tau(\\epsilon/\\beta)\\epsilon^{3/2}}
+{1+\\cosh(\\epsilon-\\eta)}d\\epsilon}-
+\\left(\\frac{\\int_0^{\\infty}\\frac{
+\\tau(\\epsilon/\\beta)(\\epsilon-\\eta)
+\\epsilon^{3/2}}{1+\\cosh(\\epsilon-\\eta)}
+d\\epsilon}{\\int_0^{\\infty}\\frac{
+\\tau(\\epsilon/\\beta)\\epsilon^{3/2}}
+{1+\\cosh(\\epsilon-\\eta)}d\\epsilon}\\right)^2
+\\right) \\left[10^{-8}\\frac{\\mathrm{V^2}}
+{\\mathrm{K^2}}\\right].
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.28 {\\mathrm{K^2}}\\right].\end{split}
+                                        
+[1]
+Overfull \vbox (547.98077pt too high) has occurred while \output is active
+[2] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (2 pages, 2132 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>Hall coeffcient:</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">R_H=10^{-3}\\frac{3\\pi^2}{4\\sqrt{5}
+\\mathrm{e_n}}\\left(\\frac{\\mathrm{m_c k}}
+{\\mathrm{\hbar_c^2}}\\right)^{-3/2}
+\\left(aT\\right)^{-3/2}\\frac{\\int_0^{\\infty}
+\\frac{\\tau(\\epsilon/\\beta)^2\\epsilon^{3/2}}
+{1+\\cosh(\\epsilon-\\eta)}d\\epsilon}{
+\\left(\\int_0^{\\infty}\\frac{
+\\tau(\\epsilon/\\beta)\\epsilon^{3/2}}
+{1+\\cosh(\\epsilon-\\eta)}d\\epsilon\\right)^2}
+\\left[\\frac{\\mathrm{cm}^3}{\\mathrm{C}}\\right].
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.23 ...rm{cm}^3}{\\mathrm{C}}\\right].\end{split}
+                                                  
+[1]
+Overfull \vbox (189.98077pt too high) has occurred while \output is active
+[2] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (2 pages, 1716 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>Carrier concentration:</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">n=\\frac{20\\sqrt{5}}{\\pi^2}\\left(
+\\frac{\\mathrm{m_c k}}{\\mathrm{\hbar_c^2}}\\right)^{3/2}
+\\left(aT\\right)^{3/2}\\int_0^{\\infty}\\frac{
+\\sqrt{\\epsilon}}{1+\\cosh(\\epsilon-\\eta)}
+d\\epsilon \\left[10^{21} \\mathrm{cm}^{-3}\\right].
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Extra }, or forgotten $.
+&lt;argument&gt; ...^{\\infty}\\frac{ \\sqrt{\\epsilon}}
+                                                  {1+\\cosh(\\epsilon-\\eta)...
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Extra }, or forgotten $.
+&lt;argument&gt; ...^{\\infty}\\frac{ \\sqrt{\\epsilon}}
+                                                  {1+\\cosh(\\epsilon-\\eta)...
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.18 ...{21} \\mathrm{cm}^{-3}\\right].\end{split}
+                                                  
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 1152 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>From these, the Hall carrier concentration <img class="math" src="_images/math/a6964690d4ca72cbb84d94823c4ae6ed79783cf2.png" alt="n_h"/> and
+Hall factor, <img class="math" src="_images/math/eb9b5a39ee0c9dec8225caa667845ca6badc3a9b.png" alt="r_h"/> can be calculated</p>
+<div class="math">
+<p><img src="_images/math/95988f198e9b8bd2093ed6abd38673556f6a5000.png" alt="n_h=\\frac{1}{eR_H},"/></p>
+</div><p>and</p>
+<div class="math">
+<p><img src="_images/math/3ac0de19f4cdd3e54c4949a8552141d39e7e848c.png" alt="r_h=\\frac{n}{n_h}."/></p>
+</div><p>The multiband expressions are accordingly (using <img class="math" src="_images/math/5aa339d4daf45a810dda332e3c80a0698e526e04.png" alt="i"/>
+as the band index)</p>
+<div class="math">
+<p><img src="_images/math/4b327d2bf681e43b583c39ac7de8fbafc3f030da.png" alt="n=\\sum_i n_i"/></p>
+</div><div class="math">
+<p><img src="_images/math/2f899e85440193c7e137a610a45993dc5af44f20.png" alt="\\sigma=\\sum_i \\sigma_i"/></p>
+</div><div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">\\alpha=\\frac{\\sum_i \\alpha_i \\sigma_i}
+{\\sum_i \\sigma_i}
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.15 {\\sum_i \\sigma_i}\end{split}
+                                   
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.15 {\\sum_i \\sigma_i}\end{split}
+                                   
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.15 {\\sum_i \\sigma_i}\end{split}
+                                   
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.15 {\\sum_i \\sigma_i}\end{split}
+                                   
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 500 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">L=\\frac{\\sum_i L_i \\sigma_i}{\\sum_i \\sigma_i}+
+\\frac{\\sum_i \\sigma_i \\alpha_i^2}
+{\\sum_i \\sigma_i}-\\alpha^2
+
+</span>)</p>
+<p>latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=latex)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2017-04-15&gt;
+Babel &lt;3.15&gt; and hyphenation patterns for 84 language(s) loaded.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/utf8.def
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/home/efl/opt/texlive/texmf-dist/tex/latex/anyfontsize/anyfontsize.sty)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/home/efl/opt/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.16 {\\sum_i \\sigma_i}-\\alpha^2\end{split}
+                                             
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.16 {\\sum_i \\sigma_i}-\\alpha^2\end{split}
+                                             
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.16 {\\sum_i \\sigma_i}-\\alpha^2\end{split}
+                                             
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.16 {\\sum_i \\sigma_i}-\\alpha^2\end{split}
+                                             
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.16 {\\sum_i \\sigma_i}-\\alpha^2\end{split}
+                                             
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.16 {\\sum_i \\sigma_i}-\\alpha^2\end{split}
+                                             
+! Missing } inserted.
+&lt;inserted text&gt; 
+                }
+l.16 {\\sum_i \\sigma_i}-\\alpha^2\end{split}
+                                             
+! Missing { inserted.
+&lt;inserted text&gt; 
+                {
+l.16 {\\sum_i \\sigma_i}-\\alpha^2\end{split}
+                                             
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 776 bytes).
+Transcript written on math.log.
+</p>
+</div>
+<p>The units on the rest of the variables are</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><img class="math" src="_images/math/9e0e21b7b50f87723c6b6fd61a7331a2578432a7.png" alt="\\tau [\mathrm{fs}]"/></div>
+<div class="line">The relaxation time given in fs.</div>
+</div>
+<div class="line-block">
+<div class="line"><img class="math" src="_images/math/d923d9517ee27d8fc14f2eddd7d03c0d2135bc8d.png" alt="T [\\mathrm{K}]"/></div>
+<div class="line">The temperature given in K.</div>
+</div>
+<div class="line-block">
+<div class="line"><img class="math" src="_images/math/b3e65e3b6408fcfa00452530b73f55d1755f9965.png" alt="a"/></div>
+<div class="line">The effective mass factor, e.g. <img class="math" src="_images/math/2b84679336a860c29e456e41e536f6376634611a.png" alt="m^*=am_e"/>.</div>
+</div>
+</div></blockquote>
+<p>Furthermore, the coefficients that sets the correct
+scaling is defined as</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><img class="math" src="_images/math/9f1668360b73b86febc01e3b71d0f37ad0dc27e4.png" alt="k = 8.6173324"/></div>
+<div class="line">The coefficient of the Boltzmann constant.</div>
+</div>
+<div class="line-block">
+<div class="line"><img class="math" src="_images/math/1e5e5524bf28a55c4cc19f753cc3a2867d172ccb.png" alt="e_n = 2.417989348"/></div>
+<div class="line">The coefficient for the normalized (e/h) electron charge.</div>
+</div>
+<div class="line-block">
+<div class="line"><img class="math" src="_images/math/392ab5f71670aa5ff00a252e88bde2d4cfd8014f.png" alt="m_c = 0.510998928"/></div>
+<div class="line">The coefficient of <img class="math" src="_images/math/7d8a6e83e1c6f19032f1b74705595f5337affd4a.png" alt="mc^2"/></div>
+</div>
+<div class="line-block">
+<div class="line"><img class="math" src="_images/math/633cee2638428fa5093025be15b62a062d488120.png" alt="\hbar_c = 197.3269718"/></div>
+<div class="line">The coefficient of <img class="math" src="_images/math/97ca964c43364550b8bf7e41459964d00b542208.png" alt="\\hbar c"/></div>
+</div>
+<div class="line-block">
+<div class="line"><img class="math" src="_images/math/4c4ae46be43b298b7c94ab8331450672d9913d4f.png" alt="\\tilde{\hbar} = 6.582119514"/></div>
+<div class="line">The coefficient of <img class="math" src="_images/math/6d1fa8d61c08d6b21a3c04479ea483ed50bd3f7b.png" alt="\\hbar"/></div>
+</div>
+<div class="line-block">
+<div class="line">:math::<cite>G = 7.7480917346</cite></div>
+<div class="line">The coefficient of the conductance quantum</div>
+</div>
+</div></blockquote>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>ONLY VALID FOR PARABOLIC ENERGY DISPERSIONS
+AND SCATTERING MODELS</p>
+</div>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>ADD POSIBILITY TO USE DIFFERENT EFFECTIVE MASSES ALONG
+DIFFERENT DIRECTIONS</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="lbtecoeff.parabolice">
+<code class="sig-prename descclassname">lbtecoeff.</code><code class="sig-name descname">parabolice</code><span class="sig-paren">(</span><em class="sig-param">tr</em>, <em class="sig-param">eta</em>, <em class="sig-param">temperature</em>, <em class="sig-param">bs</em>, <em class="sig-param">tau0</em>, <em class="sig-param">method</em><span class="sig-paren">)</span><a class="headerlink" href="#lbtecoeff.parabolice" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for all the parabolic Fermi integrals.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>tr</strong><span class="classifier">object</span></dt><dd><p>A <cite>Transport()</cite> object</p>
+</dd>
+<dt><strong>eta</strong><span class="classifier">float</span></dt><dd><p>Contains the reduced chemical potential.</p>
+</dd>
+<dt><strong>temperature</strong><span class="classifier">float</span></dt><dd><p>Contains the temperature in K.</p>
+</dd>
+<dt><strong>bs</strong><span class="classifier">object</span></dt><dd><p><cite>Bandstructure()</cite> object containing the band structure.</p>
+</dd>
+<dt><strong>method</strong><span class="classifier">{“numeric”, “closed”}</span></dt><dd><p>How to evaluate the Fermi integrals.</p>
+<div class="line-block">
+<div class="line">“numeric”: solve the Fermi integrals using</div>
+<div class="line">numerical integration</div>
+<div class="line">“closed”: solve the closed Fermi integrals</div>
+<div class="line">(exact analytic expressions)</div>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>tupple: ndarray, ndarray, ndarray, ndarray, ndarray, nadarray</dt><dd><div class="line-block">
+<div class="line">Dimension: (3,3), (3,3), (3,3), (3,3), (3,3), (3,3)</div>
+</div>
+<p>The electrical conductivity, Seebeck coefficient, Lorenz number,
+Hall coefficient (big R, where the small Hall factor is
+divided by the charge carrier concentration) and charge
+carrier concentration in units of</p>
+<div class="math">
+<p><img src="_images/math/d72a4f2499ad4c04bef71cedf0e6f2f177366536.png" alt="S/m, \\mu \mathrm{V}/\mathrm{K},
+10^{-8}\mathrm{V}^2/\mathrm{K}^2,
+\mathrm{cm}^3/\mathrm{C},
+10^{21} \mathrm{cm}^{-3}`,"/></p>
+</div><p>respectively.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>All integrals in this function is evaluated over energy
+and not k-points (one of the most usual
+procedures for solving the Boltzmann transport integrals)</p>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, Espen Flage-Larsen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

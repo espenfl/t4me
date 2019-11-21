@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>interface module &#8212; T4ME 1.1.1 documentation</title>
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="utils module" href="utils.html" />
+    <link rel="prev" title="inputoutput module" href="inputoutput.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          T4ME</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preq.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Running tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Custom interfaces</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">interface module</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="inputoutput.html" title="Previous Chapter: inputoutput module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; inputoutput module</span>
+    </a>
+  </li>
+  <li>
+    <a href="utils.html" title="Next Chapter: utils module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">utils module &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/interface.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="interface-module">
+<h1>interface module<a class="headerlink" href="#interface-module" title="Permalink to this headline">¶</a></h1>
+<p>This module, <code class="file docutils literal notranslate"><span class="pre">interface.py</span></code> contains the
+interfaces which reads in data and calculates for instance
+parametrized bandstructures etc.</p>
+<span class="target" id="module-interface"></span><p>Contains routines that interface T4ME, e.g. to the parameter files or to other input files.</p>
+<dl class="function">
+<dt id="interface.bandstructure_numpy">
+<code class="sig-prename descclassname">interface.</code><code class="sig-name descname">bandstructure_numpy</code><span class="sig-paren">(</span><em class="sig-param">bs</em>, <em class="sig-param">filename</em>, <em class="sig-param">location=None</em><span class="sig-paren">)</span><a class="headerlink" href="#interface.bandstructure_numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the bandstructure from a NumPy datafile file.</p>
+<p>Loads and stores the parameters in the bandstructure configuration file (defaults to bandparam.yml).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>bs</strong><span class="classifier">object</span></dt><dd><p>A <cite>Bandstructure()</cite> object.</p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">string</span></dt><dd><p>The filename of the NumPy data file to be read.
+The bandstructure
+configuration file have to be named “bandparam.yml”
+in this case.</p>
+</dd>
+<dt><strong>location</strong><span class="classifier">string, optional</span></dt><dd><p>The location of the NumPy data
+file. Defaults to the “input” directory in
+the current working directory.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This routine read NumPy datafiles containing the
+electron energy dispersions and optionally the band
+velocities.</p>
+<div class="line-block">
+<div class="line">The datastructure of the supplied numpy array</div>
+<div class="line">should be on the following format:</div>
+<div class="line">[</div>
+<div class="line">[kx], [ky], [kz], [e_1], [v_x_1], [v_y_1], [v_z_1],</div>
+<div class="line">[e_2], [v_x_2], [v_y_2], [v_z_2], … ,</div>
+<div class="line">[e_n], [v_x_n], [v_y_n], [v_z_n]</div>
+<div class="line">]</div>
+</div>
+<p>If the band velocities are not supplied they are simply not
+present. Each column of data has the length of the number of
+k-point in the full BZ.</p>
+<p>The bandstructure configuration file is still read due to
+the need of the scattering properties etc.</p>
+<p>This interface is enabled by setting <cite>read</cite> in the general
+configuration file to “numpy” (datafile with only
+electron energy dispersions) or “numpyv” (datafile with
+electron energy and group velocity dispersion)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="interface.bandstructure_param">
+<code class="sig-prename descclassname">interface.</code><code class="sig-name descname">bandstructure_param</code><span class="sig-paren">(</span><em class="sig-param">bs</em>, <em class="sig-param">location=None</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="headerlink" href="#interface.bandstructure_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the bandstructure from the parameters in the bandstructure configuration file (default bandparam.yml).</p>
+<p>Also loads and stores the parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>bs</strong><span class="classifier">object</span></dt><dd><p>A <cite>Bandstructure()</cite> object.</p>
+</dd>
+<dt><strong>location</strong><span class="classifier">string, optional</span></dt><dd><p>The location of the bandstructure configuration
+file. Defaults later to the “input” directory
+in the current working directory.</p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">string, optional</span></dt><dd><p>The filename of the bandstructure configuration
+file. Defaults to “bandparam.yml”.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This interface prepares analytic and tight binding
+generation of the band structure and also loads and
+stores all bandstructure related parameters.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="interface.bandstructure_vasp">
+<code class="sig-prename descclassname">interface.</code><code class="sig-name descname">bandstructure_vasp</code><span class="sig-paren">(</span><em class="sig-param">bs</em>, <em class="sig-param">location=None</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="headerlink" href="#interface.bandstructure_vasp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the bandstructure from a VASP XML file.</p>
+<p>Loads and stores the parameters in the bandstructure configuration file (defaults to bandparam.yml).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>bs</strong><span class="classifier">object</span></dt><dd><p>A <cite>Bandstructure()</cite> object.</p>
+</dd>
+<dt><strong>location</strong><span class="classifier">string, optional</span></dt><dd><p>The location of the VASP XML file. Defaults
+to the “input” directory in the current working directory.</p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">string, optional</span></dt><dd><p>The filename of the VASP XML file to be read.
+Defaults to “vasprun.xml”. The bandstructure
+configuration file have to be named “bandparam.yml”
+in this case.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This interface read and sets up the bandstructure based
+on a VASP XML file. Currently it does not read the band
+velocities as VASP does not yet support this feature.
+However, work is in progress to enable this. The band
+velocities have to be generated by an interpolation routine
+later. Flags are automatically set for this. The bandstructure
+configuration file is still read due to the need of the
+scattering properties etc.</p>
+<p>This interface is enabled by setting <cite>read</cite> in the general
+configuration file to vasp.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="interface.lattice_param_numpy">
+<code class="sig-prename descclassname">interface.</code><code class="sig-name descname">lattice_param_numpy</code><span class="sig-paren">(</span><em class="sig-param">lattice</em>, <em class="sig-param">location=None</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="headerlink" href="#interface.lattice_param_numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface used to format the elements needed to generate the <cite>Lattice()</cite> object.</p>
+<p>Used if the lattice is generated from the celldata YAML file (parameterfile and Numpy intput files).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lattice</strong><span class="classifier">object</span></dt><dd><p>A <cite>Lattice()</cite> object where we can store additional parameters
+detected during setup for later access.</p>
+</dd>
+<dt><strong>location</strong><span class="classifier">string, optional</span></dt><dd><p>The location of the YAML parameter file determining the celldata.</p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">string, optional</span></dt><dd><p>The filename of the YAML parameter file determining the celldata.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>unitcell</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3,3)</div>
+</div>
+<p>The unitcell in cartesian coordinates and {AA} units.</p>
+</dd>
+<dt><strong>positions</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,3)</div>
+</div>
+<p>The positions of the N atoms in the unitcell in cartesian
+coordinates.</p>
+</dd>
+<dt><strong>species</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N)</div>
+</div>
+<p>Integer atomic numbers of the atomic species in the same
+order as positions. Hydrogen starts with 1, while the element X
+is located at 0. Otherwise it follows the periodic table.</p>
+</dd>
+<dt><strong>kmesh</strong><span class="classifier">object</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>A <cite>Kmesh()</cite> obhect for the reciprocal mesh generation
+containment. Should include <cite>sampling</cite>, <cite>mesh</cite>, <cite>mesh_ired</cite>
+and other parameters needed for later processing.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Upon writing a custom interface, please make sure that the
+parameters in the YAML files are not overwritten.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="interface.lattice_vasp">
+<code class="sig-prename descclassname">interface.</code><code class="sig-name descname">lattice_vasp</code><span class="sig-paren">(</span><em class="sig-param">lattice</em>, <em class="sig-param">location=None</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="headerlink" href="#interface.lattice_vasp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface used to format the elements needed to generate the <cite>Lattice()</cite> object.</p>
+<p>Used if the lattice is generated from the VASP XML file.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lattice</strong><span class="classifier">object</span></dt><dd><p>A <cite>Lattice()</cite> object where we can store additional parameters
+detected during setup for later access.</p>
+</dd>
+<dt><strong>location</strong><span class="classifier">string, optional</span></dt><dd><p>The location of the VASP XML file determining the celldata.</p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">string, optional</span></dt><dd><p>The filename of the VASP XML file determining the celldata.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>unitcell</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3,3)</div>
+</div>
+<p>The unitcell in cartesian coordinates and {AA} units.</p>
+</dd>
+<dt><strong>positions</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,3)</div>
+</div>
+<p>The positions of the N atoms in the unitcell in cartesian
+coordinates.</p>
+</dd>
+<dt><strong>species</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N)</div>
+</div>
+<p>Integer atomic numbers of the atomic species in the same
+order as positions. Hydrogen starts with 1, while the
+element X is located at 0. Otherwise
+it follows the periodic table.</p>
+</dd>
+<dt><strong>kmesh</strong><span class="classifier">object</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3)</div>
+</div>
+<p>A <cite>Kmesh()</cite> object for the reciprocal mesh generation
+containment. Should include <cite>sampling</cite>, <cite>mesh</cite>, <cite>mesh_ired</cite>
+and other parameters needed for later processing.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Upon writing a custom interface, please make sure that the
+parameters in the YAML parameter files are not overwritten.</p>
+<p>Additional parameters pertaining VASP are stored inside the
+<cite>Param()</cite> object with a <cite>vasp</cite> preemble, i.e.
+<cite>param.vasp_something</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="interface.lattice_w90">
+<code class="sig-prename descclassname">interface.</code><code class="sig-name descname">lattice_w90</code><span class="sig-paren">(</span><em class="sig-param">lattice</em><span class="sig-paren">)</span><a class="headerlink" href="#interface.lattice_w90" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface used to format the elements needed to generate the <cite>Lattice()</cite> object.</p>
+<p>Used if the lattice is generated from the Wannier90 win file.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lattice</strong><span class="classifier">object</span></dt><dd><p>A <cite>Lattice()</cite> object where we can store additional
+parameters detected during setup for later access.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>unitcell</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (3,3)</div>
+</div>
+<p>The unitcell in cartesian coordinates and {AA} units.</p>
+</dd>
+<dt><strong>positions</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N,3)</div>
+</div>
+<p>The positions of the N atoms in the unitcell in cartesian
+coordinates.</p>
+</dd>
+<dt><strong>species</strong><span class="classifier">ndarray</span></dt><dd><div class="line-block">
+<div class="line">Dimension: (N)</div>
+</div>
+<p>Integer atomic numbers of the atomic species in the same
+order as positions. Hydrogen starts with 1, while the element
+X is located at 0. Otherwise it follows the periodic table.</p>
+</dd>
+<dt><strong>kmesh</strong><span class="classifier">object</span></dt><dd><p>A <cite>Kmesh()</cite> object for the reciprocal mesh generation containment.
+Should include <cite>sampling</cite>, <cite>mesh</cite>, <cite>mesh_ired</cite> and other
+parameters needed for later processing.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Upon writing a custom interface, please make sure that the parameters
+in the YAML parameter file is not overwritten.</p>
+<p>Additional parameters pertaining VASP are stored inside the <cite>Param()</cite>
+object with a <cite>vasp</cite> preemble, i.e. <cite>param.vasp_something</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="interface.read_band_parameters">
+<code class="sig-prename descclassname">interface.</code><code class="sig-name descname">read_band_parameters</code><span class="sig-paren">(</span><em class="sig-param">bs</em>, <em class="sig-param">numbands</em>, <em class="sig-param">location=None</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="headerlink" href="#interface.read_band_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads and stores the information in the band parameters configuration file (bandparam.yml).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>bs</strong><span class="classifier">object</span></dt><dd><p>The active <cite>Bandstructure()</cite> object.</p>
+</dd>
+<dt><strong>numbands</strong><span class="classifier">int</span></dt><dd><p>The number of bands</p>
+</dd>
+<dt><strong>location</strong><span class="classifier">string, optional</span></dt><dd><p>The folder in which the band configuration
+file is placed. Defaults to the relative
+folder “input”.</p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">string, optional</span></dt><dd><p>The filename of the band configuration file.
+Defaults to bandparam.yml.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Reads and stores the values in the band configuration file.
+When writing custom interfaces it is sufficient to call this
+routine in order for the setup of the individual band
+parameters to be consistent.</p>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, Espen Flage-Larsen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
